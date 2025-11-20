@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Search, X, Filter } from 'lucide-react';
+import { Search, X, Filter, Sparkles } from 'lucide-react';
 
 const SearchBar = ({ 
   searchQuery = '',
   onSearchChange,
   onFiltersToggle,
   filterCount = 0,
-  placeholder = 'Search teachers by name, subject, or location...',
+  placeholder = 'Search for subjects, teachers, or topics...',
   className = '',
   showFiltersButton = true,
   autoFocus = false,
   debounceMs = 300
 }) => {
   const [localQuery, setLocalQuery] = useState(searchQuery);
+  const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef(null);
   const debounceRef = useRef(null);
 
@@ -63,12 +64,12 @@ const SearchBar = ({
   }, []);
 
   return (
-    <div className={`w-full max-w-2xl mx-auto ${className}`}>
+    <div className={`w-full max-w-4xl mx-auto ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
           {/* Search Icon */}
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search size={20} className="text-gray-400" />
+          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+            <Search size={20} className="text-blue-400" />
           </div>
 
           {/* Input Field */}
@@ -77,8 +78,14 @@ const SearchBar = ({
             type="text"
             value={localQuery}
             onChange={(e) => handleInputChange(e.target.value)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             placeholder={placeholder}
-            className="block w-full pl-10 pr-20 py-3 border border-gray-300 rounded-xl bg-white placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent shadow-sm"
+            className={`block w-full pl-12 pr-24 py-4 border-2 rounded-2xl bg-white placeholder-blue-300 text-gray-900 focus:outline-none transition-all duration-200 shadow-lg ${
+              isFocused 
+                ? 'border-blue-500 shadow-blue-100' 
+                : 'border-blue-200 hover:border-blue-300'
+            }`}
             autoFocus={autoFocus}
             aria-label="Search teachers"
           />
@@ -88,55 +95,105 @@ const SearchBar = ({
             <button
               type="button"
               onClick={handleClear}
-              className="absolute inset-y-0 right-12 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              className="absolute inset-y-0 right-16 flex items-center px-3 text-gray-400 hover:text-red-500 transition-all duration-200 hover:scale-110"
               aria-label="Clear search"
             >
-              <X size={16} />
+              <X size={18} />
             </button>
           )}
 
           {/* Filters Button */}
           {showFiltersButton && onFiltersToggle && (
-            <button
-              type="button"
-              onClick={onFiltersToggle}
-              className={`absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors duration-200 ${
-                filterCount > 0 ? 'text-blue-600' : ''
-              }`}
-              aria-label={`Open filters ${filterCount > 0 ? `(${filterCount} active)` : ''}`}
-            >
-              <Filter size={16} />
-              {filterCount > 0 && (
-                <span className="absolute -top-1 -right-1 flex items-center justify-center w-5 h-5 bg-red-500 text-white text-xs font-bold rounded-full">
-                  {filterCount}
-                </span>
-              )}
-            </button>
+            <div className="absolute inset-y-0 right-0 flex items-center">
+              <div className="h-8 w-px bg-blue-200 mr-3"></div>
+              <button
+                type="button"
+                onClick={onFiltersToggle}
+                className={`flex items-center space-x-2 px-4 py-2 mr-2 rounded-xl transition-all duration-200 font-medium ${
+                  filterCount > 0 
+                    ? 'bg-blue-100 text-blue-700 border border-blue-200 shadow-sm' 
+                    : 'text-blue-500 hover:text-blue-700 hover:bg-blue-50'
+                }`}
+                aria-label={`Open filters ${filterCount > 0 ? `(${filterCount} active)` : ''}`}
+              >
+                <Filter size={16} className="flex-shrink-0" />
+                {filterCount > 0 && (
+                  <span className="flex items-center justify-center min-w-5 h-5 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-xs font-bold rounded-full px-1">
+                    {filterCount}
+                  </span>
+                )}
+                <span className="hidden sm:inline text-sm">Filters</span>
+              </button>
+            </div>
           )}
         </div>
 
-        {/* Search Button (for mobile accessibility) */}
-        <button 
-          type="submit" 
-          className="md:hidden mt-3 w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
-          aria-label="Perform search"
-        >
-          <Search size={16} className="mr-2" />
-          Search
-        </button>
-      </form>
+        {/* Search Suggestions */}
+        {localQuery && (
+          <div className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-blue-100 rounded-2xl shadow-xl z-10 overflow-hidden">
+            <div className="p-4 border-b border-blue-50">
+              <div className="flex items-center text-sm text-blue-600 font-medium mb-2">
+                <Sparkles size={16} className="mr-2 text-blue-400" />
+                Search suggestions for:
+              </div>
+              <div className="text-lg font-semibold text-gray-900">"{localQuery}"</div>
+            </div>
+            <div className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+                <button 
+                  className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
+                  onClick={() => handleInputChange(`${localQuery} tutors`)}
+                >
+                  <div className="font-medium text-blue-900">{localQuery} tutors</div>
+                  <div className="text-blue-600 mt-1">Find specialized tutors</div>
+                </button>
+                <button 
+                  className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
+                  onClick={() => handleInputChange(`${localQuery} online`)}
+                >
+                  <div className="font-medium text-blue-900">{localQuery} online</div>
+                  <div className="text-blue-600 mt-1">Virtual learning options</div>
+                </button>
+                <button 
+                  className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
+                  onClick={() => handleInputChange(`Advanced ${localQuery}`)}
+                >
+                  <div className="font-medium text-blue-900">Advanced {localQuery}</div>
+                  <div className="text-blue-600 mt-1">Higher level courses</div>
+                </button>
+                <button 
+                  className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
+                  onClick={() => handleInputChange(`${localQuery} for beginners`)}
+                >
+                  <div className="font-medium text-blue-900">{localQuery} for beginners</div>
+                  <div className="text-blue-600 mt-1">Start learning basics</div>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
-      {/* Search Suggestions */}
-      {localQuery && (
-        <div className="mt-3 p-4 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-700">
-          <div className="mb-2">
-            Try searching for: <strong>{localQuery}</strong>
+        {/* Popular Searches */}
+        {!localQuery && isFocused && (
+          <div className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-blue-100 rounded-2xl shadow-xl z-10 p-6">
+            <div className="flex items-center text-sm text-blue-600 font-medium mb-4">
+              <Sparkles size={16} className="mr-2 text-blue-400" />
+              Popular searches
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {['Mathematics', 'Science Tutors', 'English Language', 'Programming', 'Music Lessons', 'Test Prep'].map((term) => (
+                <button
+                  key={term}
+                  onClick={() => handleInputChange(term)}
+                  className="px-4 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-blue-700 font-medium text-sm transition-all duration-200 hover:scale-105 hover:shadow-sm"
+                >
+                  {term}
+                </button>
+              ))}
+            </div>
           </div>
-          <div>
-            Or try: "Math tutors in New York", "Online English teachers", etc.
-          </div>
-        </div>
-      )}
+        )}
+      </form>
     </div>
   );
 };

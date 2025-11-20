@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChevronLeft, ChevronRight, MoreHorizontal } from 'lucide-react';
 
 const Pagination = ({ 
@@ -7,7 +6,8 @@ const Pagination = ({
   onPageChange,
   className = '',
   showPageNumbers = true,
-  showNavigation = true
+  showNavigation = true,
+  variant = "default"
 }) => {
   // Don't render if there's only one page or no pages
   if (totalPages <= 1) {
@@ -69,6 +69,22 @@ const Pagination = ({
     return pages;
   };
 
+  const variants = {
+    default: {
+      active: "bg-gradient-to-r from-blue-600 to-indigo-600 border-blue-600 text-white shadow-sm",
+      inactive: "border-blue-100 bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-200",
+      navigation: "border-blue-200 bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-300",
+      text: "text-gray-600"
+    },
+    light: {
+      active: "bg-blue-100 border-blue-300 text-blue-700",
+      inactive: "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300",
+      navigation: "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300",
+      text: "text-gray-500"
+    }
+  };
+
+  const currentVariant = variants[variant];
   const pageNumbers = generatePageNumbers();
 
   return (
@@ -76,35 +92,37 @@ const Pagination = ({
       {/* Desktop Pagination */}
       <div className="hidden md:flex flex-col items-center space-y-4">
         {/* Page Info */}
-        <div className="text-gray-600 text-sm font-medium">
-          Page {currentPage} of {totalPages}
+        <div className={`text-sm font-medium ${currentVariant.text}`}>
+          Page <span className="font-semibold text-blue-600">{currentPage}</span> of <span className="font-semibold text-gray-700">{totalPages}</span>
         </div>
 
         {/* Navigation */}
         {showNavigation && (
-          <nav className="flex items-center space-x-2" aria-label="Pagination">
+          <nav className="flex items-center space-x-3" aria-label="Pagination">
             {/* Previous Button */}
             <button
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 font-medium"
+              className={`flex items-center space-x-2 px-5 py-3 border rounded-xl transition-all duration-200 font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-sm hover:-translate-y-0.5 ${
+                currentVariant.navigation
+              } ${currentPage === 1 ? 'cursor-not-allowed' : 'hover:shadow-blue-100'}`}
               aria-label="Previous page"
             >
-              <ChevronLeft size={16} />
-              <span>Previous</span>
+              <ChevronLeft size={18} className="text-blue-500" />
+              <span className="text-blue-700">Previous</span>
             </button>
 
             {/* Page Numbers */}
             {showPageNumbers && (
-              <div className="flex items-center space-x-1">
+              <div className="flex items-center space-x-2">
                 {pageNumbers.map((page, index) => {
                   if (page === 'ellipsis-start' || page === 'ellipsis-end') {
                     return (
                       <span 
                         key={`ellipsis-${index}`}
-                        className="flex items-center justify-center w-10 h-10 text-gray-400"
+                        className="flex items-center justify-center w-12 h-12 text-gray-400"
                       >
-                        <MoreHorizontal size={16} />
+                        <MoreHorizontal size={18} />
                       </span>
                     );
                   }
@@ -113,10 +131,10 @@ const Pagination = ({
                     <button
                       key={page}
                       onClick={() => handlePageChange(page)}
-                      className={`flex items-center justify-center w-10 h-10 border rounded-lg font-medium transition-colors duration-200 ${
+                      className={`flex items-center justify-center w-12 h-12 border rounded-xl font-semibold text-sm transition-all duration-200 hover:shadow-sm hover:-translate-y-0.5 ${
                         currentPage === page 
-                          ? 'border-blue-600 bg-blue-600 text-white' 
-                          : 'border-gray-300 bg-white text-gray-700 hover:bg-gray-50'
+                          ? `${currentVariant.active} shadow-md transform -translate-y-0.5` 
+                          : `${currentVariant.inactive} hover:shadow-blue-50`
                       }`}
                       aria-label={`Page ${page}`}
                       aria-current={currentPage === page ? 'page' : undefined}
@@ -132,38 +150,51 @@ const Pagination = ({
             <button
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage === totalPages}
-              className="flex items-center space-x-2 px-4 py-2 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200 font-medium"
+              className={`flex items-center space-x-2 px-5 py-3 border rounded-xl transition-all duration-200 font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-sm hover:-translate-y-0.5 ${
+                currentVariant.navigation
+              } ${currentPage === totalPages ? 'cursor-not-allowed' : 'hover:shadow-blue-100'}`}
               aria-label="Next page"
             >
-              <span>Next</span>
-              <ChevronRight size={16} />
+              <span className="text-blue-700">Next</span>
+              <ChevronRight size={18} className="text-blue-500" />
             </button>
           </nav>
         )}
       </div>
 
       {/* Mobile Pagination */}
-      <div className="flex md:hidden items-center justify-between w-full max-w-xs">
+      <div className="flex md:hidden items-center justify-between w-full max-w-xs bg-white p-4 rounded-2xl border border-blue-100 shadow-sm">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="flex items-center justify-center w-12 h-12 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          className={`flex items-center justify-center w-14 h-14 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+            currentPage === 1 
+              ? 'border-gray-200 text-gray-400' 
+              : 'border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
+          }`}
           aria-label="Previous page"
         >
-          <ChevronLeft size={16} />
+          <ChevronLeft size={20} />
         </button>
 
-        <span className="text-gray-700 font-medium text-sm">
-          {currentPage} / {totalPages}
-        </span>
+        <div className="flex flex-col items-center">
+          <span className="text-gray-600 font-medium text-sm">Page</span>
+          <span className="text-blue-600 font-bold text-lg">
+            {currentPage} <span className="text-gray-400 font-normal">/ {totalPages}</span>
+          </span>
+        </div>
 
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="flex items-center justify-center w-12 h-12 border border-gray-300 rounded-lg text-gray-700 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200"
+          className={`flex items-center justify-center w-14 h-14 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+            currentPage === totalPages 
+              ? 'border-gray-200 text-gray-400' 
+              : 'border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
+          }`}
           aria-label="Next page"
         >
-          <ChevronRight size={16} />
+          <ChevronRight size={20} />
         </button>
       </div>
     </div>

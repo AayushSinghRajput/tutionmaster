@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import RegisterForm from '../components/auth/RegisterForm';
-import { BookOpen, Users, Calendar, DollarSign } from 'lucide-react';
+import { BookOpen, Users, Calendar, DollarSign, Star, Shield, Clock, Globe } from 'lucide-react';
 
 const Register = () => {
   const { isAuthenticated } = useAuth();
@@ -15,73 +15,133 @@ const Register = () => {
   }, [isAuthenticated, navigate]);
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-indigo-50 py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-8">
-            <BookOpen className="mx-auto h-12 w-12 text-blue-600 mb-4" />
-            <h1 className="text-3xl font-bold text-gray-900">
-              Join TutionMaster
-            </h1>
-            <p className="mt-2 text-lg text-gray-600">
-              Create your teacher account and start connecting with students
+        <div className="max-w-6xl mx-auto">
+          {/* Header */}
+          <div className="text-center mb-12">
+            <div className="flex justify-center items-center mb-6">
+              <div className="bg-white p-3 rounded-2xl shadow-lg">
+                <BookOpen className="w-10 h-10 text-blue-600" />
+              </div>
+              <h1 className="ml-4 text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+                TutionMaster
+              </h1>
+            </div>
+            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+              Start Your Teaching Journey
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+              Join our platform of dedicated educators and transform students' lives through quality education
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            {/* Registration Form */}
-            <div className="bg-white py-8 px-6 shadow sm:rounded-lg">
-              <RegisterForm />
-
-              <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600">
-                  Already have an account?{' '}
-                  <Link 
-                    to="/login" 
-                    className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
-                  >
-                    Sign in here
-                  </Link>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            {/* Registration Form Card */}
+            <div className="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
+                <h3 className="text-2xl font-bold text-white text-center">
+                  Get Started Today
+                </h3>
+                <p className="text-blue-100 text-center mt-2">
+                  Create your teacher account in 2 minutes
                 </p>
+              </div>
+              <div className="p-8">
+                <RegisterForm />
+
+                <div className="mt-8 text-center">
+                  <p className="text-sm text-gray-600">
+                    Already have an account?{' '}
+                    <Link 
+                      to="/login" 
+                      className="font-semibold text-blue-600 hover:text-blue-700 transition-colors duration-200 underline"
+                    >
+                      Sign in to your account
+                    </Link>
+                  </p>
+                </div>
               </div>
             </div>
 
             {/* Benefits Section */}
-            <div className="bg-white py-8 px-6 shadow sm:rounded-lg">
-              <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">
-                Why join as a teacher?
-              </h3>
-              
-              <div className="space-y-4">
-                <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
-                  <Users className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Reach thousands of students</span>
-                </div>
+            <div className="space-y-8">
+              {/* Main Benefits */}
+              <div className="bg-white rounded-2xl shadow-xl border border-blue-100 p-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-8 text-center flex items-center justify-center">
+                  <Star className="w-6 h-6 text-yellow-500 mr-2" />
+                  Why Teachers Love TutionMaster
+                </h3>
                 
-                <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg">
-                  <Calendar className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Flexible teaching schedule</span>
-                </div>
-                
-                <div className="flex items-start space-x-3 p-3 bg-purple-50 rounded-lg">
-                  <BookOpen className="w-5 h-5 text-purple-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Build your teaching brand</span>
-                </div>
-                
-                <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
-                  <DollarSign className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
-                  <span className="text-gray-700">Set your own rates</span>
+                <div className="grid gap-4">
+                  <div className="flex items-start p-4 bg-blue-50 rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-200">
+                    <Users className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Global Student Reach</h4>
+                      <p className="text-gray-600 text-sm mt-1">Connect with thousands of students worldwide</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start p-4 bg-green-50 rounded-xl border border-green-200 hover:border-green-300 transition-all duration-200">
+                    <Calendar className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Flexible Schedule</h4>
+                      <p className="text-gray-600 text-sm mt-1">Teach on your own terms and availability</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start p-4 bg-purple-50 rounded-xl border border-purple-200 hover:border-purple-300 transition-all duration-200">
+                    <DollarSign className="w-6 h-6 text-purple-600 mt-1 mr-4 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Competitive Earnings</h4>
+                      <p className="text-gray-600 text-sm mt-1">Set your rates and maximize your income</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-start p-4 bg-orange-50 rounded-xl border border-orange-200 hover:border-orange-300 transition-all duration-200">
+                    <Shield className="w-6 h-6 text-orange-600 mt-1 mr-4 flex-shrink-0" />
+                    <div>
+                      <h4 className="font-semibold text-gray-900">Secure Platform</h4>
+                      <p className="text-gray-600 text-sm mt-1">Safe and reliable payment processing</p>
+                    </div>
+                  </div>
                 </div>
               </div>
 
-              {/* Additional Info */}
-              <div className="mt-8 p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium text-gray-900 mb-2">Get Started Quickly</h4>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Create your profile in minutes</li>
-                  <li>• Set your availability and rates</li>
-                  <li>• Start receiving student inquiries</li>
-                  <li>• Grow your teaching business</li>
+              {/* Stats & Additional Info */}
+              <div className="grid grid-cols-2 gap-6">
+                <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white text-center shadow-lg">
+                  <Globe className="w-8 h-8 mx-auto mb-2" />
+                  <div className="text-2xl font-bold">50K+</div>
+                  <div className="text-blue-100 text-sm">Students Worldwide</div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 text-white text-center shadow-lg">
+                  <Clock className="w-8 h-8 mx-auto mb-2" />
+                  <div className="text-2xl font-bold">10K+</div>
+                  <div className="text-blue-100 text-sm">Teaching Hours</div>
+                </div>
+              </div>
+
+              {/* Quick Start Guide */}
+              <div className="bg-gradient-to-r from-blue-500 to-blue-600 rounded-2xl p-6 text-white shadow-lg">
+                <h4 className="font-bold text-lg mb-3 flex items-center">
+                  <Star className="w-5 h-5 mr-2" />
+                  Get Started in 3 Steps
+                </h4>
+                <ul className="space-y-2 text-blue-100">
+                  <li className="flex items-center">
+                    <div className="w-6 h-6 bg-white text-blue-600 rounded-full text-sm flex items-center justify-center font-bold mr-3">1</div>
+                    Create your profile
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-6 h-6 bg-white text-blue-600 rounded-full text-sm flex items-center justify-center font-bold mr-3">2</div>
+                    Set your availability
+                  </li>
+                  <li className="flex items-center">
+                    <div className="w-6 h-6 bg-white text-blue-600 rounded-full text-sm flex items-center justify-center font-bold mr-3">3</div>
+                    Start teaching
+                  </li>
                 </ul>
               </div>
             </div>

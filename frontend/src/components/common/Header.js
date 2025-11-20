@@ -41,6 +41,22 @@ const Header = () => {
               Find Teachers
             </Link>
 
+              <Link
+                to="/about"
+                className="text-gray-700 hover:text-blue-700 font-medium text-lg px-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
+
+              <Link
+                to="/contact"
+                className="text-gray-700 hover:text-blue-700 font-medium text-lg px-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
+              </Link>
+
             {isAuthenticated ? (
               <div className="flex items-center gap-6">
                 <Link
@@ -106,6 +122,22 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 Find Teachers
+              </Link>
+
+              <Link
+                to="/about"
+                className="text-gray-700 hover:text-blue-700 font-medium text-lg px-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                About
+              </Link>
+
+              <Link
+                to="/contact"
+                className="text-gray-700 hover:text-blue-700 font-medium text-lg px-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Contact
               </Link>
 
               {isAuthenticated ? (

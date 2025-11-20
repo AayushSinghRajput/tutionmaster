@@ -20,9 +20,13 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import CreateProfile from "./pages/CreateProfile";
 import EditProfile from "./pages/EditProfile";
+import About from "./pages/About";
+import Contact from  './pages/Contact';
+
 
 // Protected Route
 import ProtectedRoute from "./components/common/ProtectedRoute";
+
 
 function App() {
   return (
@@ -34,6 +38,8 @@ function App() {
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/contact" element={<Contact />} />
               <Route path="/teachers" element={<TeacherListing />} />
               <Route path="/teachers/:id" element={<TeacherDetails />} />
               <Route path="/login" element={<Login />} />

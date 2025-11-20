@@ -73,7 +73,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link 
-                  to="#"
+                  to="/about"
                   className="text-gray-700 hover:text-blue-600 transition-all duration-300 text-sm flex items-center group"
                 >
                   <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mr-3 group-hover:scale-125 transition-transform"></div>
