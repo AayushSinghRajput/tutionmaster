@@ -1,13 +1,12 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { MapPin, Clock, DollarSign, Star } from 'lucide-react';
-import { formatExperience, generateAvatarUrl } from '../../utils/helpers';
+import { MapPin, Clock, Star } from 'lucide-react';
+import { formatExperience } from '../../utils/helpers';
 
 const TeacherCard = ({ teacher }) => {
   const {
     _id,
     name,
-    avatarPublicId,
+    avatarUrl,
     address,
     bio,
     experience,
@@ -17,7 +16,6 @@ const TeacherCard = ({ teacher }) => {
     averageRating
   } = teacher;
 
-  const avatarUrl = generateAvatarUrl(avatarPublicId);
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
@@ -25,7 +23,7 @@ const TeacherCard = ({ teacher }) => {
       <div className="p-6 pb-4">
         <div className="flex items-start space-x-4">
           <img 
-            src={avatarUrl} 
+            src={avatarUrl || "/default-avatar.png"}
             alt={name}
             className="w-16 h-16 rounded-full object-cover border-2 border-gray-100"
             onError={(e) => {
@@ -79,7 +77,6 @@ const TeacherCard = ({ teacher }) => {
               <span>{formatExperience(experience)}</span>
             </div>
             <div className="flex items-center space-x-1 text-gray-600">
-              <DollarSign size={14} />
               <span>Rs {hourlyRate}/hr</span>
             </div>
           </div>

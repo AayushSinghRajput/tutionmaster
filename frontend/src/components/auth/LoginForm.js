@@ -18,8 +18,8 @@ const LoginForm = () => {
     setIsLoading(false);
 
     if (result.success) {
-      toast.success('🎉 Welcome back! Redirecting to your dashboard...', {
-        position: "top-center",
+      toast.success('Logged In Successfully...', {
+        position: "top-right",
         theme: "colored",
         className: "bg-blue-600"
       });

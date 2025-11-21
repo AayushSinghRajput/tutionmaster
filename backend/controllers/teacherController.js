@@ -175,22 +175,25 @@ exports.getTeacher = async (req, res, next) => {
 // @access  Private
 exports.createTeacher = async (req, res, next) => {
   try {
-    // Check if profile already exists
     const existingProfile = await Teacher.findOne({ userId: req.user.id });
     if (existingProfile) {
       return next(new ErrorResponse('Profile already exists for this user', 400));
     }
 
-    const teacherData = {
+    const teacher = await Teacher.create({
       userId: req.user.id,
       ...req.body
-    };
-
-    const teacher = await Teacher.create(teacherData);
+    });
 
     const teacherObj = teacher.toObject();
-    teacherObj.avatarUrl = generateCloudinaryUrl(teacher.avatarPublicId, 'image');
-    teacherObj.cvUrl = generateCloudinaryUrl(teacher.cvPublicId, 'raw');
+
+    teacherObj.avatarUrl = teacher.avatarPublicId
+      ? generateCloudinaryUrl(teacher.avatarPublicId, 'image')
+      : null;
+
+    teacherObj.cvUrl = teacher.cvPublicId
+      ? generateCloudinaryUrl(teacher.cvPublicId, 'raw')
+      : null;
 
     res.status(201).json({
       success: true,
@@ -200,6 +203,7 @@ exports.createTeacher = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // @desc    Update teacher profile
 // @route   PUT /api/teachers/:id

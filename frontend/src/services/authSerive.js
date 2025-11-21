@@ -5,12 +5,13 @@ export const authService = {
     return api.post('/auth/login', { email, password });
   },
 
-  register: (email, password, confirmPassword) => {
-    return api.post('/auth/register', { email, password, confirmPassword });
+  register: (username, email, password, confirmPassword) => {
+    return api.post('/auth/register', { username, email, password, confirmPassword });
   },
 
-  getCurrentUser: () => {
-    return api.get('/auth/me');
+  getCurrentUser: async () => {
+    const response = await api.get('/auth/me'); 
+    return response.data.data; 
   },
 
   logout: () => {

@@ -12,8 +12,8 @@ const qualificationSchema = new mongoose.Schema({
   year: {
     type: Number,
     required: [true, 'Year is required'],
-    min: 1950,
-    max: new Date().getFullYear()
+    // min: 1950,
+    // max: new Date().getFullYear()
   }
 }, { _id: false });
 
@@ -61,7 +61,7 @@ const teacherSchema = new mongoose.Schema({
     street: { type: String, required: true },
     city: { type: String, required: true },
     state: { type: String, required: true },
-    zipCode: { type: String, required: true }
+    zipCode: { type: Number, required: true }
   },
   qualifications: [qualificationSchema],
   contact: {

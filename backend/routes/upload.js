@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.use(protect);
 
-router.post('/avatar', multerAvatar, uploadAvatar);
+router.post('/avatar',protect, multerAvatar, uploadAvatar);
 router.post('/cv', multerCV, uploadCV);
 router.delete('/:publicId', deleteFile);
 router.post('/signature', getSignature);

@@ -18,12 +18,10 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
-// Response interceptor to handle errors
+// Response interceptor to handle 401 errors globally
 api.interceptors.response.use(
   (response) => response,
   (error) => {

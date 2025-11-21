@@ -8,8 +8,8 @@ const fileFilter = (req, file, cb) => {
   // Check file type
   if (file.mimetype.startsWith('image/')) {
     // Validate image types
-    if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.mimetype)) {
-      return cb(new ErrorResponse('Only JPEG, PNG, and WebP images are allowed', 400), false);
+    if (!['image/jpeg', 'image/png', 'image/webp','image/avif','image/jpg'].includes(file.mimetype)) {
+      return cb(new ErrorResponse('Only JPEG, PNG,  WebP , Avif and JPG images are allowed', 400), false);
     }
     // Validate file size (5MB max for images)
     if (file.size > 5 * 1024 * 1024) {

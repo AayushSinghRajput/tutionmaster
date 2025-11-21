@@ -11,18 +11,6 @@ exports.uploadAvatar = async (req, res, next) => {
     if (!req.file) {
       return next(new ErrorResponse('Please upload a file', 400));
     }
-
-    // Find teacher profile
-    const teacher = await Teacher.findOne({ userId: req.user.id });
-    if (!teacher) {
-      return next(new ErrorResponse('Teacher profile not found', 404));
-    }
-
-    // Delete old avatar if exists
-    if (teacher.avatarPublicId) {
-      await cloudinary.uploader.destroy(teacher.avatarPublicId);
-    }
-
     // Upload to Cloudinary
     const uploadStream = cloudinary.uploader.upload_stream(
       {
@@ -38,11 +26,6 @@ exports.uploadAvatar = async (req, res, next) => {
         if (error) {
           return next(new ErrorResponse('File upload failed', 500));
         }
-
-        // Update teacher profile with new public ID
-        teacher.avatarPublicId = result.public_id;
-        await teacher.save();
-
         res.json({
           success: true,
           data: {
@@ -71,18 +54,6 @@ exports.uploadCV = async (req, res, next) => {
     if (!req.file) {
       return next(new ErrorResponse('Please upload a file', 400));
     }
-
-    // Find teacher profile
-    const teacher = await Teacher.findOne({ userId: req.user.id });
-    if (!teacher) {
-      return next(new ErrorResponse('Teacher profile not found', 404));
-    }
-
-    // Delete old CV if exists
-    if (teacher.cvPublicId) {
-      await cloudinary.uploader.destroy(teacher.cvPublicId, { resource_type: 'raw' });
-    }
-
     // Upload to Cloudinary
     const uploadStream = cloudinary.uploader.upload_stream(
       {
@@ -94,11 +65,6 @@ exports.uploadCV = async (req, res, next) => {
         if (error) {
           return next(new ErrorResponse('File upload failed', 500));
         }
-
-        // Update teacher profile with new public ID
-        teacher.cvPublicId = result.public_id;
-        await teacher.save();
-
         res.json({
           success: true,
           data: {

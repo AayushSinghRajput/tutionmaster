@@ -22,7 +22,9 @@ import CreateProfile from "./pages/CreateProfile";
 import EditProfile from "./pages/EditProfile";
 import About from "./pages/About";
 import Contact from  './pages/Contact';
-
+import PrivacyPolicy from './pages/PrivacyPolicy';
+import TermsOfService from './pages/TermsOfService';
+import CookiePolicy from './pages/CookiePolicy';
 
 // Protected Route
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -44,6 +46,10 @@ function App() {
               <Route path="/teachers/:id" element={<TeacherDetails />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+              <Route path="/terms-of-service" element={<TermsOfService />} />
+              <Route path="/cookie-policy" element={<CookiePolicy />} />
+
 
               {/* Protected Routes */}
               <Route

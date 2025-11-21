@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { authService } from "../services/authSerive";
+import { authService } from '../services/authSerive';
 
 const AuthContext = createContext();
 
@@ -21,14 +21,16 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const checkAuthStatus = async () => {
+    setLoading(true);
     try {
       const token = localStorage.getItem('token');
       if (token) {
         const userData = await authService.getCurrentUser();
-        setUser(userData);
+        setUser(userData); // persist user after refresh
       }
-    } catch (error) {
+    } catch (err) {
       localStorage.removeItem('token');
+      setUser(null);
     } finally {
       setLoading(false);
     }
@@ -39,30 +41,30 @@ export const AuthProvider = ({ children }) => {
       setError('');
       const response = await authService.login(email, password);
       const { token, user: userData } = response.data;
-      
+
       localStorage.setItem('token', token);
       setUser(userData);
-      
+
       return { success: true };
-    } catch (error) {
-      const message = error.response?.data?.error || 'Login failed';
+    } catch (err) {
+      const message = err.response?.data?.error || 'Login failed';
       setError(message);
       return { success: false, error: message };
     }
   };
 
-  const register = async (email, password, confirmPassword) => {
+  const register = async (username, email, password, confirmPassword) => {
     try {
       setError('');
-      const response = await authService.register(email, password, confirmPassword);
+      const response = await authService.register(username, email, password, confirmPassword);
       const { token, user: userData } = response.data;
-      
+
       localStorage.setItem('token', token);
       setUser(userData);
-      
+
       return { success: true };
-    } catch (error) {
-      const message = error.response?.data?.error || 'Registration failed';
+    } catch (err) {
+      const message = err.response?.data?.error || 'Registration failed';
       setError(message);
       return { success: false, error: message };
     }
@@ -81,7 +83,7 @@ export const AuthProvider = ({ children }) => {
     login,
     register,
     logout,
-    isAuthenticated: !!user
+    isAuthenticated: !!user,
   };
 
   return (

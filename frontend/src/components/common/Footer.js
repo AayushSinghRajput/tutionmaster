@@ -150,9 +150,9 @@ const Footer = () => {
               © 2024 <span className="text-blue-600 font-semibold">TutionMaster</span> — All Rights Reserved.
             </p>
             <div className="flex space-x-6 text-sm">
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Privacy Policy</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Terms of Service</a>
-              <a href="#" className="text-gray-600 hover:text-blue-600 transition-colors">Cookie Policy</a>
+              <a href="/privacy-policy" className="text-gray-600 hover:text-blue-600 transition-colors">Privacy Policy</a>
+              <a href="/terms-of-service" className="text-gray-600 hover:text-blue-600 transition-colors">Terms of Service</a>
+              <a href="/cookie-policy" className="text-gray-600 hover:text-blue-600 transition-colors">Cookie Policy</a>
             </div>
           </div>
         </div>

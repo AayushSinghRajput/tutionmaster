@@ -2,6 +2,8 @@ const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const jwt = require('jsonwebtoken');
 
+
+//function to generate the token
 const generateToken = (userId) => {
   return jwt.sign({ id: userId }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
@@ -13,7 +15,7 @@ const generateToken = (userId) => {
 // @access  Public
 exports.register = async (req, res, next) => {
   try {
-    const { email, password, confirmPassword } = req.body;
+    const {username , email, password, confirmPassword } = req.body;
 
     if (password !== confirmPassword) {
       return next(new ErrorResponse('Passwords do not match', 400));
@@ -27,6 +29,7 @@ exports.register = async (req, res, next) => {
 
     // Create user
     const user = await User.create({
+      username,
       email,
       password,
       role: 'teacher'
@@ -39,6 +42,7 @@ exports.register = async (req, res, next) => {
       token,
       user: {
         id: user._id,
+        username:user.username,
         email: user.email,
         role: user.role
       }
@@ -79,6 +83,7 @@ exports.login = async (req, res, next) => {
       token,
       user: {
         id: user._id,
+        username:user.username,
         email: user.email,
         role: user.role
       }
@@ -97,8 +102,9 @@ exports.getMe = async (req, res, next) => {
     
     res.json({
       success: true,
-      user: {
+      data: {
         id: user._id,
+        username:user.username,
         email: user.email,
         role: user.role
       }

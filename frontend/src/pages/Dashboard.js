@@ -1,10 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { teacherService } from '../services/teacherService';
-import { useAuth } from '../context/AuthContext';
-import LoadingSpinner from '../components/common/LoadingSpinner';
-import { User, Edit, Plus, BookOpen, Calendar, DollarSign, Eye } from 'lucide-react';
-import { toast } from 'react-toastify';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { teacherService } from "../services/teacherService";
+import { useAuth } from "../context/AuthContext";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import {
+  User,
+  Edit,
+  Plus,
+  BookOpen,
+  Calendar,
+  DollarSign,
+  Eye,
+  ShieldCheck
+} from "lucide-react";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [profile, setProfile] = useState(null);
@@ -24,8 +33,8 @@ const Dashboard = () => {
       if (error.response?.status === 404) {
         setProfile(null);
       } else {
-        toast.error('Failed to load profile');
-        console.error('Error fetching profile:', error);
+        toast.error("Failed to load profile");
+        console.error("Error fetching profile:", error);
       }
     } finally {
       setLoading(false);
@@ -33,17 +42,21 @@ const Dashboard = () => {
   };
 
   const handleDeleteProfile = async () => {
-    if (!window.confirm('Are you sure you want to delete your profile? This action cannot be undone.')) {
+    if (
+      !window.confirm(
+        "Are you sure you want to delete your profile? This action cannot be undone."
+      )
+    ) {
       return;
     }
 
     try {
       await teacherService.deleteProfile(profile._id);
-      toast.success('Profile deleted successfully');
+      toast.success("Profile deleted successfully");
       setProfile(null);
     } catch (error) {
-      toast.error('Failed to delete profile');
-      console.error('Error deleting profile:', error);
+      toast.error("Failed to delete profile");
+      console.error("Error deleting profile:", error);
     }
   };
 
@@ -56,28 +69,44 @@ const Dashboard = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Teacher Dashboard</h1>
-          <p className="text-lg text-gray-600">Welcome back, {user?.email}</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Teacher Dashboard
+          </h1>
+          <p className="text-lg text-gray-600">
+            Welcome Mr,{" "}
+            <span className="font-bold text-lg">{user?.username}</span>{" "}
+          </p>
         </div>
 
         {!profile ? (
           /* No Profile State */
-          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-12 text-center">
+          <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-8 text-center hover:shadow-xl transition-all duration-300">
             <div className="max-w-md mx-auto">
-              <BookOpen className="mx-auto h-16 w-16 text-gray-400 mb-4" />
-              <h2 className="text-2xl font-bold text-gray-900 mb-2">
+              <div className="mx-auto w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mb-6">
+                <BookOpen className="h-10 w-10 text-blue-600" />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-900 mb-4">
                 Create Your Teacher Profile
               </h2>
-              <p className="text-gray-600 mb-6">
-                Start your journey by creating a professional profile to attract students
+              <p className="text-gray-600 mb-8 text-lg leading-relaxed">
+                Start your teaching journey by creating a professional profile
+                to showcase your expertise and attract students worldwide.
               </p>
-              <Link 
-                to="/create-profile" 
-                className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              <Link
+                to="/create-profile"
+                className="inline-flex items-center px-8 py-4 border border-transparent text-lg font-semibold rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-200 transition-all duration-300 shadow-md hover:shadow-lg"
               >
-                <Plus className="w-5 h-5 mr-2" />
+                <Plus className="w-6 h-6 mr-3" />
                 Create Profile
               </Link>
+
+              {/* Optional additional info */}
+              <div className="mt-8 pt-6 border-t border-gray-100">
+                <p className="text-sm text-gray-500 flex items-center justify-center">
+                  <ShieldCheck className="w-4 h-4 mr-2 text-green-500" />
+                  Verified profiles get 3x more student inquiries
+                </p>
+              </div>
             </div>
           </div>
         ) : (
@@ -90,7 +119,9 @@ const Dashboard = () => {
                     <Eye className="h-6 w-6 text-gray-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-sm font-medium text-gray-900">Profile Views</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Profile Views
+                    </h3>
                     <p className="text-2xl font-semibold text-gray-900">0</p>
                     <span className="text-sm text-gray-500">This month</span>
                   </div>
@@ -103,7 +134,9 @@ const Dashboard = () => {
                     <Calendar className="h-6 w-6 text-gray-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-sm font-medium text-gray-900">Availability</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Availability
+                    </h3>
                     <p className="text-2xl font-semibold text-gray-900">
                       {profile.availability?.length || 0}
                     </p>
@@ -118,11 +151,15 @@ const Dashboard = () => {
                     <BookOpen className="h-6 w-6 text-gray-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-sm font-medium text-gray-900">Subjects</h3>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Subjects
+                    </h3>
                     <p className="text-2xl font-semibold text-gray-900">
                       {profile.preferredSubjects?.length || 0}
                     </p>
-                    <span className="text-sm text-gray-500">Subjects taught</span>
+                    <span className="text-sm text-gray-500">
+                      Subjects taught
+                    </span>
                   </div>
                 </div>
               </div>
@@ -133,8 +170,12 @@ const Dashboard = () => {
                     <DollarSign className="h-6 w-6 text-gray-400" />
                   </div>
                   <div className="ml-4">
-                    <h3 className="text-sm font-medium text-gray-900">Hourly Rate</h3>
-                    <p className="text-2xl font-semibold text-gray-900">${profile.hourlyRate}</p>
+                    <h3 className="text-sm font-medium text-gray-900">
+                      Hourly Rate
+                    </h3>
+                    <p className="text-2xl font-semibold text-gray-900">
+                      Rs {profile.hourlyRate}
+                    </p>
                     <span className="text-sm text-gray-500">Per hour</span>
                   </div>
                 </div>
@@ -149,14 +190,14 @@ const Dashboard = () => {
                     Profile Overview
                   </h2>
                   <div className="flex space-x-3">
-                    <Link 
+                    <Link
                       to={`/teachers/${profile._id}`}
                       className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
                       <Eye className="w-4 h-4 mr-2" />
                       View Public Profile
                     </Link>
-                    <Link 
+                    <Link
                       to="/edit-profile"
                       className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                     >
@@ -171,13 +212,15 @@ const Dashboard = () => {
                 <div className="flex flex-col md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-6">
                   {/* Profile Basic Info */}
                   <div className="flex items-start space-x-4">
-                    <img 
-                      src={profile.avatarUrl || '/default-avatar.png'} 
+                    <img
+                      src={profile.avatarUrl || "/default-avatar.png"}
                       alt={profile.name}
                       className="w-20 h-20 rounded-full object-cover"
                     />
                     <div>
-                      <h3 className="text-xl font-semibold text-gray-900">{profile.name}</h3>
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        {profile.name}
+                      </h3>
                       <p className="text-gray-600 mt-1">
                         {profile.address.city}, {profile.address.state}
                       </p>
@@ -190,15 +233,19 @@ const Dashboard = () => {
                   {/* Profile Details */}
                   <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Teaching Mode</h4>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">
+                        Teaching Mode
+                      </h4>
                       <p className="text-gray-600">{profile.teachingMode}</p>
                     </div>
 
                     <div>
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Subjects</h4>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">
+                        Subjects
+                      </h4>
                       <div className="flex flex-wrap gap-2">
                         {profile.preferredSubjects.map((subject, index) => (
-                          <span 
+                          <span
                             key={index}
                             className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
                           >
@@ -209,8 +256,12 @@ const Dashboard = () => {
                     </div>
 
                     <div className="lg:col-span-2">
-                      <h4 className="text-sm font-medium text-gray-900 mb-2">Bio</h4>
-                      <p className="text-gray-600 leading-relaxed">{profile.bio}</p>
+                      <h4 className="text-sm font-medium text-gray-900 mb-2">
+                        Bio
+                      </h4>
+                      <p className="text-gray-600 leading-relaxed">
+                        {profile.bio}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -219,30 +270,38 @@ const Dashboard = () => {
 
             {/* Quick Actions */}
             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Quick Actions</h2>
+              <h2 className="text-xl font-semibold text-gray-900 mb-6">
+                Quick Actions
+              </h2>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <Link 
+                <Link
                   to="/edit-profile"
                   className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors"
                 >
                   <Edit className="h-6 w-6 text-gray-400 mr-3" />
-                  <span className="text-gray-900 font-medium">Edit Profile</span>
+                  <span className="text-gray-900 font-medium">
+                    Edit Profile
+                  </span>
                 </Link>
-                
-                <button 
+
+                <button
                   onClick={() => navigate(`/teachers/${profile._id}`)}
                   className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-gray-300 transition-colors text-left"
                 >
                   <Eye className="h-6 w-6 text-gray-400 mr-3" />
-                  <span className="text-gray-900 font-medium">View Public Profile</span>
+                  <span className="text-gray-900 font-medium">
+                    View Public Profile
+                  </span>
                 </button>
-                
-                <button 
+
+                <button
                   onClick={handleDeleteProfile}
                   className="flex items-center p-4 border border-gray-200 rounded-lg hover:bg-red-50 hover:border-red-200 transition-colors text-left"
                 >
                   <User className="h-6 w-6 text-red-400 mr-3" />
-                  <span className="text-red-700 font-medium">Delete Profile</span>
+                  <span className="text-red-700 font-medium">
+                    Delete Profile
+                  </span>
                 </button>
               </div>
             </div>
