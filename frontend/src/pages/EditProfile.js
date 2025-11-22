@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { teacherService } from '../services/teacherService';
-import TeacherForm from '../components/teachers/TeacherForm';
-import LoadingSpinner from '../components/common/LoadingSpinner';
-import { toast } from 'react-toastify';
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { teacherService } from "../services/teacherService";
+import TeacherForm from "../components/teachers/TeacherForm";
+import LoadingSpinner from "../components/common/LoadingSpinner";
+import { toast } from "react-toastify";
 
 const EditProfile = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [updating, setUpdating] = useState(false);
+  const [formKey, setFormKey] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -18,11 +19,17 @@ const EditProfile = () => {
   const fetchProfile = async () => {
     try {
       const response = await teacherService.getMyProfile();
+      console.log("Profile data loaded:", response.data.data);
+      console.log(
+        "Availability in loaded profile:",
+        response.data.data.availability
+      );
       setProfile(response.data.data);
+      setFormKey((prev) => prev + 1);
     } catch (error) {
-      toast.error('Failed to load profile');
-      console.error('Error fetching profile:', error);
-      navigate('/dashboard');
+      toast.error("Failed to load profile");
+      console.error("Error fetching profile:", error);
+      navigate("/dashboard");
     } finally {
       setLoading(false);
     }
@@ -32,19 +39,19 @@ const EditProfile = () => {
     setUpdating(true);
     try {
       await teacherService.updateTeacher(profile._id, profileData);
-      toast.success('Profile updated successfully!');
-      navigate('/dashboard');
+      toast.success("Profile updated successfully!");
+      navigate("/dashboard");
     } catch (error) {
-      const message = error.response?.data?.error || 'Failed to update profile';
+      const message = error.response?.data?.error || "Failed to update profile";
       toast.error(message);
-      console.error('Error updating profile:', error);
+      console.error("Error updating profile:", error);
     } finally {
       setUpdating(false);
     }
   };
 
   const handleCancel = () => {
-    navigate('/dashboard');
+    navigate("/dashboard");
   };
 
   if (loading) {
@@ -53,6 +60,11 @@ const EditProfile = () => {
 
   if (updating) {
     return <LoadingSpinner text="Updating your profile..." />;
+  }
+
+  // Don't render TeacherForm until profile data is fully available
+  if (!profile) {
+    return <LoadingSpinner text="Preparing form..." />;
   }
 
   return (
@@ -69,6 +81,7 @@ const EditProfile = () => {
           </div>
 
           <TeacherForm
+            key={formKey}
             initialData={profile}
             onSubmit={handleSubmit}
             onCancel={handleCancel}

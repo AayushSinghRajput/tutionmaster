@@ -512,78 +512,185 @@ export const validatePdfFile = (file) => {
  * @param {Object} profile - Teacher profile data
  * @returns {Object} Validation result with errors
  */
-export const validateTeacherProfile = (profile) => {
+export const validateTeacherProfile = (data) => {
   const errors = {};
 
-  // Validate basic information
-  const nameValidation = validateName(profile.name, 'Full name');
-  if (!nameValidation.isValid) {
-    errors.name = nameValidation.message;
+  // Basic Information Validation
+  if (!data.name?.trim()) {
+    errors.name = "Name is required";
   }
 
-  const bioValidation = validateBio(profile.bio);
-  if (!bioValidation.isValid) {
-    errors.bio = bioValidation.message;
+  // Contact Validation
+  if (!data.contact?.email?.trim()) {
+    errors.contact = errors.contact || {};
+    errors.contact.email = "Email is required";
+  } else if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(data.contact.email)) {
+    errors.contact = errors.contact || {};
+    errors.contact.email = "Invalid email address";
   }
 
-  // Validate contact information
-  const emailValidation = validateEmail(profile.contact?.email);
-  if (!emailValidation.isValid) {
-    errors.contact = { ...errors.contact, email: emailValidation.message };
+  if (!data.contact?.phone?.trim()) {
+    errors.contact = errors.contact || {};
+    errors.contact.phone = "Phone number is required";
+  } else if (!/^\+?[\d\s\-\(\)]{10,}$/.test(data.contact.phone)) {
+    errors.contact = errors.contact || {};
+    errors.contact.phone = "Invalid phone number";
   }
 
-  const phoneValidation = validatePhone(profile.contact?.phone);
-  if (!phoneValidation.isValid) {
-    errors.contact = { ...errors.contact, phone: phoneValidation.message };
+  // Address Validation
+  if (!data.address?.street?.trim()) {
+    errors.address = errors.address || {};
+    errors.address.street = "Street address is required";
   }
 
-  // Validate address
-  const addressValidation = validateAddress(profile.address);
-  if (!addressValidation.isValid) {
-    errors.address = addressValidation.errors;
+  if (!data.address?.state?.trim()) {
+    errors.address = errors.address || {};
+    errors.address.state = "State is required";
   }
 
-  // Validate professional information
-  const experienceValidation = validateExperience(profile.experience);
-  if (!experienceValidation.isValid) {
-    errors.experience = experienceValidation.message;
+  if (!data.address?.city?.trim()) {
+    errors.address = errors.address || {};
+    errors.address.city = "City is required";
   }
 
-  const hourlyRateValidation = validateHourlyRate(profile.hourlyRate);
-  if (!hourlyRateValidation.isValid) {
-    errors.hourlyRate = hourlyRateValidation.message;
+  if (!data.address?.zipCode) {
+    errors.address = errors.address || {};
+    errors.address.zipCode = "ZIP code is required";
   }
 
-  const subjectsValidation = validateSubjects(profile.preferredSubjects);
-  if (!subjectsValidation.isValid) {
-    errors.preferredSubjects = subjectsValidation.message;
+  // Qualifications Validation
+  if (!data.qualifications || data.qualifications.length === 0) {
+    errors.qualifications = "At least one qualification is required";
+  } else {
+    data.qualifications.forEach((qual, index) => {
+      if (!qual.degree?.trim()) {
+        errors.qualifications = errors.qualifications || {};
+        errors.qualifications[index] = errors.qualifications[index] || {};
+        errors.qualifications[index].degree = "Degree is required";
+      }
+
+      if (!qual.institution?.trim()) {
+        errors.qualifications = errors.qualifications || {};
+        errors.qualifications[index] = errors.qualifications[index] || {};
+        errors.qualifications[index].institution = "Institution is required";
+      }
+
+      if (!qual.year) {
+        errors.qualifications = errors.qualifications || {};
+        errors.qualifications[index] = errors.qualifications[index] || {};
+        errors.qualifications[index].year = "Year is required";
+      } else if (qual.year < 1900 || qual.year > new Date().getFullYear()) {
+        errors.qualifications = errors.qualifications || {};
+        errors.qualifications[index] = errors.qualifications[index] || {};
+        errors.qualifications[index].year = "Invalid year";
+      }
+    });
   }
 
-  const teachingModeValidation = validateTeachingMode(profile.teachingMode);
-  if (!teachingModeValidation.isValid) {
-    errors.teachingMode = teachingModeValidation.message;
+  // Subjects Validation
+  if (!data.preferredSubjects || data.preferredSubjects.length === 0) {
+    errors.preferredSubjects = "At least one subject is required";
   }
 
-  // Validate qualifications
-  const qualificationsValidation = validateQualifications(profile.qualifications);
-  if (!qualificationsValidation.isValid) {
-    errors.qualifications = qualificationsValidation;
+  // Experience Validation
+  if (data.experience === undefined || data.experience === null) {
+    errors.experience = "Experience is required";
+  } else if (data.experience < 0) {
+    errors.experience = "Experience cannot be negative";
+  } else if (data.experience > 50) {
+    errors.experience = "Experience cannot exceed 50 years";
   }
 
-  // Validate availability (optional)
-  if (profile.availability && profile.availability.length > 0) {
-    const availabilityValidation = validateAvailability(profile.availability);
-    if (!availabilityValidation.isValid) {
-      errors.availability = availabilityValidation;
-    }
+  // Hourly Rate Validation
+  if (data.hourlyRate === undefined || data.hourlyRate === null) {
+    errors.hourlyRate = "Hourly rate is required";
+  } else if (data.hourlyRate < 0) {
+    errors.hourlyRate = "Hourly rate cannot be negative";
+  } else if (data.hourlyRate > 10000) {
+    errors.hourlyRate = "Hourly rate cannot exceed ₨10,000";
   }
 
-  const isValid = Object.keys(errors).length === 0;
+  // Teaching Mode Validation
+  if (!data.teachingMode) {
+    errors.teachingMode = "Teaching mode is required";
+  } else if (!["Online", "In-person", "Both"].includes(data.teachingMode)) {
+    errors.teachingMode = "Invalid teaching mode";
+  }
+
+  // Bio Validation
+  if (!data.bio?.trim()) {
+    errors.bio = "Bio is required";
+  } else if (data.bio.length < 50) {
+    errors.bio = "Bio must be at least 50 characters long";
+  } else if (data.bio.length > 1000) {
+    errors.bio = "Bio must be less than 1000 characters";
+  }
+
+  // Availability Validation
+  if (!data.availability || data.availability.length === 0) {
+    errors.availability = "At least one availability day is required";
+  } else {
+    data.availability.forEach((slot, index) => {
+      if (!slot.day) {
+        errors.availability = errors.availability || {};
+        errors.availability[index] = errors.availability[index] || {};
+        errors.availability[index].day = "Day is required";
+      }
+
+      if (!slot.timeSlots || slot.timeSlots.length === 0) {
+        errors.availability = errors.availability || {};
+        errors.availability[index] = errors.availability[index] || {};
+        errors.availability[index].timeSlots = "At least one time slot is required";
+      } else {
+        slot.timeSlots.forEach((timeSlot, timeIndex) => {
+          if (!timeSlot.startTime) {
+            errors.availability = errors.availability || {};
+            errors.availability[index] = errors.availability[index] || {};
+            errors.availability[index].timeSlots = errors.availability[index].timeSlots || {};
+            errors.availability[index].timeSlots[timeIndex] = errors.availability[index].timeSlots[timeIndex] || {};
+            errors.availability[index].timeSlots[timeIndex].startTime = "Start time is required";
+          } else if (!/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(timeSlot.startTime)) {
+            errors.availability = errors.availability || {};
+            errors.availability[index] = errors.availability[index] || {};
+            errors.availability[index].timeSlots = errors.availability[index].timeSlots || {};
+            errors.availability[index].timeSlots[timeIndex] = errors.availability[index].timeSlots[timeIndex] || {};
+            errors.availability[index].timeSlots[timeIndex].startTime = "Invalid time format (HH:MM)";
+          }
+
+          if (!timeSlot.endTime) {
+            errors.availability = errors.availability || {};
+            errors.availability[index] = errors.availability[index] || {};
+            errors.availability[index].timeSlots = errors.availability[index].timeSlots || {};
+            errors.availability[index].timeSlots[timeIndex] = errors.availability[index].timeSlots[timeIndex] || {};
+            errors.availability[index].timeSlots[timeIndex].endTime = "End time is required";
+          } else if (!/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/.test(timeSlot.endTime)) {
+            errors.availability = errors.availability || {};
+            errors.availability[index] = errors.availability[index] || {};
+            errors.availability[index].timeSlots = errors.availability[index].timeSlots || {};
+            errors.availability[index].timeSlots[timeIndex] = errors.availability[index].timeSlots[timeIndex] || {};
+            errors.availability[index].timeSlots[timeIndex].endTime = "Invalid time format (HH:MM)";
+          }
+
+          // Time logic validation
+          if (timeSlot.startTime && timeSlot.endTime) {
+            const start = parseInt(timeSlot.startTime.replace(':', ''));
+            const end = parseInt(timeSlot.endTime.replace(':', ''));
+            if (start >= end) {
+              errors.availability = errors.availability || {};
+              errors.availability[index] = errors.availability[index] || {};
+              errors.availability[index].timeSlots = errors.availability[index].timeSlots || {};
+              errors.availability[index].timeSlots[timeIndex] = errors.availability[index].timeSlots[timeIndex] || {};
+              errors.availability[index].timeSlots[timeIndex].timeLogic = "End time must be after start time";
+            }
+          }
+        });
+      }
+    });
+  }
 
   return {
-    isValid,
+    isValid: Object.keys(errors).length === 0,
     errors,
-    message: isValid ? 'Profile is valid' : 'Please fix the validation errors'
   };
 };
 

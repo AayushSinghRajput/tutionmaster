@@ -164,7 +164,7 @@ const TeacherDetails = () => {
                         {slot.timeSlots.map((timeSlot, timeIndex) => (
                           <div key={timeIndex} className="flex items-center space-x-2 text-gray-700">
                             <Clock className="w-4 h-4 text-gray-400" />
-                            <span>{timeSlot.start} - {timeSlot.end}</span>
+                            <span>{timeSlot.startTime} - {timeSlot.endTime}</span>
                           </div>
                         ))}
                       </div>

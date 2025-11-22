@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { teacherService } from "../services/teacherService";
 import { useAuth } from "../context/AuthContext";
@@ -9,9 +9,9 @@ import {
   Plus,
   BookOpen,
   Calendar,
-  DollarSign,
   Eye,
-  ShieldCheck
+  ShieldCheck,
+  IndianRupee
 } from "lucide-react";
 import { toast } from "react-toastify";
 
@@ -167,7 +167,7 @@ const Dashboard = () => {
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center">
                   <div className="flex-shrink-0">
-                    <DollarSign className="h-6 w-6 text-gray-400" />
+                    <IndianRupee className="h-6 w-6 text-gray-400" />
                   </div>
                   <div className="ml-4">
                     <h3 className="text-sm font-medium text-gray-900">

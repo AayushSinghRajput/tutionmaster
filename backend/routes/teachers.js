@@ -19,11 +19,15 @@ const router = express.Router();
 // Public routes
 router.get('/', getTeachers);
 router.get('/search', searchTeachers);
+
+// Specific route MUST be above :id
+router.get('/my-profile', protect, getMyProfile);
+
+// This MUST come after specific paths
 router.get('/:id', getTeacher);
 
 // Protected routes
 router.use(protect);
-router.get('/my-profile', getMyProfile);
 router.post('/', teacherProfileValidation, handleValidationErrors, createTeacher);
 router.put('/:id', teacherProfileValidation, handleValidationErrors, updateTeacher);
 router.delete('/:id', deleteTeacher);

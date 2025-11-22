@@ -194,10 +194,9 @@ const TeacherForm = ({
   const [formErrors, setFormErrors] = useState({});
   const [avatarFile, setAvatarFile] = useState(null);
   const [cvFile, setCvFile] = useState(null);
-  const [selectedState, setSelectedState] = useState(
-    initialData?.address?.state || ""
-  );
+  const [selectedState, setSelectedState] = useState("");
   const [availableCities, setAvailableCities] = useState([]);
+  const [isFormReady, setIsFormReady] = useState(false);
 
   const {
     register,
@@ -209,7 +208,7 @@ const TeacherForm = ({
     reset,
     trigger,
   } = useForm({
-    defaultValues: initialData || {
+    defaultValues: {
       name: "",
       contact: {
         email: "",
@@ -250,13 +249,90 @@ const TeacherForm = ({
   const watchAvailability = watch("availability", []);
   const watchBio = watch("bio", "");
 
+  // SIMPLIFIED INITIALIZATION - This is the key fix
+  // FIXED INITIALIZATION - Set everything in one reset()
+  useEffect(() => {
+    if (initialData && !isFormReady) {
+      console.log("🔄 INITIALIZING FORM WITH DATA:", initialData);
+
+      // Prepare the complete data object with availability included
+      const formData = {
+        name: initialData.name || "",
+        contact: {
+          email: initialData.contact?.email || "",
+          phone: initialData.contact?.phone || "",
+        },
+        address: {
+          street: initialData.address?.street || "",
+          city: initialData.address?.city || "",
+          state: initialData.address?.state || "",
+          zipCode: initialData.address?.zipCode || "",
+        },
+        qualifications: initialData.qualifications || [
+          {
+            degree: "",
+            institution: "",
+            year: new Date().getFullYear(),
+          },
+        ],
+        preferredSubjects: initialData.preferredSubjects || [],
+        bio: initialData.bio || "",
+        experience: initialData.experience || 0,
+        hourlyRate: initialData.hourlyRate || 0,
+        teachingMode: initialData.teachingMode || "Both",
+        availability: initialData.availability || [],
+      };
+
+      console.log("📅 FORM DATA WITH AVAILABILITY:", formData);
+
+      // Reset form with ALL data including availability
+      reset(formData);
+
+      // Set states AFTER reset
+      setTimeout(() => {
+        if (initialData.avatarPublicId) {
+          setAvatarFile({
+            publicId: initialData.avatarPublicId,
+            url: initialData.avatarUrl,
+          });
+        }
+        if (initialData.cvPublicId) {
+          setCvFile({
+            publicId: initialData.cvPublicId,
+            url: initialData.cvUrl,
+          });
+        }
+        if (initialData.address?.state) {
+          setSelectedState(initialData.address.state);
+          // Ensure city is set after state
+          if (initialData.address?.city) {
+            setValue("address.city", initialData.address.city);
+          }
+        }
+
+        setIsFormReady(true);
+        console.log("✅ FORM INITIALIZATION COMPLETE");
+      }, 100);
+
+      setIsFormReady(true);
+      console.log("✅ FORM INITIALIZATION COMPLETE");
+    }
+  }, [initialData, reset, setValue, isFormReady]);
+
+  // Monitor availability changes
+  useEffect(() => {
+    if (watchAvailability.length > 0) {
+      console.log("👀 CURRENT AVAILABILITY:", watchAvailability);
+      console.log("📊 AVAILABILITY LENGTH:", watchAvailability.length);
+    }
+  }, [watchAvailability]);
+
   // Update available cities when state changes
   useEffect(() => {
     if (selectedState) {
       const state = NEPAL_STATES.find((s) => s.name === selectedState);
       setAvailableCities(state ? state.cities : []);
 
-      // Clear city if it's not in the new state's cities
       const currentCity = watch("address.city");
       if (currentCity && state && !state.cities.includes(currentCity)) {
         setValue("address.city", "");
@@ -267,30 +343,15 @@ const TeacherForm = ({
     }
   }, [selectedState, setValue, watch]);
 
-  // Initialize form with existing data
-  useEffect(() => {
-    if (initialData) {
-      reset(initialData);
-      if (initialData.avatarPublicId) {
-        setAvatarFile({
-          publicId: initialData.avatarPublicId,
-          url: initialData.avatarUrl,
-        });
-      }
-      if (initialData.cvPublicId) {
-        setCvFile({ publicId: initialData.cvPublicId, url: initialData.cvUrl });
-      }
-      if (initialData.address?.state) {
-        setSelectedState(initialData.address.state);
-      }
-    }
-  }, [initialData, reset]);
-
   const handleFormSubmit = async (data) => {
     try {
+      console.log("📤 FORM SUBMISSION DATA:", data);
+      console.log("📅 AVAILABILITY BEING SUBMITTED:", data.availability);
+
       const validation = validateTeacherProfile(data);
 
       if (!validation.isValid) {
+        console.log("❌ VALIDATION ERRORS:", validation.errors);
         setFormErrors(validation.errors);
         if (validation.errors.name || validation.errors.contact) {
           setCurrentStep(1);
@@ -301,6 +362,8 @@ const TeacherForm = ({
           setCurrentStep(2);
         } else if (validation.errors.bio || validation.errors.experience) {
           setCurrentStep(3);
+        } else if (validation.errors.availability) {
+          setCurrentStep(4);
         }
         return;
       }
@@ -313,6 +376,7 @@ const TeacherForm = ({
         cvPublicId: cvFile?.publicId || null,
       };
 
+      console.log("✅ FINAL SUBMIT DATA:", submitData);
       await onSubmit(submitData);
     } catch (error) {
       console.error("Form submission error:", error);
@@ -365,7 +429,6 @@ const TeacherForm = ({
   };
 
   const nextStep = async () => {
-    // Validate current step before proceeding
     let isValid = false;
 
     if (currentStep === 1) {
@@ -388,10 +451,27 @@ const TeacherForm = ({
         "bio",
       ]);
     } else {
-      isValid = true;
+      const availability = watchAvailability || [];
+      console.log("🔍 CHECKING AVAILABILITY FOR VALIDATION:", availability);
+      isValid =
+        availability.length > 0 &&
+        availability.some(
+          (slot) => slot.timeSlots && slot.timeSlots.length > 0
+        );
+      if (!isValid) {
+        setFormErrors((prev) => ({
+          ...prev,
+          availability: "Please set at least one availability time slot",
+        }));
+      }
     }
 
     if (isValid) {
+      setFormErrors((prev) => {
+        const newErrors = { ...prev };
+        delete newErrors.availability;
+        return newErrors;
+      });
       setCurrentStep((prev) => Math.min(prev + 1, 4));
     }
   };
@@ -426,6 +506,18 @@ const TeacherForm = ({
       icon: Clock,
     },
   ];
+
+  // Show loading until form is ready
+  if (!isFormReady && isEdit) {
+    return (
+      <div className="w-full max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl border border-blue-100 overflow-hidden">
+        <div className="p-10 text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-4 text-gray-600">Loading form data...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -530,7 +622,12 @@ const TeacherForm = ({
                 <li key={key} className="flex items-center space-x-2">
                   <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
                   <span>
-                    {typeof error === "object" ? JSON.stringify(error) : error}
+                    {typeof error === "object"
+                      ? Object.values(error)
+                          .flat()
+                          .filter((val) => val)
+                          .join(", ")
+                      : error}
                   </span>
                 </li>
               ))}
@@ -964,7 +1061,7 @@ const TeacherForm = ({
               />
             </div>
 
-            {/* Subjects - Updated to 3 per row */}
+            {/* Subjects */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
               <h3 className="font-bold text-gray-800 text-xl mb-6">
                 Subjects You Teach *
@@ -1199,14 +1296,49 @@ const TeacherForm = ({
               </p>
             </div>
 
+            {/* DEBUG: Check if step 4 is rendering */}
+            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
+              <p className="text-green-800 font-bold">
+                ✅ Step 4 IS rendering! Availability data:{" "}
+                {watchAvailability?.length} slots
+              </p>
+            </div>
+
+            {/* Debug info */}
+            {process.env.NODE_ENV === "development" && (
+              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+                <p className="text-blue-800 text-sm">
+                  <strong>Debug Info:</strong>
+                  Availability slots loaded: {watchAvailability?.length || 0}
+                  {watchAvailability?.length > 0 && (
+                    <span> - First slot: {watchAvailability[0]?.day}</span>
+                  )}
+                </p>
+              </div>
+            )}
+
             {/* Availability Picker */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
               <AvailabilityPicker
-                value={watchAvailability}
-                onChange={(availability) =>
-                  setValue("availability", availability)
-                }
+                key={`availability-${watchAvailability?.length}-${isFormReady}`}
+                value={watchAvailability || []}
+                onChange={(availability) => {
+                  console.log("🔄 Availability changed:", availability);
+                  setValue("availability", availability, {
+                    shouldValidate: true,
+                  });
+                }}
               />
+              {formErrors.availability && (
+                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
+                  <p className="text-red-600 flex items-center text-base">
+                    <AlertCircle className="w-5 h-5 mr-2" />
+                    {typeof formErrors.availability === "string"
+                      ? formErrors.availability
+                      : "Please fix availability errors above"}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Final Call to Action */}

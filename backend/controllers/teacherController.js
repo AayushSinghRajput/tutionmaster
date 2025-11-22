@@ -1,5 +1,4 @@
 const Teacher = require('../models/Teacher');
-const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const cloudinary = require('../config/cloudinary');
 
@@ -278,6 +277,7 @@ exports.deleteTeacher = async (req, res, next) => {
 // @desc    Get current teacher's profile
 // @route   GET /api/teachers/my-profile
 // @access  Private
+//Fetches the logged-in teacher
 exports.getMyProfile = async (req, res, next) => {
   try {
     const teacher = await Teacher.findOne({ userId: req.user.id })
