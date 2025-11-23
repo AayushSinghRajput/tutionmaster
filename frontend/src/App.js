@@ -25,6 +25,7 @@ import Contact from  './pages/Contact';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import TermsOfService from './pages/TermsOfService';
 import CookiePolicy from './pages/CookiePolicy';
+import HowItWorks from "./pages/HowItWorks";
 
 // Protected Route
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -49,6 +50,7 @@ function App() {
               <Route path="/privacy-policy" element={<PrivacyPolicy />} />
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/cookie-policy" element={<CookiePolicy />} />
+              <Route path="/how-it-works" element={<HowItWorks/>}/>
 
 
               {/* Protected Routes */}

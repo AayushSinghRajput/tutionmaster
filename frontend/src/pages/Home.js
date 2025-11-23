@@ -1,4 +1,4 @@
-import React from "react";
+
 import { Link } from "react-router-dom";
 import {
   Search,
@@ -16,7 +16,7 @@ import {
   Clock,
   UserPlus,
   Calculator,
-  Languages
+  Cpu,
 } from "lucide-react";
 
 const Home = () => {
@@ -35,7 +35,7 @@ const Home = () => {
               <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-6">
                 <Star className="w-5 h-5 text-yellow-300" />
                 <span className="font-semibold text-sm">
-                  Trusted by 50,000+ students worldwide
+                  Trusted by 50,000+ students nationwide
                 </span>
               </div>
 
@@ -61,7 +61,7 @@ const Home = () => {
                   Find Tutors Now
                 </Link>
                 <Link
-                  to="#"
+                  to="/how-it-works"
                   className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-transparent border-2 border-white/30 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
                 >
                   <Play className="w-5 h-5 mr-3" />
@@ -98,123 +98,123 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Right Content - Illustration */}
+            {/* Right Content - Subjects Grid */}
             <div className="relative">
               <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-8 border border-white/20 shadow-2xl">
                 <div className="text-center mb-6">
                   <h3 className="text-xl font-bold text-white mb-2">
-                    Popular Academic Subjects
+                    Comprehensive Learning Programs
                   </h3>
                   <p className="text-blue-100 text-sm">
-                    Comprehensive tutoring for all educational levels
+                    Complete curriculum coverage for all educational levels in
+                    Nepal
                   </p>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  {/* Science & Math */}
+                <div className="grid grid-cols-2 gap-2">
+                  {/* School Level (1-10) */}
                   <div className="bg-white rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-all duration-300 group">
                     <div className="inline-flex items-center justify-center w-12 h-12 bg-blue-100 rounded-xl mb-3 group-hover:bg-blue-200 transition-colors">
-                      <Calculator className="w-6 h-6 text-blue-600" />
+                      <BookOpen className="w-6 h-6 text-blue-600" />
                     </div>
                     <h3 className="font-bold text-gray-900 mb-2">
-                      Science & Math
+                      School Level (1-10)
                     </h3>
                     <p className="text-sm text-gray-600">
-                      Physics, Chemistry, Biology, Mathematics
+                      All Subjects: Nepali, English, Math, Science, Social
                     </p>
                     <div className="flex justify-center gap-1 mt-2">
                       <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                        School
+                        Class 1-5
                       </span>
                       <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                        College
+                        Class 6-8
                       </span>
                       <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                        Class 9-10
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* +2 Level */}
+                  <div className="bg-white rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-all duration-300 group">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl mb-3 group-hover:bg-green-200 transition-colors">
+                      <Calculator className="w-6 h-6 text-green-600" />
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-2">
+                      +2 Level (Science/Management)
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      Physics, Chemistry, Biology, Math, English, Nepali
+                    </p>
+                    <div className="flex justify-center gap-1 mt-2">
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
+                        Grade 11
+                      </span>
+                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
+                        Grade 12
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Engineering */}
+                  <div className="bg-white rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-all duration-300 group">
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-xl mb-3 group-hover:bg-yellow-200 transition-colors">
+                      <Cpu className="w-6 h-6 text-yellow-600" />
+                    </div>
+                    <h3 className="font-bold text-gray-900 mb-2">
+                      Engineering (Bachelor's)
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      All semesters & subjects for Nepal Engineering colleges
+                    </p>
+                    <div className="flex justify-center gap-1 mt-2">
+                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
                         Bachelor
+                      </span>
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                        BE/BTech
                       </span>
                     </div>
                   </div>
 
                   {/* Programming & IT */}
                   <div className="bg-white rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-all duration-300 group">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-green-100 rounded-xl mb-3 group-hover:bg-green-200 transition-colors">
-                      <Code className="w-6 h-6 text-green-600" />
+                    <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-xl mb-3 group-hover:bg-purple-200 transition-colors">
+                      <Code className="w-6 h-6 text-purple-600" />
                     </div>
                     <h3 className="font-bold text-gray-900 mb-2">
                       Programming & IT
                     </h3>
                     <p className="text-sm text-gray-600">
-                      Coding, Web Dev, Data Science, CS
+                      JavaScript, Python, Web Development, Data Science
                     </p>
                     <div className="flex justify-center gap-1 mt-2">
                       <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                        College
+                        Beginner
                       </span>
                       <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-                        Bachelor
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Languages & Literature */}
-                  <div className="bg-white rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-all duration-300 group">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-yellow-100 rounded-xl mb-3 group-hover:bg-yellow-200 transition-colors">
-                      <Languages className="w-6 h-6 text-yellow-600" />
-                    </div>
-                    <h3 className="font-bold text-gray-900 mb-2">Languages</h3>
-                    <p className="text-sm text-gray-600">
-                      English, Spanish, French, Literature
-                    </p>
-                    <div className="flex justify-center gap-1 mt-2">
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
-                        School
-                      </span>
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                        College
-                      </span>
-                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-                        Bachelor
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Business & Commerce */}
-                  <div className="bg-white rounded-xl p-6 text-center shadow-lg transform hover:scale-105 transition-all duration-300 group">
-                    <div className="inline-flex items-center justify-center w-12 h-12 bg-purple-100 rounded-xl mb-3 group-hover:bg-purple-200 transition-colors">
-                      <TrendingUp className="w-6 h-6 text-purple-600" />
-                    </div>
-                    <h3 className="font-bold text-gray-900 mb-2">
-                      Business & Commerce
-                    </h3>
-                    <p className="text-sm text-gray-600">
-                      Economics, Accounts, Business Studies
-                    </p>
-                    <div className="flex justify-center gap-1 mt-2">
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">
-                        College
-                      </span>
-                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded-full">
-                        Bachelor
+                        Advanced
                       </span>
                     </div>
                   </div>
                 </div>
 
-                {/* Additional Subjects Row */}
+                {/* Additional Programs Row */}
                 <div className="grid grid-cols-3 gap-3 mt-6">
                   <div className="bg-white/20 rounded-lg p-3 text-center border border-white/30">
                     <span className="text-white text-sm font-medium">
-                      Social Studies
+                      SEE Preparation
                     </span>
                   </div>
                   <div className="bg-white/20 rounded-lg p-3 text-center border border-white/30">
                     <span className="text-white text-sm font-medium">
-                      Test Prep
+                      +2 Entrance
                     </span>
                   </div>
                   <div className="bg-white/20 rounded-lg p-3 text-center border border-white/30">
                     <span className="text-white text-sm font-medium">
-                      +20 More
+                      +15 More Subjects
                     </span>
                   </div>
                 </div>
@@ -391,7 +391,7 @@ const Home = () => {
               className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-blue-600 bg-white rounded-xl hover:bg-blue-50 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-2xl group"
             >
               <UserPlus className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
-              Start Learning 
+              Start Learning
             </Link>
             <Link
               to="/register"
