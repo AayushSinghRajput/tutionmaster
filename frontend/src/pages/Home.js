@@ -1,4 +1,4 @@
-
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import {
   Search,
@@ -17,9 +17,42 @@ import {
   UserPlus,
   Calculator,
   Cpu,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 
 const Home = () => {
+  const howItWorksRef = useRef(null);
+  const [activeStep, setActiveStep] = useState(1);
+
+  const scrollToHowItWorks = () => {
+    howItWorksRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'start'
+    });
+  };
+
+  const steps = [
+    {
+      number: 1,
+      icon: Search,
+      title: "Find Your Tutor",
+      description: "Browse verified tutors, compare profiles, and choose the perfect match for your learning needs"
+    },
+    {
+      number: 2,
+      icon: Calendar,
+      title: "Schedule Sessions",
+      description: "Book lessons at your convenience with flexible scheduling and personalized timing options"
+    },
+    {
+      number: 3,
+      icon: TrendingUp,
+      title: "Learn & Excel",
+      description: "Engage in interactive lessons, track your progress, and achieve your academic goals"
+    }
+  ];
+
   return (
     <div className="min-h-screen">
       {/* Hero Banner Section */}
@@ -35,10 +68,9 @@ const Home = () => {
               <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-6">
                 <Star className="w-5 h-5 text-yellow-300" />
                 <span className="font-semibold text-sm">
-                  Trusted by 50,000+ students nationwide
+                  Trusted by 10,000+ students nationwide
                 </span>
               </div>
-
               <h1 className="text-5xl lg:text-6xl font-bold leading-tight mb-6">
                 Find Your Perfect
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-yellow-400">
@@ -46,7 +78,6 @@ const Home = () => {
                   Tutor
                 </span>
               </h1>
-
               <p className="text-xl text-blue-100 leading-relaxed mb-8 max-w-lg">
                 Connect with certified educators, master new skills, and achieve
                 your academic goals with personalized 1-on-1 tutoring.
@@ -60,31 +91,31 @@ const Home = () => {
                   <Search className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                   Find Tutors Now
                 </Link>
-                <Link
-                  to="/how-it-works"
-                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-transparent border-2 border-white/30 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
+                <button
+                  onClick={scrollToHowItWorks}
+                  className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-transparent border-2 border-white/30 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm group"
                 >
-                  <Play className="w-5 h-5 mr-3" />
+                  <Play className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
                   How It Works
-                </Link>
+                </button>
               </div>
 
               {/* Stats */}
               <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-white/20">
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white">5000+</div>
+                  <div className="text-3xl font-bold text-white">1K+</div>
                   <div className="text-blue-200 text-sm font-medium">
                     Expert Tutors
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white">50K+</div>
+                  <div className="text-3xl font-bold text-white">10K+</div>
                   <div className="text-blue-200 text-sm font-medium">
                     Happy Students
                   </div>
                 </div>
                 <div className="text-center">
-                  <div className="text-3xl font-bold text-white">200+</div>
+                  <div className="text-3xl font-bold text-white">100+</div>
                   <div className="text-blue-200 text-sm font-medium">
                     Subjects
                   </div>
@@ -214,7 +245,7 @@ const Home = () => {
                   </div>
                   <div className="bg-white/20 rounded-lg p-3 text-center border border-white/30">
                     <span className="text-white text-sm font-medium">
-                      +15 More Subjects
+                      Engineering Entrance
                     </span>
                   </div>
                 </div>
@@ -222,15 +253,29 @@ const Home = () => {
             </div>
           </div>
         </div>
+
+        {/* Scroll Indicator */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2">
+          <button
+            onClick={scrollToHowItWorks}
+            className="flex flex-col items-center text-white/70 hover:text-white transition-colors duration-300 group"
+          >
+            <span className="text-sm mb-2">Learn More</span>
+            <ChevronDown className="w-5 h-5 animate-bounce group-hover:scale-110 transition-transform" />
+          </button>
+        </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="py-20 bg-white">
+      <section 
+        ref={howItWorksRef} 
+        className="py-20 bg-white scroll-mt-16"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
-              <Sparkles className="w-4 h-4" />
-              SIMPLE PROCESS
+              <Play className="w-4 h-4" />
+              GET STARTED
             </div>
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               How <span className="text-blue-600">TutionMaster</span> Works
@@ -240,57 +285,83 @@ const Home = () => {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 relative">
+          {/* Desktop Steps */}
+          <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8 relative">
             {/* Connecting Line */}
             <div className="hidden md:block absolute top-20 left-1/4 right-1/4 h-0.5 bg-gradient-to-r from-blue-200 to-blue-300 -z-10"></div>
 
-            <div className="text-center p-8 bg-gradient-to-b from-white to-blue-25 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                1
+            {steps.map((step, index) => (
+              <div 
+                key={step.number}
+                className="text-center p-8 bg-gradient-to-b from-white to-blue-25 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 relative cursor-pointer"
+                onMouseEnter={() => setActiveStep(step.number)}
+              >
+                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                  {step.number}
+                </div>
+                <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-2xl mb-6 mt-4 group-hover:scale-110 transition-transform duration-300">
+                  <step.icon className="w-10 h-10 text-blue-600" />
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                  {step.title}
+                </h3>
+                <p className="text-gray-600 leading-relaxed text-lg">
+                  {step.description}
+                </p>
               </div>
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-2xl mb-6 mt-4">
-                <Search className="w-10 h-10 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Find Your Tutor
-              </h3>
-              <p className="text-gray-600 leading-relaxed text-lg">
-                Browse verified tutors, compare profiles, and choose the perfect
-                match for your learning needs
-              </p>
-            </div>
+            ))}
+          </div>
 
-            <div className="text-center p-8 bg-gradient-to-b from-white to-blue-25 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                2
+          {/* Mobile Steps */}
+          <div className="md:hidden space-y-4">
+            {steps.map((step) => (
+              <div 
+                key={step.number}
+                className="bg-gradient-to-b from-white to-blue-25 rounded-2xl shadow-lg border border-blue-100 overflow-hidden"
+              >
+                <button
+                  className="w-full p-6 text-left flex items-center justify-between"
+                  onClick={() => setActiveStep(activeStep === step.number ? 0 : step.number)}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold">
+                      {step.number}
+                    </div>
+                    <h3 className="text-xl font-bold text-gray-900">
+                      {step.title}
+                    </h3>
+                  </div>
+                  {activeStep === step.number ? (
+                    <ChevronUp className="w-5 h-5 text-gray-500" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-gray-500" />
+                  )}
+                </button>
+                {activeStep === step.number && (
+                  <div className="px-6 pb-6">
+                    <div className="flex justify-center mb-4">
+                      <div className="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-2xl">
+                        <step.icon className="w-8 h-8 text-blue-600" />
+                      </div>
+                    </div>
+                    <p className="text-gray-600 leading-relaxed text-center">
+                      {step.description}
+                    </p>
+                  </div>
+                )}
               </div>
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-2xl mb-6 mt-4">
-                <Calendar className="w-10 h-10 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Schedule Sessions
-              </h3>
-              <p className="text-gray-600 leading-relaxed text-lg">
-                Book lessons at your convenience with flexible scheduling and
-                personalized timing options
-              </p>
-            </div>
+            ))}
+          </div>
 
-            <div className="text-center p-8 bg-gradient-to-b from-white to-blue-25 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 relative">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 w-12 h-12 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-lg shadow-lg">
-                3
-              </div>
-              <div className="inline-flex items-center justify-center w-20 h-20 bg-blue-100 rounded-2xl mb-6 mt-4">
-                <TrendingUp className="w-10 h-10 text-blue-600" />
-              </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                Learn & Excel
-              </h3>
-              <p className="text-gray-600 leading-relaxed text-lg">
-                Engage in interactive lessons, track your progress, and achieve
-                your academic goals
-              </p>
-            </div>
+          {/* CTA below steps */}
+          <div className="text-center mt-12">
+            <Link
+              to="/teachers"
+              className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-blue-600 rounded-xl hover:bg-blue-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
+            >
+              <Search className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
+              Find Your Tutor Now
+            </Link>
           </div>
         </div>
       </section>

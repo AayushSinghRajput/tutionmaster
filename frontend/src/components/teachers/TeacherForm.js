@@ -24,159 +24,63 @@ const NEPAL_STATES = [
   {
     name: "Koshi Province",
     cities: [
-      "Biratnagar",
-      "Itahari",
-      "Dharan",
-      "Bhadrapur",
-      "Mechinagar",
-      "Damak",
-      "Rajbiraj",
-      "Inaruwa",
-      "Birtamod",
-      "Dhankuta",
-      "Kankai",
-      "Bhojpur",
-      "Terhathum",
-      "Panchthar",
-      "Ilam",
-      "Jhapa",
-      "Morang",
-      "Sunsari",
-      "Saptari",
-      "Udayapur",
+      "Biratnagar", "Itahari", "Dharan", "Bhadrapur", "Mechinagar", 
+      "Damak", "Rajbiraj", "Inaruwa", "Birtamod", "Dhankuta", 
+      "Kankai", "Bhojpur", "Terhathum", "Panchthar", "Ilam", 
+      "Jhapa", "Morang", "Sunsari", "Saptari", "Udayapur"
     ],
   },
   {
     name: "Madhesh Province",
     cities: [
-      "Janakpur",
-      "Birgunj",
-      "Kalaiya",
-      "Gaur",
-      "Malangwa",
-      "Jaleshwar",
-      "Bardibas",
-      "Siraha",
-      "Lahan",
-      "Dhanusha",
-      "Mahottari",
-      "Sarlahi",
-      "Rautahat",
-      "Bara",
-      "Parsa",
+      "Janakpur", "Birgunj", "Kalaiya", "Gaur", "Malangwa", 
+      "Jaleshwar", "Bardibas", "Siraha", "Lahan", "Dhanusha", 
+      "Mahottari", "Sarlahi", "Rautahat", "Bara", "Parsa"
     ],
   },
   {
     name: "Bagmati Province",
     cities: [
-      "Kathmandu",
-      "Lalitpur",
-      "Bhaktapur",
-      "Pokhara",
-      "Hetauda",
-      "Bharatpur",
-      "Dhulikhel",
-      "Banepa",
-      "Panauti",
-      "Kirtipur",
-      "Madhyapur Thimi",
-      "Budhanilkantha",
-      "Gokarneshwar",
-      "Chandragiri",
-      "Tokha",
-      "Suryabinayak",
-      "Nagarkot",
-      "Dhading",
-      "Nuwakot",
-      "Rasuwa",
-      "Sindhupalchok",
-      "Dolakha",
-      "Ramechhap",
-      "Sindhuli",
-      "Makwanpur",
-      "Chitwan",
+      "Kathmandu", "Lalitpur", "Bhaktapur", "Pokhara", "Hetauda", 
+      "Bharatpur", "Dhulikhel", "Banepa", "Panauti", "Kirtipur", 
+      "Madhyapur Thimi", "Budhanilkantha", "Gokarneshwar", "Chandragiri", 
+      "Tokha", "Suryabinayak", "Nagarkot", "Dhading", "Nuwakot", 
+      "Rasuwa", "Sindhupalchok", "Dolakha", "Ramechhap", "Sindhuli", 
+      "Makwanpur", "Chitwan"
     ],
   },
   {
     name: "Gandaki Province",
     cities: [
-      "Pokhara",
-      "Gorkha",
-      "Lekhnath",
-      "Kusma",
-      "Baglung",
-      "Besisahar",
-      "Damauli",
-      "Waling",
-      "Beni",
-      "Jomsom",
-      "Kawasoti",
-      "Gaindakot",
-      "Bharatpur",
-      "Putalibazar",
-      "Syangja",
-      "Chapakot",
-      "Galyang",
-      "Ramgram",
+      "Pokhara", "Gorkha", "Lekhnath", "Kusma", "Baglung", 
+      "Besisahar", "Damauli", "Waling", "Beni", "Jomsom", 
+      "Kawasoti", "Gaindakot", "Bharatpur", "Putalibazar", 
+      "Syangja", "Chapakot", "Galyang", "Ramgram"
     ],
   },
   {
     name: "Lumbini Province",
     cities: [
-      "Butwal",
-      "Nepalgunj",
-      "Tansen",
-      "Gulariya",
-      "Banganga",
-      "Shivaraj",
-      "Kapilvastu",
-      "Buddhabhumi",
-      "Sandhikharka",
-      "Tamghas",
-      "Pyuthan",
-      "Salyan",
-      "Rolpa",
-      "Rukum",
-      "Dang",
-      "Banke",
-      "Bardiya",
+      "Butwal", "Nepalgunj", "Tansen", "Gulariya", "Banganga", 
+      "Shivaraj", "Kapilvastu", "Buddhabhumi", "Sandhikharka", 
+      "Tamghas", "Pyuthan", "Salyan", "Rolpa", "Rukum", 
+      "Dang", "Banke", "Bardiya"
     ],
   },
   {
     name: "Karnali Province",
     cities: [
-      "Birendranagar",
-      "Manma",
-      "Jumla",
-      "Dunai",
-      "Chandannath",
-      "Mahabu",
-      "Thuli Bheri",
-      "Narayan",
-      "Bheri",
-      "Chhedagad",
-      "Aathbiskot",
-      "Musikot",
-      "Chhayanath",
-      "Tribeni",
+      "Birendranagar", "Manma", "Jumla", "Dunai", "Chandannath", 
+      "Mahabu", "Thuli Bheri", "Narayan", "Bheri", "Chhedagad", 
+      "Aathbiskot", "Musikot", "Chhayanath", "Tribeni"
     ],
   },
   {
     name: "Sudurpashchim Province",
     cities: [
-      "Dhangadhi",
-      "Mahendranagar",
-      "Tikapur",
-      "Ghodaghodi",
-      "Lamki Chuha",
-      "Bhimdatta",
-      "Punarbas",
-      "Belauri",
-      "Amargadhi",
-      "Dasharathchand",
-      "Melauli",
-      "Purchaudi",
-      "Jogbudha",
+      "Dhangadhi", "Mahendranagar", "Tikapur", "Ghodaghodi", 
+      "Lamki Chuha", "Bhimdatta", "Punarbas", "Belauri", 
+      "Amargadhi", "Dasharathchand", "Melauli", "Purchaudi", "Jogbudha"
     ],
   },
 ];
@@ -248,14 +152,35 @@ const TeacherForm = ({
   const watchSubjects = watch("preferredSubjects", []);
   const watchAvailability = watch("availability", []);
   const watchBio = watch("bio", "");
+  const watchState = watch("address.state");
 
-  // SIMPLIFIED INITIALIZATION - This is the key fix
-  // FIXED INITIALIZATION - Set everything in one reset()
+  // Initialize form with data
   useEffect(() => {
     if (initialData && !isFormReady) {
       console.log("🔄 INITIALIZING FORM WITH DATA:", initialData);
 
-      // Prepare the complete data object with availability included
+      // Transform availability data to ensure proper structure
+      const transformedAvailability = initialData.availability?.map(daySlot => ({
+        day: daySlot.day,
+        timeSlots: daySlot.timeSlots?.map(timeSlot => {
+          let startTime = timeSlot.startTime;
+          let endTime = timeSlot.endTime;
+
+          // Convert 24-hour format to 12-hour AM/PM if needed
+          if (startTime.includes(':') && !startTime.includes('AM') && !startTime.includes('PM')) {
+            startTime = convertTo12Hour(startTime);
+          }
+          if (endTime.includes(':') && !endTime.includes('AM') && !endTime.includes('PM')) {
+            endTime = convertTo12Hour(endTime);
+          }
+
+          return {
+            startTime: startTime.toUpperCase(),
+            endTime: endTime.toUpperCase()
+          };
+        }) || []
+      })) || [];
+
       const formData = {
         name: initialData.name || "",
         contact: {
@@ -280,15 +205,13 @@ const TeacherForm = ({
         experience: initialData.experience || 0,
         hourlyRate: initialData.hourlyRate || 0,
         teachingMode: initialData.teachingMode || "Both",
-        availability: initialData.availability || [],
+        availability: transformedAvailability,
       };
 
-      console.log("📅 FORM DATA WITH AVAILABILITY:", formData);
+      console.log("📅 FORM DATA WITH TRANSFORMED AVAILABILITY:", formData);
 
-      // Reset form with ALL data including availability
       reset(formData);
 
-      // Set states AFTER reset
       setTimeout(() => {
         if (initialData.avatarPublicId) {
           setAvatarFile({
@@ -304,63 +227,78 @@ const TeacherForm = ({
         }
         if (initialData.address?.state) {
           setSelectedState(initialData.address.state);
-          // Ensure city is set after state
-          if (initialData.address?.city) {
-            setValue("address.city", initialData.address.city);
-          }
         }
 
         setIsFormReady(true);
         console.log("✅ FORM INITIALIZATION COMPLETE");
       }, 100);
-
-      setIsFormReady(true);
-      console.log("✅ FORM INITIALIZATION COMPLETE");
     }
   }, [initialData, reset, setValue, isFormReady]);
 
-  // Monitor availability changes
-  useEffect(() => {
-    if (watchAvailability.length > 0) {
-      console.log("👀 CURRENT AVAILABILITY:", watchAvailability);
-      console.log("📊 AVAILABILITY LENGTH:", watchAvailability.length);
-    }
-  }, [watchAvailability]);
+  // Helper function to convert 24-hour to 12-hour format
+  const convertTo12Hour = (time24) => {
+    const [hours, minutes] = time24.split(':').map(Number);
+    const period = hours >= 12 ? 'PM' : 'AM';
+    const hours12 = hours % 12 || 12;
+    return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+  };
 
   // Update available cities when state changes
   useEffect(() => {
-    if (selectedState) {
-      const state = NEPAL_STATES.find((s) => s.name === selectedState);
+    if (watchState) {
+      const state = NEPAL_STATES.find((s) => s.name === watchState);
       setAvailableCities(state ? state.cities : []);
-
-      const currentCity = watch("address.city");
-      if (currentCity && state && !state.cities.includes(currentCity)) {
-        setValue("address.city", "");
-      }
+      setSelectedState(watchState);
     } else {
       setAvailableCities([]);
-      setValue("address.city", "");
     }
-  }, [selectedState, setValue, watch]);
+  }, [watchState, setValue]);
 
   const handleFormSubmit = async (data) => {
     try {
       console.log("📤 FORM SUBMISSION DATA:", data);
       console.log("📅 AVAILABILITY BEING SUBMITTED:", data.availability);
 
-      const validation = validateTeacherProfile(data);
+      // Clean and transform the data before validation
+      const cleanedData = {
+        ...data,
+        // Ensure availability has proper structure
+        availability: data.availability.map(daySlot => ({
+          day: daySlot.day,
+          timeSlots: daySlot.timeSlots.map(timeSlot => ({
+            startTime: formatTimeToAMPM(timeSlot.startTime),
+            endTime: formatTimeToAMPM(timeSlot.endTime)
+          }))
+        })),
+        // Ensure numeric fields are numbers
+        experience: Number(data.experience),
+        hourlyRate: Number(data.hourlyRate),
+        // Ensure qualifications years are numbers
+        qualifications: data.qualifications.map(qual => ({
+          ...qual,
+          year: Number(qual.year)
+        })),
+        // Ensure zipCode is number
+        address: {
+          ...data.address,
+          zipCode: Number(data.address.zipCode)
+        }
+      };
+
+      console.log("🧹 CLEANED DATA FOR VALIDATION:", cleanedData);
+
+      const validation = validateTeacherProfile(cleanedData);
 
       if (!validation.isValid) {
         console.log("❌ VALIDATION ERRORS:", validation.errors);
         setFormErrors(validation.errors);
-        if (validation.errors.name || validation.errors.contact) {
+        
+        // Navigate to the step with errors
+        if (validation.errors.name || validation.errors.contact || validation.errors.address) {
           setCurrentStep(1);
-        } else if (
-          validation.errors.qualifications ||
-          validation.errors.preferredSubjects
-        ) {
+        } else if (validation.errors.qualifications || validation.errors.preferredSubjects) {
           setCurrentStep(2);
-        } else if (validation.errors.bio || validation.errors.experience) {
+        } else if (validation.errors.bio || validation.errors.experience || validation.errors.hourlyRate || validation.errors.teachingMode) {
           setCurrentStep(3);
         } else if (validation.errors.availability) {
           setCurrentStep(4);
@@ -371,7 +309,7 @@ const TeacherForm = ({
       setFormErrors({});
 
       const submitData = {
-        ...data,
+        ...cleanedData,
         avatarPublicId: avatarFile?.publicId || null,
         cvPublicId: cvFile?.publicId || null,
       };
@@ -383,13 +321,29 @@ const TeacherForm = ({
     }
   };
 
+  // Helper function to ensure time is in proper AM/PM format
+  const formatTimeToAMPM = (timeStr) => {
+    if (!timeStr) return timeStr;
+    
+    // If already in AM/PM format, return as uppercase
+    if (timeStr.includes('AM') || timeStr.includes('PM')) {
+      return timeStr.toUpperCase();
+    }
+    
+    // If in 24-hour format, convert to 12-hour AM/PM
+    if (timeStr.includes(':') && !timeStr.includes('AM') && !timeStr.includes('PM')) {
+      return convertTo12Hour(timeStr);
+    }
+    
+    return timeStr;
+  };
+
   const handleAvatarUpload = (fileData) => {
     setAvatarFile(fileData);
   };
 
   const handleAvatarRemove = () => {
     setAvatarFile(null);
-    setValue("avatarPublicId", null);
   };
 
   const handleCVUpload = (fileData) => {
@@ -398,7 +352,6 @@ const TeacherForm = ({
 
   const handleCVRemove = () => {
     setCvFile(null);
-    setValue("cvPublicId", null);
   };
 
   const addQualification = () => {
@@ -420,8 +373,8 @@ const TeacherForm = ({
 
   const handleStateChange = (e) => {
     const newState = e.target.value;
-    setSelectedState(newState);
     setValue("address.state", newState);
+    setSelectedState(newState);
   };
 
   const handleCityChange = (e) => {
@@ -453,16 +406,46 @@ const TeacherForm = ({
     } else {
       const availability = watchAvailability || [];
       console.log("🔍 CHECKING AVAILABILITY FOR VALIDATION:", availability);
-      isValid =
-        availability.length > 0 &&
-        availability.some(
-          (slot) => slot.timeSlots && slot.timeSlots.length > 0
-        );
+      
+      // Check if availability has at least one day with time slots
+      isValid = availability.length > 0 && 
+                availability.some(day => day.timeSlots && day.timeSlots.length > 0);
+      
       if (!isValid) {
         setFormErrors((prev) => ({
           ...prev,
           availability: "Please set at least one availability time slot",
         }));
+      } else {
+        // Validate individual time slots
+        const timeSlotErrors = {};
+        availability.forEach((daySlot, index) => {
+          daySlot.timeSlots.forEach((timeSlot, slotIndex) => {
+            const startTime = formatTimeToAMPM(timeSlot.startTime);
+            const endTime = formatTimeToAMPM(timeSlot.endTime);
+            
+            if (!/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i.test(startTime)) {
+              if (!timeSlotErrors[index]) timeSlotErrors[index] = {};
+              timeSlotErrors[index][slotIndex] = { 
+                startTime: "Start time must be in HH:MM AM/PM format" 
+              };
+            }
+            
+            if (!/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i.test(endTime)) {
+              if (!timeSlotErrors[index]) timeSlotErrors[index] = {};
+              if (!timeSlotErrors[index][slotIndex]) timeSlotErrors[index][slotIndex] = {};
+              timeSlotErrors[index][slotIndex].endTime = "End time must be in HH:MM AM/PM format";
+            }
+          });
+        });
+        
+        if (Object.keys(timeSlotErrors).length > 0) {
+          setFormErrors((prev) => ({
+            ...prev,
+            availability: timeSlotErrors
+          }));
+          isValid = false;
+        }
       }
     }
 
@@ -622,11 +605,8 @@ const TeacherForm = ({
                 <li key={key} className="flex items-center space-x-2">
                   <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
                   <span>
-                    {typeof error === "object"
-                      ? Object.values(error)
-                          .flat()
-                          .filter((val) => val)
-                          .join(", ")
+                    {typeof error === "object" 
+                      ? JSON.stringify(error, null, 2)
                       : error}
                   </span>
                 </li>
@@ -675,7 +655,13 @@ const TeacherForm = ({
                 <input
                   type="text"
                   id="name"
-                  {...register("name", { required: "Name is required" })}
+                  {...register("name", { 
+                    required: "Name is required",
+                    maxLength: {
+                      value: 100,
+                      message: "Name must be less than 100 characters"
+                    }
+                  })}
                   className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
                     errors.name
                       ? "border-red-500 bg-red-50"
@@ -744,7 +730,7 @@ const TeacherForm = ({
                       required: "Phone number is required",
                       pattern: {
                         value: /^\+?[\d\s\-\(\)]{10,}$/,
-                        message: "Invalid phone number",
+                        message: "Invalid phone number format",
                       },
                     })}
                     className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
@@ -883,10 +869,18 @@ const TeacherForm = ({
                     ZIP Code *
                   </label>
                   <input
-                    type="text"
+                    type="number"
                     id="zipCode"
                     {...register("address.zipCode", {
                       required: "ZIP code is required",
+                      min: {
+                        value: 10000,
+                        message: "ZIP code must be 5 digits"
+                      },
+                      max: {
+                        value: 99999,
+                        message: "ZIP code must be 5 digits"
+                      }
                     })}
                     className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
                       errors.address?.zipCode
@@ -894,6 +888,8 @@ const TeacherForm = ({
                         : "border-blue-200 hover:border-blue-400"
                     }`}
                     placeholder="44600"
+                    min="10000"
+                    max="99999"
                   />
                   {errors.address?.zipCode && (
                     <p className="mt-3 text-red-600 flex items-center text-base">
@@ -1088,10 +1084,10 @@ const TeacherForm = ({
                   </label>
                 ))}
               </div>
-              {formErrors.preferredSubjects && (
+              {(errors.preferredSubjects || formErrors.preferredSubjects) && (
                 <p className="mt-4 text-red-600 flex items-center text-base">
                   <AlertCircle className="w-5 h-5 mr-2" />
-                  {formErrors.preferredSubjects}
+                  {errors.preferredSubjects?.message || formErrors.preferredSubjects}
                 </p>
               )}
             </div>
@@ -1118,7 +1114,7 @@ const TeacherForm = ({
                     htmlFor="experience"
                     className="block text-lg font-bold text-gray-800 mb-3"
                   >
-                    Years of Experience*
+                    Years of Experience *
                   </label>
                   <input
                     type="number"
@@ -1296,24 +1292,15 @@ const TeacherForm = ({
               </p>
             </div>
 
-            {/* DEBUG: Check if step 4 is rendering */}
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4">
-              <p className="text-green-800 font-bold">
-                ✅ Step 4 IS rendering! Availability data:{" "}
-                {watchAvailability?.length} slots
-              </p>
-            </div>
-
             {/* Debug info */}
             {process.env.NODE_ENV === "development" && (
               <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
                 <p className="text-blue-800 text-sm">
-                  <strong>Debug Info:</strong>
-                  Availability slots loaded: {watchAvailability?.length || 0}
-                  {watchAvailability?.length > 0 && (
-                    <span> - First slot: {watchAvailability[0]?.day}</span>
-                  )}
+                  <strong>Debug Info:</strong> Availability slots: {watchAvailability?.length || 0}
                 </p>
+                <pre className="text-xs mt-2">
+                  {JSON.stringify(watchAvailability, null, 2)}
+                </pre>
               </div>
             )}
 
@@ -1328,15 +1315,29 @@ const TeacherForm = ({
                     shouldValidate: true,
                   });
                 }}
+                timeFormat="12h"
               />
-              {formErrors.availability && (
+              
+              {/* Display specific availability errors */}
+              {formErrors.availability && typeof formErrors.availability === 'object' && (
                 <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
-                  <p className="text-red-600 flex items-center text-base">
-                    <AlertCircle className="w-5 h-5 mr-2" />
-                    {typeof formErrors.availability === "string"
-                      ? formErrors.availability
-                      : "Please fix availability errors above"}
+                  <p className="text-red-600 font-semibold mb-2">
+                    Please fix the following time slot errors:
                   </p>
+                  {Object.entries(formErrors.availability).map(([dayIndex, dayErrors]) => (
+                    <div key={dayIndex} className="mb-2">
+                      {Object.entries(dayErrors).map(([slotIndex, slotErrors]) => (
+                        <div key={slotIndex} className="text-red-600 text-sm ml-4">
+                          {slotErrors.startTime && (
+                            <p>• Day {parseInt(dayIndex) + 1}, Slot {parseInt(slotIndex) + 1}: {slotErrors.startTime}</p>
+                          )}
+                          {slotErrors.endTime && (
+                            <p>• Day {parseInt(dayIndex) + 1}, Slot {parseInt(slotIndex) + 1}: {slotErrors.endTime}</p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>

@@ -23,12 +23,12 @@ const timeSlotSchema = new mongoose.Schema(
     startTime: {
       type: String,
       required: [true, "Start time is required"],
-      match: [/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"],
+      match: [/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM|am|pm)$/, "Invalid time format (HH:MM AM/PM)"],
     },
     endTime: {
       type: String,
       required: [true, "End time is required"],
-      match: [/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, "Invalid time format (HH:MM)"],
+      match: [/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM|am|pm)$/, "Invalid time format (HH:MM AM/PM)"],
     },
   },
   { _id: false }
@@ -100,7 +100,9 @@ const teacherSchema = new mongoose.Schema(
       },
       zipCode: { 
         type: Number, 
-        required: [true, "ZIP code is required"] 
+        required: [true, "ZIP code is required"],
+        min: [10000, "ZIP code must be 5 digits"],
+        max: [99999, "ZIP code must be 5 digits"],
       },
     },
     qualifications: {
@@ -178,21 +180,46 @@ const teacherSchema = new mongoose.Schema(
   }
 );
 
-// Time validation middleware
+// Enhanced time validation middleware with AM/PM support
 teacherSchema.pre('save', function(next) {
   if (this.availability && this.availability.length > 0) {
-    for (const slot of this.availability) {
-      for (const timeSlot of slot.timeSlots) {
-        const start = parseInt(timeSlot.startTime.replace(':', ''));
-        const end = parseInt(timeSlot.endTime.replace(':', ''));
+    const convertTo24Hour = (timeStr) => {
+      const [time, period] = timeStr.split(/(?=[AP]M)/i);
+      const [hours, minutes] = time.split(':').map(Number);
+      
+      let hour24 = hours;
+      if (period.toLowerCase() === 'pm' && hours !== 12) {
+        hour24 += 12;
+      } else if (period.toLowerCase() === 'am' && hours === 12) {
+        hour24 = 0;
+      }
+      
+      return hour24 * 100 + minutes; // Return as comparable number
+    };
+
+    for (const daySlot of this.availability) {
+      for (const timeSlot of daySlot.timeSlots) {
+        const start = convertTo24Hour(timeSlot.startTime);
+        const end = convertTo24Hour(timeSlot.endTime);
         
         if (start >= end) {
-          return next(new Error(`End time must be after start time for ${slot.day}`));
+          return next(new Error(`End time must be after start time for ${daySlot.day}`));
         }
       }
     }
   }
   next();
+});
+
+// Virtual for formatted availability
+teacherSchema.virtual('formattedAvailability').get(function() {
+  return this.availability.map(daySlot => ({
+    day: daySlot.day,
+    timeSlots: daySlot.timeSlots.map(slot => ({
+      startTime: slot.startTime.toUpperCase(),
+      endTime: slot.endTime.toUpperCase()
+    }))
+  }));
 });
 
 teacherSchema.index({ "address.city": 1 });
