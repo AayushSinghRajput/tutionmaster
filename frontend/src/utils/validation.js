@@ -489,8 +489,8 @@ export const validateFileUpload = (file, options = {}) => {
 export const validateImageFile = (file) => {
   return validateFileUpload(file, {
     maxSize: 5 * 1024 * 1024, // 5MB
-    allowedTypes: ['image/jpeg', 'image/png', 'image/webp'],
-    allowedExtensions: ['jpg', 'jpeg', 'png', 'webp']
+    allowedTypes: ['image/jpeg', 'image/png', 'image/webp' ,'image/avif','image/jpg'],
+    allowedExtensions: ['jpg', 'jpeg', 'png', 'webp','avif']
   });
 };
 

@@ -1,8 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Mail, Phone, MapPin, Facebook, Twitter, Instagram } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'react-toastify';
+import { newsletterService } from '../../services/newsletterService';
+
 
 const Footer = () => {
+  const [email , setEmail] = useState("");
+  const handleSubscribe = async() => {
+    if(!email.trim()){
+      toast.error("Please enter your email address...");
+      return;
+    }
+    try {
+      const response = await newsletterService.subscribe(email);
+      toast.success(response.data.message);
+      setEmail("");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Something went wrong!");
+    }
+  }
   return (
     <footer className="bg-gradient-to-b from-blue-50 to-white text-gray-900 pt-16 pb-8 border-t-4 border-blue-500">
       <div className="max-w-7xl mx-auto px-6">
@@ -25,7 +43,7 @@ const Footer = () => {
               Empowering education through technology and dedicated mentorship.
             </p>
             <div className="flex space-x-4">
-              <a href="#" className="bg-blue-100 hover:bg-blue-200 p-2 rounded-full transition-colors duration-300">
+              <a href="https://www.facebook.com/profile.php?id=61577776648214" className="bg-blue-100 hover:bg-blue-200 p-2 rounded-full transition-colors duration-300">
                 <Facebook size={18} className="text-blue-600" />
               </a>
               <a href="#" className="bg-blue-100 hover:bg-blue-200 p-2 rounded-full transition-colors duration-300">
@@ -96,7 +114,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <span className="text-sm text-gray-700 block">Email</span>
-                  <span className="text-sm text-blue-600 font-medium">support@tutionmaster.com</span>
+                  <span className="text-sm text-blue-600 font-medium">aayushsinghrajput3003@gmail.com</span>
                 </div>
               </div>
               <div className="flex items-start gap-3 group">
@@ -133,9 +151,11 @@ const Footer = () => {
               <input 
                 type="email" 
                 placeholder="Your email address"
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
                 className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
-              <button className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm">
+              <button onClick={handleSubscribe} className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm">
                 Subscribe
               </button>
             </div>

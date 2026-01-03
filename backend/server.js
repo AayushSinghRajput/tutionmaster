@@ -3,6 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const connectDB = require("./config/database");
 const errorHandler = require("./middleware/error");
+const newsletterRoute = require("./routes/newsletterRoute");
 
 // Load env vars
 dotenv.config();
@@ -27,6 +28,7 @@ app.use(
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/teachers", require("./routes/teachers"));
 app.use("/api/upload", require("./routes/upload"));
+app.use("/api/newsletter",newsletterRoute);
 
 // Health check route
 app.get("/api/health", (req, res) => {

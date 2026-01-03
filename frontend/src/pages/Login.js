@@ -1,14 +1,22 @@
-import React, { useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../context/AuthContext';
-import LoginForm from '../components/auth/LoginForm';
-import { BookOpen, GraduationCap, Users, Star, Shield, Clock, Award } from 'lucide-react';
+import React, { useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import LoginForm from "../components/auth/LoginForm";
+import {
+  BookOpen,
+  GraduationCap,
+  Users,
+  Star,
+  Shield,
+  Clock,
+  Award,
+} from "lucide-react";
 
 const Login = () => {
   const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname || "/dashboard";
 
   useEffect(() => {
     if (isAuthenticated) navigate(from, { replace: true });
@@ -30,16 +38,21 @@ const Login = () => {
                   <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
                     TutionMaster
                   </h1>
-                  <p className="text-sm text-gray-500 -mt-1 font-medium">Empowering Educators & Students</p>
+                  <p className="text-sm text-gray-500 -mt-1 font-medium">
+                    Empowering Educators & Students
+                  </p>
                 </div>
               </div>
-              
+
               <div className="hidden lg:block">
                 <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                  Continue Your <span className="text-blue-600">Learning Journey</span>
+                  Continue Your{" "}
+                  <span className="text-blue-600">Learning Journey</span>
                 </h2>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  Access your personalized dashboard, connect with your community, and continue making progress in your educational goals.
+                  Access your personalized dashboard, connect with your
+                  community, and continue making progress in your educational
+                  goals.
                 </p>
               </div>
             </div>
@@ -51,7 +64,7 @@ const Login = () => {
               {/* Sign Up Link */}
               <div className="mt-8 text-center">
                 <p className="text-gray-600">
-                  New to TutionMaster?{' '}
+                  New to TutionMaster?{" "}
                   <Link
                     to="/register"
                     className="text-blue-600 font-bold hover:text-blue-700 transition-colors duration-200 underline underline-offset-4 hover:underline-offset-2"
@@ -70,13 +83,17 @@ const Login = () => {
               <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
                 <Users className="w-8 h-8 mx-auto mb-3" />
                 <div className="text-2xl font-bold">50K+</div>
-                <div className="text-blue-100 text-sm font-medium">Active Users</div>
+                <div className="text-blue-100 text-sm font-medium">
+                  Active Users
+                </div>
               </div>
-              
+
               <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 text-white text-center shadow-lg transform hover:scale-105 transition-transform duration-300">
                 <Award className="w-8 h-8 mx-auto mb-3" />
                 <div className="text-2xl font-bold">1K+</div>
-                <div className="text-blue-100 text-sm font-medium">Expert Tutors</div>
+                <div className="text-blue-100 text-sm font-medium">
+                  Expert Tutors
+                </div>
               </div>
             </div>
 
@@ -86,37 +103,51 @@ const Login = () => {
                 <Star className="w-6 h-6 text-yellow-500" />
                 Why Learn With Us?
               </h3>
-              
+
               <div className="space-y-4">
                 <div className="flex items-start gap-4 p-4 bg-blue-50 rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-200 group">
                   <Shield className="w-6 h-6 text-blue-600 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">Secure & Trusted</h4>
-                    <p className="text-gray-600 text-sm mt-1">Your data and privacy are our top priority</p>
+                    <h4 className="font-semibold text-gray-900">
+                      Secure & Trusted
+                    </h4>
+                    <p className="text-gray-600 text-sm mt-1">
+                      Your data and privacy are our top priority
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4 p-4 bg-green-50 rounded-xl border border-green-200 hover:border-green-300 transition-all duration-200 group">
                   <Clock className="w-6 h-6 text-green-600 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <div>
                     <h4 className="font-semibold text-gray-900">24/7 Access</h4>
-                    <p className="text-gray-600 text-sm mt-1">Learn anytime, anywhere at your own pace</p>
+                    <p className="text-gray-600 text-sm mt-1">
+                      Learn anytime, anywhere at your own pace
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4 p-4 bg-purple-50 rounded-xl border border-purple-200 hover:border-purple-300 transition-all duration-200 group">
                   <GraduationCap className="w-6 h-6 text-purple-600 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">Expert Educators</h4>
-                    <p className="text-gray-600 text-sm mt-1">Learn from qualified and experienced teachers</p>
+                    <h4 className="font-semibold text-gray-900">
+                      Expert Educators
+                    </h4>
+                    <p className="text-gray-600 text-sm mt-1">
+                      Learn from qualified and experienced teachers
+                    </p>
                   </div>
                 </div>
-                
+
                 <div className="flex items-start gap-4 p-4 bg-orange-50 rounded-xl border border-orange-200 hover:border-orange-300 transition-all duration-200 group">
                   <BookOpen className="w-6 h-6 text-orange-600 mt-1 flex-shrink-0 group-hover:scale-110 transition-transform" />
                   <div>
-                    <h4 className="font-semibold text-gray-900">Quality Content</h4>
-                    <p className="text-gray-600 text-sm mt-1">Curriculum designed by education experts</p>
+                    <h4 className="font-semibold text-gray-900">
+                      Quality Content
+                    </h4>
+                    <p className="text-gray-600 text-sm mt-1">
+                      Curriculum designed by education experts
+                    </p>
                   </div>
                 </div>
               </div>
@@ -132,9 +163,12 @@ const Login = () => {
                 </div>
                 <div>
                   <p className="italic text-blue-100">
-                    "TutionMaster transformed how I teach. The platform is intuitive and my students love the interactive features!"
+                    "TutionMaster transformed how I teach. The platform is
+                    intuitive and my students love the interactive features!"
                   </p>
-                  <p className="font-semibold mt-3">- Aayush Singh Rajput, Math Teacher</p>
+                  <p className="font-semibold mt-3">
+                    - Aayush Singh Rajput, Math Teacher
+                  </p>
                 </div>
               </div>
             </div>

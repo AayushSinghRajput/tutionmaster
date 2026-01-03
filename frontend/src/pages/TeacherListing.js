@@ -1,28 +1,28 @@
-import  { useState, useEffect } from 'react';
-import { teacherService } from '../services/teacherService';
-import TeacherCard from '../components/common/TeacherCard';
-import TeacherFilters from '../components/teachers/TeacherFilters';
-import SearchBar from '../components/common/SearchBar';
-import Pagination from '../components/common/Pagination';
-import LoadingSpinner from '../components/common/LoadingSpinner';
+import { useState, useEffect } from "react";
+import { teacherService } from "../services/teacherService";
+import TeacherCard from "../components/common/TeacherCard";
+import TeacherFilters from "../components/teachers/TeacherFilters";
+import SearchBar from "../components/common/SearchBar";
+import Pagination from "../components/common/Pagination";
+import LoadingSpinner from "../components/common/LoadingSpinner";
 
 const TeacherListing = () => {
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [filters, setFilters] = useState({
     subjects: [],
-    teachingMode: '',
-    minExperience: '',
-    maxExperience: '',
-    minRate: '',
-    maxRate: '',
-    location: ''
+    teachingMode: "",
+    minExperience: "",
+    maxExperience: "",
+    minRate: "",
+    maxRate: "",
+    location: "",
   });
   const [pagination, setPagination] = useState({
     page: 1,
     totalPages: 1,
-    total: 0
+    total: 0,
   });
 
   useEffect(() => {
@@ -32,60 +32,99 @@ const TeacherListing = () => {
   const fetchTeachers = async () => {
     try {
       setLoading(true);
+      
+      // Build query parameters matching backend expectations
       const params = {
         page: pagination.page,
         limit: 12,
-        ...filters
       };
 
-      // Clean up empty filters
-      Object.keys(params).forEach(key => {
-        if (params[key] === '' || params[key] === null || params[key] === undefined) {
+      // Map frontend filter names to backend parameter names
+      // Backend now supports 'subjects' parameter for multiple subjects
+      if (filters.subjects.length > 0) {
+        // Send multiple subjects as comma-separated string
+        params.subjects = filters.subjects.join(',');
+      }
+      
+      if (filters.teachingMode) {
+        params.teachingMode = filters.teachingMode;
+      }
+      
+      if (filters.minExperience) {
+        params.minExperience = parseInt(filters.minExperience);
+      }
+      
+      if (filters.maxExperience) {
+        params.maxExperience = parseInt(filters.maxExperience);
+      }
+      
+      if (filters.minRate) {
+        params.minRate = parseInt(filters.minRate);
+      }
+      
+      if (filters.maxRate) {
+        params.maxRate = parseInt(filters.maxRate);
+      }
+      
+      if (filters.location) {
+        // Backend expects 'city' parameter
+        params.city = filters.location;
+      }
+
+
+      // Clean up empty/null/undefined parameters
+      Object.keys(params).forEach((key) => {
+        if (
+          params[key] === "" ||
+          params[key] === null ||
+          params[key] === undefined ||
+          params[key] === 0 ||
+          (Array.isArray(params[key]) && params[key].length === 0)
+        ) {
           delete params[key];
         }
       });
 
       const response = await teacherService.getAllTeachers(params);
       const { data, pagination: paginationData } = response.data;
-      
       setTeachers(data);
-      setPagination(prev => ({
+      setPagination((prev) => ({
         ...prev,
         totalPages: paginationData.pages,
-        total: paginationData.total
+        total: paginationData.total,
       }));
     } catch (error) {
-      setError('Failed to load teachers');
-      console.error('Error fetching teachers:', error);
+      console.error("Error fetching teachers:", error.response || error);
+      setError("Failed to load teachers. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   const handleFilterChange = (filterName, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [filterName]: value
+      [filterName]: value,
     }));
-    setPagination(prev => ({ ...prev, page: 1 }));
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   const handleClearFilters = () => {
     setFilters({
       subjects: [],
-      teachingMode: '',
-      minExperience: '',
-      maxExperience: '',
-      minRate: '',
-      maxRate: '',
-      location: ''
+      teachingMode: "",
+      minExperience: "",
+      maxExperience: "",
+      minRate: "",
+      maxRate: "",
+      location: "",
     });
-    setPagination(prev => ({ ...prev, page: 1 }));
+    setPagination((prev) => ({ ...prev, page: 1 }));
   };
 
   const handlePageChange = (newPage) => {
-    setPagination(prev => ({ ...prev, page: newPage }));
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setPagination((prev) => ({ ...prev, page: newPage }));
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading && teachers.length === 0) {
@@ -98,16 +137,32 @@ const TeacherListing = () => {
         {/* Header */}
         <div className="text-center mb-12">
           <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl mb-6 shadow-lg">
-            <svg className="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5z" />
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 14l9-5-9-5-9 5 9 5zm0 0l-9 5m9-5v9" />
+            <svg
+              className="w-10 h-10 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 14l9-5-9-5-9 5 9 5z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 14l9-5-9-5-9 5 9 5zm0 0l-9 5m9-5v9"
+              />
             </svg>
           </div>
           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
             Discover Expert Educators
           </h1>
           <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Connect with qualified tutors who inspire and transform learning experiences
+            Connect with qualified tutors who inspire and transform learning
+            experiences
           </p>
         </div>
 
@@ -115,20 +170,30 @@ const TeacherListing = () => {
         <div className="bg-white rounded-2xl shadow-sm border border-blue-100 p-6 mb-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
             <div className="border-r border-blue-100 last:border-r-0 pr-6 last:pr-0">
-              <div className="text-2xl font-bold text-blue-600">{pagination.total}+</div>
-              <div className="text-sm text-gray-600 font-medium">Qualified Teachers</div>
+              <div className="text-2xl font-bold text-blue-600">
+                1K+
+              </div>
+              <div className="text-sm text-gray-600 font-medium">
+                Qualified Teachers
+              </div>
             </div>
             <div className="border-r border-blue-100 last:border-r-0 pr-6 last:pr-0">
-              <div className="text-2xl font-bold text-blue-600">50+</div>
-              <div className="text-sm text-gray-600 font-medium">Subjects Covered</div>
+              <div className="text-2xl font-bold text-blue-600">100+</div>
+              <div className="text-sm text-gray-600 font-medium">
+                Subjects Covered
+              </div>
             </div>
             <div className="border-r border-blue-100 last:border-r-0 pr-6 last:pr-0">
               <div className="text-2xl font-bold text-blue-600">10k+</div>
-              <div className="text-sm text-gray-600 font-medium">Students Taught</div>
+              <div className="text-sm text-gray-600 font-medium">
+                Students Taught
+              </div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-blue-600">4.9/5</div>
-              <div className="text-sm text-gray-600 font-medium">Average Rating</div>
+              <div className="text-2xl font-bold text-blue-600">4.5/5</div>
+              <div className="text-sm text-gray-600 font-medium">
+                Average Rating
+              </div>
             </div>
           </div>
         </div>
@@ -139,8 +204,18 @@ const TeacherListing = () => {
             <div className="relative">
               <SearchBar />
               <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
-                <svg className="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg
+                  className="w-5 h-5 text-blue-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </div>
             </div>
@@ -154,8 +229,18 @@ const TeacherListing = () => {
               <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-6 py-4">
                 <div className="flex items-center justify-between">
                   <h2 className="text-lg font-semibold text-white flex items-center">
-                    <svg className="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z" />
+                    <svg
+                      className="w-5 h-5 mr-3"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.207A1 1 0 013 6.5V4z"
+                      />
                     </svg>
                     Filter Teachers
                   </h2>
@@ -182,8 +267,18 @@ const TeacherListing = () => {
             {error && (
               <div className="bg-red-50 border border-red-200 rounded-xl p-6 mb-6 shadow-sm">
                 <div className="flex items-center text-red-800">
-                  <svg className="w-5 h-5 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-5 h-5 mr-3 flex-shrink-0"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                   {error}
                 </div>
@@ -199,7 +294,8 @@ const TeacherListing = () => {
                   </h3>
                   <p className="text-sm text-gray-600 mt-1">
                     Showing {teachers.length} of {pagination.total} results
-                    {pagination.totalPages > 1 && ` • Page ${pagination.page} of ${pagination.totalPages}`}
+                    {pagination.totalPages > 1 &&
+                      ` • Page ${pagination.page} of ${pagination.totalPages}`}
                   </p>
                 </div>
                 <div className="mt-3 sm:mt-0">
@@ -215,13 +311,26 @@ const TeacherListing = () => {
             {teachers.length === 0 && !loading ? (
               <div className="bg-white rounded-2xl shadow-sm border border-blue-100 p-12 text-center">
                 <div className="w-20 h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-6">
-                  <svg className="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  <svg
+                    className="w-10 h-10 text-blue-400"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                    />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-3">No teachers found</h3>
+                <h3 className="text-2xl font-semibold text-gray-900 mb-3">
+                  No teachers found
+                </h3>
                 <p className="text-gray-600 max-w-md mx-auto mb-6">
-                  We couldn't find any teachers matching your criteria. Try adjusting your filters or search terms.
+                  We couldn't find any teachers matching your criteria. Try
+                  adjusting your filters or search terms.
                 </p>
                 <button
                   onClick={handleClearFilters}
@@ -233,8 +342,11 @@ const TeacherListing = () => {
             ) : (
               <>
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
-                  {teachers.map(teacher => (
-                    <div key={teacher._id} className="transform hover:-translate-y-1 transition-transform duration-200">
+                  {teachers.map((teacher) => (
+                    <div
+                      key={teacher._id}
+                      className="transform hover:-translate-y-1 transition-transform duration-200"
+                    >
                       <TeacherCard teacher={teacher} />
                     </div>
                   ))}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Menu, X, User, LogOut, BookOpen } from 'lucide-react';
+import { Menu, X,  LogOut, BookOpen } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -63,7 +63,6 @@ const Header = () => {
                   to="/dashboard"
                   className="flex items-center gap-2 text-gray-700 hover:text-blue-700 transition-all font-medium text-lg"
                 >
-                  <User size={20} />
                   Dashboard
                 </Link>
 
