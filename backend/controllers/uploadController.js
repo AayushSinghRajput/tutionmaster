@@ -1,7 +1,8 @@
-const Teacher = require('../models/Teacher');
-const ErrorResponse = require('../utils/errorResponse');
-const cloudinary = require('../config/cloudinary');
-const stream = require('stream');
+const Teacher = require("../models/Teacher");
+const ErrorResponse = require("../utils/errorResponse");
+const cloudinary = require("../config/cloudinary");
+const stream = require("stream");
+const streamifier = require("streamifier");
 
 // @desc    Upload avatar image
 // @route   POST /api/upload/avatar
@@ -9,32 +10,32 @@ const stream = require('stream');
 exports.uploadAvatar = async (req, res, next) => {
   try {
     if (!req.file) {
-      return next(new ErrorResponse('Please upload a file', 400));
+      return next(new ErrorResponse("Please upload a file", 400));
     }
     // Upload to Cloudinary
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: 'tutionmaster/avatars',
-        resource_type: 'image',
+        folder: "tutionmaster/avatars",
+        resource_type: "image",
         transformation: [
-          { width: 500, height: 500, crop: 'fill' },
-          { quality: 'auto' },
-          { format: 'webp' }
-        ]
+          { width: 500, height: 500, crop: "fill" },
+          { quality: "auto" },
+          { format: "webp" },
+        ],
       },
       async (error, result) => {
         if (error) {
-          return next(new ErrorResponse('File upload failed', 500));
+          return next(new ErrorResponse("File upload failed", 500));
         }
         res.json({
           success: true,
           data: {
             publicId: result.public_id,
             url: result.secure_url,
-            message: 'Avatar uploaded successfully'
-          }
+            message: "Avatar uploaded successfully",
+          },
         });
-      }
+      },
     );
 
     // Create stream from buffer and pipe to Cloudinary
@@ -51,37 +52,49 @@ exports.uploadAvatar = async (req, res, next) => {
 // @access  Private
 exports.uploadCV = async (req, res, next) => {
   try {
-    if (!req.file) {
-      return next(new ErrorResponse('Please upload a file', 400));
+    if (!req.files || !req.files.cv) {
+      return res.status(400).json({
+        success: false,
+        message: "Please upload a file.",
+      });
     }
+    const file = req.files.cv;
+
     // Upload to Cloudinary
     const uploadStream = cloudinary.uploader.upload_stream(
       {
-        folder: 'tutionmaster/documents',
-        resource_type: 'raw',
-        format: 'pdf'
+        folder: "tutionmaster/documents",
+        resource_type: "raw",
+        public_id: `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}`, // Clean filename
+        format: "pdf",
       },
-      async (error, result) => {
+      (error, result) => {
         if (error) {
-          return next(new ErrorResponse('File upload failed', 500));
+          console.error("Cloudinary Error:", error);
+          return res.status(500).json({
+            success: false,
+            message: "Upload failed.",
+          });
         }
         res.json({
           success: true,
           data: {
             publicId: result.public_id,
             url: result.secure_url,
-            message: 'CV uploaded successfully'
-          }
+            message: "CV uploaded successfully",
+          },
         });
-      }
+      },
     );
 
-    // Create stream from buffer and pipe to Cloudinary
-    const bufferStream = new stream.PassThrough();
-    bufferStream.end(req.file.buffer);
-    bufferStream.pipe(uploadStream);
+    // convert the file buffer into a stream and pipe it to cloudinary
+    streamifier.createReadStream(file.data).pipe(uploadStream);
   } catch (error) {
-    next(error);
+    console.error("Controller Erro:", error);
+    res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
   }
 };
 
@@ -90,38 +103,85 @@ exports.uploadCV = async (req, res, next) => {
 // @access  Private
 exports.deleteFile = async (req, res, next) => {
   try {
-    const { publicId } = req.params;
-    const { resourceType = 'image' } = req.body;
+    const { publicId, resourceType = "image" } = req.body;
+    if (!publicId) {
+      return next(new ErrorResponse("Public ID is required", 400));
+    }
 
-    // Find teacher profile to verify ownership
-    const teacher = await Teacher.findOne({ 
+    let fullPublicId = publicId; // already plain string
+
+    // Build search patterns for finding the teacher
+    const searchPatterns = [fullPublicId];
+    if (resourceType === "raw") {
+      if (fullPublicId.endsWith(".pdf"))
+        searchPatterns.push(fullPublicId.replace(/\.pdf$/, ""));
+      else searchPatterns.push(`${fullPublicId}.pdf`);
+    }
+
+    console.log("[DEBUG] Delete request:", {
+      fullPublicId,
+      resourceType,
+      searchPatterns,
+    });
+
+    const teacher = await Teacher.findOne({
       userId: req.user.id,
       $or: [
-        { avatarPublicId: publicId },
-        { cvPublicId: publicId }
-      ]
+        { avatarPublicId: { $in: searchPatterns } },
+        { cvPublicId: { $in: searchPatterns } },
+      ],
     });
 
-    if (!teacher) {
-      return next(new ErrorResponse('File not found or not authorized', 404));
+    console.log("[DEBUG] Teacher found:", !!teacher);
+    if (!teacher)
+      return next(new ErrorResponse("File not found or not authorized", 404));
+
+    const actualPublicId = teacher.cvPublicId || teacher.avatarPublicId;
+    let cloudinaryResult;
+    try {
+      cloudinaryResult = await cloudinary.uploader.destroy(actualPublicId, {
+        resource_type: resourceType,
+        invalidate: true,
+      });
+      if (cloudinaryResult.result === "not found" && resourceType === "raw") {
+        const altId = actualPublicId.endsWith(".pdf")
+          ? actualPublicId.replace(/\.pdf$/, "")
+          : `${actualPublicId}.pdf`;
+        cloudinaryResult = await cloudinary.uploader.destroy(altId, {
+          resource_type: resourceType,
+          invalidate: true,
+        });
+      }
+    } catch (err) {
+      console.warn("[WARN] Cloudinary deletion failed:", err.message);
     }
 
-    // Delete from Cloudinary
-    await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    // Clear references without triggering other validations
+    const updateQuery = {};
+    if (
+      teacher.avatarPublicId &&
+      searchPatterns.includes(teacher.avatarPublicId)
+    )
+      updateQuery.avatarPublicId = null;
+    if (teacher.cvPublicId && searchPatterns.includes(teacher.cvPublicId))
+      updateQuery.cvPublicId = null;
 
-    // Update teacher profile
-    if (teacher.avatarPublicId === publicId) {
-      teacher.avatarPublicId = null;
-    } else if (teacher.cvPublicId === publicId) {
-      teacher.cvPublicId = null;
-    }
-    await teacher.save();
+    await Teacher.updateOne(
+      { _id: teacher._id },
+      { $set: updateQuery },
+      { validateBeforeSave: false },
+    );
 
-    res.json({
+    return res.status(200).json({
       success: true,
-      message: 'File deleted successfully'
+      message:
+        cloudinaryResult?.result === "ok"
+          ? "File deleted successfully"
+          : "File reference removed (file may have been already deleted)",
+      cloudinaryStatus: cloudinaryResult?.result || "not found",
     });
   } catch (error) {
+    console.error("[ERROR] Delete file error:", error);
     next(error);
   }
 };
@@ -131,16 +191,16 @@ exports.deleteFile = async (req, res, next) => {
 // @access  Private
 exports.getSignature = async (req, res, next) => {
   try {
-    const { folder, resourceType = 'image' } = req.body;
+    const { folder, resourceType = "image" } = req.body;
 
     const timestamp = Math.round(new Date().getTime() / 1000);
-    
+
     const signature = cloudinary.utils.api_sign_request(
       {
         timestamp,
-        folder: folder || 'tutionmaster/uploads'
+        folder: folder || "tutionmaster/uploads",
       },
-      process.env.CLOUDINARY_API_SECRET
+      process.env.CLOUDINARY_API_SECRET,
     );
 
     res.json({
@@ -150,8 +210,8 @@ exports.getSignature = async (req, res, next) => {
         timestamp,
         apiKey: process.env.CLOUDINARY_API_KEY,
         cloudName: process.env.CLOUDINARY_CLOUD_NAME,
-        folder: folder || 'tutionmaster/uploads'
-      }
+        folder: folder || "tutionmaster/uploads",
+      },
     });
   } catch (error) {
     next(error);

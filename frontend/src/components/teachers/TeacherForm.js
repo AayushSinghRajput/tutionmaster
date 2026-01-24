@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
-import AvailabilityPicker from "./AvailabilityPicker";
-import FileUpload from "./FileUpload";
-import { SUBJECTS, TEACHING_MODES } from "../../utils/constants";
+import { SUBJECTS, TEACHING_MODES, NEPAL_STATES } from "../../utils/constants";
 import { validateTeacherProfile } from "../../utils/validation";
 import {
-  Plus,
-  Trash2,
   Save,
   X,
   AlertCircle,
@@ -16,74 +12,12 @@ import {
   User,
   BookOpen,
   Clock,
-  Star,
   CheckCircle,
 } from "lucide-react";
-
-const NEPAL_STATES = [
-  {
-    name: "Koshi Province",
-    cities: [
-      "Biratnagar", "Itahari", "Dharan", "Bhadrapur", "Mechinagar", 
-      "Damak", "Rajbiraj", "Inaruwa", "Birtamod", "Dhankuta", 
-      "Kankai", "Bhojpur", "Terhathum", "Panchthar", "Ilam", 
-      "Jhapa", "Morang", "Sunsari", "Saptari", "Udayapur"
-    ],
-  },
-  {
-    name: "Madhesh Province",
-    cities: [
-      "Janakpur", "Birgunj", "Kalaiya", "Gaur", "Malangwa", 
-      "Jaleshwar", "Bardibas", "Siraha", "Lahan", "Dhanusha", 
-      "Mahottari", "Sarlahi", "Rautahat", "Bara", "Parsa"
-    ],
-  },
-  {
-    name: "Bagmati Province",
-    cities: [
-      "Kathmandu", "Lalitpur", "Bhaktapur", "Pokhara", "Hetauda", 
-      "Bharatpur", "Dhulikhel", "Banepa", "Panauti", "Kirtipur", 
-      "Madhyapur Thimi", "Budhanilkantha", "Gokarneshwar", "Chandragiri", 
-      "Tokha", "Suryabinayak", "Nagarkot", "Dhading", "Nuwakot", 
-      "Rasuwa", "Sindhupalchok", "Dolakha", "Ramechhap", "Sindhuli", 
-      "Makwanpur", "Chitwan"
-    ],
-  },
-  {
-    name: "Gandaki Province",
-    cities: [
-      "Pokhara", "Gorkha", "Lekhnath", "Kusma", "Baglung", 
-      "Besisahar", "Damauli", "Waling", "Beni", "Jomsom", 
-      "Kawasoti", "Gaindakot", "Bharatpur", "Putalibazar", 
-      "Syangja", "Chapakot", "Galyang", "Ramgram"
-    ],
-  },
-  {
-    name: "Lumbini Province",
-    cities: [
-      "Butwal", "Nepalgunj", "Tansen", "Gulariya", "Banganga", 
-      "Shivaraj", "Kapilvastu", "Buddhabhumi", "Sandhikharka", 
-      "Tamghas", "Pyuthan", "Salyan", "Rolpa", "Rukum", 
-      "Dang", "Banke", "Bardiya"
-    ],
-  },
-  {
-    name: "Karnali Province",
-    cities: [
-      "Birendranagar", "Manma", "Jumla", "Dunai", "Chandannath", 
-      "Mahabu", "Thuli Bheri", "Narayan", "Bheri", "Chhedagad", 
-      "Aathbiskot", "Musikot", "Chhayanath", "Tribeni"
-    ],
-  },
-  {
-    name: "Sudurpashchim Province",
-    cities: [
-      "Dhangadhi", "Mahendranagar", "Tikapur", "Ghodaghodi", 
-      "Lamki Chuha", "Bhimdatta", "Punarbas", "Belauri", 
-      "Amargadhi", "Dasharathchand", "Melauli", "Purchaudi", "Jogbudha"
-    ],
-  },
-];
+import Step1 from "../steps/Step1";
+import Step2 from "../steps/Step2";
+import Step3 from "../steps/Step3";
+import Step4 from "../steps/Step4";
 
 const TeacherForm = ({
   initialData = null,
@@ -154,32 +88,45 @@ const TeacherForm = ({
   const watchBio = watch("bio", "");
   const watchState = watch("address.state");
 
+  // Move availabilityPickerKey declaration HERE (after watchAvailability)
+  const availabilityPickerKey = `availability-${watchAvailability?.length}-${isFormReady}`;
+
   // Initialize form with data
   useEffect(() => {
     if (initialData && !isFormReady) {
       console.log("🔄 INITIALIZING FORM WITH DATA:", initialData);
 
       // Transform availability data to ensure proper structure
-      const transformedAvailability = initialData.availability?.map(daySlot => ({
-        day: daySlot.day,
-        timeSlots: daySlot.timeSlots?.map(timeSlot => {
-          let startTime = timeSlot.startTime;
-          let endTime = timeSlot.endTime;
+      const transformedAvailability =
+        initialData.availability?.map((daySlot) => ({
+          day: daySlot.day,
+          timeSlots:
+            daySlot.timeSlots?.map((timeSlot) => {
+              let startTime = timeSlot.startTime;
+              let endTime = timeSlot.endTime;
 
-          // Convert 24-hour format to 12-hour AM/PM if needed
-          if (startTime.includes(':') && !startTime.includes('AM') && !startTime.includes('PM')) {
-            startTime = convertTo12Hour(startTime);
-          }
-          if (endTime.includes(':') && !endTime.includes('AM') && !endTime.includes('PM')) {
-            endTime = convertTo12Hour(endTime);
-          }
+              // Convert 24-hour format to 12-hour AM/PM if needed
+              if (
+                startTime.includes(":") &&
+                !startTime.includes("AM") &&
+                !startTime.includes("PM")
+              ) {
+                startTime = convertTo12Hour(startTime);
+              }
+              if (
+                endTime.includes(":") &&
+                !endTime.includes("AM") &&
+                !endTime.includes("PM")
+              ) {
+                endTime = convertTo12Hour(endTime);
+              }
 
-          return {
-            startTime: startTime.toUpperCase(),
-            endTime: endTime.toUpperCase()
-          };
-        }) || []
-      })) || [];
+              return {
+                startTime: startTime.toUpperCase(),
+                endTime: endTime.toUpperCase(),
+              };
+            }) || [],
+        })) || [];
 
       const formData = {
         name: initialData.name || "",
@@ -237,10 +184,10 @@ const TeacherForm = ({
 
   // Helper function to convert 24-hour to 12-hour format
   const convertTo12Hour = (time24) => {
-    const [hours, minutes] = time24.split(':').map(Number);
-    const period = hours >= 12 ? 'PM' : 'AM';
+    const [hours, minutes] = time24.split(":").map(Number);
+    const period = hours >= 12 ? "PM" : "AM";
     const hours12 = hours % 12 || 12;
-    return `${hours12}:${minutes.toString().padStart(2, '0')} ${period}`;
+    return `${hours12}:${minutes.toString().padStart(2, "0")} ${period}`;
   };
 
   // Update available cities when state changes
@@ -263,26 +210,26 @@ const TeacherForm = ({
       const cleanedData = {
         ...data,
         // Ensure availability has proper structure
-        availability: data.availability.map(daySlot => ({
+        availability: data.availability.map((daySlot) => ({
           day: daySlot.day,
-          timeSlots: daySlot.timeSlots.map(timeSlot => ({
+          timeSlots: daySlot.timeSlots.map((timeSlot) => ({
             startTime: formatTimeToAMPM(timeSlot.startTime),
-            endTime: formatTimeToAMPM(timeSlot.endTime)
-          }))
+            endTime: formatTimeToAMPM(timeSlot.endTime),
+          })),
         })),
         // Ensure numeric fields are numbers
         experience: Number(data.experience),
         hourlyRate: Number(data.hourlyRate),
         // Ensure qualifications years are numbers
-        qualifications: data.qualifications.map(qual => ({
+        qualifications: data.qualifications.map((qual) => ({
           ...qual,
-          year: Number(qual.year)
+          year: Number(qual.year),
         })),
         // Ensure zipCode is number
         address: {
           ...data.address,
-          zipCode: Number(data.address.zipCode)
-        }
+          zipCode: Number(data.address.zipCode),
+        },
       };
 
       console.log("🧹 CLEANED DATA FOR VALIDATION:", cleanedData);
@@ -292,13 +239,25 @@ const TeacherForm = ({
       if (!validation.isValid) {
         console.log("❌ VALIDATION ERRORS:", validation.errors);
         setFormErrors(validation.errors);
-        
+
         // Navigate to the step with errors
-        if (validation.errors.name || validation.errors.contact || validation.errors.address) {
+        if (
+          validation.errors.name ||
+          validation.errors.contact ||
+          validation.errors.address
+        ) {
           setCurrentStep(1);
-        } else if (validation.errors.qualifications || validation.errors.preferredSubjects) {
+        } else if (
+          validation.errors.qualifications ||
+          validation.errors.preferredSubjects
+        ) {
           setCurrentStep(2);
-        } else if (validation.errors.bio || validation.errors.experience || validation.errors.hourlyRate || validation.errors.teachingMode) {
+        } else if (
+          validation.errors.bio ||
+          validation.errors.experience ||
+          validation.errors.hourlyRate ||
+          validation.errors.teachingMode
+        ) {
           setCurrentStep(3);
         } else if (validation.errors.availability) {
           setCurrentStep(4);
@@ -324,17 +283,21 @@ const TeacherForm = ({
   // Helper function to ensure time is in proper AM/PM format
   const formatTimeToAMPM = (timeStr) => {
     if (!timeStr) return timeStr;
-    
+
     // If already in AM/PM format, return as uppercase
-    if (timeStr.includes('AM') || timeStr.includes('PM')) {
+    if (timeStr.includes("AM") || timeStr.includes("PM")) {
       return timeStr.toUpperCase();
     }
-    
+
     // If in 24-hour format, convert to 12-hour AM/PM
-    if (timeStr.includes(':') && !timeStr.includes('AM') && !timeStr.includes('PM')) {
+    if (
+      timeStr.includes(":") &&
+      !timeStr.includes("AM") &&
+      !timeStr.includes("PM")
+    ) {
       return convertTo12Hour(timeStr);
     }
-    
+
     return timeStr;
   };
 
@@ -406,11 +369,12 @@ const TeacherForm = ({
     } else {
       const availability = watchAvailability || [];
       console.log("🔍 CHECKING AVAILABILITY FOR VALIDATION:", availability);
-      
+
       // Check if availability has at least one day with time slots
-      isValid = availability.length > 0 && 
-                availability.some(day => day.timeSlots && day.timeSlots.length > 0);
-      
+      isValid =
+        availability.length > 0 &&
+        availability.some((day) => day.timeSlots && day.timeSlots.length > 0);
+
       if (!isValid) {
         setFormErrors((prev) => ({
           ...prev,
@@ -423,26 +387,28 @@ const TeacherForm = ({
           daySlot.timeSlots.forEach((timeSlot, slotIndex) => {
             const startTime = formatTimeToAMPM(timeSlot.startTime);
             const endTime = formatTimeToAMPM(timeSlot.endTime);
-            
+
             if (!/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i.test(startTime)) {
               if (!timeSlotErrors[index]) timeSlotErrors[index] = {};
-              timeSlotErrors[index][slotIndex] = { 
-                startTime: "Start time must be in HH:MM AM/PM format" 
+              timeSlotErrors[index][slotIndex] = {
+                startTime: "Start time must be in HH:MM AM/PM format",
               };
             }
-            
+
             if (!/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM)$/i.test(endTime)) {
               if (!timeSlotErrors[index]) timeSlotErrors[index] = {};
-              if (!timeSlotErrors[index][slotIndex]) timeSlotErrors[index][slotIndex] = {};
-              timeSlotErrors[index][slotIndex].endTime = "End time must be in HH:MM AM/PM format";
+              if (!timeSlotErrors[index][slotIndex])
+                timeSlotErrors[index][slotIndex] = {};
+              timeSlotErrors[index][slotIndex].endTime =
+                "End time must be in HH:MM AM/PM format";
             }
           });
         });
-        
+
         if (Object.keys(timeSlotErrors).length > 0) {
           setFormErrors((prev) => ({
             ...prev,
-            availability: timeSlotErrors
+            availability: timeSlotErrors,
           }));
           isValid = false;
         }
@@ -546,8 +512,8 @@ const TeacherForm = ({
                       isCompleted
                         ? "bg-green-500 text-white shadow-lg scale-110"
                         : isCurrent
-                        ? "bg-white text-blue-600 shadow-2xl scale-110 border-2 border-blue-200"
-                        : "bg-white bg-opacity-20 text-white border-2 border-white border-opacity-30"
+                          ? "bg-white text-blue-600 shadow-2xl scale-110 border-2 border-blue-200"
+                          : "bg-white bg-opacity-20 text-white border-2 border-white border-opacity-30"
                     }`}
                   >
                     <IconComponent size={24} />
@@ -605,7 +571,7 @@ const TeacherForm = ({
                 <li key={key} className="flex items-center space-x-2">
                   <div className="w-1.5 h-1.5 bg-red-500 rounded-full"></div>
                   <span>
-                    {typeof error === "object" 
+                    {typeof error === "object"
                       ? JSON.stringify(error, null, 2)
                       : error}
                   </span>
@@ -619,742 +585,87 @@ const TeacherForm = ({
       <form onSubmit={handleSubmit(handleFormSubmit)} className="p-10">
         {/* Step 1: Basic Information */}
         {currentStep === 1 && (
-          <div className="space-y-8 w-full">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">
-                Personal Information
-              </h2>
-              <p className="text-gray-600 text-lg mt-3">
-                Tell us about yourself and how students can contact you
-              </p>
-            </div>
-
-            {/* Profile Picture Section */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <h3 className="font-bold text-gray-800 text-xl mb-6 flex items-center">
-                <User className="w-6 h-6 text-blue-600 mr-3" />
-                Profile Picture
-              </h3>
-              <FileUpload
-                type="avatar"
-                onUploadComplete={handleAvatarUpload}
-                onRemove={handleAvatarRemove}
-                currentFile={avatarFile}
-              />
-            </div>
-
-            {/* Basic Information Grid */}
-            <div className="grid grid-cols-1 gap-8 w-full">
-              <div className="w-full">
-                <label
-                  htmlFor="name"
-                  className="block text-lg font-bold text-gray-800 mb-3"
-                >
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  {...register("name", { 
-                    required: "Name is required",
-                    maxLength: {
-                      value: 100,
-                      message: "Name must be less than 100 characters"
-                    }
-                  })}
-                  className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                    errors.name
-                      ? "border-red-500 bg-red-50"
-                      : "border-blue-200 hover:border-blue-400"
-                  }`}
-                  placeholder="Enter your full name"
-                />
-                {errors.name && (
-                  <p className="mt-3 text-red-600 flex items-center text-base">
-                    <AlertCircle className="w-5 h-5 mr-2" />
-                    {errors.name.message}
-                  </p>
-                )}
-              </div>
-            </div>
-
-            {/* Contact Information */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <h3 className="font-bold text-gray-800 text-xl mb-6">
-                Contact Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <div className="w-full">
-                  <label
-                    htmlFor="email"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    Email Address *
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    {...register("contact.email", {
-                      required: "Email is required",
-                      pattern: {
-                        value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                        message: "Invalid email address",
-                      },
-                    })}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.contact?.email
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    }`}
-                    placeholder="your.email@example.com"
-                  />
-                  {errors.contact?.email && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.contact.email.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="w-full">
-                  <label
-                    htmlFor="phone"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    id="phone"
-                    {...register("contact.phone", {
-                      required: "Phone number is required",
-                      pattern: {
-                        value: /^\+?[\d\s\-\(\)]{10,}$/,
-                        message: "Invalid phone number format",
-                      },
-                    })}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.contact?.phone
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    }`}
-                    placeholder="98XXXXXXXX"
-                  />
-                  {errors.contact?.phone && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.contact.phone.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Address Information */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <h3 className="font-bold text-gray-800 text-xl mb-6">
-                Address Information
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-                <div className="md:col-span-2 w-full">
-                  <label
-                    htmlFor="street"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    Street Address *
-                  </label>
-                  <input
-                    type="text"
-                    id="street"
-                    {...register("address.street", {
-                      required: "Street address is required",
-                    })}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.address?.street
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    }`}
-                    placeholder="123 Main Street"
-                  />
-                  {errors.address?.street && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.address.street.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="w-full">
-                  <label
-                    htmlFor="state"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    State/Province *
-                  </label>
-                  <select
-                    id="state"
-                    {...register("address.state", {
-                      required: "State is required",
-                    })}
-                    onChange={handleStateChange}
-                    value={selectedState}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.address?.state
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    }`}
-                  >
-                    <option value="">Select State/Province</option>
-                    {NEPAL_STATES.map((state) => (
-                      <option key={state.name} value={state.name}>
-                        {state.name}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.address?.state && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.address.state.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="w-full">
-                  <label
-                    htmlFor="city"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    City *
-                  </label>
-                  <select
-                    id="city"
-                    {...register("address.city", {
-                      required: "City is required",
-                    })}
-                    onChange={handleCityChange}
-                    disabled={!selectedState}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.address?.city
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    } ${
-                      !selectedState ? "bg-gray-100 cursor-not-allowed" : ""
-                    }`}
-                  >
-                    <option value="">Select City</option>
-                    {availableCities.map((city) => (
-                      <option key={city} value={city}>
-                        {city}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.address?.city && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.address.city.message}
-                    </p>
-                  )}
-                  {!selectedState && (
-                    <p className="mt-2 text-blue-600 text-base">
-                      Please select a state first to choose a city
-                    </p>
-                  )}
-                </div>
-
-                <div className="w-full">
-                  <label
-                    htmlFor="zipCode"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    ZIP Code *
-                  </label>
-                  <input
-                    type="number"
-                    id="zipCode"
-                    {...register("address.zipCode", {
-                      required: "ZIP code is required",
-                      min: {
-                        value: 10000,
-                        message: "ZIP code must be 5 digits"
-                      },
-                      max: {
-                        value: 99999,
-                        message: "ZIP code must be 5 digits"
-                      }
-                    })}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.address?.zipCode
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    }`}
-                    placeholder="44600"
-                    min="10000"
-                    max="99999"
-                  />
-                  {errors.address?.zipCode && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.address.zipCode.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
+          <Step1
+            data={{
+              name: watch("name"),
+              contact: watch("contact"),
+              address: watch("address"),
+            }}
+            errors={errors}
+            formErrors={formErrors}
+            register={register}
+            watch={watch}
+            avatarFile={avatarFile}
+            availableCities={availableCities}
+            selectedState={selectedState}
+            onAvatarUpload={handleAvatarUpload}
+            onAvatarRemove={handleAvatarRemove}
+            onStateChange={handleStateChange}
+            onCityChange={handleCityChange}
+            NEPAL_STATES={NEPAL_STATES}
+          />
         )}
 
         {/* Step 2: Qualifications */}
         {currentStep === 2 && (
-          <div className="space-y-8 w-full">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">
-                Qualifications & Subjects
-              </h2>
-              <p className="text-gray-600 text-lg mt-3">
-                Showcase your education and what you teach
-              </p>
-            </div>
-
-            {/* Education & Qualifications */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <h3 className="font-bold text-gray-800 text-xl mb-6 flex items-center">
-                <GraduationCap className="w-6 h-6 text-blue-600 mr-3" />
-                Education & Qualifications
-              </h3>
-              <div className="space-y-6 w-full">
-                {qualificationFields.map((field, index) => (
-                  <div
-                    key={field.id}
-                    className="bg-white p-8 border-2 border-blue-200 rounded-2xl hover:border-blue-400 transition-all duration-300 shadow-sm w-full"
-                  >
-                    <div className="flex justify-between items-center mb-6 w-full">
-                      <span className="font-bold text-gray-800 text-lg">
-                        Qualification #{index + 1}
-                      </span>
-                      {qualificationFields.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeQualification(index)}
-                          className="flex items-center space-x-2 px-4 py-2 text-red-600 hover:bg-red-50 rounded-xl transition-colors duration-200 border border-red-200"
-                        >
-                          <Trash2 className="w-5 h-5" />
-                          <span className="font-semibold">Remove</span>
-                        </button>
-                      )}
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 w-full">
-                      <div className="w-full">
-                        <label
-                          htmlFor={`degree-${index}`}
-                          className="block text-lg font-bold text-gray-800 mb-3"
-                        >
-                          Degree/Certificate *
-                        </label>
-                        <input
-                          type="text"
-                          id={`degree-${index}`}
-                          {...register(`qualifications.${index}.degree`, {
-                            required: "Degree is required",
-                          })}
-                          className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                            errors.qualifications?.[index]?.degree
-                              ? "border-red-500 bg-red-50"
-                              : "border-blue-200 hover:border-blue-400"
-                          }`}
-                          placeholder="e.g., Bachelor of Science in Mathematics"
-                        />
-                        {errors.qualifications?.[index]?.degree && (
-                          <p className="mt-3 text-red-600 flex items-center text-base">
-                            <AlertCircle className="w-5 h-5 mr-2" />
-                            {errors.qualifications[index].degree.message}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="w-full">
-                        <label
-                          htmlFor={`institution-${index}`}
-                          className="block text-lg font-bold text-gray-800 mb-3"
-                        >
-                          Institution *
-                        </label>
-                        <input
-                          type="text"
-                          id={`institution-${index}`}
-                          {...register(`qualifications.${index}.institution`, {
-                            required: "Institution is required",
-                          })}
-                          className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                            errors.qualifications?.[index]?.institution
-                              ? "border-red-500 bg-red-50"
-                              : "border-blue-200 hover:border-blue-400"
-                          }`}
-                          placeholder="e.g., Tribhuvan University"
-                        />
-                        {errors.qualifications?.[index]?.institution && (
-                          <p className="mt-3 text-red-600 flex items-center text-base">
-                            <AlertCircle className="w-5 h-5 mr-2" />
-                            {errors.qualifications[index].institution.message}
-                          </p>
-                        )}
-                      </div>
-
-                      <div className="w-full">
-                        <label
-                          htmlFor={`year-${index}`}
-                          className="block text-lg font-bold text-gray-800 mb-3"
-                        >
-                          Year Completed *
-                        </label>
-                        <input
-                          type="number"
-                          id={`year-${index}`}
-                          {...register(`qualifications.${index}.year`, {
-                            required: "Year is required",
-                          })}
-                          className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                            errors.qualifications?.[index]?.year
-                              ? "border-red-500 bg-red-50"
-                              : "border-blue-200 hover:border-blue-400"
-                          }`}
-                          placeholder="2020"
-                        />
-                        {errors.qualifications?.[index]?.year && (
-                          <p className="mt-3 text-red-600 flex items-center text-base">
-                            <AlertCircle className="w-5 h-5 mr-2" />
-                            {errors.qualifications[index].year.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                <button
-                  type="button"
-                  onClick={addQualification}
-                  className="flex items-center space-x-4 w-full px-8 py-6 border-2 border-dashed border-blue-400 rounded-2xl text-blue-600 hover:bg-blue-50 hover:border-blue-500 transition-all duration-300 bg-white"
-                >
-                  <Plus className="w-6 h-6" />
-                  <span className="font-bold text-lg">
-                    Add Another Qualification
-                  </span>
-                </button>
-              </div>
-            </div>
-
-            {/* CV/Resume */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <h3 className="font-bold text-gray-800 text-xl mb-6">
-                CV/Resume
-              </h3>
-              <FileUpload
-                type="cv"
-                onUploadComplete={handleCVUpload}
-                onRemove={handleCVRemove}
-                currentFile={cvFile}
-              />
-            </div>
-
-            {/* Subjects */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <h3 className="font-bold text-gray-800 text-xl mb-6">
-                Subjects You Teach *
-              </h3>
-              <p className="text-gray-600 text-lg mb-6">
-                Select all subjects you're qualified to teach
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-                {SUBJECTS.map((subject) => (
-                  <label
-                    key={subject}
-                    className="flex items-center space-x-4 p-4 bg-white border-2 border-blue-200 rounded-xl hover:border-blue-400 cursor-pointer transition-all duration-300 shadow-sm w-full"
-                  >
-                    <input
-                      type="checkbox"
-                      value={subject}
-                      checked={watchSubjects.includes(subject)}
-                      onChange={() => handleSubjectToggle(subject)}
-                      className="w-6 h-6 text-blue-600 border-2 border-gray-300 rounded-lg focus:ring-4 focus:ring-blue-200 focus:ring-offset-2 flex-shrink-0"
-                    />
-                    <span className="text-gray-700 font-semibold text-lg break-words flex-1 min-w-0">
-                      {subject}
-                    </span>
-                  </label>
-                ))}
-              </div>
-              {(errors.preferredSubjects || formErrors.preferredSubjects) && (
-                <p className="mt-4 text-red-600 flex items-center text-base">
-                  <AlertCircle className="w-5 h-5 mr-2" />
-                  {errors.preferredSubjects?.message || formErrors.preferredSubjects}
-                </p>
-              )}
-            </div>
-          </div>
+          <Step2
+            data={{
+              qualifications: watch("qualifications"),
+              preferredSubjects: watchSubjects,
+            }}
+            errors={errors}
+            formErrors={formErrors}
+            qualificationFields={qualificationFields}
+            watchSubjects={watchSubjects}
+            cvFile={cvFile}
+            onCVUpload={handleCVUpload}
+            onCVRemove={handleCVRemove}
+            onSubjectToggle={handleSubjectToggle}
+            onQualificationAdd={addQualification}
+            onQualificationRemove={removeQualification}
+            register={register}
+            SUBJECTS={SUBJECTS}
+          />
         )}
 
         {/* Step 3: Teaching Details */}
         {currentStep === 3 && (
-          <div className="space-y-8 w-full">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">
-                Teaching Details
-              </h2>
-              <p className="text-gray-600 text-lg mt-3">
-                Describe your experience and teaching style
-              </p>
-            </div>
-
-            {/* Teaching Information */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
-                <div className="w-full">
-                  <label
-                    htmlFor="experience"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    Years of Experience *
-                  </label>
-                  <input
-                    type="number"
-                    id="experience"
-                    {...register("experience", {
-                      required: "Experience is required",
-                      min: {
-                        value: 0,
-                        message: "Experience cannot be negative",
-                      },
-                      max: {
-                        value: 50,
-                        message: "Experience cannot exceed 50 years",
-                      },
-                    })}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.experience
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    }`}
-                    placeholder="5"
-                    min="0"
-                    max="50"
-                  />
-                  {errors.experience && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.experience.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="w-full">
-                  <label
-                    htmlFor="hourlyRate"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    Hourly Rate (₨) *
-                  </label>
-                  <div className="relative w-full">
-                    <input
-                      type="number"
-                      id="hourlyRate"
-                      {...register("hourlyRate", {
-                        required: "Hourly rate is required",
-                        min: {
-                          value: 0,
-                          message: "Hourly rate cannot be negative",
-                        },
-                        max: {
-                          value: 10000,
-                          message: "Hourly rate cannot exceed ₨10,000",
-                        },
-                      })}
-                      className={`w-full px-5 py-4 text-lg pr-16 border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                        errors.hourlyRate
-                          ? "border-red-500 bg-red-50"
-                          : "border-blue-200 hover:border-blue-400"
-                      }`}
-                      placeholder="500"
-                      min="0"
-                      max="10000"
-                      step="50"
-                    />
-                    <div className="absolute right-6 top-1/2 transform -translate-y-1/2">
-                      <span className="text-blue-600 font-bold text-lg">
-                        ₨/hr
-                      </span>
-                    </div>
-                  </div>
-                  {errors.hourlyRate && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.hourlyRate.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="w-full">
-                  <label
-                    htmlFor="teachingMode"
-                    className="block text-lg font-bold text-gray-800 mb-3"
-                  >
-                    Teaching Mode *
-                  </label>
-                  <select
-                    id="teachingMode"
-                    {...register("teachingMode", {
-                      required: "Teaching mode is required",
-                    })}
-                    className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-                      errors.teachingMode
-                        ? "border-red-500 bg-red-50"
-                        : "border-blue-200 hover:border-blue-400"
-                    }`}
-                  >
-                    {TEACHING_MODES.map((mode) => (
-                      <option key={mode} value={mode}>
-                        {mode}
-                      </option>
-                    ))}
-                  </select>
-                  {errors.teachingMode && (
-                    <p className="mt-3 text-red-600 flex items-center text-base">
-                      <AlertCircle className="w-5 h-5 mr-2" />
-                      {errors.teachingMode.message}
-                    </p>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Bio Section */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <h3 className="font-bold text-gray-800 text-xl mb-6 flex items-center">
-                <BookOpen className="w-6 h-6 text-blue-600 mr-3" />
-                Bio & Teaching Philosophy *
-              </h3>
-              <p className="text-gray-600 text-lg mb-6">
-                Write a compelling bio that showcases your teaching style,
-                experience, and what makes you a great teacher. Minimum 50
-                characters.
-              </p>
-              <div className="w-full">
-                <textarea
-                  id="bio"
-                  {...register("bio", {
-                    required: "Bio is required",
-                    minLength: {
-                      value: 50,
-                      message: "Bio must be at least 50 characters long",
-                    },
-                    maxLength: {
-                      value: 1000,
-                      message: "Bio must be less than 1000 characters",
-                    },
-                  })}
-                  className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 resize-none ${
-                    errors.bio
-                      ? "border-red-500 bg-red-50"
-                      : "border-blue-200 hover:border-blue-400"
-                  }`}
-                  placeholder="Describe your teaching experience, methodology, and what students can expect from your lessons..."
-                  rows="8"
-                />
-                {errors.bio && (
-                  <p className="mt-3 text-red-600 flex items-center text-base">
-                    <AlertCircle className="w-5 h-5 mr-2" />
-                    {errors.bio.message}
-                  </p>
-                )}
-                <div
-                  className={`mt-3 text-lg font-semibold ${
-                    watchBio.length < 50 ? "text-red-600" : "text-blue-600"
-                  }`}
-                >
-                  {watchBio.length}/1000 characters
-                  {watchBio.length < 50 &&
-                    ` (minimum ${50 - watchBio.length} more characters needed)`}
-                </div>
-              </div>
-            </div>
-          </div>
+          <Step3
+            data={{
+              experience: watch("experience"),
+              hourlyRate: watch("hourlyRate"),
+              teachingMode: watch("teachingMode"),
+              bio: watchBio,
+            }}
+            errors={errors}
+            formErrors={formErrors}
+            watchBio={watchBio}
+            register={register}
+            watch={watch}
+            TEACHING_MODES={TEACHING_MODES}
+          />
         )}
 
         {/* Step 4: Availability */}
         {currentStep === 4 && (
-          <div className="space-y-8 w-full">
-            <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-gray-900">
-                Availability & Schedule
-              </h2>
-              <p className="text-gray-600 text-lg mt-3">
-                Set your available days and times for teaching
-              </p>
-            </div>
-
-            {/* Debug info */}
-            {process.env.NODE_ENV === "development" && (
-              <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
-                <p className="text-blue-800 text-sm">
-                  <strong>Debug Info:</strong> Availability slots: {watchAvailability?.length || 0}
-                </p>
-                <pre className="text-xs mt-2">
-                  {JSON.stringify(watchAvailability, null, 2)}
-                </pre>
-              </div>
-            )}
-
-            {/* Availability Picker */}
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-              <AvailabilityPicker
-                key={`availability-${watchAvailability?.length}-${isFormReady}`}
-                value={watchAvailability || []}
-                onChange={(availability) => {
-                  console.log("🔄 Availability changed:", availability);
-                  setValue("availability", availability, {
-                    shouldValidate: true,
-                  });
-                }}
-                timeFormat="12h"
-              />
-              
-              {/* Display specific availability errors */}
-              {formErrors.availability && typeof formErrors.availability === 'object' && (
-                <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-xl">
-                  <p className="text-red-600 font-semibold mb-2">
-                    Please fix the following time slot errors:
-                  </p>
-                  {Object.entries(formErrors.availability).map(([dayIndex, dayErrors]) => (
-                    <div key={dayIndex} className="mb-2">
-                      {Object.entries(dayErrors).map(([slotIndex, slotErrors]) => (
-                        <div key={slotIndex} className="text-red-600 text-sm ml-4">
-                          {slotErrors.startTime && (
-                            <p>• Day {parseInt(dayIndex) + 1}, Slot {parseInt(slotIndex) + 1}: {slotErrors.startTime}</p>
-                          )}
-                          {slotErrors.endTime && (
-                            <p>• Day {parseInt(dayIndex) + 1}, Slot {parseInt(slotIndex) + 1}: {slotErrors.endTime}</p>
-                          )}
-                        </div>
-                      ))}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Final Call to Action */}
-            <div className="bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl p-8 text-white text-center shadow-lg w-full">
-              <Star className="w-12 h-12 mx-auto mb-4" />
-              <h3 className="font-bold text-2xl mb-3">
-                Ready to Complete Your Profile!
-              </h3>
-              <p className="text-green-100 text-lg">
-                Review all your information before submitting. You can always
-                come back and update your profile later to keep it current and
-                engaging for students.
-              </p>
-            </div>
-          </div>
+          <Step4
+            data={{
+              availability: watchAvailability,
+            }}
+            errors={errors}
+            formErrors={formErrors}
+            watchAvailability={watchAvailability}
+            isFormReady={isFormReady}
+            onAvailabilityChange={(availability) => {
+              console.log("🔄 Availability changed:", availability);
+              setValue("availability", availability, {
+                shouldValidate: true,
+              });
+            }}
+            register={register}
+            setValue={setValue}
+            availabilityPickerKey={availabilityPickerKey}
+          />
         )}
 
         {/* Enhanced Navigation Buttons */}

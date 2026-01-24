@@ -1,31 +1,4 @@
-export const SUBJECTS = [
-  "Mathematics",
-  "Physics",
-  "Chemistry",
-  "Biology",
-  "English",
-  "History",
-  "Geography",
-  "Computer Science",
-  "Economics",
-  "Business Studies",
-  "Psychology",
-  "Languages",
-  "Art",
-  "Music",
-];
-
-export const TEACHING_MODES = ["Online", "In-person", "Both"];
-
-export const DAYS_OF_WEEK = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
+import { User, GraduationCap, BookOpen, Clock } from "lucide-react";
 
 export const NEPAL_STATES = [
   {
@@ -79,7 +52,6 @@ export const NEPAL_STATES = [
       "Kathmandu",
       "Lalitpur",
       "Bhaktapur",
-      "Pokhara",
       "Hetauda",
       "Bharatpur",
       "Dhulikhel",
@@ -119,7 +91,6 @@ export const NEPAL_STATES = [
       "Jomsom",
       "Kawasoti",
       "Gaindakot",
-      "Bharatpur",
       "Putalibazar",
       "Syangja",
       "Chapakot",
@@ -185,5 +156,32 @@ export const NEPAL_STATES = [
       "Purchaudi",
       "Jogbudha",
     ],
+  },
+];
+
+export const FORM_STEPS = [
+  {
+    number: 1,
+    title: "Basic Info",
+    description: "Personal details",
+    icon: User,
+  },
+  {
+    number: 2,
+    title: "Qualifications",
+    description: "Education & subjects",
+    icon: GraduationCap,
+  },
+  {
+    number: 3,
+    title: "Teaching Details",
+    description: "Experience & bio",
+    icon: BookOpen,
+  },
+  {
+    number: 4,
+    title: "Availability",
+    description: "Schedule setup",
+    icon: Clock,
   },
 ];

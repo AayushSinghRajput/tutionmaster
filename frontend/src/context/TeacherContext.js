@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useReducer, useEffect } from 'react';
+import { createContext, useContext, useReducer, useEffect } from 'react';
 import { teacherService } from '../services/teacherService';
 import { useAuth } from './AuthContext';
 import { toast } from 'react-toastify';

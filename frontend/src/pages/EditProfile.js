@@ -22,7 +22,7 @@ const EditProfile = () => {
       console.log("Profile data loaded:", response.data.data);
       console.log(
         "Availability in loaded profile:",
-        response.data.data.availability
+        response.data.data.availability,
       );
       setProfile(response.data.data);
       setFormKey((prev) => prev + 1);

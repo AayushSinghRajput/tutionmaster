@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const fileUpload = require("express-fileupload");
 const connectDB = require("./config/database");
 const errorHandler = require("./middleware/error");
 const newsletterRoute = require("./routes/newsletterRoute");
@@ -14,21 +15,23 @@ connectDB();
 const app = express();
 
 // Body parser middleware
-app.use(express.json({ limit: "10mb" }));
+app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
 
 // Enable CORS
 app.use(
   cors({
     origin: "*",
-  })
+  }),
 );
+
+app.use(fileUpload());
 
 // Mount routers
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/teachers", require("./routes/teachers"));
 app.use("/api/upload", require("./routes/upload"));
-app.use("/api/newsletter",newsletterRoute);
+app.use("/api/newsletter", newsletterRoute);
 
 // Health check route
 app.get("/api/health", (req, res) => {
