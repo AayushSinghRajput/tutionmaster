@@ -624,7 +624,7 @@ const TeacherForm = ({
             onQualificationAdd={addQualification}
             onQualificationRemove={removeQualification}
             register={register}
-            SUBJECTS={SUBJECTS}
+            onChange={onSubjectToggle} 
           />
         )}
 
