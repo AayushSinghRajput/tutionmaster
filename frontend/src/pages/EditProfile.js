@@ -19,11 +19,6 @@ const EditProfile = () => {
   const fetchProfile = async () => {
     try {
       const response = await teacherService.getMyProfile();
-      console.log("Profile data loaded:", response.data.data);
-      console.log(
-        "Availability in loaded profile:",
-        response.data.data.availability,
-      );
       setProfile(response.data.data);
       setFormKey((prev) => prev + 1);
     } catch (error) {
