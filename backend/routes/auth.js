@@ -7,7 +7,8 @@ const {
 } = require('../controllers/authController');
 const {
   registerValidation,
-  handleValidationErrors
+  handleValidationErrors,
+  loginValidation
 } = require('../middleware/validation');
 const { protect } = require('../middleware/auth');
 
@@ -18,7 +19,7 @@ const router = express.Router();
 router.post('/register', registerValidation, handleValidationErrors, register);
 
 //route to login a teacher
-router.post('/login', login);
+router.post('/login', loginValidation, handleValidationErrors, login);
 
 //route to get the personal info
 router.get('/me', protect, getMe);

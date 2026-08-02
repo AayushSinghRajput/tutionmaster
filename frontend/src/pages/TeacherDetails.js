@@ -12,7 +12,7 @@ import CvViewer from '../components/teachers/CvViewer';
 import ContactInfoCard from '../components/teachers/ContactInfoCard';
 import TeachingDetailsCard from '../components/teachers/TeachingDetailsCard';
 import QuickDownloadCard from '../components/teachers/QuickDownloadCard';
-import ContactActionsCard from '../components/teachers/ContactActionsCard';
+import ContactActionsCard from '../components/teachers/ContactActionCard';
 
 const TeacherDetails = () => {
   const { id } = useParams();

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import { BookOpen, Mail, Phone, MapPin, Facebook, Twitter, Instagram } from 'lucide-react';
 import { useState } from 'react';
@@ -7,9 +6,9 @@ import { newsletterService } from '../../services/newsletterService';
 
 
 const Footer = () => {
-  const [email , setEmail] = useState("");
-  const handleSubscribe = async() => {
-    if(!email.trim()){
+  const [email, setEmail] = useState("");
+  const handleSubscribe = async () => {
+    if (!email.trim()) {
       toast.error("Please enter your email address...");
       return;
     }
@@ -39,7 +38,7 @@ const Footer = () => {
               </span>
             </div>
             <p className="text-gray-600 text-sm leading-relaxed max-w-xs">
-              Connecting students with qualified tutors for personalized learning experiences. 
+              Connecting students with qualified tutors for personalized learning experiences.
               Empowering education through technology and dedicated mentorship.
             </p>
             <div className="flex space-x-4">
@@ -63,7 +62,7 @@ const Footer = () => {
             </h4>
             <ul className="space-y-4">
               <li>
-                <Link 
+                <Link
                   to="/teachers"
                   className="text-gray-700 hover:text-blue-600 transition-all duration-300 text-sm flex items-center group"
                 >
@@ -72,7 +71,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link 
+                <Link
                   to="/register"
                   className="text-gray-700 hover:text-blue-600 transition-all duration-300 text-sm flex items-center group"
                 >
@@ -81,7 +80,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link 
+                <Link
                   to="/login"
                   className="text-gray-700 hover:text-blue-600 transition-all duration-300 text-sm flex items-center group"
                 >
@@ -90,7 +89,7 @@ const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link 
+                <Link
                   to="/about"
                   className="text-gray-700 hover:text-blue-600 transition-all duration-300 text-sm flex items-center group"
                 >
@@ -132,7 +131,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <span className="text-sm text-gray-700 block">Address</span>
-                  <span className="text-sm text-blue-600 font-medium">Dharan, Nepal</span>
+                  <span className="text-sm text-blue-600 font-medium">Kathmandu, Nepal</span>
                 </div>
               </div>
             </div>
@@ -148,11 +147,11 @@ const Footer = () => {
               Subscribe to get updates on new tutors and educational resources.
             </p>
             <div className="flex flex-col space-y-3">
-              <input 
-                type="email" 
+              <input
+                type="email"
                 placeholder="Your email address"
                 value={email}
-                onChange={(e)=>setEmail(e.target.value)}
+                onChange={(e) => setEmail(e.target.value)}
                 className="px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
               <button onClick={handleSubscribe} className="bg-blue-500 hover:bg-blue-600 text-white py-3 px-6 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 text-sm">
@@ -167,7 +166,8 @@ const Footer = () => {
         <div className="pt-8 border-t border-gray-300">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-center text-gray-600 text-sm">
-              © 2024 <span className="text-blue-600 font-semibold">TutionMaster</span> — All Rights Reserved.
+              © {new Date().getFullYear()}{" "}
+              <span className="text-blue-600 font-semibold">TuitionMaster</span> — All Rights Reserved.
             </p>
             <div className="flex space-x-6 text-sm">
               <a href="/privacy-policy" className="text-gray-600 hover:text-blue-600 transition-colors">Privacy Policy</a>

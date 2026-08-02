@@ -1,17 +1,11 @@
 import StepHeader from "../step4/StepHeader";
 import AvailabilitySection from "../step4/AvailabilitySection";
-import CustomTimeSlotSection from "../step4/CustomTimeSlotSection";
 import ProfileReadyBanner from "../step4/ProfileReadyBanner";
 
 const Step4 = ({
-  data,
-  errors,
   formErrors,
   watchAvailability,
-  isFormReady,
   onAvailabilityChange,
-  register,
-  setValue,
   availabilityPickerKey,
 }) => {
   return (
@@ -27,8 +21,6 @@ const Step4 = ({
         onAvailabilityChange={onAvailabilityChange}
         formErrors={formErrors}
       />
-
-      <CustomTimeSlotSection />
 
       <ProfileReadyBanner />
     </div>

@@ -1,4 +1,3 @@
-import React from 'react';
 import { Clock, Shield, Phone, Mail, BookOpen } from 'lucide-react';
 import { faqs, officeHours } from '../../constants/contact/contactData';
 

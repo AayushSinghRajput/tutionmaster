@@ -1,4 +1,3 @@
-import React from 'react';
 import { Mail, Phone, MapPin, MessageCircle } from 'lucide-react';
 
 export const contactMethods = [
@@ -6,21 +5,21 @@ export const contactMethods = [
     icon: <Mail className="w-6 h-6" />,
     title: "Email Us",
     description: "Send us an email anytime",
-    details: "support@tutionmaster.com",
-    action: "mailto:support@tutionmaster.com"
+    details: "aayushsinghrajput3003@gmail.com",
+    action: "mailto:aayushsinghrajput3003@gmail.com"
   },
   {
     icon: <Phone className="w-6 h-6" />,
     title: "Call Us",
     description: "Mon to Fri from 8am to 5pm",
-    details: "+1 (555) 123-4567",
-    action: "tel:+15551234567"
+    details: "+977 (980) 598-1168",
+    action: "tel:+9779805981168"
   },
   {
     icon: <MapPin className="w-6 h-6" />,
     title: "Visit Us",
     description: "Come say hello at our office",
-    details: "123 Education Street, Learning City",
+    details: "Kathmandu, Nepal",
     action: "https://maps.google.com"
   },
   {
@@ -52,7 +51,6 @@ export const faqs = [
 ];
 
 export const officeHours = [
-  { days: "Monday - Friday", hours: "8:00 AM - 6:00 PM" },
-  { days: "Saturday", hours: "9:00 AM - 2:00 PM" },
-  { days: "Sunday", hours: "Emergency Support Only" }
+  { days: "Sunday - Friday", hours: "8:00 AM - 8:00 PM" },
+  { days: "Saturday", hours: "Closed" },
 ];

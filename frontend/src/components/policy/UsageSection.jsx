@@ -1,4 +1,4 @@
-import { DATA_USAGE_ITEMS } from '../../constants/privacyPolicyData';
+import { DATA_USAGE_ITEMS } from '../../constants/policy/privacyPolicyData';
 
 const UsageSection = () => {
   return (

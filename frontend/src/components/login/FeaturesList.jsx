@@ -1,6 +1,6 @@
 import { Star, Shield, Clock, GraduationCap, BookOpen } from 'lucide-react';
 import FeatureItem from './FeatureItem';
-import { FEATURES } from '../../constants/loginPageData';
+import { FEATURES } from '../../constants/login/loginPageData';
 
 const FEATURE_ICONS = {
   secure: Shield,
