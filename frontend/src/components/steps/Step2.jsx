@@ -11,11 +11,9 @@ const Step2 = ({
   cvFile,
   onCVUpload,
   onCVRemove,
-  onSubjectToggle,
   onQualificationAdd,
   onQualificationRemove,
   register,
-  value = [],
   onChange,
 }) => {
   return (
@@ -41,7 +39,7 @@ const Step2 = ({
       <SubjectsSection
         errors={errors}
         formErrors={formErrors}
-        value={value}
+        value={data.preferredSubjects || []}
         onChange={onChange}
       />
     </div>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { Plus, X, AlertCircle } from "lucide-react";
 
 const SubjectsSection = ({ errors, formErrors, value = [], onChange }) => {
@@ -10,7 +10,7 @@ const SubjectsSection = ({ errors, formErrors, value = [], onChange }) => {
     if (trimmed && !subjects.includes(trimmed)) {
       const newSubjects = [...subjects, trimmed];
       setSubjects(newSubjects);
-      onChange?.(newSubjects);
+      onChange?.([...newSubjects]);
       setInputValue("");
     }
   };
@@ -18,7 +18,7 @@ const SubjectsSection = ({ errors, formErrors, value = [], onChange }) => {
   const removeSubject = (subject) => {
     const newSubjects = subjects.filter((s) => s !== subject);
     setSubjects(newSubjects);
-    onChange?.(newSubjects);
+    onChange?.([...newSubjects]);
   };
 
   const handleKeyDown = (e) => {
@@ -27,6 +27,10 @@ const SubjectsSection = ({ errors, formErrors, value = [], onChange }) => {
       addSubject();
     }
   };
+
+  useEffect(()=>{
+    setSubjects(value || []);
+  },[value]);
 
   return (
     <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">

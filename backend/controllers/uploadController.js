@@ -1,7 +1,6 @@
 const Teacher = require("../models/Teacher");
 const ErrorResponse = require("../utils/errorResponse");
 const cloudinary = require("../config/cloudinary");
-const stream = require("stream");
 const streamifier = require("streamifier");
 
 // @desc    Upload avatar image
@@ -9,9 +8,11 @@ const streamifier = require("streamifier");
 // @access  Private
 exports.uploadAvatar = async (req, res, next) => {
   try {
-    if (!req.file) {
+    if (!req.files || !req.files.avatar) {
       return next(new ErrorResponse("Please upload a file", 400));
     }
+    const file = req.files.avatar;
+
     // Upload to Cloudinary
     const uploadStream = cloudinary.uploader.upload_stream(
       {
@@ -38,10 +39,7 @@ exports.uploadAvatar = async (req, res, next) => {
       },
     );
 
-    // Create stream from buffer and pipe to Cloudinary
-    const bufferStream = new stream.PassThrough();
-    bufferStream.end(req.file.buffer);
-    bufferStream.pipe(uploadStream);
+    streamifier.createReadStream(file.data).pipe(uploadStream);
   } catch (error) {
     next(error);
   }

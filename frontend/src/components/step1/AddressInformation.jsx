@@ -49,8 +49,10 @@ const AddressInformation = ({
           id="state"
           {...(register
             ? register("address.state", { required: "State is required" })
-            : { value: data.address?.state || "", onChange: onStateChange || ((e) => onChange?.("address.state", e.target.value)) })}
-          value={selectedState || stateValue || ""}
+            : {
+                value: selectedState || stateValue || data.address?.state || "",
+                onChange: onStateChange || ((e) => onChange?.("address.state", e.target.value)),
+              })}
           className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
             errors?.address?.state || formErrors?.address?.state ? "border-red-500 bg-red-50" : "border-blue-200 hover:border-blue-400"
           }`}

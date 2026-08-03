@@ -14,6 +14,11 @@ const CreateProfile = () => {
   const handleSubmit = async (profileData) => {
     setLoading(true);
     try {
+      console.log(profileData);
+      console.log(
+        "FINAL SUBJECTS:",
+        profileData.preferredSubjects
+      );
       await teacherService.createTeacher(profileData);
       toast.success('Profile created successfully!');
       navigate('/dashboard');

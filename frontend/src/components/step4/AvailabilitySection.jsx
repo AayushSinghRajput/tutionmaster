@@ -1,4 +1,4 @@
-import { AlertCircle, Clock } from "lucide-react";
+import { AlertCircle } from "lucide-react";
 import AvailabilityPicker from "../teachers/AvailabilityPicker";
 
 const AvailabilitySection = ({

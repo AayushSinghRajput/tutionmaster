@@ -7,7 +7,7 @@ import FormLoadingSpinner from "./FormLoadingSpinner";
 import FormProgressHeader from "./FormProgressHeader";
 import FormErrorBanner from "./FormErrorBanner";
 import FormNavigation from "./FormNavigation";
-import useTeacherForm from "./useTeacherForm";
+import useTeacherForm from "../../hooks/teacher/useTeacherForm";
 import STEPS from "./formSteps";
 
 const TeacherForm = ({
@@ -21,6 +21,7 @@ const TeacherForm = ({
 }) => {
   const {
     currentStep,
+    isNavigating,
     formErrors,
     avatarFile,
     cvFile,
@@ -54,6 +55,8 @@ const TeacherForm = ({
   if (!isFormReady && isEdit) {
     return <FormLoadingSpinner />;
   }
+
+
 
   return (
     <div
@@ -91,6 +94,8 @@ const TeacherForm = ({
           />
         )}
 
+
+
         {/* Step 2: Qualifications */}
         {currentStep === 2 && (
           <Step2
@@ -109,6 +114,7 @@ const TeacherForm = ({
             onQualificationAdd={addQualification}
             onQualificationRemove={removeQualification}
             register={register}
+            value={watchSubjects}
             onChange={handleSubjectToggle}
           />
         )}
@@ -148,6 +154,7 @@ const TeacherForm = ({
           currentStep={currentStep}
           totalSteps={STEPS.length}
           isSubmitting={isSubmitting}
+          isNavigating={isNavigating}
           submitButtonText={submitButtonText}
           cancelButtonText={cancelButtonText}
           onPrev={prevStep}

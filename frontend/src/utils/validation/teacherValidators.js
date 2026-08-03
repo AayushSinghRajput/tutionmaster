@@ -94,20 +94,75 @@ const validateAvailabilityFields = (availability, errors) => {
 
       if (!timeSlot.startTime) {
         addTimeError("startTime", "Start time is required");
-      } else if (!timeRegex.test(timeSlot.startTime)) {
-        addTimeError("startTime", "Invalid time format (HH:MM)");
+      } else if (!timeRegex.test(timeSlot.startTime.trim())) {
+        addTimeError("startTime", "Invalid time format (HH:MM AM/PM)");
       }
 
       if (!timeSlot.endTime) {
         addTimeError("endTime", "End time is required");
-      } else if (!timeRegex.test(timeSlot.endTime)) {
-        addTimeError("endTime", "Invalid time format (HH:MM)");
+      } else if (!timeRegex.test(timeSlot.endTime.trim())) {
+        addTimeError("endTime", "Invalid time format (HH:MM AM/PM)");
       }
 
       if (timeSlot.startTime && timeSlot.endTime) {
-        const start = parseInt(timeSlot.startTime.replace(":", ""));
-        const end = parseInt(timeSlot.endTime.replace(":", ""));
-        if (start >= end) addTimeError("timeLogic", "End time must be after start time");
+
+        const convertToMinutes = (time) => {
+
+          const match =
+            time.match(
+              /^(\d+):(\d+)\s?(AM|PM)$/i
+            );
+
+
+          if (!match)
+            return null;
+
+
+          let hour =
+            Number(match[1]);
+
+          const minute =
+            Number(match[2]);
+
+
+          const period =
+            match[3].toUpperCase();
+
+
+          if (period === "PM" && hour !== 12)
+            hour += 12;
+
+
+          if (period === "AM" && hour === 12)
+            hour = 0;
+
+
+          return hour * 60 + minute;
+
+        };
+
+
+        const start =
+          convertToMinutes(
+            timeSlot.startTime
+          );
+
+
+        const end =
+          convertToMinutes(
+            timeSlot.endTime
+          );
+
+
+        if (start >= end) {
+
+          addTimeError(
+            "timeLogic",
+            "End time must be after start time"
+          );
+
+        }
+
       }
     });
   });
@@ -138,7 +193,6 @@ export const validateTeacherProfile = (data) => {
   } else if (data.experience > 50) {
     errors.experience = "Experience cannot exceed 50 years";
   }
-
   if (data.hourlyRate === undefined || data.hourlyRate === null) {
     errors.hourlyRate = "Hourly rate is required";
   } else if (data.hourlyRate < 0) {

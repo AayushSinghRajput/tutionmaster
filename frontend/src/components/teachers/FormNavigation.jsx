@@ -4,6 +4,7 @@ const FormNavigation = ({
   currentStep,
   totalSteps,
   isSubmitting,
+  isNavigating,
   submitButtonText,
   cancelButtonText,
   onPrev,
@@ -42,7 +43,8 @@ const FormNavigation = ({
         <button
           type="button"
           onClick={onNext}
-          className="flex items-center space-x-3 px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-offset-2 transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
+          disabled={isNavigating}
+          className="flex items-center space-x-3 px-10 py-4 bg-gradient-to-r from-blue-600 to-indigo-600 text-white rounded-2xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
         >
           <span>Next Step</span>
           <ChevronRight className="w-6 h-6" />
@@ -50,7 +52,7 @@ const FormNavigation = ({
       ) : (
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || isNavigating}
           className="flex items-center space-x-3 px-10 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white rounded-2xl hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-4 focus:ring-green-200 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300 font-bold text-lg shadow-lg hover:shadow-xl transform hover:scale-105"
         >
           <Save className="w-6 h-6" />
