@@ -2,7 +2,6 @@ import React from 'react';
 import {
   AboutHero,
   AboutMissionVision,
-  AboutJourney,
   AboutValues,
   AboutTeam,
   AboutCta
@@ -13,7 +12,6 @@ const About = () => {
     <div className="min-h-screen bg-gradient-to-b from-blue-25 to-white">
       <AboutHero />
       <AboutMissionVision />
-      <AboutJourney />
       <AboutValues />
       <AboutTeam />
       <AboutCta />

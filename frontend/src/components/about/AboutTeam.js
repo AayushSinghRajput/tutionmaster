@@ -1,34 +1,7 @@
-import React from 'react';
 import { Users } from 'lucide-react';
+import { teamMembers } from "../../constants/about/teamMembers";
 
 const AboutTeam = () => {
-  const teamMembers = [
-    {
-      name: "Dr. Sarah Chen",
-      role: "Founder & CEO",
-      bio: "Former Education Professor with 15+ years in educational technology",
-      image: "/team/sarah.jpg"
-    },
-    {
-      name: "Michael Rodriguez",
-      role: "Head of Tutoring",
-      bio: "Education specialist with expertise in curriculum development",
-      image: "/team/michael.jpg"
-    },
-    {
-      name: "Dr. Emily Watson",
-      role: "Academic Director",
-      bio: "PhD in Educational Psychology and learning methodologies",
-      image: "/team/emily.jpg"
-    },
-    {
-      name: "James Kim",
-      role: "Technology Lead",
-      bio: "Software engineer passionate about educational innovation",
-      image: "/team/james.jpg"
-    }
-  ];
-
   return (
     <section className="py-20 bg-gradient-to-br from-blue-25 to-indigo-25">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -48,8 +21,16 @@ const AboutTeam = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {teamMembers.map((member, index) => (
             <div key={index} className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 text-center group">
-              <div className="w-24 h-24 bg-blue-100 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
-                <Users className="w-12 h-12 text-blue-600" />
+              <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden bg-blue-100 flex items-center justify-center group-hover:bg-blue-200 transition-colors">
+                {member.image ? (
+                  <img
+                    src={member.image}
+                    alt={member.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <Users className="w-12 h-12 text-blue-600" />
+                )}
               </div>
               <h3 className="text-xl font-bold text-gray-900 mb-2">
                 {member.name}

@@ -4,7 +4,6 @@ import {
   Star,
   Search,
   Play,
-  ChevronDown,
   BookOpen,
   Calculator,
   Cpu,
@@ -25,7 +24,7 @@ const HeroBanner = ({ scrollToHowItWorks }) => {
             <div className="inline-flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full border border-white/20 mb-6">
               <Star className="w-5 h-5 text-yellow-300" />
               <span className="font-semibold text-sm">
-                Trusted by 10,000+ students nationwide
+                Connecting students with verified tutors across Nepal
               </span>
             </div>
             <h1 className="text-5xl lg:text-6xl font-bold leading-tight mb-6">
@@ -60,27 +59,27 @@ const HeroBanner = ({ scrollToHowItWorks }) => {
             {/* Stats */}
             <div className="flex flex-wrap gap-8 mt-12 pt-8 border-t border-white/20">
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">1K+</div>
+                <div className="text-3xl font-bold text-white">Nepal-Wide</div>
                 <div className="text-blue-200 text-sm font-medium">
-                  Expert Tutors
+                  Tutor Network
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">10K+</div>
+                <div className="text-3xl font-bold text-white">Verified</div>
                 <div className="text-blue-200 text-sm font-medium">
-                  Happy Students
+                  Teacher Profiles
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">100+</div>
+                <div className="text-3xl font-bold text-white">All Levels</div>
                 <div className="text-blue-200 text-sm font-medium">
-                  Subjects
+                  School to Bachelor's
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">98%</div>
+                <div className="text-3xl font-bold text-white">1-on-1</div>
                 <div className="text-blue-200 text-sm font-medium">
-                  Success Rate
+                  Personalized Learning
                 </div>
               </div>
             </div>

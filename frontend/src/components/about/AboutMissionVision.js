@@ -12,7 +12,7 @@ const AboutMissionVision = () => {
               OUR MISSION
             </div>
             <h2 className="text-4xl font-bold text-gray-900 mb-6">
-              Empowering Learners Worldwide
+              Empowering Learners Across Nepal
             </h2>
             <p className="text-lg text-gray-600 leading-relaxed mb-6">
               Our mission is to bridge the educational gap by connecting passionate educators with 
@@ -61,20 +61,20 @@ const AboutMissionVision = () => {
             
             <div className="grid grid-cols-2 gap-4 mt-8">
               <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-                <div className="text-2xl font-bold">50K+</div>
-                <div className="text-blue-200 text-sm">Students Helped</div>
+                <div className="text-2xl font-bold">Nepal-Wide</div>
+                <div className="text-blue-200 text-sm">Tutor Network</div>
               </div>
               <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-                <div className="text-2xl font-bold">5K+</div>
-                <div className="text-blue-200 text-sm">Expert Tutors</div>
+                <div className="text-2xl font-bold">Verified</div>
+                <div className="text-blue-200 text-sm">Teacher Profiles</div>
               </div>
               <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-                <div className="text-2xl font-bold">98%</div>
-                <div className="text-blue-200 text-sm">Success Rate</div>
+                <div className="text-2xl font-bold">1-on-1</div>
+                <div className="text-blue-200 text-sm">Personalized Learning</div>
               </div>
               <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-                <div className="text-2xl font-bold">20+</div>
-                <div className="text-blue-200 text-sm">Countries</div>
+                <div className="text-2xl font-bold">24/7</div>
+                <div className="text-blue-200 text-sm">Support Available</div>
               </div>
             </div>
           </div>

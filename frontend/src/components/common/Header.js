@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Menu, X,  LogOut, BookOpen } from 'lucide-react';
+import { Menu, X, LogOut, BookOpen } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -22,7 +22,7 @@ const Header = () => {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <BookOpen size={34} className="text-blue-700" />
-            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">TutionMaster</h1>
+            <h1 className="text-2xl font-bold text-gray-900 tracking-tight">TuitionMaster</h1>
           </Link>
 
           {/* Desktop Nav */}

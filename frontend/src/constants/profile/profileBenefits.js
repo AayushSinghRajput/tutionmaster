@@ -2,7 +2,7 @@ export const PROFILE_BENEFITS = [
   {
     id: 1,
     title: 'Reach More Students',
-    description: 'Get discovered by students worldwide',
+    description: 'Get discovered by students across Nepal',
   },
   {
     id: 2,

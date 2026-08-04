@@ -1,6 +1,6 @@
 export const STATS = [
-  { id: 'users', value: '50K+', label: 'Active Users', gradient: 'from-blue-500 to-blue-600' },
-  { id: 'tutors', value: '1K+', label: 'Expert Tutors', gradient: 'from-blue-600 to-blue-700' },
+  { id: 'users', value: 'Nepal-Wide', label: 'Student Reach', gradient: 'from-blue-500 to-blue-600' },
+  { id: 'tutors', value: 'Verified', label: 'Teacher Profiles', gradient: 'from-blue-600 to-blue-700' },
 ];
 
 export const FEATURES = [
@@ -29,9 +29,3 @@ export const FEATURES = [
     color: 'orange',
   },
 ];
-
-export const TESTIMONIAL = {
-  quote:
-    'TutionMaster transformed how I teach. The platform is intuitive and my students love the interactive features!',
-  author: 'Aayush Singh Rajput, Math Teacher',
-};

@@ -185,7 +185,7 @@ const Dashboard = () => {
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12 text-left">
                 {[
-                  { icon: User, text: 'Reach thousands of potential students', color: 'text-blue-500' },
+                  { icon: User, text: 'Reach students actively searching for tutors', color: 'text-blue-500' },
                   { icon: DollarSign, text: 'Set your own competitive hourly rates', color: 'text-green-500' },
                   { icon: Calendar, text: 'Flexible teaching schedule on your terms', color: 'text-purple-500' },
                   { icon: Star, text: 'Build your teaching reputation and reviews', color: 'text-yellow-500' }

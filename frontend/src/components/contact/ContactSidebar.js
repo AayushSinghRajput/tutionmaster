@@ -32,11 +32,11 @@ const ContactSidebar = () => {
         <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2">
             <Phone className="w-4 h-4" />
-            <span>Emergency Hotline: +1 (555) 123-HELP</span>
+            <span>Emergency Hotline: +977 (980) 5981168</span>
           </div>
           <div className="flex items-center gap-2">
             <Mail className="w-4 h-4" />
-            <span>urgent@tutionmaster.com</span>
+            <span>aayushsinghrajput3003@gmail.com</span>
           </div>
         </div>
       </div>

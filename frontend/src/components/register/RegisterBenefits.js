@@ -32,13 +32,13 @@ const RegisterBenefits = () => {
       <div className="grid grid-cols-2 gap-6">
         <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-6 text-white text-center shadow-lg">
           <Globe className="w-8 h-8 mx-auto mb-2" />
-          <div className="text-2xl font-bold">50K+</div>
-          <div className="text-blue-100 text-sm">Students Worldwide</div>
+          <div className="text-2xl font-bold">Nepal-Wide</div>
+          <div className="text-blue-100 text-sm">Student Reach</div>
         </div>
-        
+
         <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-2xl p-6 text-white text-center shadow-lg">
           <Clock className="w-8 h-8 mx-auto mb-2" />
-          <div className="text-2xl font-bold">10K+</div>
+          <div className="text-2xl font-bold">Flexible</div>
           <div className="text-blue-100 text-sm">Teaching Hours</div>
         </div>
       </div>

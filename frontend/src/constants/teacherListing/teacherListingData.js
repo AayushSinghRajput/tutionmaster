@@ -1,6 +1,6 @@
 export const listingStats = [
-  { value: "1K+", label: "Qualified Teachers" },
-  { value: "100+", label: "Subjects Covered" },
-  { value: "10k+", label: "Students Taught" },
-  { value: "4.5/5", label: "Average Rating" }
+  { value: "Nepal-Wide", label: "Tutor Network" },
+  { value: "Verified", label: "Teacher Profiles" },
+  { value: "All Levels", label: "School to Bachelor's" },
+  { value: "1-on-1", label: "Personalized Tutoring" }
 ];
