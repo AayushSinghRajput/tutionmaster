@@ -1,11 +1,11 @@
 const ErrorResponse = require('../utils/errorResponse');
+const logger = require('../utils/logger');
 
 const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
 
-  // Log to console for dev
-  console.log(err.stack);
+  logger.error(err.stack || err.message);
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {
