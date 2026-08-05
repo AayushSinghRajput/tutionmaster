@@ -1,3 +1,45 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cv-flip-perspective {
+  perspective: 1800px;
+}
+
+.cv-page {
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  background: white;
+}
+
+@keyframes cvPageFlipNext {
+  from {
+    transform: rotateY(-40deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes cvPageFlipPrev {
+  from {
+    transform: rotateY(40deg);
+    opacity: 0;
+  }
+  to {
+    transform: rotateY(0deg);
+    opacity: 1;
+  }
+}
+
+.cv-page-flip-next {
+  transform-origin: left center;
+  animation: cvPageFlipNext 0.35s ease-out;
+}
+
+.cv-page-flip-prev {
+  transform-origin: right center;
+  animation: cvPageFlipPrev 0.35s ease-out;
+}

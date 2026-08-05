@@ -1,19 +1,62 @@
-import { FileText, Download, Maximize2, ZoomIn, ZoomOut, RefreshCw } from 'lucide-react';
+import { useState, useRef, useEffect, useMemo } from 'react';
+import { Document, Page, pdfjs } from 'react-pdf';
+import {
+  FileText,
+  Download,
+  Maximize2,
+  ZoomIn,
+  ZoomOut,
+  RefreshCw,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 import { useCvViewer } from '../../hooks/useCvViewer';
 import CvInfoCard from './CvInfoCard';
 import { CV_INFO_CARDS } from '../../constants/cv/cvInfoCards';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
+const MAX_PAGE_WIDTH = 720;
+const MIN_PAGE_WIDTH = 240;
 
 const CvViewer = ({ teacher, onDownload }) => {
   const {
     zoomLevel,
     isFullscreen,
     pdfError,
+    numPages,
+    pageNumber,
+    flipDirection,
     zoomIn,
     zoomOut,
     toggleFullscreen,
     reloadPdf,
     handlePdfError,
+    onDocumentLoadSuccess,
+    goToPrevPage,
+    goToNextPage,
   } = useCvViewer();
+
+  const containerRef = useRef(null);
+  const [containerWidth, setContainerWidth] = useState(MAX_PAGE_WIDTH);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return undefined;
+
+    const observer = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        setContainerWidth(entry.contentRect.width);
+      }
+    });
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  const pageWidth = useMemo(() => {
+    const fitWidth = Math.min(MAX_PAGE_WIDTH, Math.max(MIN_PAGE_WIDTH, containerWidth - 32));
+    return Math.round(fitWidth * (zoomLevel / 100));
+  }, [containerWidth, zoomLevel]);
 
   if (!teacher.cvUrl) return null;
 
@@ -54,17 +97,11 @@ const CvViewer = ({ teacher, onDownload }) => {
 
       <div
         id="cv-container"
-        className="border border-gray-300 rounded-xl overflow-hidden bg-gray-100 relative"
-        style={{
-          maxWidth: '210mm',
-          minHeight: '297mm',
-          margin: '0 auto',
-          transform: `scale(${zoomLevel / 100})`,
-          transformOrigin: 'top center',
-        }}
+        ref={containerRef}
+        className="border border-gray-300 rounded-xl bg-gray-50 py-8 px-4 flex flex-col items-center"
       >
         {pdfError ? (
-          <div className="w-full h-[297mm] flex flex-col items-center justify-center bg-white">
+          <div className="w-full max-w-lg flex flex-col items-center justify-center bg-white rounded-lg py-16">
             <div className="text-center p-8">
               <div className="w-16 h-16 mx-auto mb-4 bg-red-100 rounded-full flex items-center justify-center">
                 <FileText className="w-8 h-8 text-red-600" />
@@ -90,13 +127,61 @@ const CvViewer = ({ teacher, onDownload }) => {
             </div>
           </div>
         ) : (
-          <iframe
-            src={teacher.cvUrl}
-            title={`${teacher.name}'s CV`}
-            className="w-full h-full min-h-[297mm] border-0"
-            loading="lazy"
-            onError={handlePdfError}
-          />
+          <>
+            <div className="cv-flip-perspective">
+              <Document
+                file={teacher.cvUrl}
+                onLoadSuccess={onDocumentLoadSuccess}
+                onLoadError={handlePdfError}
+                loading={
+                  <div
+                    className="flex items-center justify-center"
+                    style={{ width: pageWidth, height: Math.round(pageWidth * 1.414) }}
+                  >
+                    <div className="animate-spin h-8 w-8 border-2 border-blue-600 border-t-transparent rounded-full" />
+                  </div>
+                }
+              >
+                <div
+                  key={pageNumber}
+                  className={`cv-page shadow-lg rounded-sm overflow-hidden ${
+                    flipDirection === 'next' ? 'cv-page-flip-next' : 'cv-page-flip-prev'
+                  }`}
+                >
+                  <Page
+                    pageNumber={pageNumber}
+                    width={pageWidth}
+                    renderTextLayer={false}
+                    renderAnnotationLayer={false}
+                  />
+                </div>
+              </Document>
+            </div>
+
+            {numPages > 1 && (
+              <div className="flex items-center space-x-4 mt-5">
+                <button
+                  onClick={goToPrevPage}
+                  disabled={pageNumber <= 1}
+                  className="flex items-center space-x-1 px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                  <span>Prev</span>
+                </button>
+                <span className="text-sm font-medium text-gray-600 tabular-nums">
+                  Page {pageNumber} of {numPages}
+                </span>
+                <button
+                  onClick={goToNextPage}
+                  disabled={pageNumber >= numPages}
+                  className="flex items-center space-x-1 px-3 py-2 bg-white border border-gray-300 rounded-lg text-gray-700 font-medium disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+                >
+                  <span>Next</span>
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+              </div>
+            )}
+          </>
         )}
       </div>
 

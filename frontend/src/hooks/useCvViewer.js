@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const ZOOM_STEP = 25;
 const ZOOM_MIN = 50;
@@ -8,6 +8,9 @@ export const useCvViewer = () => {
   const [zoomLevel, setZoomLevel] = useState(100);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [pdfError, setPdfError] = useState(false);
+  const [numPages, setNumPages] = useState(null);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [flipDirection, setFlipDirection] = useState('next');
 
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -36,17 +39,43 @@ export const useCvViewer = () => {
     }
   };
 
-  const reloadPdf = () => setPdfError(false);
-  const handlePdfError = () => setPdfError(true);
+  const onDocumentLoadSuccess = useCallback(({ numPages: total }) => {
+    setNumPages(total);
+    setPageNumber(1);
+    setPdfError(false);
+  }, []);
+
+  const handlePdfError = useCallback(() => setPdfError(true), []);
+
+  const goToPrevPage = () => {
+    setFlipDirection('prev');
+    setPageNumber((prev) => Math.max(prev - 1, 1));
+  };
+
+  const goToNextPage = () => {
+    setFlipDirection('next');
+    setPageNumber((prev) => Math.min(prev + 1, numPages || prev));
+  };
+
+  const reloadPdf = () => {
+    setPdfError(false);
+    setPageNumber(1);
+  };
 
   return {
     zoomLevel,
     isFullscreen,
     pdfError,
+    numPages,
+    pageNumber,
+    flipDirection,
     zoomIn,
     zoomOut,
     toggleFullscreen,
     reloadPdf,
     handlePdfError,
+    onDocumentLoadSuccess,
+    goToPrevPage,
+    goToNextPage,
   };
 };
