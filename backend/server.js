@@ -14,6 +14,10 @@ const { globalLimiter, authLimiter } = require("./middleware/rateLimiter");
 const validateEnv = require("./utils/validateEnv");
 const logger = require("./utils/logger");
 const newsletterRoute = require("./routes/newsletterRoute");
+const uploadRoute = require("./routes/upload");
+const teacherRoute = require("./routes/teachers");
+const authRoute = require("./routes/auth");
+
 
 // Load env vars
 dotenv.config();
@@ -67,9 +71,9 @@ app.use(
 app.use(globalLimiter);
 
 // Mount routers
-app.use("/api/auth", authLimiter, require("./routes/auth"));
-app.use("/api/teachers", require("./routes/teachers"));
-app.use("/api/upload", require("./routes/upload"));
+app.use("/api/auth", authLimiter, authRoute);
+app.use("/api/teachers",teacherRoute);
+app.use("/api/upload", uploadRoute);
 app.use("/api/newsletter", newsletterRoute);
 
 // Health check route

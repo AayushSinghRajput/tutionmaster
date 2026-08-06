@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Search, X, Filter, Sparkles } from 'lucide-react';
 
-const SearchBar = ({ 
+const SearchBar = ({
   searchQuery = '',
   onSearchChange,
   onFiltersToggle,
@@ -67,11 +67,6 @@ const SearchBar = ({
     <div className={`w-full max-w-4xl mx-auto ${className}`}>
       <form onSubmit={handleSubmit} className="relative">
         <div className="relative">
-          {/* Search Icon */}
-          <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-            <Search size={20} className="text-blue-400" />
-          </div>
-
           {/* Input Field */}
           <input
             ref={inputRef}

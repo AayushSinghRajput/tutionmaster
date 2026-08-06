@@ -35,7 +35,7 @@ const HeroBanner = ({ scrollToHowItWorks }) => {
               </span>
             </h1>
             <p className="text-xl text-blue-100 leading-relaxed mb-8 max-w-lg">
-              Connect with certified educators, master new skills, and achieve
+              Connect with qualified educators, master new skills, and achieve
               your academic goals with personalized 1-on-1 tutoring.
             </p>
 
@@ -65,9 +65,9 @@ const HeroBanner = ({ scrollToHowItWorks }) => {
                 </div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-bold text-white">Verified</div>
+                <div className="text-3xl font-bold text-white">Qualified</div>
                 <div className="text-blue-200 text-sm font-medium">
-                  Teacher Profiles
+                  Tutor Profiles
                 </div>
               </div>
               <div className="text-center">

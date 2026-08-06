@@ -25,24 +25,17 @@ const HowItWorks = ({ howItWorksRef }) => {
     },
     {
       number: "2",
-      icon: ShieldCheck,
-      title: "Admin Verification",
-      description:
-        "Our admin team reviews and verifies teacher credentials, documents, and qualifications to ensure quality and authenticity.",
-    },
-    {
-      number: "3",
       icon: Search,
       title: "Student Browsing",
       description:
-        "Students browse through verified teacher profiles, view their availability, and ratings to find the perfect match.",
+        "Students browse through qualified teacher profiles, view their availability, and subjects to find the perfect tutor.",
     },
     {
-      number: "4",
+      number: "3",
       icon: CalendarCheck,
       title: "Book & Connect Directly",
       description:
-        "Students contact teachers directly via provided contact information and book tuition classes from available time slots.",
+        "Students contact the teacher directly via provided contact information and book tuition classes from available time slots.",
     },
   ];
 
@@ -63,7 +56,7 @@ const HowItWorks = ({ howItWorksRef }) => {
         </div>
 
         {/* Desktop Steps - Updated to 4 columns */}
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
           {/* Connecting Lines */}
           <div className="hidden lg:block absolute top-16 left-1/4 right-3/4 h-0.5 bg-gradient-to-r from-blue-200 to-blue-300 -z-10"></div>
           <div className="hidden lg:block absolute top-16 left-1/2 right-1/4 h-0.5 bg-gradient-to-r from-blue-200 to-blue-300 -z-10"></div>
@@ -159,22 +152,13 @@ const HowItWorks = ({ howItWorksRef }) => {
             Platform Flow
           </h3>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100">
               <div className="w-12 h-12 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-3">
                 <User className="w-6 h-6 text-blue-600" />
               </div>
               <h4 className="font-semibold text-gray-900 text-sm">
                 Teacher Sign Up
-              </h4>
-            </div>
-
-            <div className="text-center p-4 bg-white rounded-xl shadow-sm border border-blue-100">
-              <div className="w-12 h-12 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-3">
-                <ShieldCheck className="w-6 h-6 text-green-600" />
-              </div>
-              <h4 className="font-semibold text-gray-900 text-sm">
-                Admin Verification
               </h4>
             </div>
 

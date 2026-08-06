@@ -1,4 +1,4 @@
-import { SUBJECTS, TEACHING_MODES } from "../../utils/constants";
+import { TEACHING_MODES } from "../../utils/constants";
 import {
   Filter,
   X,
@@ -9,14 +9,16 @@ import {
   Search,
 } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
+import { teacherService } from "../../services/teacherService";
 
-const TeacherFilters = ({ 
-  filters, 
-  onFilterChange, 
-  onClearFilters 
+const TeacherFilters = ({
+  filters,
+  onFilterChange,
+  onClearFilters
 }) => {
   const [subjectSearch, setSubjectSearch] = useState("");
-  const [filteredSubjects, setFilteredSubjects] = useState(SUBJECTS);
+  const [subjects, setSubjects] = useState([]);
+  const [filteredSubjects, setFilteredSubjects] = useState([]);
   const [localLocation, setLocalLocation] = useState(filters.location);
   const locationTimeoutRef = useRef(null);
 
@@ -43,9 +45,9 @@ const TeacherFilters = ({
   // Filter subjects based on search input
   useEffect(() => {
     if (subjectSearch.trim() === "") {
-      setFilteredSubjects(SUBJECTS);
+      setFilteredSubjects(subjects);
     } else {
-      const filtered = SUBJECTS.filter((subject) =>
+      const filtered = subjects.filter((subject) =>
         subject.toLowerCase().includes(subjectSearch.toLowerCase())
       );
       setFilteredSubjects(filtered);
@@ -121,6 +123,15 @@ const TeacherFilters = ({
     };
   }, []);
 
+  //fetch subjects
+  useEffect(() => {
+    const fetchSubjects = async () => {
+      const res = await teacherService.getAllSubjects();
+      setSubjects(res.data);
+    }
+    fetchSubjects();
+  }, [])
+
   return (
     <div className="w-80 bg-white rounded-2xl shadow-xl border border-blue-50 h-fit sticky top-8 transition-all duration-300 hover:shadow-2xl">
       {/* Enhanced Header */}
@@ -138,7 +149,7 @@ const TeacherFilters = ({
                 Refine Search
               </h3>
               <p className="text-blue-100 text-sm font-medium mt-1">
-                Find your ideal educator
+                Find your ideal tutor
               </p>
             </div>
           </div>
@@ -165,7 +176,7 @@ const TeacherFilters = ({
               Subjects & Courses
             </h4>
           </div>
-          
+
           {/* Subject Search Input */}
           <div className="relative">
             <input
@@ -173,11 +184,8 @@ const TeacherFilters = ({
               placeholder="Search subjects..."
               value={subjectSearch}
               onChange={(e) => setSubjectSearch(e.target.value)}
-              className="w-full px-4 py-3 pl-11 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+              className="w-full px-4 py-3 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
             />
-            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400">
-              <Search size={16} />
-            </div>
             {subjectSearch && (
               <button
                 onClick={() => setSubjectSearch("")}
@@ -221,11 +229,10 @@ const TeacherFilters = ({
                     )}
                   </div>
                   <span
-                    className={`text-gray-700 group-hover:text-blue-800 transition-colors duration-200 flex-1 ${
-                      filters.subjects.includes(subject)
-                        ? "font-semibold text-blue-700"
-                        : "font-medium"
-                    }`}
+                    className={`text-gray-700 group-hover:text-blue-800 transition-colors duration-200 flex-1 ${filters.subjects.includes(subject)
+                      ? "font-semibold text-blue-700"
+                      : "font-medium"
+                      }`}
                   >
                     {subject}
                   </span>
@@ -265,9 +272,6 @@ const TeacherFilters = ({
                   </option>
                 ))}
               </select>
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400">
-                <Search size={16} />
-              </div>
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg
                   className="w-4 h-4 text-blue-400"
@@ -304,13 +308,10 @@ const TeacherFilters = ({
                     placeholder="Min years"
                     value={filters.minExperience}
                     onChange={handleMinExperienceChange}
-                    className="w-full px-4 py-3.5 pl-11 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
                     min="0"
                     max="50"
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400">
-                    <Search size={16} />
-                  </div>
                 </div>
                 <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                   <span className="text-blue-600 font-semibold text-sm">→</span>
@@ -321,13 +322,10 @@ const TeacherFilters = ({
                     placeholder="Max years"
                     value={filters.maxExperience}
                     onChange={handleMaxExperienceChange}
-                    className="w-full px-4 py-3.5 pl-11 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
                     min="0"
                     max="50"
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400">
-                    <Search size={16} />
-                  </div>
                 </div>
               </div>
               <div className="text-xs text-blue-600 font-semibold text-center bg-blue-50 py-1.5 rounded-lg">
@@ -351,19 +349,13 @@ const TeacherFilters = ({
                 <div className="flex-1 relative">
                   <input
                     type="number"
-                    placeholder="Minimum rate"
+                    placeholder="Min rate"
                     value={filters.minRate}
                     onChange={handleMinRateChange}
-                    className="w-full px-4 py-3.5 pl-11 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
                     min="0"
                     max="10000"
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400">
-                    <Search size={16} />
-                  </div>
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <span className="text-blue-500 text-sm font-bold">₨</span>
-                  </div>
                 </div>
                 <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
                   <span className="text-blue-600 font-semibold text-sm">→</span>
@@ -371,19 +363,13 @@ const TeacherFilters = ({
                 <div className="flex-1 relative">
                   <input
                     type="number"
-                    placeholder="Maximum rate"
+                    placeholder="Max rate"
                     value={filters.maxRate}
                     onChange={handleMaxRateChange}
-                    className="w-full px-4 py-3.5 pl-11 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
                     min="0"
                     max="10000"
                   />
-                  <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400">
-                    <Search size={16} />
-                  </div>
-                  <div className="absolute right-4 top-1/2 transform -translate-y-1/2">
-                    <span className="text-blue-500 text-sm font-bold">₨</span>
-                  </div>
                 </div>
               </div>
               <div className="text-xs text-blue-600 font-semibold text-center bg-blue-50 py-1.5 rounded-lg">
@@ -423,9 +409,6 @@ const TeacherFilters = ({
                   </button>
                 </div>
               )}
-            </div>
-            <div className="text-xs text-blue-600 font-medium text-center bg-blue-50 py-1.5 rounded-lg">
-              Search will start after you stop typing
             </div>
           </div>
         </div>

@@ -6,6 +6,11 @@ export const teacherService = {
     return api.get("/teachers", { params });
   },
 
+  getAllSubjects: () => {
+    return api.get('/teachers/subject');
+  },
+
+
   searchTeachers: (params = {}) => {
     return api.get("/teachers/search", { params });
   },

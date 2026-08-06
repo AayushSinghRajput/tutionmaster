@@ -101,6 +101,18 @@ exports.getTeachers = asyncHandler(async (req, res) => {
   });
 });
 
+// @desc Get all subjects
+// @route GET /api/teachers/subject
+// @access Public
+exports.getAllSubjects = asyncHandler(async (req, res, next) => {
+  const subjects = await Teacher.distinct("preferredSubjects");
+  subjects.sort((a, b) => a.localeCompare(b));
+  res.status(200).json({
+    success: true,
+    data: subjects,
+  });
+});
+
 // @desc    Search teachers
 // @route   GET /api/teachers/search
 // @access  Public

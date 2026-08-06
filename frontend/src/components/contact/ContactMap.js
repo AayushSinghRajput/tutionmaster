@@ -61,9 +61,9 @@ const ContactMap = () => {
               </div>
 
               <div className="bg-blue-25 rounded-xl p-4">
-                <h4 className="font-semibold text-gray-900 mb-2">Parking & Access</h4>
+                <h4 className="font-semibold text-gray-900 mb-2">Parking</h4>
                 <p className="text-sm text-gray-600">
-                  Free parking available in the adjacent lot. Our building is wheelchair accessible with elevator access to all floors.
+                  Free parking available in the adjacent lot.
                 </p>
               </div>
             </div>

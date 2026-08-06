@@ -1,4 +1,3 @@
-import React from 'react';
 import TeacherFilters from '../teachers/TeacherFilters';
 
 const TeacherFilterSidebar = ({ filters, onFilterChange, onClearFilters }) => {

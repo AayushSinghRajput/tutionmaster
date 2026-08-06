@@ -65,7 +65,7 @@ const AboutMissionVision = () => {
                 <div className="text-blue-200 text-sm">Tutor Network</div>
               </div>
               <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">
-                <div className="text-2xl font-bold">Verified</div>
+                <div className="text-2xl font-bold">Qualified</div>
                 <div className="text-blue-200 text-sm">Teacher Profiles</div>
               </div>
               <div className="text-center p-4 bg-white/10 rounded-xl backdrop-blur-sm">

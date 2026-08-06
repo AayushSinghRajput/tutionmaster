@@ -59,13 +59,6 @@ year:new Date().getFullYear()
 
 
 const handleSubjectToggle = (subjects) => {
-
-  console.log(
-    "Selected Subjects:",
-    subjects
-  );
-
-
   setValue(
     "preferredSubjects",
     subjects,

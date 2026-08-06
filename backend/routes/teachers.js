@@ -6,7 +6,8 @@ const {
   createTeacher,
   updateTeacher,
   deleteTeacher,
-  getMyProfile
+  getMyProfile,
+  getAllSubjects
 } = require('../controllers/teacherController');
 const {
   teacherProfileValidation,
@@ -18,6 +19,7 @@ const router = express.Router();
 
 // Public routes
 router.get('/', getTeachers);
+router.get("/subject",getAllSubjects)
 router.get('/search', searchTeachers);
 
 // Specific route MUST be above :id

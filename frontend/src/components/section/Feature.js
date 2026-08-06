@@ -28,7 +28,7 @@ const Features = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 group">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
               <User className="w-8 h-8 text-white" />
@@ -39,19 +39,6 @@ const Features = () => {
             <p className="text-gray-600 leading-relaxed">
               Teachers create comprehensive profiles with qualifications,
               experience, and teaching subjects
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-blue-100 group">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Shield className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Admin Verification
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              All teacher profiles are verified by admins to ensure authenticity
-              and quality standards
             </p>
           </div>
 
@@ -123,10 +110,10 @@ const Features = () => {
               </div>
               <div>
                 <h4 className="font-semibold text-gray-900">
-                  Verified Quality
+                  Quality Education
                 </h4>
                 <p className="text-sm text-gray-600 mt-1">
-                  Admin-verified profiles ensure reliability
+                  Well-qualified teachers ensure quality
                 </p>
               </div>
             </div>
