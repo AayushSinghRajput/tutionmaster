@@ -1,20 +1,3 @@
-export const SUBJECTS = [
-  "Mathematics",
-  "Physics",
-  "Chemistry",
-  "Biology",
-  "English",
-  "History",
-  "Geography",
-  "Computer Science",
-  "Economics",
-  "Business Studies",
-  "Psychology",
-  "Languages",
-  "Art",
-  "Music",
-];
-
 export const TEACHING_MODES = ["Online", "In-person", "Both"];
 
 export const DAYS_OF_WEEK = [
