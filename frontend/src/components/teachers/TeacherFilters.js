@@ -127,7 +127,8 @@ const TeacherFilters = ({
   useEffect(() => {
     const fetchSubjects = async () => {
       const res = await teacherService.getAllSubjects();
-      setSubjects(res.data);
+      setSubjects(res.data.data);
+      setFilteredSubjects(res.data.data);
     }
     fetchSubjects();
   }, [])
