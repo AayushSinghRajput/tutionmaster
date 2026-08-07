@@ -1,11 +1,15 @@
 import SearchBar from '../common/SearchBar';
 
-const TeacherListingSearch = () => {
+const TeacherListingSearch = ({ searchQuery, onSearchChange }) => {
   return (
     <div className="mb-8">
       <div className="max-w-2xl mx-auto">
         <div className="relative">
-          <SearchBar />
+          <SearchBar
+            searchQuery={searchQuery}
+            onSearchChange={onSearchChange}
+          />
+
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
             <svg
               className="w-5 h-5 text-blue-400"

@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Search, X, Filter, Sparkles } from 'lucide-react';
+import { X, Filter, Sparkles } from 'lucide-react';
 
 const SearchBar = ({
   searchQuery = '',
-  onSearchChange,
-  onFiltersToggle,
+  onSearchChange = () => { },
+  onFiltersToggle = () => { },
   filterCount = 0,
   placeholder = 'Search for subjects, teachers, or topics...',
   className = '',
@@ -76,11 +76,10 @@ const SearchBar = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder={placeholder}
-            className={`block w-full pl-12 pr-24 py-4 border-2 rounded-2xl bg-white placeholder-blue-300 text-gray-900 focus:outline-none transition-all duration-200 shadow-lg ${
-              isFocused 
-                ? 'border-blue-500 shadow-blue-100' 
-                : 'border-blue-200 hover:border-blue-300'
-            }`}
+            className={`block w-full pl-12 pr-24 py-4 border-2 rounded-2xl bg-white placeholder-blue-300 text-gray-900 focus:outline-none transition-all duration-200 shadow-lg ${isFocused
+              ? 'border-blue-500 shadow-blue-100'
+              : 'border-blue-200 hover:border-blue-300'
+              }`}
             autoFocus={autoFocus}
             aria-label="Search teachers"
           />
@@ -104,11 +103,10 @@ const SearchBar = ({
               <button
                 type="button"
                 onClick={onFiltersToggle}
-                className={`flex items-center space-x-2 px-4 py-2 mr-2 rounded-xl transition-all duration-200 font-medium ${
-                  filterCount > 0 
-                    ? 'bg-blue-100 text-blue-700 border border-blue-200 shadow-sm' 
-                    : 'text-blue-500 hover:text-blue-700 hover:bg-blue-50'
-                }`}
+                className={`flex items-center space-x-2 px-4 py-2 mr-2 rounded-xl transition-all duration-200 font-medium ${filterCount > 0
+                  ? 'bg-blue-100 text-blue-700 border border-blue-200 shadow-sm'
+                  : 'text-blue-500 hover:text-blue-700 hover:bg-blue-50'
+                  }`}
                 aria-label={`Open filters ${filterCount > 0 ? `(${filterCount} active)` : ''}`}
               >
                 <Filter size={16} className="flex-shrink-0" />
@@ -135,28 +133,28 @@ const SearchBar = ({
             </div>
             <div className="p-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <button 
+                <button
                   className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
                   onClick={() => handleInputChange(`${localQuery} tutors`)}
                 >
                   <div className="font-medium text-blue-900">{localQuery} tutors</div>
                   <div className="text-blue-600 mt-1">Find specialized tutors</div>
                 </button>
-                <button 
+                <button
                   className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
                   onClick={() => handleInputChange(`${localQuery} online`)}
                 >
                   <div className="font-medium text-blue-900">{localQuery} online</div>
                   <div className="text-blue-600 mt-1">Virtual learning options</div>
                 </button>
-                <button 
+                <button
                   className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
                   onClick={() => handleInputChange(`Advanced ${localQuery}`)}
                 >
                   <div className="font-medium text-blue-900">Advanced {localQuery}</div>
                   <div className="text-blue-600 mt-1">Higher level courses</div>
                 </button>
-                <button 
+                <button
                   className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
                   onClick={() => handleInputChange(`${localQuery} for beginners`)}
                 >
@@ -176,7 +174,7 @@ const SearchBar = ({
               Popular searches
             </div>
             <div className="flex flex-wrap gap-3">
-              {['Mathematics', 'Science Tutors', 'English Language', 'Programming', 'Music Lessons', 'Test Prep'].map((term) => (
+              {['Math', 'Physics', 'Computer', 'English', 'JavaScript'].map((term) => (
                 <button
                   key={term}
                   onClick={() => handleInputChange(term)}
