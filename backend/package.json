@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Backend for TutionMaster tutoring platform",
   "main": "server.js",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
