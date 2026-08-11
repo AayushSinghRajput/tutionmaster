@@ -5,7 +5,7 @@ const CookieSupportNotice = () => {
   return (
     <>
       {/* Updates & Contact */}
-      <section className="bg-blue-50 rounded-xl p-8 mb-8">
+      <section className="bg-blue-50 rounded-xl p-6 sm:p-8 mb-8">
         <div className="flex items-center mb-4">
           <MessageCircle className="w-8 h-8 text-blue-600 mr-3" />
           <h3 className="text-xl font-bold text-gray-900">Questions About Cookies?</h3>
@@ -29,7 +29,7 @@ const CookieSupportNotice = () => {
       </section>
 
       {/* Consent Status */}
-      <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-center">
+      <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-center">
         <div className="flex items-center justify-center mb-3">
           <Shield className="w-5 h-5 text-white mr-2" />
           <p className="text-white font-semibold">

@@ -134,19 +134,20 @@ const TeacherFilters = ({
   }, [])
 
   return (
-    <div className="w-80 bg-white rounded-2xl shadow-xl border border-blue-50 h-fit sticky top-8 transition-all duration-300 hover:shadow-2xl">
+    <div className="w-full lg:w-80 bg-white rounded-2xl shadow-xl border border-blue-50 h-fit lg:sticky lg:top-8 transition-all duration-300 hover:shadow-2xl">
       {/* Enhanced Header */}
-      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 px-6 py-6 rounded-t-2xl relative overflow-hidden">
+      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 px-4 py-4 sm:px-6 sm:py-6 rounded-t-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -translate-y-16 translate-x-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-5 rounded-full -translate-x-12 translate-y-8"></div>
 
-        <div className="flex items-center justify-between relative z-10">
-          <div className="flex items-center space-x-4">
-            <div className="p-3 bg-white bg-opacity-20 rounded-2xl shadow-lg backdrop-blur-sm">
-              <Filter size={22} className="text-white" />
+        <div className="flex items-center justify-between relative z-10 gap-3">
+          <div className="flex items-center space-x-3 sm:space-x-4 min-w-0">
+            <div className="p-2.5 sm:p-3 bg-white bg-opacity-20 rounded-2xl shadow-lg backdrop-blur-sm shrink-0">
+              <Filter size={20} className="text-white sm:hidden" />
+              <Filter size={22} className="text-white hidden sm:block" />
             </div>
-            <div>
-              <h3 className="text-xl font-bold text-white tracking-tight">
+            <div className="min-w-0">
+              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">
                 Refine Search
               </h3>
               <p className="text-blue-100 text-sm font-medium mt-1">
@@ -157,7 +158,7 @@ const TeacherFilters = ({
           {hasActiveFilters() && (
             <button
               onClick={onClearFilters}
-              className="p-2.5 text-blue-100 hover:text-white hover:bg-white hover:bg-opacity-15 rounded-xl transition-all duration-200 shadow-sm backdrop-blur-sm border border-white border-opacity-20"
+              className="p-2.5 text-blue-100 hover:text-white hover:bg-white hover:bg-opacity-15 rounded-xl transition-all duration-200 shadow-sm backdrop-blur-sm border border-white border-opacity-20 shrink-0"
               title="Clear all filters"
             >
               <X size={18} />
@@ -166,14 +167,14 @@ const TeacherFilters = ({
         </div>
       </div>
 
-      <div className="p-6 space-y-7 bg-gradient-to-b from-white to-blue-50 rounded-b-2xl">
+      <div className="p-4 space-y-5 sm:p-6 sm:space-y-7 bg-gradient-to-b from-white to-blue-50 rounded-b-2xl">
         {/* Enhanced Subject Filter with Search */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-blue-100 rounded-lg">
               <GraduationCap size={18} className="text-blue-600" />
             </div>
-            <h4 className="font-bold text-gray-800 text-lg">
+            <h4 className="font-bold text-gray-800 text-base sm:text-lg">
               Subjects & Courses
             </h4>
           </div>
@@ -254,7 +255,7 @@ const TeacherFilters = ({
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Monitor size={18} className="text-blue-600" />
               </div>
-              <h4 className="font-bold text-gray-800 text-lg">
+              <h4 className="font-bold text-gray-800 text-base sm:text-lg">
                 Teaching Format
               </h4>
             </div>
@@ -297,7 +298,7 @@ const TeacherFilters = ({
               <div className="p-2 bg-blue-100 rounded-lg">
                 <Clock size={18} className="text-blue-600" />
               </div>
-              <h4 className="font-bold text-gray-800 text-lg">
+              <h4 className="font-bold text-gray-800 text-base sm:text-lg">
                 Teaching Experience
               </h4>
             </div>
@@ -341,7 +342,7 @@ const TeacherFilters = ({
               <div className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
                 <span className="text-white font-bold text-sm">₨</span>
               </div>
-              <h4 className="font-bold text-gray-800 text-lg">
+              <h4 className="font-bold text-gray-800 text-base sm:text-lg">
                 Hourly Rate Range
               </h4>
             </div>
@@ -385,7 +386,7 @@ const TeacherFilters = ({
               <div className="p-2 bg-blue-100 rounded-lg">
                 <MapPin size={18} className="text-blue-600" />
               </div>
-              <h4 className="font-bold text-gray-800 text-lg">
+              <h4 className="font-bold text-gray-800 text-base sm:text-lg">
                 Location Preference
               </h4>
             </div>
@@ -429,7 +430,7 @@ const TeacherFilters = ({
         )}
       </div>
 
-      <style jsx>{`
+      <style>{`
         .custom-scrollbar::-webkit-scrollbar {
           width: 4px;
         }

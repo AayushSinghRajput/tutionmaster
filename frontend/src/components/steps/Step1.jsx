@@ -23,7 +23,7 @@ const Step1 = ({
   const stateValue = watch ? watch("address.state") : data.address?.state;
 
   return (
-    <div className="space-y-8 w-full">
+    <div className="space-y-6 sm:space-y-8 w-full">
       {/* Header Section */}
       <Header />
 

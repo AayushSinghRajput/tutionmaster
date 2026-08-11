@@ -4,19 +4,19 @@ import RegisterForm from '../auth/RegisterForm';
 
 const RegisterFormCard = () => {
   return (
-    <div className="bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-6">
-        <h3 className="text-2xl font-bold text-white text-center">
+    <div className="w-full max-w-md mx-auto lg:max-w-full bg-white rounded-2xl shadow-xl border border-blue-100 overflow-hidden">
+      <div className="bg-gradient-to-r from-blue-600 to-blue-700 p-4 sm:p-6">
+        <h3 className="text-xl sm:text-2xl font-bold text-white text-center">
           Get Started Today
         </h3>
-        <p className="text-blue-100 text-center mt-2">
+        <p className="text-sm sm:text-base text-blue-100 text-center mt-2">
           Create your teacher account in 2 minutes
         </p>
       </div>
-      <div className="p-8">
+      <div className="p-5 sm:p-8">
         <RegisterForm />
 
-        <div className="mt-8 text-center">
+        <div className="mt-6 sm:mt-8 text-center">
           <p className="text-sm text-gray-600">
             Already have an account?{' '}
             <Link 

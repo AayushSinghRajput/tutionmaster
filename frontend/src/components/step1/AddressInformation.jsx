@@ -12,13 +12,13 @@ const AddressInformation = ({
   register,
   NEPAL_STATES,
 }) => (
-  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-    <h3 className="font-bold text-gray-800 text-xl mb-6">Address Information</h3>
+  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-8 border border-blue-200 w-full">
+    <h3 className="font-bold text-gray-800 text-lg sm:text-xl mb-4 sm:mb-6">Address Information</h3>
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 w-full">
       {/* Street Address */}
-      <div className="md:col-span-2 w-full">
-        <label htmlFor="street" className="block text-lg font-bold text-gray-800 mb-3">
+      <div className="sm:col-span-2 w-full">
+        <label htmlFor="street" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
           Street Address *
         </label>
         <input
@@ -27,7 +27,7 @@ const AddressInformation = ({
           {...(register
             ? register("address.street", { required: "Street address is required" })
             : { value: data.address?.street || "", onChange: (e) => onChange?.("address.street", e.target.value) })}
-          className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
             errors?.address?.street || formErrors?.address?.street ? "border-red-500 bg-red-50" : "border-blue-200 hover:border-blue-400"
           }`}
           placeholder="123 Main Street"
@@ -42,7 +42,7 @@ const AddressInformation = ({
 
       {/* State */}
       <div className="w-full">
-        <label htmlFor="state" className="block text-lg font-bold text-gray-800 mb-3">
+        <label htmlFor="state" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
           State/Province *
         </label>
         <select
@@ -53,7 +53,7 @@ const AddressInformation = ({
                 value: selectedState || stateValue || data.address?.state || "",
                 onChange: onStateChange || ((e) => onChange?.("address.state", e.target.value)),
               })}
-          className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
             errors?.address?.state || formErrors?.address?.state ? "border-red-500 bg-red-50" : "border-blue-200 hover:border-blue-400"
           }`}
         >
@@ -74,7 +74,7 @@ const AddressInformation = ({
 
       {/* City */}
       <div className="w-full">
-        <label htmlFor="city" className="block text-lg font-bold text-gray-800 mb-3">
+        <label htmlFor="city" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
           City *
         </label>
         <input
@@ -89,7 +89,7 @@ const AddressInformation = ({
                   onCityChange?.(e.target.value);
                 },
               })}
-          className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
             errors?.address?.city || formErrors?.address?.city ? "border-red-500 bg-red-50" : "border-blue-200 hover:border-blue-400"
           }`}
           placeholder="Enter your city"
@@ -104,7 +104,7 @@ const AddressInformation = ({
 
       {/* ZIP Code */}
       <div className="w-full">
-        <label htmlFor="zipCode" className="block text-lg font-bold text-gray-800 mb-3">
+        <label htmlFor="zipCode" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
           ZIP Code *
         </label>
         <input
@@ -117,7 +117,7 @@ const AddressInformation = ({
                 max: { value: 99999, message: "ZIP code must be 5 digits" },
               })
             : { value: data.address?.zipCode || "", onChange: (e) => onChange?.("address.zipCode", e.target.value) })}
-          className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
             errors?.address?.zipCode || formErrors?.address?.zipCode ? "border-red-500 bg-red-50" : "border-blue-200 hover:border-blue-400"
           }`}
           placeholder="44600"

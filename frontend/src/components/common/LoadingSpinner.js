@@ -28,7 +28,7 @@ const LoadingSpinner = ({
   const currentVariant = variants[variant];
 
   const spinnerContent = (
-    <div className={`flex flex-col items-center justify-center p-8 rounded-2xl ${currentVariant.background} ${className}`}>
+    <div className={`flex flex-col items-center justify-center p-6 sm:p-8 rounded-2xl ${currentVariant.background} ${className}`}>
       <div className="relative">
         <Loader 
           size={size} 

@@ -17,7 +17,7 @@ const Step2 = ({
   onChange,
 }) => {
   return (
-    <div className="space-y-8 w-full">
+    <div className="space-y-6 sm:space-y-8 w-full">
       <StepHeader />
 
       <QualificationsSection

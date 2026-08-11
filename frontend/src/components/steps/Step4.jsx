@@ -9,7 +9,7 @@ const Step4 = ({
   availabilityPickerKey,
 }) => {
   return (
-    <div className="space-y-8 w-full">
+    <div className="space-y-6 sm:space-y-8 w-full">
       <StepHeader
         title="Availability &amp; Schedule"
         subtitle="Set your available days and times for teaching"

@@ -3,9 +3,9 @@ const formatLabel = (item) =>
 
 const QuickNav = ({ items }) => {
     return (
-        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-8 py-6">
+        <div className="bg-gradient-to-r from-blue-600 to-blue-700 px-4 sm:px-6 lg:px-8 py-4 sm:py-6">
             <h2 className="text-white text-lg font-semibold mb-4">Quick Navigation</h2>
-            <div className="flex flex-wrap gap-4">
+            <div className="flex flex-wrap gap-3 sm:gap-4">
                 {items.map((item) => (
                     <a
 

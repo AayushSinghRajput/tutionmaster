@@ -37,15 +37,15 @@ const RegisterForm = () => {
 
   return (
     <div className="w-full">
-      <div className="text-center mb-8">
-        <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <UserPlus className="w-8 h-8 text-blue-600" />
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
+          <UserPlus className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Join TutionMaster</h2>
-        <p className="mt-2 text-gray-600">Start your educational journey with us</p>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Join TutionMaster</h2>
+        <p className="mt-2 text-sm sm:text-base text-gray-600">Start your educational journey with us</p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
         <div className="space-y-2">
           <label htmlFor="username" className="block text-sm font-medium text-gray-700">
             Full Name
@@ -57,7 +57,7 @@ const RegisterForm = () => {
             <input
               type="text"
               id="username"
-              className={`block w-full pl-10 pr-3 py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-3 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
                 errors.username ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
               placeholder="Enter your full name"
@@ -92,7 +92,7 @@ const RegisterForm = () => {
             <input
               type="email"
               id="email"
-              className={`block w-full pl-10 pr-3 py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-3 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
                 errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
               placeholder="your.email@institution.com"
@@ -123,7 +123,7 @@ const RegisterForm = () => {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              className={`block w-full pl-10 pr-10 py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-10 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
                 errors.password ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
               placeholder="Minimum 6 characters"
@@ -165,7 +165,7 @@ const RegisterForm = () => {
             <input
               type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
-              className={`block w-full pl-10 pr-10 py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-10 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
                 errors.confirmPassword ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
               placeholder="Re-enter your password"
@@ -193,7 +193,7 @@ const RegisterForm = () => {
           )}
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
+        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 sm:p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0">
               <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
@@ -210,9 +210,9 @@ const RegisterForm = () => {
           </div>
         </div>
 
-        <button 
-          type="submit" 
-          className="w-full flex justify-center items-center py-4 px-4 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+        <button
+          type="submit"
+          className="w-full flex justify-center items-center py-3.5 sm:py-4 px-4 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
           disabled={isLoading}
         >
           {isLoading ? (

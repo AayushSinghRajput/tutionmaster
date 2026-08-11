@@ -440,16 +440,16 @@ const AvailabilityPicker = ({
 
 
       <div className="
-flex justify-between items-center
+flex flex-wrap justify-between items-center gap-2
 ">
 
         <h3 className="
-font-bold text-xl
+font-bold text-lg sm:text-xl
 flex items-center
 ">
 
           <Clock
-            className="w-6 h-6 mr-3 text-blue-600"
+            className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-600 shrink-0"
           />
 
           Weekly Availability
@@ -458,8 +458,8 @@ flex items-center
 
 
         <div className="
-bg-blue-50 px-4 py-2 rounded-xl
-text-sm
+bg-blue-50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl
+text-xs sm:text-sm whitespace-nowrap
 ">
 
           {
@@ -490,7 +490,7 @@ text-sm text-gray-600
 
 
       <div className="
-grid md:grid-cols-2 lg:grid-cols-3 gap-4
+grid sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4
 ">
 
 
@@ -573,7 +573,7 @@ w-3 h-3 rounded-full bg-green-500
           <div
             key={dayData.day}
             className="
-bg-white border rounded-2xl p-6
+bg-white border rounded-2xl p-4 sm:p-6
 shadow-sm
 "
           >
@@ -581,12 +581,12 @@ shadow-sm
 
 
             <div className="
-flex justify-between items-center mb-5
+flex flex-wrap justify-between items-center gap-2 mb-4 sm:mb-5
 ">
 
 
               <h4 className="
-font-bold text-lg
+font-bold text-base sm:text-lg
 ">
 
                 {dayData.day}
@@ -606,7 +606,7 @@ font-bold text-lg
                 className="
 flex items-center gap-2
 text-blue-600
-text-sm
+text-xs sm:text-sm shrink-0
 "
 
               >
@@ -633,7 +633,7 @@ text-sm
                   <div
                     key={index}
                     className="
-grid md:grid-cols-3 gap-4
+grid sm:grid-cols-3 gap-3 sm:gap-4
 items-end mb-4
 "
                   >

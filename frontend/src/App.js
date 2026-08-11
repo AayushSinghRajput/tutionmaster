@@ -36,7 +36,7 @@ function App() {
       <TeacherProvider>
         <div className=" min-h-screen flex flex-col bg-gray-50">
           <Header />
-          <main className="flex-1 pt-16">
+          <main className="flex-1 pt-16 sm:pt-20">
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />

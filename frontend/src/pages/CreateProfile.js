@@ -33,11 +33,11 @@ const CreateProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-25 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-25 py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ProfilePageHeader onBack={handleCancel} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8">
           <div className="lg:col-span-8">
             <ProfileFormCard onSubmit={handleSubmit} onCancel={handleCancel} />
           </div>

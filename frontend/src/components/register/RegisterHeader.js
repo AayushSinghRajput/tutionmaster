@@ -3,19 +3,19 @@ import { BookOpen } from 'lucide-react';
 
 const RegisterHeader = () => {
   return (
-    <div className="text-center mb-12">
-      <div className="flex justify-center items-center mb-6">
-        <div className="bg-white p-3 rounded-2xl shadow-lg">
-          <BookOpen className="w-10 h-10 text-blue-600" />
+    <div className="text-center mb-8 sm:mb-12">
+      <div className="flex justify-center items-center gap-3 sm:gap-0 mb-4 sm:mb-6">
+        <div className="bg-white p-2.5 sm:p-3 rounded-2xl shadow-lg shrink-0">
+          <BookOpen className="w-7 h-7 sm:w-10 sm:h-10 text-blue-600" />
         </div>
-        <h1 className="ml-4 text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
+        <h1 className="sm:ml-4 text-2xl sm:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">
           TutionMaster
         </h1>
       </div>
-      <h2 className="text-3xl font-bold text-gray-900 mb-4">
+      <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-3 sm:mb-4">
         Start Your Teaching Journey
       </h2>
-      <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+      <p className="text-sm sm:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed px-2">
         Join our platform of dedicated educators and transform students' lives through quality education
       </p>
     </div>

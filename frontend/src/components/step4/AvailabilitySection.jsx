@@ -7,7 +7,7 @@ const AvailabilitySection = ({
   onAvailabilityChange,
   formErrors,
 }) => (
-  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
+  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-4 sm:p-8 border border-blue-200 w-full overflow-hidden">
     <AvailabilityPicker
       key={availabilityPickerKey}
       value={watchAvailability || []}

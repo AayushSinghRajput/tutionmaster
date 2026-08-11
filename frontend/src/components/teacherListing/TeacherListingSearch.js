@@ -2,7 +2,7 @@ import SearchBar from '../common/SearchBar';
 
 const TeacherListingSearch = ({ searchQuery, onSearchChange }) => {
   return (
-    <div className="mb-8">
+    <div className="mb-6 sm:mb-8 px-2 sm:px-0">
       <div className="max-w-2xl mx-auto">
         <div className="relative">
           <SearchBar

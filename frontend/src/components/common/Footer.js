@@ -21,11 +21,11 @@ const Footer = () => {
     }
   }
   return (
-    <footer className="bg-gradient-to-b from-blue-50 to-white text-gray-900 pt-16 pb-8 border-t-4 border-blue-500">
-      <div className="max-w-7xl mx-auto px-6">
+    <footer className="bg-gradient-to-b from-blue-50 to-white text-gray-900 pt-12 sm:pt-16 pb-8 border-t-4 border-blue-500">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {/* Main Footer Content */}
-        <div className="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-10 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10 mb-10 sm:mb-12">
 
           {/* Brand Section */}
           <div className="space-y-6">

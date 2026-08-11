@@ -37,7 +37,7 @@ const ContactForm = () => {
         </p>
       </div>
       
-      <div className="p-8">
+      <div className="p-5 sm:p-8">
         {isSubmitted && (
           <div className="mb-6 bg-green-50 border border-green-200 rounded-xl p-4 flex items-center gap-3 animate-pulse">
             <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" />

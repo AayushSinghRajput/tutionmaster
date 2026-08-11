@@ -15,7 +15,7 @@ const Step3 = ({
   const bioLength = bioValue?.length || 0;
 
   return (
-    <div className="space-y-8 w-full">
+    <div className="space-y-6 sm:space-y-8 w-full">
       <StepHeader
         title="Teaching Details"
         subtitle="Describe your experience and teaching style"

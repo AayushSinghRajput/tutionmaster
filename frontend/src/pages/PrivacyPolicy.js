@@ -15,7 +15,7 @@ const PrivacyPolicy = () => {
 };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-12">
+    <div className="min-h-screen bg-gray-50 py-8 sm:py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <PolicyHeader
           title="Privacy Policy"
@@ -25,7 +25,7 @@ const PrivacyPolicy = () => {
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
           <QuickNav items={QUICK_NAV_ITEMS} />
 
-          <div className="px-8 py-12">
+          <div className="px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
             <IntroductionSection />
             <InformationSection />
             <UsageSection />

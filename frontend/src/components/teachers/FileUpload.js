@@ -220,7 +220,7 @@ const FileUpload = ({
               )}
             </div>
           ) : (
-            <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 border-2 border-blue-200 max-w-md mx-auto shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 sm:p-6 border-2 border-blue-200 max-w-md w-full mx-auto shadow-sm hover:shadow-md transition-shadow duration-300">
               <div className="flex items-center space-x-4">
                 <div className="flex-shrink-0 w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center">
                   <FileText size={24} className="text-blue-500" />
@@ -261,7 +261,7 @@ const FileUpload = ({
         </div>
       ) : (
         <div
-          className={`border-2 border-dashed rounded-2xl p-8 text-center cursor-pointer transition-all duration-300 ${
+          className={`border-2 border-dashed rounded-2xl p-5 sm:p-8 text-center cursor-pointer transition-all duration-300 ${
             isDragOver
               ? "border-blue-400 bg-gradient-to-br from-blue-50 to-blue-100 shadow-inner"
               : "border-blue-200 bg-gradient-to-br from-white to-blue-50 hover:border-blue-300 hover:shadow-md"

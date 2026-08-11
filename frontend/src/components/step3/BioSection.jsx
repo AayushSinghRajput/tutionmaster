@@ -1,12 +1,12 @@
 import { BookOpen, AlertCircle } from "lucide-react";
 
 const BioSection = ({ data, errors, formErrors, register, onChange, bioLength }) => (
-  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-    <h3 className="font-bold text-gray-800 text-xl mb-6 flex items-center">
-      <BookOpen className="w-6 h-6 text-blue-600 mr-3" />
+  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-8 border border-blue-200 w-full">
+    <h3 className="font-bold text-gray-800 text-lg sm:text-xl mb-4 sm:mb-6 flex items-center">
+      <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2 sm:mr-3" />
       Bio &amp; Teaching Philosophy *
     </h3>
-    <p className="text-gray-600 text-lg mb-6">
+    <p className="text-gray-600 text-base sm:text-lg mb-4 sm:mb-6">
       Write a compelling bio that showcases your teaching style, experience,
       and what makes you a great teacher. Minimum 50 characters.
     </p>
@@ -30,7 +30,7 @@ const BioSection = ({ data, errors, formErrors, register, onChange, bioLength })
               value: data.bio || "",
               onChange: (e) => onChange?.("bio", e.target.value),
             })}
-        className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 resize-none ${
+        className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 resize-none ${
           errors?.bio || formErrors?.bio
             ? "border-red-500 bg-red-50"
             : "border-blue-200 hover:border-blue-400"
@@ -45,7 +45,7 @@ const BioSection = ({ data, errors, formErrors, register, onChange, bioLength })
         </p>
       )}
       <div
-        className={`mt-3 text-lg font-semibold ${
+        className={`mt-3 text-base sm:text-lg font-semibold ${
           bioLength < 50 ? "text-red-600" : "text-blue-600"
         }`}
       >

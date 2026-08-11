@@ -6,7 +6,7 @@ const TermsContactAndAgreement = () => {
   return (
     <>
       {/* Contact Information */}
-      <section className="bg-blue-50 rounded-xl p-8 mb-8">
+      <section className="bg-blue-50 rounded-xl p-6 sm:p-8 mb-8">
         <div className="flex items-center mb-4">
           <Mail className="w-8 h-8 text-blue-600 mr-3" />
           <h3 className="text-xl font-bold text-gray-900">Legal & Support Contact</h3>
@@ -22,7 +22,7 @@ const TermsContactAndAgreement = () => {
       </section>
 
       {/* Agreement */}
-      <div className="p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-center">
+      <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-center">
         <p className="text-white font-semibold text-lg">
           By using TutionMaster, you acknowledge that you have read, understood, and agree to these Terms of Service.
         </p>

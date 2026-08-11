@@ -124,28 +124,28 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-25 via-white to-indigo-25 pt-16">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         {/* Enhanced Header Section */}
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-8 text-white mb-8 shadow-xl">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-600 rounded-2xl p-5 sm:p-8 text-white mb-6 sm:mb-8 shadow-xl">
           <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-            <div className="mb-6 lg:mb-0">
-              <div className="flex items-center space-x-4 mb-4">
-                <div className="p-3 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm">
-                  <BookOpen size={28} className="text-white" />
+            <div className="mb-6 lg:mb-0 min-w-0">
+              <div className="flex items-center space-x-3 sm:space-x-4 mb-4">
+                <div className="p-2.5 sm:p-3 bg-white bg-opacity-20 rounded-2xl backdrop-blur-sm flex-shrink-0">
+                  <BookOpen size={24} className="text-white sm:w-7 sm:h-7" />
                 </div>
-                <div>
-                  <h1 className="text-3xl lg:text-4xl font-bold">Teacher Dashboard</h1>
-                  <p className="text-blue-100 text-lg mt-2">Welcome back, {user?.email}</p>
+                <div className="min-w-0">
+                  <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">Teacher Dashboard</h1>
+                  <p className="text-blue-100 text-base sm:text-lg mt-2 break-words">Welcome back, {user?.email}</p>
                 </div>
               </div>
               {currentTeacher && (
-                <div className="flex items-center space-x-4 text-blue-100">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-blue-100 text-sm sm:text-base">
                   <div className="flex items-center space-x-2">
-                    <MapPin size={16} />
+                    <MapPin size={16} className="flex-shrink-0" />
                     <span>{currentTeacher.address?.city}, {currentTeacher.address?.state}</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Clock size={16} />
+                    <Clock size={16} className="flex-shrink-0" />
                     <span>{currentTeacher.experience} years experience</span>
                   </div>
                 </div>
@@ -153,16 +153,16 @@ const Dashboard = () => {
             </div>
             {currentTeacher && (
               <div className="flex flex-col sm:flex-row gap-3">
-                <button 
+                <button
                   onClick={handleViewPublicProfile}
-                  className="flex items-center justify-center space-x-3 px-6 py-3 border-2 border-white border-opacity-30 rounded-xl text-white bg-white bg-opacity-10 hover:bg-opacity-20 transition-all duration-300 font-semibold backdrop-blur-sm hover:scale-105"
+                  className="flex items-center justify-center space-x-3 px-4 sm:px-6 py-3 border-2 border-white border-opacity-30 rounded-xl text-white bg-white bg-opacity-10 hover:bg-opacity-20 transition-all duration-300 font-semibold backdrop-blur-sm hover:scale-105"
                 >
                   <Eye size={18} />
                   <span>View Public Profile</span>
                 </button>
-                <button 
+                <button
                   onClick={handleEditProfile}
-                  className="flex items-center justify-center space-x-3 px-6 py-3 border border-transparent rounded-xl text-blue-600 bg-white hover:bg-blue-50 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105"
+                  className="flex items-center justify-center space-x-3 px-4 sm:px-6 py-3 border border-transparent rounded-xl text-blue-600 bg-white hover:bg-blue-50 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl hover:scale-105"
                 >
                   <Edit size={18} />
                   <span>Edit Profile</span>
@@ -174,16 +174,16 @@ const Dashboard = () => {
 
         {!currentTeacher ? (
           /* Enhanced No Profile State */
-          <div className="flex items-center justify-center py-16">
+          <div className="flex items-center justify-center py-10 sm:py-16">
             <div className="text-center max-w-3xl">
-              <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-xl">
-                <BookOpen size={40} className="text-white" />
+              <div className="w-20 h-20 sm:w-24 sm:h-24 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-3xl flex items-center justify-center shadow-xl">
+                <BookOpen size={36} className="text-white sm:w-10 sm:h-10" />
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">Create Your Teacher Profile</h2>
-              <p className="text-gray-600 text-xl mb-8 leading-relaxed">
+              <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">Create Your Teacher Profile</h2>
+              <p className="text-gray-600 text-base sm:text-xl mb-6 sm:mb-8 leading-relaxed">
                 Start your teaching journey by creating a professional profile that showcases your expertise and connects you with eager students.
               </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12 text-left">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 mb-8 sm:mb-12 text-left">
                 {[
                   { icon: User, text: 'Reach students actively searching for tutors', color: 'text-blue-500' },
                   { icon: DollarSign, text: 'Set your own competitive hourly rates', color: 'text-green-500' },
@@ -191,28 +191,28 @@ const Dashboard = () => {
                   { icon: Star, text: 'Build your teaching reputation and reviews', color: 'text-yellow-500' }
                 ].map((item, index) => (
                   <div key={index} className="flex items-center space-x-4 p-4 bg-white rounded-xl border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300">
-                    <div className="p-2 bg-blue-50 rounded-lg">
+                    <div className="p-2 bg-blue-50 rounded-lg flex-shrink-0">
                       <item.icon size={20} className={item.color} />
                     </div>
                     <span className="text-gray-700 font-medium">{item.text}</span>
                   </div>
                 ))}
               </div>
-              <Link 
-                to="/create-profile" 
-                className="inline-flex items-center space-x-3 px-8 py-4 border border-transparent rounded-xl text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
+              <Link
+                to="/create-profile"
+                className="w-full sm:w-auto inline-flex items-center justify-center space-x-3 px-6 sm:px-8 py-3 sm:py-4 border border-transparent rounded-xl text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 font-semibold shadow-lg hover:shadow-xl transform hover:scale-105"
               >
                 <Plus size={22} />
-                <span className="text-lg">Create Your Teaching Profile</span>
+                <span className="text-base sm:text-lg">Create Your Teaching Profile</span>
                 <ChevronRight size={18} />
               </Link>
             </div>
           </div>
         ) : (
           /* Enhanced Profile Exists State */
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {/* Profile Stats */}
-            <ProfileStats 
+            <ProfileStats
               teacher={currentTeacher}
               completeness={profileCompleteness}
             />
@@ -220,7 +220,7 @@ const Dashboard = () => {
             {/* Enhanced Main Content Tabs */}
             <div className="bg-white rounded-2xl shadow-lg border border-blue-100 overflow-hidden">
               <div className="border-b border-blue-100 bg-gradient-to-r from-blue-50 to-indigo-50">
-                <nav className="flex -mb-px">
+                <nav className="flex -mb-px overflow-x-auto">
                   {[
                     { id: 'overview', label: 'Overview', icon: TrendingUp },
                     { id: 'profile', label: 'Profile Details', icon: User },
@@ -229,20 +229,20 @@ const Dashboard = () => {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex-1 py-5 px-6 text-center font-semibold border-b-2 transition-all duration-300 flex items-center justify-center space-x-2 ${
+                      className={`flex-1 min-w-[100px] py-3 px-2 sm:py-5 sm:px-6 text-center font-semibold border-b-2 transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-1 sm:gap-2 text-xs sm:text-base whitespace-nowrap ${
                         activeTab === tab.id
                           ? 'border-blue-600 text-blue-600 bg-white shadow-sm'
                           : 'border-transparent text-gray-600 hover:text-blue-500 hover:bg-white hover:bg-opacity-50'
                       }`}
                     >
-                      <tab.icon size={18} />
+                      <tab.icon size={16} />
                       <span>{tab.label}</span>
                     </button>
                   ))}
                 </nav>
               </div>
 
-              <div className="p-8">
+              <div className="p-4 sm:p-6 lg:p-8">
                 {activeTab === 'overview' && (
                   <OverviewTab 
                     teacher={currentTeacher}
@@ -315,19 +315,19 @@ const OverviewTab = ({ teacher, onEditProfile, onViewProfile }) => {
   ];
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Enhanced Quick Stats */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6">
         {stats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-2xl p-6 border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300 group hover:border-blue-200">
-            <div className="flex items-center justify-between mb-4">
-              <div className={`p-3 rounded-xl ${stat.bgColor} group-hover:scale-110 transition-transform duration-300`}>
+          <div key={index} className="bg-white rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm hover:shadow-md transition-all duration-300 group hover:border-blue-200 min-w-0">
+            <div className="flex items-center justify-between mb-4 gap-2">
+              <div className={`p-2 sm:p-3 rounded-xl ${stat.bgColor} group-hover:scale-110 transition-transform duration-300 flex-shrink-0`}>
                 <stat.icon size={20} className={stat.color} />
               </div>
               <span className="text-sm font-semibold text-green-500">{stat.trend}</span>
             </div>
-            <h3 className="text-sm font-medium text-gray-600 mb-2">{stat.label}</h3>
-            <p className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</p>
+            <h3 className="text-sm font-medium text-gray-600 mb-2 truncate">{stat.label}</h3>
+            <p className="text-xl sm:text-2xl font-bold text-gray-900 mb-1 truncate">{stat.value}</p>
             <span className="text-xs text-gray-500 font-medium">{stat.description}</span>
           </div>
         ))}
@@ -339,7 +339,7 @@ const OverviewTab = ({ teacher, onEditProfile, onViewProfile }) => {
           <Zap size={24} className="text-blue-600" />
           <h3 className="text-xl font-bold text-gray-900">Quick Actions</h3>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
           {[
             {
               icon: Edit,
@@ -370,10 +370,10 @@ const OverviewTab = ({ teacher, onEditProfile, onViewProfile }) => {
               color: 'from-orange-500 to-orange-600'
             }
           ].map((action, index) => (
-            <button 
+            <button
               key={index}
               onClick={action.action}
-              className="text-left p-6 bg-gradient-to-br from-white to-blue-25 rounded-2xl border-2 border-blue-100 hover:border-blue-300 hover:shadow-lg transition-all duration-300 group"
+              className="text-left p-4 sm:p-6 bg-gradient-to-br from-white to-blue-25 rounded-2xl border-2 border-blue-100 hover:border-blue-300 hover:shadow-lg transition-all duration-300 group"
             >
               <div className={`w-12 h-12 bg-gradient-to-r ${action.color} rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300`}>
                 <action.icon size={24} className="text-white" />
@@ -391,7 +391,7 @@ const OverviewTab = ({ teacher, onEditProfile, onViewProfile }) => {
           <Target size={24} className="text-blue-600" />
           <h3 className="text-xl font-bold text-gray-900">Recent Activity</h3>
         </div>
-        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border-2 border-dashed border-blue-200 text-center">
+        <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-6 sm:p-8 border-2 border-dashed border-blue-200 text-center">
           <div className="w-16 h-16 mx-auto mb-4 bg-white rounded-2xl flex items-center justify-center shadow-sm">
             <BookOpen size={32} className="text-blue-400" />
           </div>
@@ -421,10 +421,10 @@ const ProfileTab = ({ teacher }) => {
   } = teacher;
 
   return (
-    <div className="space-y-8">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <div className="space-y-6 sm:space-y-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-8">
         {/* Enhanced Personal Information */}
-        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
           <div className="flex items-center space-x-3 mb-6">
             <User size={20} className="text-blue-600" />
             <h4 className="text-lg font-bold text-gray-900">Personal Information</h4>
@@ -436,16 +436,16 @@ const ProfileTab = ({ teacher }) => {
               { label: 'Phone', value: contact.phone },
               { label: 'Location', value: `${address.city}, ${address.state}` }
             ].map((item, index) => (
-              <div key={index} className="flex justify-between items-center py-3 border-b border-blue-50 last:border-b-0">
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 py-3 border-b border-blue-50 last:border-b-0">
                 <strong className="text-gray-700 font-semibold">{item.label}:</strong>
-                <span className="text-gray-900 font-medium">{item.value}</span>
+                <span className="text-gray-900 font-medium break-words">{item.value}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Enhanced Professional Information */}
-        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
           <div className="flex items-center space-x-3 mb-6">
             <Award size={20} className="text-blue-600" />
             <h4 className="text-lg font-bold text-gray-900">Professional Information</h4>
@@ -456,16 +456,16 @@ const ProfileTab = ({ teacher }) => {
               { label: 'Hourly Rate', value: `$${hourlyRate}/hour` },
               { label: 'Teaching Mode', value: teachingMode }
             ].map((item, index) => (
-              <div key={index} className="flex justify-between items-center py-3 border-b border-blue-50 last:border-b-0">
+              <div key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 py-3 border-b border-blue-50 last:border-b-0">
                 <strong className="text-gray-700 font-semibold">{item.label}:</strong>
-                <span className="text-gray-900 font-medium">{item.value}</span>
+                <span className="text-gray-900 font-medium break-words">{item.value}</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* Enhanced Subjects */}
-        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
           <div className="flex items-center space-x-3 mb-6">
             <GraduationCap size={20} className="text-blue-600" />
             <h4 className="text-lg font-bold text-gray-900">Subjects Taught</h4>
@@ -483,7 +483,7 @@ const ProfileTab = ({ teacher }) => {
         </div>
 
         {/* Enhanced Qualifications */}
-        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
           <div className="flex items-center space-x-3 mb-6">
             <BookOpen size={20} className="text-blue-600" />
             <h4 className="text-lg font-bold text-gray-900">Qualifications</h4>
@@ -500,7 +500,7 @@ const ProfileTab = ({ teacher }) => {
       </div>
 
       {/* Enhanced Bio */}
-      <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+      <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
         <div className="flex items-center space-x-3 mb-6">
           <User size={20} className="text-blue-600" />
           <h4 className="text-lg font-bold text-gray-900">Bio & Teaching Philosophy</h4>
@@ -512,12 +512,12 @@ const ProfileTab = ({ teacher }) => {
 
       {/* Enhanced Availability */}
       {availability && availability.length > 0 && (
-        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+        <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
           <div className="flex items-center space-x-3 mb-6">
             <Calendar size={20} className="text-blue-600" />
             <h4 className="text-lg font-bold text-gray-900">Teaching Availability</h4>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             {availability.map((slot, index) => (
               <div key={index} className="bg-white rounded-xl p-4 border border-blue-100 hover:border-blue-200 transition-all duration-300">
                 <strong className="block text-gray-900 font-bold text-lg mb-3">{slot.day}:</strong>
@@ -548,9 +548,9 @@ const SettingsTab = ({
   onConfirmDelete 
 }) => {
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8">
       {/* Enhanced Profile Visibility */}
-      <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+      <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
         <div className="flex items-center space-x-3 mb-6">
           <Eye size={20} className="text-blue-600" />
           <h4 className="text-lg font-bold text-gray-900">Profile Visibility</h4>
@@ -575,7 +575,7 @@ const SettingsTab = ({
       </div>
 
       {/* Enhanced Notification Settings */}
-      <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-6 border border-blue-100 shadow-sm">
+      <div className="bg-gradient-to-br from-white to-blue-25 rounded-2xl p-4 sm:p-6 border border-blue-100 shadow-sm">
         <div className="flex items-center space-x-3 mb-6">
           <Bell size={20} className="text-blue-600" />
           <h4 className="text-lg font-bold text-gray-900">Notification Settings</h4>
@@ -603,7 +603,7 @@ const SettingsTab = ({
       </div>
 
       {/* Enhanced Danger Zone */}
-      <div className="bg-gradient-to-br from-red-50 to-red-25 rounded-2xl p-6 border border-red-200 shadow-sm">
+      <div className="bg-gradient-to-br from-red-50 to-red-25 rounded-2xl p-4 sm:p-6 border border-red-200 shadow-sm">
         <div className="flex items-center space-x-3 mb-6">
           <Shield size={20} className="text-red-600" />
           <h4 className="text-lg font-bold text-red-900">Account Management</h4>
@@ -621,7 +621,7 @@ const SettingsTab = ({
             <span>Delete Teaching Profile</span>
           </button>
         ) : (
-          <div className="bg-white p-6 rounded-xl border border-red-300 shadow-sm">
+          <div className="bg-white p-4 sm:p-6 rounded-xl border border-red-300 shadow-sm">
             <div className="flex items-center space-x-3 mb-4">
               <div className="p-2 bg-red-100 rounded-lg">
                 <Shield size={20} className="text-red-600" />

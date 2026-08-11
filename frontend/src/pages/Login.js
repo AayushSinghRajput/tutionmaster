@@ -16,9 +16,9 @@ const Login = () => {
   }, [isAuthenticated, navigate, from]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-25 via-white to-indigo-25 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-25 via-white to-indigo-25 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto w-full">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           <div className="w-full max-w-md mx-auto lg:mx-0 lg:max-w-full">
             <LoginBrandHeader />
             <LoginCard />

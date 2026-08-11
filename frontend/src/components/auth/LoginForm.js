@@ -43,17 +43,17 @@ const LoginForm = () => {
 
   return (
     <div className="w-full">
-      <div className="text-center mb-8">
-        <div className="mx-auto w-16 h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
-          <LogIn className="w-8 h-8 text-blue-600" />
+      <div className="text-center mb-6 sm:mb-8">
+        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
+          <LogIn className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900">Welcome Back</h2>
-        <p className="text-gray-600 mt-2">
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome Back</h2>
+        <p className="text-sm sm:text-base text-gray-600 mt-2">
           Continue your educational journey with us
         </p>
       </div>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
         {/* Email Field */}
         <div className="space-y-3">
           <label
@@ -73,7 +73,7 @@ const LoginForm = () => {
               type="email"
               id="email"
               placeholder="your@email.com"
-              className={`w-full pl-12 pr-4 py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+              className={`w-full pl-12 pr-4 py-3 sm:py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
                 errors.email
                   ? "border-red-400 bg-red-25 focus:ring-red-200"
                   : "border-gray-200 hover:border-blue-300 group-focus-within:border-blue-400"
@@ -97,7 +97,7 @@ const LoginForm = () => {
 
         {/* Password Field */}
         <div className="space-y-3">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <label
               htmlFor="password"
               className="block text-sm font-semibold text-gray-800"
@@ -122,7 +122,7 @@ const LoginForm = () => {
               type={showPassword ? "text" : "password"}
               id="password"
               placeholder="Enter your password"
-              className={`w-full pl-12 pr-12 py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+              className={`w-full pl-12 pr-12 py-3 sm:py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
                 errors.password
                   ? "border-red-400 bg-red-25 focus:ring-red-200"
                   : "border-gray-200 hover:border-blue-300 group-focus-within:border-blue-400"
@@ -170,7 +170,7 @@ const LoginForm = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold shadow-lg shadow-blue-500/25 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-offset-2 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center gap-3 group"
+          className="w-full py-3.5 sm:py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold shadow-lg shadow-blue-500/25 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-offset-2 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center gap-3 group"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -191,7 +191,7 @@ const LoginForm = () => {
       </form>
 
       {/* Demo Access */}
-      <div className="mt-8">
+      <div className="mt-6 sm:mt-8">
         <div className="relative">
           <div className="absolute inset-0 flex items-center">
             <div className="w-full border-t border-gray-200"></div>

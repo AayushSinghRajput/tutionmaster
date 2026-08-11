@@ -19,23 +19,23 @@ const TeacherCard = ({ teacher }) => {
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
       {/* Header Section */}
-      <div className="p-6 pb-4">
-        <div className="flex items-start space-x-4">
+      <div className="p-4 sm:p-6 pb-4">
+        <div className="flex items-start space-x-3 sm:space-x-4">
           <img
             src={avatarUrl || "/default-avatar.png"}
             alt={name}
-            className="w-16 h-16 rounded-full object-cover border-2 border-gray-100"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-gray-100 flex-shrink-0"
             onError={(e) => {
               e.target.src = "/default-avatar.png";
             }}
           />
           <div className="flex-1 min-w-0">
-            <h3 className="text-lg font-semibold text-gray-900 truncate">
+            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
               {name}
             </h3>
             <div className="flex items-center space-x-1 mt-1">
-              <MapPin size={14} className="text-gray-500" />
-              <span className="text-sm text-gray-600">
+              <MapPin size={14} className="text-gray-500 flex-shrink-0" />
+              <span className="text-sm text-gray-600 truncate">
                 {address.city}, {address.state}
               </span>
             </div>
@@ -52,7 +52,7 @@ const TeacherCard = ({ teacher }) => {
       </div>
 
       {/* Body Section */}
-      <div className="px-6 pb-4 flex-1">
+      <div className="px-4 sm:px-6 pb-4 flex-1">
         <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
           {bio.substring(0, 120)}...
         </p>
@@ -75,8 +75,8 @@ const TeacherCard = ({ teacher }) => {
         </div>
 
         {/* Details */}
-        <div className="flex items-center justify-between text-sm">
-          <div className="flex items-center space-x-4">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1">
             <div className="flex items-center space-x-1 text-gray-600">
               <Clock size={14} />
               <span>{formatExperience(experience)}</span>
@@ -92,7 +92,7 @@ const TeacherCard = ({ teacher }) => {
       </div>
 
       {/* Footer Section */}
-      <div className="px-6 py-4 bg-gray-50 border-t border-gray-100">
+      <div className="px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100">
         <Link
           to={`/teachers/${_id}`}
           className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"

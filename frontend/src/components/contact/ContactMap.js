@@ -3,10 +3,10 @@ import { MapPin, Phone, Mail } from 'lucide-react';
 const ContactMap = () => {
   const mapUrl = "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d7066.245986802847!2d85.34502866980142!3d27.68259324943417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eb19d34436c277%3A0xc4d1871672e00006!2sUnique%20boys%20hostel!5e0!3m2!1sen!2snp!4v1785642899465!5m2!1sen!2snp";
   return (
-    <section className="py-16 bg-white">
+    <section className="py-12 sm:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-8 sm:mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
             Visit Our Headquarters
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -14,10 +14,10 @@ const ContactMap = () => {
           </p>
         </div>
 
-        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-8 border border-blue-200">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 bg-white rounded-xl p-6 shadow-lg">
-              <div className="w-full h-64 bg-blue-200 rounded-lg flex items-center justify-center">
+        <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 sm:p-8 border border-blue-200">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 sm:gap-8">
+            <div className="lg:col-span-2 bg-white rounded-xl p-4 sm:p-6 shadow-lg">
+              <div className="w-full h-56 sm:h-64 bg-blue-200 rounded-lg flex items-center justify-center">
                 <div className="w-full h-full">
                   {mapUrl ? (
                     <iframe

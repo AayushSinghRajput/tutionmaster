@@ -33,35 +33,35 @@ const SubjectsSection = ({ errors, formErrors, value = [], onChange }) => {
   },[value]);
 
   return (
-    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-200 w-full">
-      <h3 className="font-bold text-gray-800 text-xl mb-6">
+    <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-8 border border-blue-200 w-full">
+      <h3 className="font-bold text-gray-800 text-lg sm:text-xl mb-4 sm:mb-6">
         Subjects You Teach *
       </h3>
-      <p className="text-gray-600 text-lg mb-4">
+      <p className="text-gray-600 text-base sm:text-lg mb-4">
         Enter all subjects you are qualified to teach (at least 1).
       </p>
 
       {/* Input + Add button */}
-      <div className="flex items-center space-x-2 mb-4">
+      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 sm:space-x-2 mb-4">
         <input
           type="text"
           value={inputValue}
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Type a subject and press Enter or +"
-          className="flex-1 px-4 py-3 text-lg border-2 border-blue-200 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300"
+          className="flex-1 min-w-0 px-4 py-3 text-base sm:text-lg border-2 border-blue-200 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300"
         />
         <button
           type="button"
           onClick={addSubject}
-          className="bg-blue-600 text-white px-4 py-3 rounded-xl hover:bg-blue-700 transition-colors flex items-center"
+          className="bg-blue-600 text-white px-4 py-3 rounded-xl hover:bg-blue-700 transition-colors flex items-center justify-center shrink-0"
         >
           <Plus className="w-5 h-5 mr-1" /> Add
         </button>
       </div>
 
       {/* Subject tags */}
-      <div className="flex flex-wrap gap-3">
+      <div className="flex flex-wrap gap-2 sm:gap-3">
         {subjects.map((sub) => (
           <span
             key={sub}

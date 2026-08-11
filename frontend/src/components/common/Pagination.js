@@ -88,7 +88,7 @@ const Pagination = ({
   const pageNumbers = generatePageNumbers();
 
   return (
-    <div className={`flex justify-center items-center my-8 ${className}`}>
+    <div className={`flex justify-center items-center my-6 sm:my-8 ${className}`}>
       {/* Desktop Pagination */}
       <div className="hidden md:flex flex-col items-center space-y-4">
         {/* Page Info */}
@@ -163,13 +163,13 @@ const Pagination = ({
       </div>
 
       {/* Mobile Pagination */}
-      <div className="flex md:hidden items-center justify-between w-full max-w-xs bg-white p-4 rounded-2xl border border-blue-100 shadow-sm">
+      <div className="flex md:hidden items-center justify-between w-full max-w-xs bg-white p-3 sm:p-4 rounded-2xl border border-blue-100 shadow-sm">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className={`flex items-center justify-center w-14 h-14 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-            currentPage === 1 
-              ? 'border-gray-200 text-gray-400' 
+          className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+            currentPage === 1
+              ? 'border-gray-200 text-gray-400'
               : 'border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
           }`}
           aria-label="Previous page"
@@ -177,7 +177,7 @@ const Pagination = ({
           <ChevronLeft size={20} />
         </button>
 
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center px-2">
           <span className="text-gray-600 font-medium text-sm">Page</span>
           <span className="text-blue-600 font-bold text-lg">
             {currentPage} <span className="text-gray-400 font-normal">/ {totalPages}</span>
@@ -187,9 +187,9 @@ const Pagination = ({
         <button
           onClick={() => handlePageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className={`flex items-center justify-center w-14 h-14 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
-            currentPage === totalPages 
-              ? 'border-gray-200 text-gray-400' 
+          className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
+            currentPage === totalPages
+              ? 'border-gray-200 text-gray-400'
               : 'border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
           }`}
           aria-label="Next page"

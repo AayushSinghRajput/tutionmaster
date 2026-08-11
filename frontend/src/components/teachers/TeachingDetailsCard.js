@@ -3,7 +3,7 @@ import { formatExperience } from '../../utils/helpers';
 
 const TeachingDetailsCard = ({ teacher }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm p-6">
+    <div className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
       <h3 className="text-lg font-semibold text-gray-900 mb-4">Teaching Details</h3>
       <div className="space-y-4">
         <div className="flex items-center space-x-3">

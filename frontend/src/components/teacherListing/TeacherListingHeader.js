@@ -2,10 +2,10 @@ import React from 'react';
 
 const TeacherListingHeader = () => {
   return (
-    <div className="text-center mb-12">
-      <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl mb-6 shadow-lg">
+    <div className="text-center mb-8 sm:mb-12 px-2">
+      <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl mb-4 sm:mb-6 shadow-lg">
         <svg
-          className="w-10 h-10 text-white"
+          className="w-8 h-8 sm:w-10 sm:h-10 text-white"
           fill="none"
           stroke="currentColor"
           viewBox="0 0 24 24"
@@ -24,10 +24,10 @@ const TeacherListingHeader = () => {
           />
         </svg>
       </div>
-      <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-gray-900 mb-3 sm:mb-4 bg-gradient-to-r from-blue-600 to-indigo-700 bg-clip-text text-transparent">
         Discover Expert Educators
       </h1>
-      <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+      <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
         Connect with qualified tutors who inspire and transform learning
         experiences
       </p>

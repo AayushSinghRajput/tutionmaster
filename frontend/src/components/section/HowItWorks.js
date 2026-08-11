@@ -40,17 +40,17 @@ const HowItWorks = ({ howItWorksRef }) => {
   ];
 
   return (
-    <section ref={howItWorksRef} className="py-20 bg-white scroll-mt-16">
+    <section ref={howItWorksRef} className="py-12 sm:py-16 md:py-20 bg-white scroll-mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10 sm:mb-16">
           <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
             <Play className="w-4 h-4" />
             GET STARTED
           </div>
-          <h2 className="text-4xl font-bold text-gray-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             How <span className="text-blue-600">TutionMaster</span> Works
           </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
             Connect with verified tutors in four simple steps
           </p>
         </div>
@@ -147,8 +147,8 @@ const HowItWorks = ({ howItWorksRef }) => {
         </div>
 
         {/* Platform Flow Diagram - Mobile Optimized */}
-        <div className="mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-8 border border-blue-100">
-          <h3 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <div className="mt-10 sm:mt-12 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-8 border border-blue-100">
+          <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-6 text-center">
             Platform Flow
           </h3>
 
@@ -187,10 +187,10 @@ const HowItWorks = ({ howItWorksRef }) => {
         </div>
 
         {/* CTA below steps */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-10 sm:mt-12">
           <Link
             to="/teachers"
-            className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 text-base sm:text-lg font-bold text-white bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
           >
             <Search className="w-5 h-5 mr-3 group-hover:scale-110 transition-transform" />
             Browse Verified Tutors

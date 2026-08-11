@@ -3,7 +3,7 @@ import { AlertCircle } from "lucide-react";
 const BasicInformation = ({ data, errors, formErrors, onChange, register }) => (
   <div className="grid grid-cols-1 gap-8 w-full">
     <div className="w-full">
-      <label htmlFor="name" className="block text-lg font-bold text-gray-800 mb-3">
+      <label htmlFor="name" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
         Enter Your Full Name *
       </label>
       <input
@@ -15,7 +15,7 @@ const BasicInformation = ({ data, errors, formErrors, onChange, register }) => (
               maxLength: { value: 100, message: "Name must be less than 100 characters" },
             })
           : { value: data.name || "", onChange: (e) => onChange?.("name", e.target.value) })}
-        className={`w-full px-5 py-4 text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+        className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
           errors?.name || formErrors?.name ? "border-red-500 bg-red-50" : "border-blue-200 hover:border-blue-400"
         }`}
         placeholder="Enter your full name"

@@ -2,11 +2,11 @@ import { Download } from 'lucide-react';
 
 const QuickDownloadCard = ({ onDownload }) => {
   return (
-    <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg shadow-lg p-6 text-white">
+    <div className="bg-gradient-to-br from-blue-600 to-blue-700 rounded-lg shadow-lg p-5 sm:p-6 text-white">
       <div className="flex items-center space-x-3 mb-4">
-        <Download className="w-8 h-8" />
-        <div>
-          <h3 className="text-lg font-semibold">Download CV</h3>
+        <Download className="w-7 h-7 sm:w-8 sm:h-8 shrink-0" />
+        <div className="min-w-0">
+          <h3 className="text-base sm:text-lg font-semibold">Download CV</h3>
           <p className="text-blue-100 text-sm">Save for offline reference</p>
         </div>
       </div>

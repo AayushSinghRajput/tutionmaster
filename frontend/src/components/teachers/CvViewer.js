@@ -61,13 +61,13 @@ const CvViewer = ({ teacher, onDownload }) => {
   if (!teacher.cvUrl) return null;
 
   return (
-    <section className="bg-white rounded-lg shadow-sm p-6">
+    <section className="bg-white rounded-lg shadow-sm p-4 sm:p-6 w-full max-w-full overflow-hidden">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
-        <h2 className="text-2xl font-semibold text-gray-900 flex items-center">
-          <FileText className="w-6 h-6 mr-3 text-blue-600" />
+        <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 flex items-center">
+          <FileText className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-600 shrink-0" />
           Professional CV
         </h2>
-        <div className="flex items-center space-x-3">
+        <div className="flex items-center flex-wrap gap-2 sm:gap-3 sm:space-x-0">
           <div className="flex items-center space-x-2 bg-gray-100 rounded-lg px-3 py-1">
             <button onClick={zoomOut} className="p-1 hover:bg-gray-200 rounded" title="Zoom Out">
               <ZoomOut className="w-4 h-4 text-gray-700" />
@@ -98,7 +98,7 @@ const CvViewer = ({ teacher, onDownload }) => {
       <div
         id="cv-container"
         ref={containerRef}
-        className="border border-gray-300 rounded-xl bg-gray-50 py-8 px-4 flex flex-col items-center"
+        className="border border-gray-300 rounded-xl bg-gray-50 py-5 px-3 sm:py-8 sm:px-4 flex flex-col items-center w-full max-w-full overflow-x-auto"
       >
         {pdfError ? (
           <div className="w-full max-w-lg flex flex-col items-center justify-center bg-white rounded-lg py-16">
@@ -185,7 +185,7 @@ const CvViewer = ({ teacher, onDownload }) => {
         )}
       </div>
 
-      <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
         {CV_INFO_CARDS.map((card) => (
           <CvInfoCard key={card.id} {...card} />
         ))}

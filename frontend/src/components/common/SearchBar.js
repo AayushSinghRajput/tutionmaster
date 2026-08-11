@@ -76,7 +76,7 @@ const SearchBar = ({
             onFocus={() => setIsFocused(true)}
             onBlur={() => setIsFocused(false)}
             placeholder={placeholder}
-            className={`block w-full pl-12 pr-24 py-4 border-2 rounded-2xl bg-white placeholder-blue-300 text-gray-900 focus:outline-none transition-all duration-200 shadow-lg ${isFocused
+            className={`block w-full pl-10 sm:pl-12 pr-20 sm:pr-24 py-3 sm:py-4 border-2 rounded-2xl bg-white placeholder-blue-300 text-gray-900 focus:outline-none transition-all duration-200 shadow-lg text-sm sm:text-base ${isFocused
               ? 'border-blue-500 shadow-blue-100'
               : 'border-blue-200 hover:border-blue-300'
               }`}
@@ -103,7 +103,7 @@ const SearchBar = ({
               <button
                 type="button"
                 onClick={onFiltersToggle}
-                className={`flex items-center space-x-2 px-4 py-2 mr-2 rounded-xl transition-all duration-200 font-medium ${filterCount > 0
+                className={`flex items-center space-x-2 px-2.5 sm:px-4 py-2 mr-1 sm:mr-2 rounded-xl transition-all duration-200 font-medium ${filterCount > 0
                   ? 'bg-blue-100 text-blue-700 border border-blue-200 shadow-sm'
                   : 'text-blue-500 hover:text-blue-700 hover:bg-blue-50'
                   }`}
@@ -124,15 +124,15 @@ const SearchBar = ({
         {/* Search Suggestions */}
         {localQuery && (
           <div className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-blue-100 rounded-2xl shadow-xl z-10 overflow-hidden">
-            <div className="p-4 border-b border-blue-50">
+            <div className="p-3 sm:p-4 border-b border-blue-50">
               <div className="flex items-center text-sm text-blue-600 font-medium mb-2">
-                <Sparkles size={16} className="mr-2 text-blue-400" />
+                <Sparkles size={16} className="mr-2 text-blue-400 flex-shrink-0" />
                 Search suggestions for:
               </div>
-              <div className="text-lg font-semibold text-gray-900">"{localQuery}"</div>
+              <div className="text-base sm:text-lg font-semibold text-gray-900 truncate">"{localQuery}"</div>
             </div>
-            <div className="p-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
+            <div className="p-3 sm:p-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 <button
                   className="text-left p-3 rounded-lg bg-blue-50 hover:bg-blue-100 border border-blue-100 transition-colors duration-200"
                   onClick={() => handleInputChange(`${localQuery} tutors`)}
@@ -168,17 +168,17 @@ const SearchBar = ({
 
         {/* Popular Searches */}
         {!localQuery && isFocused && (
-          <div className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-blue-100 rounded-2xl shadow-xl z-10 p-6">
+          <div className="absolute top-full left-0 right-0 mt-3 bg-white border-2 border-blue-100 rounded-2xl shadow-xl z-10 p-4 sm:p-6">
             <div className="flex items-center text-sm text-blue-600 font-medium mb-4">
-              <Sparkles size={16} className="mr-2 text-blue-400" />
+              <Sparkles size={16} className="mr-2 text-blue-400 flex-shrink-0" />
               Popular searches
             </div>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {['Math', 'Physics', 'Computer', 'English', 'JavaScript'].map((term) => (
                 <button
                   key={term}
                   onClick={() => handleInputChange(term)}
-                  className="px-4 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-blue-700 font-medium text-sm transition-all duration-200 hover:scale-105 hover:shadow-sm"
+                  className="px-3 sm:px-4 py-2 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-xl text-blue-700 font-medium text-sm transition-all duration-200 hover:scale-105 hover:shadow-sm"
                 >
                   {term}
                 </button>
