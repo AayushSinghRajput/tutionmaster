@@ -6,9 +6,9 @@ const TermsContactAndAgreement = () => {
   return (
     <>
       {/* Contact Information */}
-      <section className="bg-blue-50 rounded-xl p-6 sm:p-8 mb-8">
+      <section className="bg-brand-50 rounded-xl p-6 sm:p-8 mb-8">
         <div className="flex items-center mb-4">
-          <Mail className="w-8 h-8 text-blue-600 mr-3" />
+          <Mail className="w-8 h-8 text-brand-600 mr-3" />
           <h3 className="text-xl font-bold text-gray-900">Legal & Support Contact</h3>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
@@ -22,11 +22,11 @@ const TermsContactAndAgreement = () => {
       </section>
 
       {/* Agreement */}
-      <div className="p-4 sm:p-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl text-center">
+      <div className="p-4 sm:p-6 bg-gradient-to-r from-brand-600 to-brand-700 rounded-xl text-center">
         <p className="text-white font-semibold text-lg">
-          By using TutionMaster, you acknowledge that you have read, understood, and agree to these Terms of Service.
+          By using TuitionMaster, you acknowledge that you have read, understood, and agree to these Terms of Service.
         </p>
-        <p className="text-blue-100 text-sm mt-2">
+        <p className="text-brand-100 text-sm mt-2">
           Last updated: {new Date().toLocaleDateString()}
         </p>
       </div>

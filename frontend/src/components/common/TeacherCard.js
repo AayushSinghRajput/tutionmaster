@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { MapPin, Clock, Star } from "lucide-react";
+import { MapPin, Clock } from "lucide-react";
 import { formatExperience } from "../../utils/helpers";
 
 const TeacherCard = ({ teacher }) => {
@@ -13,18 +13,17 @@ const TeacherCard = ({ teacher }) => {
     hourlyRate,
     preferredSubjects,
     teachingMode,
-    averageRating,
   } = teacher;
 
   return (
-    <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
+    <div className="bg-white rounded-xl shadow-sm border border-stone-200 overflow-hidden hover:shadow-md transition-shadow duration-300 flex flex-col h-full">
       {/* Header Section */}
       <div className="p-4 sm:p-6 pb-4">
         <div className="flex items-start space-x-3 sm:space-x-4">
           <img
             src={avatarUrl || "/default-avatar.png"}
             alt={name}
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-gray-100 flex-shrink-0"
+            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-stone-100 flex-shrink-0"
             onError={(e) => {
               e.target.src = "/default-avatar.png";
             }}
@@ -39,14 +38,6 @@ const TeacherCard = ({ teacher }) => {
                 {address.city}, {address.state}
               </span>
             </div>
-            {averageRating && (
-              <div className="flex items-center space-x-1 mt-1">
-                <Star size={14} className="text-yellow-400 fill-current" />
-                <span className="text-sm text-gray-700 font-medium">
-                  {averageRating}
-                </span>
-              </div>
-            )}
           </div>
         </div>
       </div>
@@ -60,15 +51,12 @@ const TeacherCard = ({ teacher }) => {
         {/* Subjects */}
         <div className="flex flex-wrap gap-2 mb-4">
           {preferredSubjects.slice(0, 3).map((subject, index) => (
-            <span
-              key={index}
-              className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-            >
+            <span key={index} className="tag-subject">
               {subject}
             </span>
           ))}
           {preferredSubjects.length > 3 && (
-            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-600">
+            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-stone-100 text-gray-600">
               +{preferredSubjects.length - 3} more
             </span>
           )}
@@ -85,17 +73,17 @@ const TeacherCard = ({ teacher }) => {
               <span>Rs {hourlyRate}/hr</span>
             </div>
           </div>
-          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-green-100 text-green-800">
+          <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-success-100 text-success-700">
             {teachingMode}
           </span>
         </div>
       </div>
 
       {/* Footer Section */}
-      <div className="px-4 sm:px-6 py-4 bg-gray-50 border-t border-gray-100">
+      <div className="px-4 sm:px-6 py-4 bg-stone-50 border-t border-stone-100">
         <Link
           to={`/teachers/${_id}`}
-          className="w-full flex justify-center items-center py-2 px-4 border border-transparent rounded-lg text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200"
+          className="btn-brand-primary w-full py-2 px-4 text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-500"
         >
           View Profile
         </Link>

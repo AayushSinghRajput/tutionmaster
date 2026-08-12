@@ -15,8 +15,8 @@ const BasicInformation = ({ data, errors, formErrors, onChange, register }) => (
               maxLength: { value: 100, message: "Name must be less than 100 characters" },
             })
           : { value: data.name || "", onChange: (e) => onChange?.("name", e.target.value) })}
-        className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
-          errors?.name || formErrors?.name ? "border-red-500 bg-red-50" : "border-blue-200 hover:border-blue-400"
+        className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
+          errors?.name || formErrors?.name ? "border-red-500 bg-red-50" : "border-brand-200 hover:border-brand-400"
         }`}
         placeholder="Enter your full name"
       />

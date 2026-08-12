@@ -18,7 +18,7 @@ const HowItWorks = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 to-gold-50">
       <HeroSection onWatchDemo={handleWatchDemo} />
       <StepsSection />
       <FeaturesSection />

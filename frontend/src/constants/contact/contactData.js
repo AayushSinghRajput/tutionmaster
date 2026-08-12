@@ -24,29 +24,29 @@ export const contactMethods = [
   },
   {
     icon: <MessageCircle className="w-6 h-6" />,
-    title: "Live Chat",
-    description: "Instant help from our team",
-    details: "Available 24/7 for urgent queries",
-    action: "#chat"
+    title: "Message Us",
+    description: "Send us a message anytime",
+    details: "We usually reply within a day",
+    action: "mailto:aayushsinghrajput3003@gmail.com"
   }
 ];
 
 export const faqs = [
   {
-    question: "How do I become a tutor on TutionMaster?",
-    answer: "Visit our 'Become a Tutor' page, complete the application form, and our team will review your qualifications within 2-3 business days."
+    question: "How do I become a tutor on TuitionMaster?",
+    answer: "Visit our 'Become a Tutor' page and complete your profile — subjects, qualifications, and availability. Once submitted, your profile is live and visible to students right away."
   },
   {
     question: "What subjects do you offer tutoring for?",
-    answer: "We offer tutoring for all major academic subjects from K-12 to college level, including STEM, languages, business, and test preparation."
+    answer: "We cover subjects across school level (Class 1-10), +2 (Science/Management), Bachelor's/Engineering, and programming & IT, plus SEE and entrance-exam preparation."
   },
   {
-    question: "How are tutors vetted and verified?",
-    answer: "All tutors undergo a rigorous verification process including background checks, qualification verification, and teaching experience assessment."
+    question: "How are tutors verified?",
+    answer: "Tutors self-report their qualifications, experience, and subjects when creating a profile. We recommend reviewing a tutor's profile details and speaking with them directly before booking a session."
   },
   {
     question: "Can I schedule sessions outside regular hours?",
-    answer: "Yes! Our platform offers flexible scheduling, including evenings and weekends, to accommodate different time zones and schedules."
+    answer: "Yes! Tutors set their own weekly availability, including evenings and weekends, so you can find a schedule that fits."
   }
 ];
 

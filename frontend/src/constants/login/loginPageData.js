@@ -1,31 +1,31 @@
 export const STATS = [
-  { id: 'users', value: 'Nepal-Wide', label: 'Student Reach', gradient: 'from-blue-500 to-blue-600' },
-  { id: 'tutors', value: 'Verified', label: 'Teacher Profiles', gradient: 'from-blue-600 to-blue-700' },
+  { id: 'users', value: 'Nepal-Wide', label: 'Student Reach', gradient: 'from-brand-500 to-brand-600' },
+  { id: 'tutors', value: 'Growing', label: 'Teacher Network', gradient: 'from-gold-500 to-gold-600' },
 ];
 
 export const FEATURES = [
   {
     id: 'secure',
     title: 'Secure & Trusted',
-    description: 'Your data and privacy are our top priority',
-    color: 'blue',
+    description: 'Your account and profile data are kept private and secure',
+    color: 'brand',
   },
   {
     id: 'access',
-    title: '24/7 Access',
-    description: 'Learn anytime, anywhere at your own pace',
-    color: 'green',
+    title: 'Always Discoverable',
+    description: 'Your profile stays visible so students can find and contact you anytime',
+    color: 'gold',
   },
   {
     id: 'educators',
-    title: 'Expert Educators',
-    description: 'Learn from qualified and experienced teachers',
-    color: 'purple',
+    title: 'Built for Tutors',
+    description: 'Every feature here is designed around helping tutors get found — no learner accounts, no clutter',
+    color: 'brand',
   },
   {
     id: 'content',
-    title: 'Quality Content',
-    description: 'Curriculum designed by education experts',
-    color: 'orange',
+    title: 'Direct Contact',
+    description: 'Students reach out to you directly — no bookings, no middlemen',
+    color: 'gold',
   },
 ];

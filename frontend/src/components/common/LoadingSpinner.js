@@ -9,19 +9,19 @@ const LoadingSpinner = ({
 }) => {
   const variants = {
     default: {
-      spinner: "text-blue-600",
+      spinner: "text-brand-600",
       text: "text-gray-600",
       background: ""
     },
     primary: {
       spinner: "text-white",
       text: "text-white",
-      background: "bg-gradient-to-r from-blue-600 to-indigo-600"
+      background: "bg-gradient-to-r from-brand-600 to-brand-700"
     },
     light: {
-      spinner: "text-blue-500",
+      spinner: "text-brand-500",
       text: "text-gray-500",
-      background: "bg-blue-50 border border-blue-100"
+      background: "bg-brand-50 border border-brand-100"
     }
   };
 

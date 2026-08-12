@@ -5,8 +5,8 @@ export const STEPS = [
     id: 'find-tutor',
     icon: Search,
     title: 'Find Your Tutor',
-    description: 'Browse through our verified tutors and filter by subject, level, and availability',
-    details: 'Use our advanced search to find the perfect match based on qualifications, ratings, and teaching style',
+    description: 'Browse tutor profiles and filter by subject, level, and availability',
+    details: 'Use our search to find the right match based on qualifications and teaching style',
   },
   {
     id: 'book-session',

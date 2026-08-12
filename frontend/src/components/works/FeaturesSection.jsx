@@ -3,13 +3,13 @@ import { FEATURES } from '../../constants/works/features';
 
 const FeaturesSection = () => {
   return (
-    <div className="bg-blue-900 text-white py-12 sm:py-16">
+    <div className="bg-brand-900 text-white py-12 sm:py-16">
       <div className="container mx-auto px-4 sm:px-6">
         <div className="text-center mb-10 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-bold mb-4">Why Choose TutionMaster?</h2>
-          <p className="text-blue-200 text-sm sm:text-base max-w-2xl mx-auto">
-            We combine cutting-edge technology with proven teaching methodologies to deliver
-            exceptional learning outcomes
+          <h2 className="text-2xl sm:text-3xl font-serif font-bold mb-4">Why Choose TuitionMaster?</h2>
+          <p className="text-brand-200 text-sm sm:text-base max-w-2xl mx-auto">
+            We combine an easy-to-use platform with a network of qualified tutors to deliver
+            a personalized learning experience
           </p>
         </div>
 

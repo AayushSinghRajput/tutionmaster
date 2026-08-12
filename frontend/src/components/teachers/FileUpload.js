@@ -159,9 +159,9 @@ const FileUpload = ({
 
   const getFileIcon = () => {
     if (isImage) {
-      return <Image size={32} className="text-blue-500" />;
+      return <Image size={32} className="text-brand-500" />;
     }
-    return <FileText size={32} className="text-blue-500" />;
+    return <FileText size={32} className="text-brand-500" />;
   };
 
   return (
@@ -190,7 +190,7 @@ const FileUpload = ({
                   alt="Preview"
                   className="w-32 h-32 rounded-2xl object-cover border-4 border-white shadow-lg transition-all duration-300 group-hover:shadow-xl"
                 />
-                <div className="absolute inset-0 bg-blue-500 bg-opacity-0 group-hover:bg-opacity-20 rounded-2xl transition-all duration-300 flex items-center justify-center">
+                <div className="absolute inset-0 bg-brand-500 bg-opacity-0 group-hover:bg-opacity-20 rounded-2xl transition-all duration-300 flex items-center justify-center">
                   <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <Upload size={24} className="text-white" />
                   </div>
@@ -211,8 +211,8 @@ const FileUpload = ({
               {isUploading && (
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-full shadow-lg px-3 py-1">
                   <div className="flex items-center space-x-2">
-                    <Loader size={12} className="text-blue-500 animate-spin" />
-                    <span className="text-xs font-semibold text-blue-600">
+                    <Loader size={12} className="text-brand-500 animate-spin" />
+                    <span className="text-xs font-semibold text-brand-600">
                       {uploadProgress}%
                     </span>
                   </div>
@@ -220,16 +220,16 @@ const FileUpload = ({
               )}
             </div>
           ) : (
-            <div className="relative bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-4 sm:p-6 border-2 border-blue-200 max-w-md w-full mx-auto shadow-sm hover:shadow-md transition-shadow duration-300">
+            <div className="relative bg-gradient-to-br from-brand-50 to-brand-100 rounded-2xl p-4 sm:p-6 border-2 border-brand-200 max-w-md w-full mx-auto shadow-sm hover:shadow-md transition-shadow duration-300">
               <div className="flex items-center space-x-4">
                 <div className="flex-shrink-0 w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center">
-                  <FileText size={24} className="text-blue-500" />
+                  <FileText size={24} className="text-brand-500" />
                 </div>
                 <div className="flex-1 text-left min-w-0">
                   <span className="block text-gray-900 font-semibold truncate text-sm">
                     {preview || "CV Document"}
                   </span>
-                  <span className="block text-blue-600 text-xs font-medium mt-1">
+                  <span className="block text-brand-600 text-xs font-medium mt-1">
                     PDF Document
                   </span>
                 </div>
@@ -249,8 +249,8 @@ const FileUpload = ({
               {isUploading && (
                 <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 bg-white rounded-full shadow-lg px-3 py-1">
                   <div className="flex items-center space-x-2">
-                    <Loader size={12} className="text-blue-500 animate-spin" />
-                    <span className="text-xs font-semibold text-blue-600">
+                    <Loader size={12} className="text-brand-500 animate-spin" />
+                    <span className="text-xs font-semibold text-brand-600">
                       {uploadProgress}%
                     </span>
                   </div>
@@ -263,8 +263,8 @@ const FileUpload = ({
         <div
           className={`border-2 border-dashed rounded-2xl p-5 sm:p-8 text-center cursor-pointer transition-all duration-300 ${
             isDragOver
-              ? "border-blue-400 bg-gradient-to-br from-blue-50 to-blue-100 shadow-inner"
-              : "border-blue-200 bg-gradient-to-br from-white to-blue-50 hover:border-blue-300 hover:shadow-md"
+              ? "border-brand-400 bg-gradient-to-br from-brand-50 to-brand-100 shadow-inner"
+              : "border-brand-200 bg-gradient-to-br from-white to-brand-50 hover:border-brand-300 hover:shadow-md"
           }`}
           onDrop={handleDrop}
           onDragOver={handleDragOver}
@@ -275,12 +275,12 @@ const FileUpload = ({
             {/* Icon Container */}
             <div
               className={`w-16 h-16 mx-auto rounded-2xl flex items-center justify-center transition-all duration-300 ${
-                isDragOver ? "bg-blue-500 shadow-lg" : "bg-blue-100 shadow-sm"
+                isDragOver ? "bg-brand-500 shadow-lg" : "bg-brand-100 shadow-sm"
               }`}
             >
               {React.cloneElement(getFileIcon(), {
                 size: 24,
-                className: isDragOver ? "text-white" : "text-blue-500",
+                className: isDragOver ? "text-white" : "text-brand-500",
               })}
             </div>
 
@@ -288,7 +288,7 @@ const FileUpload = ({
             <div className="space-y-2">
               <p
                 className={`font-semibold transition-colors duration-300 ${
-                  isDragOver ? "text-blue-700" : "text-gray-800"
+                  isDragOver ? "text-brand-700" : "text-gray-800"
                 }`}
               >
                 {isDragOver
@@ -306,15 +306,15 @@ const FileUpload = ({
             <div
               className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center transition-all duration-300 ${
                 isDragOver
-                  ? "bg-blue-600 text-white"
-                  : "bg-blue-100 text-blue-500 hover:bg-blue-200"
+                  ? "bg-brand-600 text-white"
+                  : "bg-brand-100 text-brand-500 hover:bg-brand-200"
               }`}
             >
               <Upload size={16} />
             </div>
 
             {/* Helper Text */}
-            <p className="text-blue-400 text-xs font-medium">
+            <p className="text-brand-400 text-xs font-medium">
               or drag and drop file here
             </p>
           </div>
@@ -323,9 +323,9 @@ const FileUpload = ({
 
       {/* Upload Progress Bar */}
       {isUploading && (
-        <div className="w-full bg-blue-100 rounded-full h-2 overflow-hidden">
+        <div className="w-full bg-brand-100 rounded-full h-2 overflow-hidden">
           <div
-            className="bg-gradient-to-r from-blue-500 to-blue-600 h-2 rounded-full transition-all duration-300 ease-out"
+            className="bg-gradient-to-r from-brand-500 to-brand-600 h-2 rounded-full transition-all duration-300 ease-out"
             style={{ width: `${uploadProgress}%` }}
           />
         </div>

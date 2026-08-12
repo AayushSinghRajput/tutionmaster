@@ -33,7 +33,7 @@ const CreateProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-blue-25 py-6 sm:py-8">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-stone-50 py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <ProfilePageHeader onBack={handleCancel} />
 

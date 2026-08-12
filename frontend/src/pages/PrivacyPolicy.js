@@ -15,11 +15,11 @@ const PrivacyPolicy = () => {
 };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 sm:py-12">
+    <div className="min-h-screen bg-stone-100 py-8 sm:py-12">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <PolicyHeader
           title="Privacy Policy"
-          description="Protecting your privacy is fundamental to our mission at TutionMaster. Learn how we safeguard your information."
+          description="Protecting your privacy is fundamental to our mission at TuitionMaster. Learn how we safeguard your information."
         />
 
         <div className="bg-white rounded-2xl shadow-lg overflow-hidden">

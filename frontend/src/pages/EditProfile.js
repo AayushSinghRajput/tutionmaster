@@ -63,11 +63,11 @@ const EditProfile = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-6 sm:py-8">
+    <div className="min-h-screen bg-stone-100 py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-6 sm:mb-8">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-gray-900 mb-2">
               Edit Your Profile
             </h1>
             <p className="text-base sm:text-lg text-gray-600">

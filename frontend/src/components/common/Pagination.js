@@ -71,13 +71,13 @@ const Pagination = ({
 
   const variants = {
     default: {
-      active: "bg-gradient-to-r from-blue-600 to-indigo-600 border-blue-600 text-white shadow-sm",
-      inactive: "border-blue-100 bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-200",
-      navigation: "border-blue-200 bg-white text-gray-700 hover:bg-blue-50 hover:border-blue-300",
+      active: "bg-gradient-to-r from-brand-600 to-brand-700 border-brand-600 text-white shadow-sm",
+      inactive: "border-stone-200 bg-white text-gray-700 hover:bg-brand-50 hover:border-brand-200",
+      navigation: "border-stone-200 bg-white text-gray-700 hover:bg-brand-50 hover:border-brand-300",
       text: "text-gray-600"
     },
     light: {
-      active: "bg-blue-100 border-blue-300 text-blue-700",
+      active: "bg-brand-100 border-brand-300 text-brand-700",
       inactive: "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300",
       navigation: "border-gray-200 bg-white text-gray-600 hover:bg-gray-50 hover:border-gray-300",
       text: "text-gray-500"
@@ -93,7 +93,7 @@ const Pagination = ({
       <div className="hidden md:flex flex-col items-center space-y-4">
         {/* Page Info */}
         <div className={`text-sm font-medium ${currentVariant.text}`}>
-          Page <span className="font-semibold text-blue-600">{currentPage}</span> of <span className="font-semibold text-gray-700">{totalPages}</span>
+          Page <span className="font-semibold text-brand-600">{currentPage}</span> of <span className="font-semibold text-gray-700">{totalPages}</span>
         </div>
 
         {/* Navigation */}
@@ -105,11 +105,11 @@ const Pagination = ({
               disabled={currentPage === 1}
               className={`flex items-center space-x-2 px-5 py-3 border rounded-xl transition-all duration-200 font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-sm hover:-translate-y-0.5 ${
                 currentVariant.navigation
-              } ${currentPage === 1 ? 'cursor-not-allowed' : 'hover:shadow-blue-100'}`}
+              } ${currentPage === 1 ? 'cursor-not-allowed' : 'hover:shadow-brand-100'}`}
               aria-label="Previous page"
             >
-              <ChevronLeft size={18} className="text-blue-500" />
-              <span className="text-blue-700">Previous</span>
+              <ChevronLeft size={18} className="text-brand-500" />
+              <span className="text-brand-700">Previous</span>
             </button>
 
             {/* Page Numbers */}
@@ -132,9 +132,9 @@ const Pagination = ({
                       key={page}
                       onClick={() => handlePageChange(page)}
                       className={`flex items-center justify-center w-12 h-12 border rounded-xl font-semibold text-sm transition-all duration-200 hover:shadow-sm hover:-translate-y-0.5 ${
-                        currentPage === page 
-                          ? `${currentVariant.active} shadow-md transform -translate-y-0.5` 
-                          : `${currentVariant.inactive} hover:shadow-blue-50`
+                        currentPage === page
+                          ? `${currentVariant.active} shadow-md transform -translate-y-0.5`
+                          : `${currentVariant.inactive} hover:shadow-brand-50`
                       }`}
                       aria-label={`Page ${page}`}
                       aria-current={currentPage === page ? 'page' : undefined}
@@ -152,25 +152,25 @@ const Pagination = ({
               disabled={currentPage === totalPages}
               className={`flex items-center space-x-2 px-5 py-3 border rounded-xl transition-all duration-200 font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-sm hover:-translate-y-0.5 ${
                 currentVariant.navigation
-              } ${currentPage === totalPages ? 'cursor-not-allowed' : 'hover:shadow-blue-100'}`}
+              } ${currentPage === totalPages ? 'cursor-not-allowed' : 'hover:shadow-brand-100'}`}
               aria-label="Next page"
             >
-              <span className="text-blue-700">Next</span>
-              <ChevronRight size={18} className="text-blue-500" />
+              <span className="text-brand-700">Next</span>
+              <ChevronRight size={18} className="text-brand-500" />
             </button>
           </nav>
         )}
       </div>
 
       {/* Mobile Pagination */}
-      <div className="flex md:hidden items-center justify-between w-full max-w-xs bg-white p-3 sm:p-4 rounded-2xl border border-blue-100 shadow-sm">
+      <div className="flex md:hidden items-center justify-between w-full max-w-xs bg-white p-3 sm:p-4 rounded-2xl border border-stone-200 shadow-sm">
         <button
           onClick={() => handlePageChange(currentPage - 1)}
           disabled={currentPage === 1}
           className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
             currentPage === 1
               ? 'border-gray-200 text-gray-400'
-              : 'border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
+              : 'border-brand-200 text-brand-600 hover:bg-brand-50 hover:border-brand-300 hover:shadow-sm'
           }`}
           aria-label="Previous page"
         >
@@ -179,7 +179,7 @@ const Pagination = ({
 
         <div className="flex flex-col items-center px-2">
           <span className="text-gray-600 font-medium text-sm">Page</span>
-          <span className="text-blue-600 font-bold text-lg">
+          <span className="text-brand-600 font-bold text-lg">
             {currentPage} <span className="text-gray-400 font-normal">/ {totalPages}</span>
           </span>
         </div>
@@ -190,7 +190,7 @@ const Pagination = ({
           className={`flex items-center justify-center w-12 h-12 sm:w-14 sm:h-14 flex-shrink-0 border-2 rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed ${
             currentPage === totalPages
               ? 'border-gray-200 text-gray-400'
-              : 'border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 hover:shadow-sm'
+              : 'border-brand-200 text-brand-600 hover:bg-brand-50 hover:border-brand-300 hover:shadow-sm'
           }`}
           aria-label="Next page"
         >

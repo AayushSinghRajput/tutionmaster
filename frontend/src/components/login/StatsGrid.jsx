@@ -17,7 +17,7 @@ const StatsGrid = ({ stats }) => {
           >
             <Icon className="w-8 h-8 mx-auto mb-3" />
             <div className="text-2xl font-bold">{stat.value}</div>
-            <div className="text-blue-100 text-sm font-medium">{stat.label}</div>
+            <div className="text-white/80 text-sm font-medium">{stat.label}</div>
           </div>
         );
       })}

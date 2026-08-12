@@ -4,20 +4,20 @@ export const FEATURES = [
   {
     id: 'verified',
     icon: Shield,
-    title: 'Verified Tutors',
-    description: 'All tutors undergo rigorous background checks and qualification verification',
+    title: 'Transparent Profiles',
+    description: 'Tutors share their qualifications and experience directly on their profiles',
   },
   {
     id: 'flexible',
     icon: Clock,
     title: 'Flexible Scheduling',
-    description: 'Learn at your own pace with 24/7 availability across multiple time zones',
+    description: 'Book sessions at times that work for you and your tutor',
   },
   {
     id: 'guarantee',
     icon: Award,
-    title: 'Quality Guarantee',
-    description: '100% satisfaction guarantee with free replacement if not satisfied',
+    title: 'Direct Communication',
+    description: 'Talk with tutors directly to make sure they are the right fit for you',
   },
   {
     id: 'attention',

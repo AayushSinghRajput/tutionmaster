@@ -107,7 +107,7 @@ flex border rounded-lg overflow-hidden
 px-3 py-2 text-sm
 ${period === p
                     ?
-                    "bg-blue-600 text-white"
+                    "bg-brand-600 text-white"
                     :
                     "bg-white text-gray-600"
                   }
@@ -449,7 +449,7 @@ flex items-center
 ">
 
           <Clock
-            className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-blue-600 shrink-0"
+            className="w-5 h-5 sm:w-6 sm:h-6 mr-2 sm:mr-3 text-brand-600 shrink-0"
           />
 
           Weekly Availability
@@ -458,7 +458,7 @@ flex items-center
 
 
         <div className="
-bg-blue-50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl
+bg-brand-50 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl
 text-xs sm:text-sm whitespace-nowrap
 ">
 
@@ -522,9 +522,9 @@ p-4 rounded-xl border-2
 flex justify-between
 ${selected
                     ?
-                    "border-blue-600 bg-blue-100"
+                    "border-brand-600 bg-brand-100"
                     :
-                    "border-gray-300"
+                    "border-stone-300"
                   }
 `}
 
@@ -539,7 +539,7 @@ ${selected
                   selected
                     ?
                     <span className="
-w-3 h-3 rounded-full bg-green-500
+w-3 h-3 rounded-full bg-success-500
 "/>
                     :
                     <Plus className="w-5 h-5" />
@@ -605,7 +605,7 @@ font-bold text-base sm:text-lg
 
                 className="
 flex items-center gap-2
-text-blue-600
+text-brand-600
 text-xs sm:text-sm shrink-0
 "
 
@@ -758,7 +758,7 @@ text-red-600 text-sm flex items-center
 
               className="
 mt-3
-text-blue-600
+text-brand-600
 flex items-center gap-2
 "
 

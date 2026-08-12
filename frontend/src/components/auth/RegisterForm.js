@@ -26,7 +26,7 @@ const RegisterForm = () => {
     setIsLoading(false);
 
     if (result.success) {
-      toast.success('Registration successful! Welcome to TutionMaster!');
+      toast.success('Registration successful! Welcome to TuitionMaster!');
     } else {
       toast.error(result.error);
     }
@@ -38,11 +38,11 @@ const RegisterForm = () => {
   return (
     <div className="w-full">
       <div className="text-center mb-6 sm:mb-8">
-        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-          <UserPlus className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" />
+        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-brand-100 rounded-full flex items-center justify-center mb-4">
+          <UserPlus className="w-7 h-7 sm:w-8 sm:h-8 text-brand-600" />
         </div>
-        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Join TutionMaster</h2>
-        <p className="mt-2 text-sm sm:text-base text-gray-600">Start your educational journey with us</p>
+        <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Join TuitionMaster</h2>
+        <p className="mt-2 text-sm sm:text-base text-gray-600">Create your tutor profile and start hearing from students</p>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
@@ -57,7 +57,7 @@ const RegisterForm = () => {
             <input
               type="text"
               id="username"
-              className={`block w-full pl-10 pr-3 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-3 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 ${
                 errors.username ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
               placeholder="Enter your full name"
@@ -92,10 +92,10 @@ const RegisterForm = () => {
             <input
               type="email"
               id="email"
-              className={`block w-full pl-10 pr-3 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-3 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 ${
                 errors.email ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
-              placeholder="your.email@institution.com"
+              placeholder="your@email.com"
               {...register('email', {
                 required: 'Email is required',
                 pattern: {
@@ -123,7 +123,7 @@ const RegisterForm = () => {
             <input
               type={showPassword ? "text" : "password"}
               id="password"
-              className={`block w-full pl-10 pr-10 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-10 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 ${
                 errors.password ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
               placeholder="Minimum 6 characters"
@@ -141,9 +141,9 @@ const RegisterForm = () => {
               onClick={togglePasswordVisibility}
             >
               {showPassword ? (
-                <EyeOff className="h-5 w-5 text-gray-400 hover:text-blue-600 transition-colors" />
+                <EyeOff className="h-5 w-5 text-gray-400 hover:text-brand-600 transition-colors" />
               ) : (
-                <Eye className="h-5 w-5 text-gray-400 hover:text-blue-600 transition-colors" />
+                <Eye className="h-5 w-5 text-gray-400 hover:text-brand-600 transition-colors" />
               )}
             </button>
           </div>
@@ -165,7 +165,7 @@ const RegisterForm = () => {
             <input
               type={showConfirmPassword ? "text" : "password"}
               id="confirmPassword"
-              className={`block w-full pl-10 pr-10 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 ${
+              className={`block w-full pl-10 pr-10 py-2.5 sm:py-3 border rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 ${
                 errors.confirmPassword ? 'border-red-500 bg-red-50' : 'border-gray-300 hover:border-gray-400'
               }`}
               placeholder="Re-enter your password"
@@ -180,9 +180,9 @@ const RegisterForm = () => {
               onClick={toggleConfirmPasswordVisibility}
             >
               {showConfirmPassword ? (
-                <EyeOff className="h-5 w-5 text-gray-400 hover:text-blue-600 transition-colors" />
+                <EyeOff className="h-5 w-5 text-gray-400 hover:text-brand-600 transition-colors" />
               ) : (
-                <Eye className="h-5 w-5 text-gray-400 hover:text-blue-600 transition-colors" />
+                <Eye className="h-5 w-5 text-gray-400 hover:text-brand-600 transition-colors" />
               )}
             </button>
           </div>
@@ -193,18 +193,18 @@ const RegisterForm = () => {
           )}
         </div>
 
-        <div className="bg-blue-50 border border-blue-200 rounded-xl p-3 sm:p-4">
+        <div className="bg-brand-50 border border-brand-200 rounded-xl p-3 sm:p-4">
           <div className="flex items-start">
             <div className="flex-shrink-0">
-              <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+              <div className="w-5 h-5 bg-brand-500 rounded-full flex items-center justify-center">
                 <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
                 </svg>
               </div>
             </div>
             <div className="ml-3">
-              <p className="text-sm text-blue-800">
-                By creating an account, you agree to our <a href="#" className="font-semibold underline hover:text-blue-900">Terms of Service</a> and <a href="#" className="font-semibold underline hover:text-blue-900">Privacy Policy</a>
+              <p className="text-sm text-brand-800">
+                By creating an account, you agree to our <a href="#" className="font-semibold underline hover:text-brand-900">Terms of Service</a> and <a href="#" className="font-semibold underline hover:text-brand-900">Privacy Policy</a>
               </p>
             </div>
           </div>
@@ -212,7 +212,7 @@ const RegisterForm = () => {
 
         <button
           type="submit"
-          className="w-full flex justify-center items-center py-3.5 sm:py-4 px-4 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
+          className="w-full flex justify-center items-center py-3.5 sm:py-4 px-4 border border-transparent rounded-xl shadow-lg text-base font-semibold text-white bg-gradient-to-r from-brand-500 to-brand-600 hover:from-brand-600 hover:to-brand-700 focus:outline-none focus:ring-4 focus:ring-brand-200 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:-translate-y-0.5 active:translate-y-0"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -220,7 +220,7 @@ const RegisterForm = () => {
           ) : (
             <>
               <UserPlus className="w-5 h-5 mr-2" />
-              Create Educator Account
+              Create Your Tutor Profile
             </>
           )}
         </button>

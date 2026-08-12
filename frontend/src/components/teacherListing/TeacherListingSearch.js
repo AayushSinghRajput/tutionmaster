@@ -12,7 +12,7 @@ const TeacherListingSearch = ({ searchQuery, onSearchChange }) => {
 
           <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
             <svg
-              className="w-5 h-5 text-blue-400"
+              className="w-5 h-5 text-brand-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"

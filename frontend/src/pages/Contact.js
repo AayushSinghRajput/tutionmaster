@@ -8,10 +8,10 @@ import {
 
 const Contact = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-25 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-brand-50 to-white">
       <ContactHero />
       <ContactMethods />
-      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-blue-25 to-indigo-25">
+      <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-brand-50 to-gold-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-10 lg:gap-12">
             <ContactForm />

@@ -5,10 +5,10 @@ const AvailabilitySection = ({ availability }) => {
 
   return (
     <section className="bg-white rounded-lg shadow-sm p-4 sm:p-6">
-      <h2 className="text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Availability</h2>
+      <h2 className="font-serif text-xl sm:text-2xl font-semibold text-gray-900 mb-4">Availability</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
         {availability.map((slot, index) => (
-          <div key={index} className="border border-gray-200 rounded-lg p-4">
+          <div key={index} className="border border-stone-200 rounded-lg p-4">
             <h4 className="font-semibold text-gray-900 mb-3">{slot.day}</h4>
             <div className="space-y-2">
               {slot.timeSlots.map((timeSlot, timeIndex) => (

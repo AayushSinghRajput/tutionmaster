@@ -8,7 +8,7 @@ const TeachingInfoSection = ({
   onChange,
   TEACHING_MODES,
 }) => (
-  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-8 border border-blue-200 w-full">
+  <div className="bg-gradient-to-br from-brand-50 to-stone-100 rounded-2xl p-5 sm:p-8 border border-brand-200 w-full">
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full">
       {/* Years of Experience */}
       <div className="w-full">
@@ -34,10 +34,10 @@ const TeachingInfoSection = ({
                 value: data.experience || 0,
                 onChange: (e) => onChange?.("experience", e.target.value),
               })}
-          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
             errors?.experience || formErrors?.experience
               ? "border-red-500 bg-red-50"
-              : "border-blue-200 hover:border-blue-400"
+              : "border-brand-200 hover:border-brand-400"
           }`}
           placeholder="5"
           min="0"
@@ -76,10 +76,10 @@ const TeachingInfoSection = ({
                   value: data.hourlyRate || 0,
                   onChange: (e) => onChange?.("hourlyRate", e.target.value),
                 })}
-            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg pr-14 sm:pr-16 border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg pr-14 sm:pr-16 border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
               errors?.hourlyRate || formErrors?.hourlyRate
                 ? "border-red-500 bg-red-50"
-                : "border-blue-200 hover:border-blue-400"
+                : "border-brand-200 hover:border-brand-400"
             }`}
             placeholder="500"
             min="0"
@@ -87,7 +87,7 @@ const TeachingInfoSection = ({
             step="50"
           />
           <div className="absolute right-4 sm:right-6 top-1/2 transform -translate-y-1/2">
-            <span className="text-blue-600 font-bold text-base sm:text-lg">₨/hr</span>
+            <span className="text-brand-600 font-bold text-base sm:text-lg">₨/hr</span>
           </div>
         </div>
         {(errors?.hourlyRate || formErrors?.hourlyRate) && (
@@ -116,10 +116,10 @@ const TeachingInfoSection = ({
                 value: data.teachingMode || "Both",
                 onChange: (e) => onChange?.("teachingMode", e.target.value),
               })}
-          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+          className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
             errors?.teachingMode || formErrors?.teachingMode
               ? "border-red-500 bg-red-50"
-              : "border-blue-200 hover:border-blue-400"
+              : "border-brand-200 hover:border-brand-400"
           }`}
         >
           {TEACHING_MODES?.map((mode) => (

@@ -1,7 +1,7 @@
 const COLOR_CLASSES = {
-  blue: { bg: 'bg-blue-50', border: 'border-blue-200', icon: 'text-blue-600', title: 'text-blue-800', text: 'text-blue-700' },
-  green: { bg: 'bg-green-50', border: 'border-green-200', icon: 'text-green-600', title: 'text-green-800', text: 'text-green-700' },
-  purple: { bg: 'bg-purple-50', border: 'border-purple-200', icon: 'text-purple-600', title: 'text-purple-800', text: 'text-purple-700' },
+  blue: { bg: 'bg-brand-50', border: 'border-brand-200', icon: 'text-brand-600', title: 'text-brand-800', text: 'text-brand-700' },
+  green: { bg: 'bg-success-50', border: 'border-success-200', icon: 'text-success-600', title: 'text-success-700', text: 'text-success-600' },
+  purple: { bg: 'bg-gold-50', border: 'border-gold-200', icon: 'text-gold-600', title: 'text-gold-700', text: 'text-gold-600' },
 };
 
 const CvInfoCard = ({ color, title, description, icon }) => {

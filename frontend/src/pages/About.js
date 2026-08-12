@@ -9,7 +9,7 @@ import {
 
 const About = () => {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-25 to-white">
+    <div className="min-h-screen bg-gradient-to-b from-brand-50 to-white">
       <AboutHero />
       <AboutMissionVision />
       <AboutValues />

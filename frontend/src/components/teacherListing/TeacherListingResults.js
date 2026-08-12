@@ -35,7 +35,7 @@ const TeacherListingResults = ({
       )}
 
       {/* Results Header */}
-      <div className="bg-white rounded-2xl shadow-sm border border-blue-100 p-4 sm:p-6 mb-6">
+      <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
             <h3 className="text-base sm:text-lg font-semibold text-gray-900">
@@ -48,8 +48,8 @@ const TeacherListingResults = ({
             </p>
           </div>
           <div className="mt-3 sm:mt-0">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-50 border border-blue-200">
-              <span className="text-sm font-medium text-blue-700">
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-brand-50 border border-brand-200">
+              <span className="text-sm font-medium text-brand-700">
                 {pagination.total} Total
               </span>
             </div>
@@ -58,10 +58,10 @@ const TeacherListingResults = ({
       </div>
 
       {teachers.length === 0 && !loading ? (
-        <div className="bg-white rounded-2xl shadow-sm border border-blue-100 p-6 sm:p-12 text-center">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-blue-50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
+        <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 sm:p-12 text-center">
+          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-50 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6">
             <svg
-              className="w-8 h-8 sm:w-10 sm:h-10 text-blue-400"
+              className="w-8 h-8 sm:w-10 sm:h-10 text-brand-400"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -83,7 +83,7 @@ const TeacherListingResults = ({
           </p>
           <button
             onClick={onClearFilters}
-            className="bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-medium py-3 px-6 sm:px-8 rounded-xl transition-all duration-200 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
+            className="btn-brand-primary py-3 px-6 sm:px-8 shadow-sm hover:shadow-md transform hover:-translate-y-0.5"
           >
             Clear All Filters
           </button>
@@ -102,7 +102,7 @@ const TeacherListingResults = ({
           </div>
 
           {pagination.totalPages > 1 && (
-            <div className="bg-white rounded-2xl shadow-sm border border-blue-100 p-4 sm:p-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-4 sm:p-6">
               <Pagination
                 currentPage={pagination.page}
                 totalPages={pagination.totalPages}

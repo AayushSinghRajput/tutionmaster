@@ -60,7 +60,7 @@ const TeacherForm = ({
 
   return (
     <div
-      className={`w-full max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl border border-blue-100 overflow-hidden ${className}`}
+      className={`w-full max-w-7xl mx-auto bg-white rounded-3xl shadow-2xl border border-brand-100 overflow-hidden ${className}`}
     >
       <FormProgressHeader
         isEdit={isEdit}

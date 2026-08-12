@@ -3,33 +3,33 @@ import { Users, Calendar, DollarSign, Shield } from 'lucide-react';
 
 export const teacherBenefits = [
   {
-    icon: <Users className="w-6 h-6 text-blue-600 mt-1 mr-4 flex-shrink-0" />,
-    bgClass: "bg-blue-50 border-blue-200 hover:border-blue-300",
-    title: "Global Student Reach",
-    description: "Connect with thousands of students worldwide"
+    icon: <Users className="w-6 h-6 text-brand-600 mt-1 mr-4 flex-shrink-0" />,
+    bgClass: "bg-brand-50 border-brand-200 hover:border-brand-300",
+    title: "Nepal-Wide Reach",
+    description: "Get discovered by students across Nepal, not just your neighborhood"
   },
   {
-    icon: <Calendar className="w-6 h-6 text-green-600 mt-1 mr-4 flex-shrink-0" />,
-    bgClass: "bg-green-50 border-green-200 hover:border-green-300",
+    icon: <Calendar className="w-6 h-6 text-gold-600 mt-1 mr-4 flex-shrink-0" />,
+    bgClass: "bg-gold-50 border-gold-200 hover:border-gold-300",
     title: "Flexible Schedule",
     description: "Teach on your own terms and availability"
   },
   {
-    icon: <DollarSign className="w-6 h-6 text-purple-600 mt-1 mr-4 flex-shrink-0" />,
-    bgClass: "bg-purple-50 border-purple-200 hover:border-purple-300",
-    title: "Competitive Earnings",
-    description: "Set your rates and maximize your income"
+    icon: <DollarSign className="w-6 h-6 text-brand-600 mt-1 mr-4 flex-shrink-0" />,
+    bgClass: "bg-brand-50 border-brand-200 hover:border-brand-300",
+    title: "Set Your Own Rates",
+    description: "List your subjects and rates on your profile"
   },
   {
-    icon: <Shield className="w-6 h-6 text-orange-600 mt-1 mr-4 flex-shrink-0" />,
-    bgClass: "bg-orange-50 border-orange-200 hover:border-orange-300",
+    icon: <Shield className="w-6 h-6 text-gold-600 mt-1 mr-4 flex-shrink-0" />,
+    bgClass: "bg-gold-50 border-gold-200 hover:border-gold-300",
     title: "Secure Platform",
-    description: "Safe and reliable payment processing"
+    description: "Your account and personal details are kept safe"
   }
 ];
 
 export const quickStartSteps = [
   "Create your profile",
-  "Set your availability",
-  "Start teaching"
+  "List your subjects & rates",
+  "Get contacted by students"
 ];

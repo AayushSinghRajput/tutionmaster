@@ -2,6 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  body {
+    @apply bg-stone-100 text-gray-900;
+  }
+  h1, h2, h3 {
+    @apply font-serif;
+  }
+}
+
+@layer components {
+  /* Trust badges — each state must only be used when it is literally true. */
+  .badge-verified {
+    @apply inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-success-100 text-success-600 border border-success-200;
+  }
+  .badge-toprated {
+    @apply inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-gold-100 text-gold-700 border border-gold-200;
+  }
+  .badge-new {
+    @apply inline-flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full bg-stone-100 text-gray-500 border border-stone-200;
+  }
+
+  .tag-subject {
+    @apply text-xs font-semibold px-2.5 py-1 rounded-md bg-brand-100 text-brand-700 border border-brand-200;
+  }
+
+  .btn-brand-primary {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-lg bg-brand-600 text-white px-5 py-2.5 hover:bg-brand-700 transition-colors shadow-sm;
+  }
+  .btn-brand-outline {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-lg bg-gold-50 text-gold-700 border border-gold-200 px-5 py-2.5 hover:bg-gold-100 transition-colors;
+  }
+  .btn-brand-ghost {
+    @apply inline-flex items-center justify-center gap-2 font-semibold rounded-lg bg-transparent text-gray-700 border border-stone-200 px-5 py-2.5 hover:bg-stone-50 transition-colors;
+  }
+}
+
 .cv-flip-perspective {
   perspective: 1800px;
 }

@@ -12,7 +12,7 @@ const QualificationCard = ({
   onQualificationAdd,
 }) => {
   return (
-    <div className="bg-white p-5 sm:p-8 border-2 border-blue-200 rounded-2xl hover:border-blue-400 transition-all duration-300 shadow-sm w-full">
+    <div className="bg-white p-5 sm:p-8 border-2 border-brand-200 rounded-2xl hover:border-brand-400 transition-all duration-300 shadow-sm w-full">
       {/* Card Header */}
       <div className="flex justify-between items-center mb-4 sm:mb-6 w-full gap-2">
         <span className="font-bold text-gray-800 text-base sm:text-lg">
@@ -51,11 +51,11 @@ const QualificationCard = ({
                   onChange: (e) =>
                     onQualificationAdd?.(index, "degree", e.target.value),
                 })}
-            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
               errors?.qualifications?.[index]?.degree ||
               formErrors?.qualifications?.[index]?.degree
                 ? "border-red-500 bg-red-50"
-                : "border-blue-200 hover:border-blue-400"
+                : "border-brand-200 hover:border-brand-400"
             }`}
             placeholder="e.g., Bachelor of Science in Mathematics"
           />
@@ -89,11 +89,11 @@ const QualificationCard = ({
                   onChange: (e) =>
                     onQualificationAdd?.(index, "institution", e.target.value),
                 })}
-            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
               errors?.qualifications?.[index]?.institution ||
               formErrors?.qualifications?.[index]?.institution
                 ? "border-red-500 bg-red-50"
-                : "border-blue-200 hover:border-blue-400"
+                : "border-brand-200 hover:border-brand-400"
             }`}
             placeholder="e.g., Tribhuvan University"
           />
@@ -129,11 +129,11 @@ const QualificationCard = ({
                   onChange: (e) =>
                     onQualificationAdd?.(index, "year", e.target.value),
                 })}
-            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
               errors?.qualifications?.[index]?.year ||
               formErrors?.qualifications?.[index]?.year
                 ? "border-red-500 bg-red-50"
-                : "border-blue-200 hover:border-blue-400"
+                : "border-brand-200 hover:border-brand-400"
             }`}
             placeholder="2020"
           />

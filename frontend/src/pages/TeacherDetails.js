@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Mail, Phone } from 'lucide-react';
 import { teacherService } from '../services/teacherService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import TeacherNotFound from '../components/teachers/TeacherNotFound';
@@ -50,7 +51,7 @@ const TeacherDetails = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-stone-50 pb-20 md:pb-0">
       <TeacherHeader teacher={teacher} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
@@ -70,10 +71,37 @@ const TeacherDetails = () => {
             <ContactActionsCard teacher={teacher} />
             <Link
               to="/teachers"
-              className="w-full flex items-center justify-center space-x-2 px-4 py-3 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+              className="btn-brand-ghost w-full"
             >
               <span>← Back to All Teachers</span>
             </Link>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile-only sticky contact bar: keeps the primary CTA reachable without
+          scrolling through the whole profile on small screens. */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-stone-200 shadow-[0_-2px_12px_rgba(0,0,0,0.08)] px-4 py-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))]">
+        <div className="flex items-center justify-between gap-3">
+          <div className="min-w-0">
+            <div className="text-[11px] text-gray-500 leading-none">Rate</div>
+            <div className="text-sm font-bold text-brand-700 truncate">Rs {teacher.hourlyRate}/hr</div>
+          </div>
+          <div className="flex items-center gap-2 shrink-0">
+            <a
+              href={`mailto:${teacher.contact.email}`}
+              className="btn-brand-outline px-3 py-2 text-xs"
+            >
+              <Mail size={14} />
+              <span>Message</span>
+            </a>
+            <a
+              href={`tel:${teacher.contact.phone}`}
+              className="btn-brand-primary px-3 py-2 text-xs"
+            >
+              <Phone size={14} />
+              <span>Call</span>
+            </a>
           </div>
         </div>
       </div>

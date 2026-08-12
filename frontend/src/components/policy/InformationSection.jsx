@@ -6,13 +6,13 @@ const InformationSection = () => {
   return (
     <section id="information" className="mb-12">
       <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center">
-        <Eye className="w-6 h-6 text-blue-600 mr-3" />
+        <Eye className="w-6 h-6 text-brand-600 mr-3" />
         Information We Collect
       </h2>
 
-      <div className="bg-blue-50 border-l-4 border-blue-500 pl-6 py-4 mb-6">
-        <h3 className="font-semibold text-blue-800 mb-2">Educational Data</h3>
-        <p className="text-blue-700 text-sm">
+      <div className="bg-brand-50 border-l-4 border-brand-500 pl-6 py-4 mb-6">
+        <h3 className="font-semibold text-brand-800 mb-2">Educational Data</h3>
+        <p className="text-brand-700 text-sm">
           We collect information necessary to provide personalized educational experiences,
           including course progress, assessment results, and learning preferences.
         </p>

@@ -1,8 +1,6 @@
 const COLOR_CLASSES = {
-  blue: { bg: 'bg-blue-50', border: 'border-blue-200', hoverBorder: 'hover:border-blue-300', icon: 'text-blue-600' },
-  green: { bg: 'bg-green-50', border: 'border-green-200', hoverBorder: 'hover:border-green-300', icon: 'text-green-600' },
-  purple: { bg: 'bg-purple-50', border: 'border-purple-200', hoverBorder: 'hover:border-purple-300', icon: 'text-purple-600' },
-  orange: { bg: 'bg-orange-50', border: 'border-orange-200', hoverBorder: 'hover:border-orange-300', icon: 'text-orange-600' },
+  brand: { bg: 'bg-brand-50', border: 'border-brand-200', hoverBorder: 'hover:border-brand-300', icon: 'text-brand-600' },
+  gold: { bg: 'bg-gold-50', border: 'border-gold-200', hoverBorder: 'hover:border-gold-300', icon: 'text-gold-600' },
 };
 
 const FeatureItem = ({ icon: Icon, title, description, color }) => {

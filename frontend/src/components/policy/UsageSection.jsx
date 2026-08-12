@@ -6,9 +6,9 @@ const UsageSection = () => {
       <h2 className="text-2xl font-bold text-gray-900 mb-6">How We Use Your Information</h2>
       <div className="space-y-4">
         {DATA_USAGE_ITEMS.map((use, index) => (
-          <div key={use.title} className="flex items-start p-4 bg-gray-50 rounded-lg hover:bg-blue-50 transition-colors">
-            <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
-              <span className="text-blue-600 font-semibold text-sm">{index + 1}</span>
+          <div key={use.title} className="flex items-start p-4 bg-stone-50 rounded-lg hover:bg-brand-50 transition-colors">
+            <div className="w-8 h-8 bg-brand-100 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+              <span className="text-brand-600 font-semibold text-sm">{index + 1}</span>
             </div>
             <div className="ml-4">
               <h4 className="font-semibold text-gray-900">{use.title}</h4>

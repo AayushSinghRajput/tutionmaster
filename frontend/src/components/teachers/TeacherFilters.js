@@ -134,9 +134,9 @@ const TeacherFilters = ({
   }, [])
 
   return (
-    <div className="w-full lg:w-80 bg-white rounded-2xl shadow-xl border border-blue-50 h-fit lg:sticky lg:top-8 transition-all duration-300 hover:shadow-2xl">
-      {/* Enhanced Header */}
-      <div className="bg-gradient-to-br from-blue-700 via-blue-600 to-blue-800 px-4 py-4 sm:px-6 sm:py-6 rounded-t-2xl relative overflow-hidden">
+    <div className="w-full lg:w-80 bg-white rounded-2xl shadow-xl border border-stone-200 h-fit lg:sticky lg:top-8 transition-all duration-300 hover:shadow-2xl">
+      {/* Header */}
+      <div className="bg-gradient-to-br from-brand-700 via-brand-600 to-brand-800 px-4 py-4 sm:px-6 sm:py-6 rounded-t-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-32 h-32 bg-white bg-opacity-10 rounded-full -translate-y-16 translate-x-16"></div>
         <div className="absolute bottom-0 left-0 w-24 h-24 bg-white bg-opacity-5 rounded-full -translate-x-12 translate-y-8"></div>
 
@@ -147,10 +147,10 @@ const TeacherFilters = ({
               <Filter size={22} className="text-white hidden sm:block" />
             </div>
             <div className="min-w-0">
-              <h3 className="text-lg sm:text-xl font-bold text-white tracking-tight truncate">
+              <h3 className="font-serif text-lg sm:text-xl font-bold text-white tracking-tight truncate">
                 Refine Search
               </h3>
-              <p className="text-blue-100 text-sm font-medium mt-1">
+              <p className="text-brand-100 text-sm font-medium mt-1">
                 Find your ideal tutor
               </p>
             </div>
@@ -158,7 +158,7 @@ const TeacherFilters = ({
           {hasActiveFilters() && (
             <button
               onClick={onClearFilters}
-              className="p-2.5 text-blue-100 hover:text-white hover:bg-white hover:bg-opacity-15 rounded-xl transition-all duration-200 shadow-sm backdrop-blur-sm border border-white border-opacity-20 shrink-0"
+              className="p-2.5 text-brand-100 hover:text-white hover:bg-white hover:bg-opacity-15 rounded-xl transition-all duration-200 shadow-sm backdrop-blur-sm border border-white border-opacity-20 shrink-0"
               title="Clear all filters"
             >
               <X size={18} />
@@ -167,12 +167,12 @@ const TeacherFilters = ({
         </div>
       </div>
 
-      <div className="p-4 space-y-5 sm:p-6 sm:space-y-7 bg-gradient-to-b from-white to-blue-50 rounded-b-2xl">
+      <div className="p-4 space-y-5 sm:p-6 sm:space-y-7 bg-gradient-to-b from-white to-stone-50 rounded-b-2xl">
         {/* Enhanced Subject Filter with Search */}
         <div className="space-y-4">
           <div className="flex items-center space-x-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
-              <GraduationCap size={18} className="text-blue-600" />
+            <div className="p-2 bg-brand-100 rounded-lg">
+              <GraduationCap size={18} className="text-brand-600" />
             </div>
             <h4 className="font-bold text-gray-800 text-base sm:text-lg">
               Subjects & Courses
@@ -186,12 +186,12 @@ const TeacherFilters = ({
               placeholder="Search subjects..."
               value={subjectSearch}
               onChange={(e) => setSubjectSearch(e.target.value)}
-              className="w-full px-4 py-3 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+              className="w-full px-4 py-3 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
             />
             {subjectSearch && (
               <button
                 onClick={() => setSubjectSearch("")}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-400 hover:text-blue-600"
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-brand-600"
               >
                 <X size={16} />
               </button>
@@ -203,19 +203,19 @@ const TeacherFilters = ({
               filteredSubjects.map((subject) => (
                 <label
                   key={subject}
-                  className="flex items-center space-x-3 cursor-pointer group p-2 rounded-xl transition-all duration-200 hover:bg-blue-50"
+                  className="flex items-center space-x-3 cursor-pointer group p-2 rounded-xl transition-all duration-200 hover:bg-brand-50"
                 >
                   <div className="relative flex-shrink-0">
                     <input
                       type="checkbox"
                       checked={filters.subjects.includes(subject)}
                       onChange={() => handleSubjectChange(subject)}
-                      className="w-5 h-5 text-blue-600 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-white transition-all duration-200 group-hover:border-blue-400 shadow-sm appearance-none"
+                      className="w-5 h-5 text-brand-600 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-white transition-all duration-200 group-hover:border-brand-400 shadow-sm appearance-none"
                     />
                     {filters.subjects.includes(subject) && (
                       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
                         <svg
-                          className="w-3 h-3 text-blue-600"
+                          className="w-3 h-3 text-brand-600"
                           fill="none"
                           stroke="currentColor"
                           viewBox="0 0 24 24"
@@ -231,8 +231,8 @@ const TeacherFilters = ({
                     )}
                   </div>
                   <span
-                    className={`text-gray-700 group-hover:text-blue-800 transition-colors duration-200 flex-1 ${filters.subjects.includes(subject)
-                      ? "font-semibold text-blue-700"
+                    className={`text-gray-700 group-hover:text-brand-800 transition-colors duration-200 flex-1 ${filters.subjects.includes(subject)
+                      ? "font-semibold text-brand-700"
                       : "font-medium"
                       }`}
                   >
@@ -248,12 +248,12 @@ const TeacherFilters = ({
           </div>
         </div>
 
-        <div className="border-t border-blue-100 pt-6 space-y-7">
-          {/* Enhanced Teaching Mode Filter */}
+        <div className="border-t border-stone-200 pt-6 space-y-7">
+          {/* Teaching Mode Filter */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Monitor size={18} className="text-blue-600" />
+              <div className="p-2 bg-brand-100 rounded-lg">
+                <Monitor size={18} className="text-brand-600" />
               </div>
               <h4 className="font-bold text-gray-800 text-base sm:text-lg">
                 Teaching Format
@@ -263,7 +263,7 @@ const TeacherFilters = ({
               <select
                 value={filters.teachingMode}
                 onChange={(e) => onFilterChange("teachingMode", e.target.value)}
-                className="w-full px-4 py-3.5 pl-11 border-2 border-blue-100 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm appearance-none"
+                className="w-full px-4 py-3.5 pl-11 border-2 border-stone-200 rounded-xl bg-white text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm appearance-none"
               >
                 <option value="" className="text-gray-400">
                   All Teaching Formats
@@ -276,7 +276,7 @@ const TeacherFilters = ({
               </select>
               <div className="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
                 <svg
-                  className="w-4 h-4 text-blue-400"
+                  className="w-4 h-4 text-brand-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -295,8 +295,8 @@ const TeacherFilters = ({
           {/* Enhanced Experience Filter */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Clock size={18} className="text-blue-600" />
+              <div className="p-2 bg-brand-100 rounded-lg">
+                <Clock size={18} className="text-brand-600" />
               </div>
               <h4 className="font-bold text-gray-800 text-base sm:text-lg">
                 Teaching Experience
@@ -310,13 +310,13 @@ const TeacherFilters = ({
                     placeholder="Min years"
                     value={filters.minExperience}
                     onChange={handleMinExperienceChange}
-                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
                     min="0"
                     max="50"
                   />
                 </div>
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-600 font-semibold text-sm">→</span>
+                <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center">
+                  <span className="text-brand-600 font-semibold text-sm">→</span>
                 </div>
                 <div className="flex-1 relative">
                   <input
@@ -324,22 +324,22 @@ const TeacherFilters = ({
                     placeholder="Max years"
                     value={filters.maxExperience}
                     onChange={handleMaxExperienceChange}
-                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
                     min="0"
                     max="50"
                   />
                 </div>
               </div>
-              <div className="text-xs text-blue-600 font-semibold text-center bg-blue-50 py-1.5 rounded-lg">
+              <div className="text-xs text-brand-700 font-semibold text-center bg-brand-50 py-1.5 rounded-lg">
                 Years of professional experience
               </div>
             </div>
           </div>
 
-          {/* Enhanced Hourly Rate Filter */}
+          {/* Hourly Rate Filter */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg shadow-sm">
+              <div className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-brand-500 to-brand-600 rounded-lg shadow-sm">
                 <span className="text-white font-bold text-sm">₨</span>
               </div>
               <h4 className="font-bold text-gray-800 text-base sm:text-lg">
@@ -354,13 +354,13 @@ const TeacherFilters = ({
                     placeholder="Min rate"
                     value={filters.minRate}
                     onChange={handleMinRateChange}
-                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
                     min="0"
                     max="10000"
                   />
                 </div>
-                <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center">
-                  <span className="text-blue-600 font-semibold text-sm">→</span>
+                <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center">
+                  <span className="text-brand-600 font-semibold text-sm">→</span>
                 </div>
                 <div className="flex-1 relative">
                   <input
@@ -368,23 +368,23 @@ const TeacherFilters = ({
                     placeholder="Max rate"
                     value={filters.maxRate}
                     onChange={handleMaxRateChange}
-                    className="w-full px-4 py-3.5 pl-4 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
                     min="0"
                     max="10000"
                   />
                 </div>
               </div>
-              <div className="text-xs text-blue-600 font-semibold text-center bg-blue-50 py-1.5 rounded-lg">
+              <div className="text-xs text-brand-700 font-semibold text-center bg-brand-50 py-1.5 rounded-lg">
                 Nepali Rupee (₨) per hour
               </div>
             </div>
           </div>
 
-          {/* Enhanced Location Filter with Debouncing */}
+          {/* Location Filter with Debouncing */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <MapPin size={18} className="text-blue-600" />
+              <div className="p-2 bg-brand-100 rounded-lg">
+                <MapPin size={18} className="text-brand-600" />
               </div>
               <h4 className="font-bold text-gray-800 text-base sm:text-lg">
                 Location Preference
@@ -396,16 +396,16 @@ const TeacherFilters = ({
                 placeholder="Search by city or region..."
                 value={localLocation}
                 onChange={handleLocationChange}
-                className="w-full px-4 py-3.5 pl-11 border-2 border-blue-100 rounded-xl bg-white placeholder-blue-300 text-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-200 hover:border-blue-300 shadow-sm"
+                className="w-full px-4 py-3.5 pl-11 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
               />
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-400">
+              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-400">
                 <Search size={16} />
               </div>
               {localLocation && (
                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
                   <button
                     onClick={handleClearLocation}
-                    className="text-blue-400 hover:text-blue-600"
+                    className="text-gray-400 hover:text-brand-600"
                   >
                     <X size={16} />
                   </button>
@@ -415,11 +415,11 @@ const TeacherFilters = ({
           </div>
         </div>
 
-        {/* Enhanced Clear Filters Button */}
+        {/* Clear Filters Button */}
         {hasActiveFilters() && (
           <button
             onClick={onClearFilters}
-            className="w-full py-3.5 px-4 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-bold rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 group"
+            className="w-full py-3.5 px-4 bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 text-white font-bold rounded-xl transition-all duration-200 transform hover:scale-[1.02] shadow-lg hover:shadow-xl flex items-center justify-center space-x-2 group"
           >
             <X
               size={18}
@@ -435,15 +435,15 @@ const TeacherFilters = ({
           width: 4px;
         }
         .custom-scrollbar::-webkit-scrollbar-track {
-          background: #f1f5f9;
+          background: #f1eee9;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb {
-          background: #bfdbfe;
+          background: #e4c7d3;
           border-radius: 10px;
         }
         .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-          background: #93c5fd;
+          background: #cf9fb3;
         }
       `}</style>
     </div>

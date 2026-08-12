@@ -3,10 +3,10 @@ import { Eye, Edit } from 'lucide-react';
 
 const ProfileOverviewCard = ({ profile }) => {
   return (
-    <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-      <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-gray-200">
+    <div className="bg-white rounded-lg shadow-sm border border-stone-200">
+      <div className="px-4 sm:px-6 py-3 sm:py-4 border-b border-stone-200">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-900 mb-2 sm:mb-0">Profile Overview</h2>
+          <h2 className="text-lg sm:text-xl font-serif font-semibold text-gray-900 mb-2 sm:mb-0">Profile Overview</h2>
         </div>
       </div>
 
@@ -39,7 +39,7 @@ const ProfileOverviewCard = ({ profile }) => {
                 {profile.preferredSubjects.map((subject, index) => (
                   <span
                     key={index}
-                    className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
+                    className="tag-subject"
                   >
                     {subject}
                   </span>

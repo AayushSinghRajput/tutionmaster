@@ -1,9 +1,9 @@
 import { BookOpen, AlertCircle } from "lucide-react";
 
 const BioSection = ({ data, errors, formErrors, register, onChange, bioLength }) => (
-  <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-2xl p-5 sm:p-8 border border-blue-200 w-full">
-    <h3 className="font-bold text-gray-800 text-lg sm:text-xl mb-4 sm:mb-6 flex items-center">
-      <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-blue-600 mr-2 sm:mr-3" />
+  <div className="bg-gradient-to-br from-brand-50 to-stone-100 rounded-2xl p-5 sm:p-8 border border-brand-200 w-full">
+    <h3 className="font-serif font-bold text-gray-800 text-lg sm:text-xl mb-4 sm:mb-6 flex items-center">
+      <BookOpen className="w-5 h-5 sm:w-6 sm:h-6 text-brand-600 mr-2 sm:mr-3" />
       Bio &amp; Teaching Philosophy *
     </h3>
     <p className="text-gray-600 text-base sm:text-lg mb-4 sm:mb-6">
@@ -30,10 +30,10 @@ const BioSection = ({ data, errors, formErrors, register, onChange, bioLength })
               value: data.bio || "",
               onChange: (e) => onChange?.("bio", e.target.value),
             })}
-        className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 resize-none ${
+        className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 resize-none ${
           errors?.bio || formErrors?.bio
             ? "border-red-500 bg-red-50"
-            : "border-blue-200 hover:border-blue-400"
+            : "border-brand-200 hover:border-brand-400"
         }`}
         placeholder="Describe your teaching experience, methodology, and what students can expect from your lessons..."
         rows="8"
@@ -46,7 +46,7 @@ const BioSection = ({ data, errors, formErrors, register, onChange, bioLength })
       )}
       <div
         className={`mt-3 text-base sm:text-lg font-semibold ${
-          bioLength < 50 ? "text-red-600" : "text-blue-600"
+          bioLength < 50 ? "text-red-600" : "text-success-600"
         }`}
       >
         {bioLength}/1000 characters

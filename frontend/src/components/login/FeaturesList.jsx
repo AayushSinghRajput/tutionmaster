@@ -11,10 +11,10 @@ const FEATURE_ICONS = {
 
 const FeaturesList = () => {
   return (
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-blue-100">
+    <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-brand-100">
       <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
-        <Star className="w-6 h-6 text-yellow-500" />
-        Why Learn With Us?
+        <Star className="w-6 h-6 text-gold-500" />
+        Why Tutors Choose TuitionMaster
       </h3>
 
       <div className="space-y-4">

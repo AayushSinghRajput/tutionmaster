@@ -25,7 +25,7 @@ const LoginForm = () => {
       toast.success("Logged In Successfully...", {
         position: "top-right",
         theme: "colored",
-        className: "bg-blue-600",
+        className: "bg-brand-600",
       });
     } else {
       toast.error(result.error || "Login failed. Please try again.", {
@@ -44,12 +44,12 @@ const LoginForm = () => {
   return (
     <div className="w-full">
       <div className="text-center mb-6 sm:mb-8">
-        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-blue-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
-          <LogIn className="w-7 h-7 sm:w-8 sm:h-8 text-blue-600" />
+        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-brand-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
+          <LogIn className="w-7 h-7 sm:w-8 sm:h-8 text-brand-600" />
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome Back</h2>
         <p className="text-sm sm:text-base text-gray-600 mt-2">
-          Continue your educational journey with us
+          Log in to manage your tutor profile
         </p>
       </div>
 
@@ -63,20 +63,20 @@ const LoginForm = () => {
             Email Address
           </label>
           <div className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-blue-600">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-brand-600">
               <Mail
                 size={20}
-                className="text-gray-400 group-focus-within:text-blue-500"
+                className="text-gray-400 group-focus-within:text-brand-500"
               />
             </div>
             <input
               type="email"
               id="email"
               placeholder="your@email.com"
-              className={`w-full pl-12 pr-4 py-3 sm:py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+              className={`w-full pl-12 pr-4 py-3 sm:py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
                 errors.email
                   ? "border-red-400 bg-red-25 focus:ring-red-200"
-                  : "border-gray-200 hover:border-blue-300 group-focus-within:border-blue-400"
+                  : "border-gray-200 hover:border-brand-300 group-focus-within:border-brand-400"
               }`}
               {...register("email", {
                 required: "Email is required",
@@ -106,26 +106,26 @@ const LoginForm = () => {
             </label>
             <a
               href="/forgot-password"
-              className="text-sm text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
             >
               Forgot password?
             </a>
           </div>
           <div className="relative group">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-blue-600">
+            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-brand-600">
               <Lock
                 size={20}
-                className="text-gray-400 group-focus-within:text-blue-500"
+                className="text-gray-400 group-focus-within:text-brand-500"
               />
             </div>
             <input
               type={showPassword ? "text" : "password"}
               id="password"
               placeholder="Enter your password"
-              className={`w-full pl-12 pr-12 py-3 sm:py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-blue-200 focus:border-blue-500 transition-all duration-300 ${
+              className={`w-full pl-12 pr-12 py-3 sm:py-4 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-3 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
                 errors.password
                   ? "border-red-400 bg-red-25 focus:ring-red-200"
-                  : "border-gray-200 hover:border-blue-300 group-focus-within:border-blue-400"
+                  : "border-gray-200 hover:border-brand-300 group-focus-within:border-brand-400"
               }`}
               {...register("password", {
                 required: "Password is required",
@@ -138,7 +138,7 @@ const LoginForm = () => {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-blue-600 transition-colors duration-200"
+              className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-brand-600 transition-colors duration-200"
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
             </button>
@@ -157,7 +157,7 @@ const LoginForm = () => {
             id="remember-me"
             name="remember-me"
             type="checkbox"
-            className="h-5 w-5 text-blue-600 focus:ring-blue-500 border-gray-300 rounded transition duration-200"
+            className="h-5 w-5 text-brand-600 focus:ring-brand-500 border-gray-300 rounded transition duration-200"
           />
           <label
             htmlFor="remember-me"
@@ -170,7 +170,7 @@ const LoginForm = () => {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full py-3.5 sm:py-4 px-6 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold shadow-lg shadow-blue-500/25 focus:outline-none focus:ring-4 focus:ring-blue-200 focus:ring-offset-2 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center gap-3 group"
+          className="w-full py-3.5 sm:py-4 px-6 rounded-xl bg-gradient-to-r from-brand-600 to-brand-700 hover:from-brand-700 hover:to-brand-800 text-white font-semibold shadow-lg shadow-brand-500/25 focus:outline-none focus:ring-4 focus:ring-brand-200 focus:ring-offset-2 transform hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none flex justify-center items-center gap-3 group"
           disabled={isLoading}
         >
           {isLoading ? (
@@ -206,11 +206,11 @@ const LoginForm = () => {
         <div className="mt-4 grid grid-cols-1 gap-3">
           <button
             onClick={() => fillDemoCredentials("teacher")}
-            className="flex items-center justify-center gap-3 px-4 py-3 border-2 border-blue-200 rounded-xl text-blue-700 hover:bg-blue-50 hover:border-blue-300 hover:shadow-md transition-all duration-200 group"
+            className="flex items-center justify-center gap-3 px-4 py-3 border-2 border-brand-200 rounded-xl text-brand-700 hover:bg-brand-50 hover:border-brand-300 hover:shadow-md transition-all duration-200 group"
           >
             <BookOpen
               size={18}
-              className="text-blue-600 group-hover:scale-110 transition-transform"
+              className="text-brand-600 group-hover:scale-110 transition-transform"
             />
             <div className="text-left">
               <div className="font-semibold text-sm">Teacher</div>
