@@ -3,12 +3,14 @@ const {
   register,
   login,
   getMe,
-  logout
+  logout,
+  googleAuth
 } = require('../controllers/authController');
 const {
   registerValidation,
   handleValidationErrors,
-  loginValidation
+  loginValidation,
+  googleAuthValidation
 } = require('../middleware/validation');
 const { protect } = require('../middleware/auth');
 
@@ -20,6 +22,9 @@ router.post('/register', registerValidation, handleValidationErrors, register);
 
 //route to login a teacher
 router.post('/login', loginValidation, handleValidationErrors, login);
+
+//route to login or register a teacher via Google
+router.post('/google', googleAuthValidation, handleValidationErrors, googleAuth);
 
 //route to get the personal info
 router.get('/me', protect, getMe);

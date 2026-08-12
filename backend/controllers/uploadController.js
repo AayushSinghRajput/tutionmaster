@@ -5,6 +5,21 @@ const streamifier = require("streamifier");
 const asyncHandler = require("../middleware/asyncHandler");
 const withRetry = require("../utils/withRetry");
 const logger = require("../utils/logger");
+const { PDFDocument } = require("pdf-lib");
+
+// Losslessly re-packs the PDF's internal object streams to shrink file size
+// before it's sent to Cloudinary. Falls back to the original buffer if the
+// PDF can't be parsed (e.g. encrypted or malformed files).
+const compressPdfBuffer = async (buffer) => {
+  try {
+    const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+    const compressed = await pdfDoc.save({ useObjectStreams: true });
+    return Buffer.from(compressed);
+  } catch (error) {
+    logger.warn(`PDF compression skipped, using original file: ${error.message}`);
+    return buffer;
+  }
+};
 
 const UPLOAD_TIMEOUT_MS = 60000;
 
@@ -59,10 +74,11 @@ exports.uploadCV = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Please upload a file", 400));
   }
   const file = req.files.cv;
+  const compressedData = await compressPdfBuffer(file.data);
 
   const result = await withRetry(
     () =>
-      streamUpload(file.data, {
+      streamUpload(compressedData, {
         folder: "tutionmaster/documents",
         resource_type: "raw",
         public_id: `${Date.now()}-${file.name.replace(/\.[^/.]+$/, "")}`, // Clean filename

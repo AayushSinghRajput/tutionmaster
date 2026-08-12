@@ -70,6 +70,23 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const loginWithGoogle = async (credential) => {
+    try {
+      setError('');
+      const response = await authService.googleLogin(credential);
+      const { token, user: userData } = response.data;
+
+      localStorage.setItem('token', token);
+      setUser(userData);
+
+      return { success: true };
+    } catch (err) {
+      const message = err.response?.data?.error || 'Google sign-in failed';
+      setError(message);
+      return { success: false, error: message };
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     setUser(null);
@@ -82,6 +99,7 @@ export const AuthProvider = ({ children }) => {
     error,
     login,
     register,
+    loginWithGoogle,
     logout,
     isAuthenticated: !!user,
   };

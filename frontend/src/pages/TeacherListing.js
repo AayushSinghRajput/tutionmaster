@@ -2,8 +2,6 @@ import { useState, useEffect } from "react";
 import { teacherService } from "../services/teacherService";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import {
-  TeacherListingHeader,
-  TeacherListingStats,
   TeacherListingSearch,
   TeacherFilterSidebar,
   TeacherListingResults,
@@ -130,8 +128,6 @@ const TeacherListing = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-gold-50 py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <TeacherListingHeader />
-        <TeacherListingStats />
         {/* <TeacherListingSearch /> */}
 
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">

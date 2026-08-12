@@ -37,6 +37,12 @@ exports.loginValidation = [
   .withMessage('Password must be atleast 6 characters long')
 ]
 
+exports.googleAuthValidation = [
+  body('credential')
+    .notEmpty()
+    .withMessage('Google credential is required')
+];
+
 exports.teacherProfileValidation = [
   body('name')
     .notEmpty()

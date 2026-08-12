@@ -3,6 +3,7 @@ const ErrorResponse = require('../utils/errorResponse');
 const cloudinary = require('../config/cloudinary');
 const asyncHandler = require('../middleware/asyncHandler');
 const withRetry = require('../utils/withRetry');
+const logger = require('../utils/logger');
 const {
   generateImageUrl,
   generatePdfViewUrl,
@@ -223,6 +224,37 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Not authorized to update this profile', 403));
   }
 
+  // If the avatar/CV is being replaced or cleared, delete the old Cloudinary
+  // asset so storage isn't wasted on orphaned files.
+  if (
+    'avatarPublicId' in req.body &&
+    teacher.avatarPublicId &&
+    req.body.avatarPublicId !== teacher.avatarPublicId
+  ) {
+    try {
+      await withRetry(
+        () => cloudinary.uploader.destroy(teacher.avatarPublicId, { resource_type: 'image' }),
+        { label: 'Cloudinary old avatar deletion' },
+      );
+    } catch (err) {
+      logger.warn(`Failed to delete old avatar from Cloudinary: ${err.message}`);
+    }
+  }
+  if (
+    'cvPublicId' in req.body &&
+    teacher.cvPublicId &&
+    req.body.cvPublicId !== teacher.cvPublicId
+  ) {
+    try {
+      await withRetry(
+        () => cloudinary.uploader.destroy(teacher.cvPublicId, { resource_type: 'raw' }),
+        { label: 'Cloudinary old CV deletion' },
+      );
+    } catch (err) {
+      logger.warn(`Failed to delete old CV from Cloudinary: ${err.message}`);
+    }
+  }
+
   teacher = await Teacher.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -299,77 +331,3 @@ exports.getMyProfile = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc    Update teacher avatar
-// @route   PUT /api/teachers/:id/avatar
-// @access  Private
-exports.updateTeacherAvatar = asyncHandler(async (req, res, next) => {
-  const teacher = await Teacher.findById(req.params.id);
-
-  if (!teacher) {
-    return next(new ErrorResponse('Teacher not found', 404));
-  }
-
-  // Make sure user is teacher owner or admin
-  if (teacher.userId.toString() !== req.user.id) {
-    return next(new ErrorResponse('Not authorized to update this teacher profile', 401));
-  }
-
-  if (req.body.avatarPublicId) {
-    // Delete old avatar from Cloudinary if exists
-    if (teacher.avatarPublicId) {
-      await withRetry(
-        () => cloudinary.uploader.destroy(teacher.avatarPublicId, { resource_type: 'image' }),
-        { label: 'Cloudinary avatar deletion' },
-      );
-    }
-    teacher.avatarPublicId = req.body.avatarPublicId;
-  }
-
-  await teacher.save();
-
-  const teacherObj = teacher.toObject();
-  teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
-
-  res.json({
-    success: true,
-    data: teacherObj
-  });
-});
-
-// @desc    Update teacher CV
-// @route   PUT /api/teachers/:id/cv
-// @access  Private
-exports.updateTeacherCV = asyncHandler(async (req, res, next) => {
-  const teacher = await Teacher.findById(req.params.id);
-
-  if (!teacher) {
-    return next(new ErrorResponse('Teacher not found', 404));
-  }
-
-  // Make sure user is teacher owner or admin
-  if (teacher.userId.toString() !== req.user.id) {
-    return next(new ErrorResponse('Not authorized to update this teacher profile', 401));
-  }
-
-  if (req.body.cvPublicId) {
-    // Delete old CV from Cloudinary if exists
-    if (teacher.cvPublicId) {
-      await withRetry(
-        () => cloudinary.uploader.destroy(teacher.cvPublicId, { resource_type: 'raw' }),
-        { label: 'Cloudinary CV deletion' },
-      );
-    }
-    teacher.cvPublicId = req.body.cvPublicId;
-  }
-
-  await teacher.save();
-
-  const teacherObj = teacher.toObject();
-  teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId);
-  teacherObj.cvDownloadUrl = generatePdfUrl(teacher.cvPublicId);
-
-  res.json({
-    success: true,
-    data: teacherObj
-  });
-});

@@ -1,7 +1,11 @@
+import { useState } from 'react';
 import { Clock, Shield, Phone, Mail, BookOpen } from 'lucide-react';
 import { faqs, officeHours } from '../../constants/contact/contactData';
 
 const ContactSidebar = () => {
+  const [showAllFaqs, setShowAllFaqs] = useState(false);
+  const visibleFaqs = showAllFaqs ? faqs : faqs.slice(0, 3);
+
   return (
     <div className="space-y-8">
       {/* Office Hours */}
@@ -36,7 +40,7 @@ const ContactSidebar = () => {
           </div>
           <div className="flex items-center gap-2">
             <Mail className="w-4 h-4" />
-            <span>aayushsinghrajput3003@gmail.com</span>
+            <span>hello.tuitionmaster@gmail.com</span>
           </div>
         </div>
       </div>
@@ -48,7 +52,7 @@ const ContactSidebar = () => {
           <h3 className="text-xl font-bold text-gray-900">Common Questions</h3>
         </div>
         <div className="space-y-4">
-          {faqs.slice(0, 3).map((faq, index) => (
+          {visibleFaqs.map((faq, index) => (
             <div key={index} className="border-l-4 border-brand-200 pl-4">
               <h4 className="font-semibold text-gray-900 text-sm mb-1">
                 {faq.question}
@@ -59,9 +63,18 @@ const ContactSidebar = () => {
             </div>
           ))}
         </div>
-        <button className="w-full mt-4 text-brand-600 hover:text-brand-700 font-semibold text-sm flex items-center justify-center gap-2 py-2">
-          View All FAQs
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <button
+          type="button"
+          onClick={() => setShowAllFaqs((prev) => !prev)}
+          className="w-full mt-4 text-brand-600 hover:text-brand-700 font-semibold text-sm flex items-center justify-center gap-2 py-2"
+        >
+          {showAllFaqs ? 'Show Less' : 'View All FAQs'}
+          <svg
+            className={`w-4 h-4 transition-transform duration-200 ${showAllFaqs ? '-rotate-90' : ''}`}
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>

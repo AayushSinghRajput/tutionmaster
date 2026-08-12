@@ -9,6 +9,10 @@ export const authService = {
     return api.post('/auth/register', { username, email, password, confirmPassword });
   },
 
+  googleLogin: (credential) => {
+    return api.post('/auth/google', { credential });
+  },
+
   getCurrentUser: async () => {
     const response = await api.get('/auth/me'); 
     return response.data.data; 

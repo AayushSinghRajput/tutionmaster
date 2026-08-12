@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import "react-toastify/dist/ReactToastify.css";
 
 // Context providers
@@ -32,8 +33,9 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
   return (
-    <AuthProvider>
-      <TeacherProvider>
+    <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID || ""}>
+      <AuthProvider>
+        <TeacherProvider>
         <div className=" min-h-screen flex flex-col bg-gray-50">
           <Header />
           <main className="flex-1 pt-16 sm:pt-20">
@@ -94,6 +96,7 @@ function App() {
         </div>
       </TeacherProvider>
     </AuthProvider>
+    </GoogleOAuthProvider>
   );
 }
 

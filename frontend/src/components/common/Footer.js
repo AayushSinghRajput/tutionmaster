@@ -111,7 +111,7 @@ const Footer = () => {
                 </div>
                 <div>
                   <span className="text-sm text-gray-700 block">Email</span>
-                  <span className="text-sm text-brand-600 font-medium">aayushsinghrajput3003@gmail.com</span>
+                  <span className="text-sm text-brand-600 font-medium">hello.tuitionmaster@gmail.com</span>
                 </div>
               </div>
               <div className="flex items-start gap-3 group">

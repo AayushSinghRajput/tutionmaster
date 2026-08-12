@@ -1,7 +1,12 @@
+const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const generateToken = require("../utils/generateToken");
 const asyncHandler = require('../middleware/asyncHandler');
+
+const googleClient = process.env.GOOGLE_CLIENT_ID
+  ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
+  : null;
 
 
 
@@ -104,5 +109,64 @@ exports.logout = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     message: 'Logged out successfully'
+  });
+});
+
+// @desc    Login or register a teacher via a Google ID token
+// @route   POST /api/auth/google
+// @access  Public
+exports.googleAuth = asyncHandler(async (req, res, next) => {
+  if (!googleClient) {
+    return next(new ErrorResponse('Google sign-in is not configured', 501));
+  }
+
+  const { credential } = req.body;
+
+  let payload;
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    payload = ticket.getPayload();
+  } catch (err) {
+    return next(new ErrorResponse('Invalid Google credential', 401));
+  }
+
+  const { sub: googleId, email, name, email_verified: emailVerified } = payload;
+
+  if (!email || !emailVerified) {
+    return next(new ErrorResponse('Google account email is not verified', 401));
+  }
+
+  let user = await User.findOne({ googleId });
+
+  if (!user) {
+    user = await User.findOne({ email });
+    if (user) {
+      // Link this Google account to the existing password-based account
+      user.googleId = googleId;
+      await user.save();
+    } else {
+      user = await User.create({
+        username: name || email.split('@')[0],
+        email,
+        googleId,
+        role: 'teacher',
+      });
+    }
+  }
+
+  const token = generateToken(user._id);
+
+  res.json({
+    success: true,
+    token,
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    },
   });
 });

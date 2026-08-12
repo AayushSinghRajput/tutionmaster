@@ -55,7 +55,7 @@ const ContactMap = () => {
                   </p>
                   <p className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-brand-600" />
-                    aayushsinghrajput3003@gmail.com
+                    hello.tuitionmaster@gmail.com
                   </p>
                 </div>
               </div>
