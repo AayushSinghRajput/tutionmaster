@@ -116,7 +116,8 @@ exports.getTeachers = asyncHandler(async (req, res) => {
     .populate('userId', 'email')
     .skip(skip)
     .limit(limitNum)
-    .sort({ createdAt: -1 });
+    .collation({ locale: 'en', strength: 2 })
+    .sort({ name: 1 });
 
   // Add Cloudinary URLs using helper functions
   const teachersWithUrls = teachers.map(teacher => {
