@@ -17,8 +17,7 @@ const StepCard = ({ step, index, isLast }) => {
           </div>
         </div>
         <h3 className="text-xl font-bold text-brand-900 mb-3">{step.title}</h3>
-        <p className="text-brand-700 mb-4">{step.description}</p>
-        <p className="text-sm text-brand-600 bg-brand-50 rounded-lg p-3">{step.details}</p>
+        <p className="text-brand-700">{step.description}</p>
       </div>
     </div>
   );

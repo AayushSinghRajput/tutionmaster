@@ -1,6 +1,10 @@
+// Load env vars first — modules required below (e.g. config/cloudinary.js,
+// controllers/authController.js) read process.env at require-time, so this
+// must run before any local module is imported.
+require("dotenv").config();
+
 const express = require("express");
 const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cors = require("cors");
 const helmet = require("helmet");
 const compression = require("compression");
@@ -17,10 +21,6 @@ const newsletterRoute = require("./routes/newsletterRoute");
 const uploadRoute = require("./routes/upload");
 const teacherRoute = require("./routes/teachers");
 const authRoute = require("./routes/auth");
-
-
-// Load env vars
-dotenv.config();
 
 // Fail fast if required config is missing
 validateEnv();

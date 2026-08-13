@@ -5,7 +5,7 @@ const HeroSection = ({ onWatchDemo }) => {
   return (
     <div className="container mx-auto px-4 sm:px-6 py-12 sm:py-16 text-center">
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-brand-900 mb-6">
-        Start Your Learning Journey in 4 Simple Steps
+        Start Your Learning Journey in 3 Simple Steps
       </h1>
       <p className="text-base sm:text-lg md:text-xl text-brand-700 max-w-2xl mx-auto mb-8">
         Find a tutor and get started with our personalized tutoring approach
