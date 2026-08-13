@@ -88,9 +88,18 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
+    // Update UI state immediately so logout feels instant regardless of
+    // network conditions. The API call happens in the background — but the
+    // request interceptor (services/api.js) reads the token from
+    // localStorage asynchronously, after this function returns, so the
+    // token must stay in storage until that request has actually been
+    // sent (not removed synchronously here) or it goes out unauthenticated
+    // and never reaches the tokenVersion bump on the backend.
     setUser(null);
     setError('');
+    authService.logout().catch(() => {}).finally(() => {
+      localStorage.removeItem('token');
+    });
   };
 
   const value = {

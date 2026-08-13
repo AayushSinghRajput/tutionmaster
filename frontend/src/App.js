@@ -1,3 +1,4 @@
+import { Suspense, lazy } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { GoogleOAuthProvider } from "@react-oauth/google";
@@ -10,25 +11,27 @@ import { TeacherProvider } from "./context/TeacherContext";
 // Components
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
-
-// Pages
-import Home from "./pages/Home";
-import TeacherListing from "./pages/TeacherListing";
-import TeacherDetails from "./pages/TeacherDetails";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import CreateProfile from "./pages/CreateProfile";
-import EditProfile from "./pages/EditProfile";
-import About from "./pages/About";
-import Contact from  './pages/Contact';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import TermsOfService from './pages/TermsOfService';
-import CookiePolicy from './pages/CookiePolicy';
-import HowItWorks from "./pages/HowItWorks";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 
 // Protected Route
 import ProtectedRoute from "./components/common/ProtectedRoute";
+
+// Pages — lazy-loaded so each route ships its own chunk instead of one
+// ever-growing bundle for the whole app.
+const Home = lazy(() => import("./pages/Home"));
+const TeacherListing = lazy(() => import("./pages/TeacherListing"));
+const TeacherDetails = lazy(() => import("./pages/TeacherDetails"));
+const Login = lazy(() => import("./pages/Login"));
+const Register = lazy(() => import("./pages/Register"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const CreateProfile = lazy(() => import("./pages/CreateProfile"));
+const EditProfile = lazy(() => import("./pages/EditProfile"));
+const About = lazy(() => import("./pages/About"));
+const Contact = lazy(() => import("./pages/Contact"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
+const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 
 
 function App() {
@@ -39,6 +42,7 @@ function App() {
         <div className=" min-h-screen flex flex-col bg-gray-50">
           <Header />
           <main className="flex-1 pt-16 sm:pt-20">
+            <Suspense fallback={<LoadingSpinner fullScreen text="Loading..." />}>
             <Routes>
               {/* Public Routes */}
               <Route path="/" element={<Home />} />
@@ -80,6 +84,7 @@ function App() {
                 }
               />
             </Routes>
+            </Suspense>
           </main>
           <Footer />
           <ToastContainer

@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { MapPin, Clock } from "lucide-react";
 import { formatExperience } from "../../utils/helpers";
@@ -90,6 +91,23 @@ const TeacherCard = ({ teacher }) => {
       </div>
     </div>
   );
+};
+
+TeacherCard.propTypes = {
+  teacher: PropTypes.shape({
+    _id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    avatarUrl: PropTypes.string,
+    address: PropTypes.shape({
+      city: PropTypes.string,
+      state: PropTypes.string,
+    }).isRequired,
+    bio: PropTypes.string.isRequired,
+    experience: PropTypes.number.isRequired,
+    hourlyRate: PropTypes.number.isRequired,
+    preferredSubjects: PropTypes.arrayOf(PropTypes.string).isRequired,
+    teachingMode: PropTypes.string.isRequired,
+  }).isRequired,
 };
 
 export default TeacherCard;

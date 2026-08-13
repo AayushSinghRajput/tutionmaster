@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import { Loader } from 'lucide-react';
 
 const LoadingSpinner = ({ 
@@ -66,6 +67,14 @@ const LoadingSpinner = ({
   }
 
   return spinnerContent;
+};
+
+LoadingSpinner.propTypes = {
+  size: PropTypes.number,
+  text: PropTypes.string,
+  className: PropTypes.string,
+  variant: PropTypes.oneOf(['default', 'primary', 'light']),
+  fullScreen: PropTypes.bool,
 };
 
 export default LoadingSpinner;
