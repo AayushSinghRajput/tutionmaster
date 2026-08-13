@@ -14,7 +14,7 @@ const TeachingInfoSection = ({
       <div className="w-full">
         <label
           htmlFor="experience"
-          className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
+          className="flex items-end min-h-[2.75rem] sm:min-h-[3.25rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
         >
           Years of Experience *
         </label>
@@ -55,7 +55,7 @@ const TeachingInfoSection = ({
       <div className="w-full">
         <label
           htmlFor="hourlyRate"
-          className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
+          className="flex items-end min-h-[2.75rem] sm:min-h-[3.25rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
         >
           Hourly Rate (₨) *
         </label>
@@ -102,7 +102,7 @@ const TeachingInfoSection = ({
       <div className="w-full">
         <label
           htmlFor="teachingMode"
-          className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
+          className="flex items-end min-h-[2.75rem] sm:min-h-[3.25rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
         >
           Teaching Mode *
         </label>

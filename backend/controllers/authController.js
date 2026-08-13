@@ -3,6 +3,7 @@ const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const generateToken = require("../utils/generateToken");
 const asyncHandler = require('../middleware/asyncHandler');
+const logger = require('../utils/logger');
 
 const googleClient = process.env.GOOGLE_CLIENT_ID
   ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
@@ -130,6 +131,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     });
     payload = ticket.getPayload();
   } catch (err) {
+    logger.warn(`Google credential verification failed: ${err.message}`);
     return next(new ErrorResponse('Invalid Google credential', 401));
   }
 
