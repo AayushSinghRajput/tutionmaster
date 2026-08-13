@@ -5,7 +5,8 @@ const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
 
-  logger.error(err.stack || err.message);
+  const requestTag = req.id ? `[${req.id}] ` : '';
+  logger.error(`${requestTag}${err.stack || err.message}`);
 
   // Mongoose bad ObjectId
   if (err.name === 'CastError') {

@@ -35,7 +35,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     role: 'teacher'
   });
 
-  const token = generateToken(user._id);
+  const token = generateToken(user._id, user.tokenVersion);
 
   res.status(201).json({
     success: true,
@@ -72,7 +72,7 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
 
-  const token = generateToken(user._id);
+  const token = generateToken(user._id, user.tokenVersion);
 
   res.json({
     success: true,
@@ -103,10 +103,16 @@ exports.getMe = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc    Logout teacher / clear cookie
+// @desc    Logout teacher / invalidate their current token(s)
 // @route   POST /api/auth/logout
 // @access  Private
 exports.logout = asyncHandler(async (req, res) => {
+  // Bumping tokenVersion invalidates every JWT issued before this point
+  // (checked in middleware/auth.js `protect`), since there's no per-token
+  // store to revoke a single token individually.
+  req.user.tokenVersion += 1;
+  await req.user.save();
+
   res.json({
     success: true,
     message: 'Logged out successfully'
@@ -159,7 +165,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     }
   }
 
-  const token = generateToken(user._id);
+  const token = generateToken(user._id, user.tokenVersion);
 
   res.json({
     success: true,

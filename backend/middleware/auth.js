@@ -16,11 +16,17 @@ exports.protect = async (req, res, next) => {
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = await User.findById(decoded.id);
-    
+
     if (!req.user) {
       return next(new ErrorResponse('No user found with this id', 404));
     }
-    
+
+    // Tokens issued before the user's last logout carry a stale
+    // tokenVersion and must be rejected even though they haven't expired.
+    if ((decoded.tokenVersion || 0) !== req.user.tokenVersion) {
+      return next(new ErrorResponse('Session expired, please log in again', 401));
+    }
+
     next();
   } catch (error) {
     return next(new ErrorResponse('Not authorized to access this route', 401));

@@ -4,11 +4,50 @@ const cloudinary = require('../config/cloudinary');
 const asyncHandler = require('../middleware/asyncHandler');
 const withRetry = require('../utils/withRetry');
 const logger = require('../utils/logger');
+const escapeRegex = require('../utils/escapeRegex');
+const cache = require('../utils/cache');
+
+const SUBJECTS_CACHE_KEY = 'subjects';
+const SUBJECTS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 const {
   generateImageUrl,
   generatePdfViewUrl,
   generatePdfUrl,
 } = require('../utils/cloudinaryUtils');
+
+// Fields a user is allowed to set directly on their own teacher profile.
+// userId/isActive/timestamps etc. are deliberately excluded so a client
+// can't reassign a profile to another account or flip moderation flags
+// by stuffing extra keys into the request body (mass-assignment).
+const ALLOWED_TEACHER_FIELDS = [
+  'name',
+  'address',
+  'qualifications',
+  'contact',
+  'preferredSubjects',
+  'bio',
+  'experience',
+  'availability',
+  'teachingMode',
+  'hourlyRate',
+  'avatarPublicId',
+  'cvPublicId',
+];
+
+function pickAllowedTeacherFields(body) {
+  const picked = {};
+  for (const field of ALLOWED_TEACHER_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(body, field)) {
+      picked[field] = body[field];
+    }
+  }
+  return picked;
+}
+
+// Public list/search endpoints only ever need a handful of results per page;
+// without a hard cap a client can request `limit=1000000` and force a huge
+// collection scan / response payload.
+const MAX_PAGE_LIMIT = 50;
 
 // @desc    Get all teachers (public)
 // @route   GET /api/teachers
@@ -36,14 +75,14 @@ exports.getTeachers = asyncHandler(async (req, res) => {
 
     // Handle single subject (for backward compatibility)
     if (subject) {
-      subjectFilters.push(new RegExp(subject, 'i'));
+      subjectFilters.push(new RegExp(escapeRegex(subject), 'i'));
     }
 
     // Handle multiple subjects (comma-separated)
     if (subjects) {
       const subjectArray = subjects.split(',');
       subjectArray.forEach(sub => {
-        subjectFilters.push(new RegExp(sub.trim(), 'i'));
+        subjectFilters.push(new RegExp(escapeRegex(sub.trim()), 'i'));
       });
     }
 
@@ -51,7 +90,7 @@ exports.getTeachers = asyncHandler(async (req, res) => {
   }
 
   if (city) {
-    filter['address.city'] = new RegExp(city, 'i');
+    filter['address.city'] = new RegExp(escapeRegex(city), 'i');
   }
   if (teachingMode) {
     filter.teachingMode = teachingMode;
@@ -69,8 +108,8 @@ exports.getTeachers = asyncHandler(async (req, res) => {
 
 
 
-  const pageNum = parseInt(page);
-  const limitNum = parseInt(limit);
+  const pageNum = Math.max(1, parseInt(page) || 1);
+  const limitNum = Math.min(MAX_PAGE_LIMIT, Math.max(1, parseInt(limit) || 10));
   const skip = (pageNum - 1) * limitNum;
 
   const teachers = await Teacher.find(filter)
@@ -106,11 +145,35 @@ exports.getTeachers = asyncHandler(async (req, res) => {
 // @route GET /api/teachers/subject
 // @access Public
 exports.getAllSubjects = asyncHandler(async (req, res, next) => {
+  const cached = cache.get(SUBJECTS_CACHE_KEY);
+  if (cached) {
+    return res.status(200).json({ success: true, data: cached });
+  }
+
   const subjects = await Teacher.distinct("preferredSubjects");
-  subjects.sort((a, b) => a.localeCompare(b));
+
+  // Teachers may enter the same subject with different casing (e.g.
+  // "Computer" vs "computer"), so `distinct` alone can return duplicates.
+  // Dedupe case-insensitively, keeping one canonical label per subject.
+  const uniqueByLowerCase = new Map();
+  subjects.forEach((subject) => {
+    if (!subject) return;
+    const trimmed = subject.trim();
+    const key = trimmed.toLowerCase();
+    if (!uniqueByLowerCase.has(key)) {
+      uniqueByLowerCase.set(key, trimmed);
+    }
+  });
+
+  const uniqueSubjects = Array.from(uniqueByLowerCase.values()).sort((a, b) =>
+    a.localeCompare(b)
+  );
+
+  cache.set(SUBJECTS_CACHE_KEY, uniqueSubjects, SUBJECTS_CACHE_TTL_MS);
+
   res.status(200).json({
     success: true,
-    data: subjects,
+    data: uniqueSubjects,
   });
 });
 
@@ -123,19 +186,20 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
   let filter = { isActive: true };
 
   if (q) {
+    const qRegex = new RegExp(escapeRegex(q), 'i');
     filter.$or = [
-      { name: new RegExp(q, 'i') },
-      { bio: new RegExp(q, 'i') },
-      { 'address.city': new RegExp(q, 'i') }
+      { name: qRegex },
+      { bio: qRegex },
+      { 'address.city': qRegex }
     ];
   }
 
   if (subject) {
-    filter.preferredSubjects = { $in: [new RegExp(subject, 'i')] };
+    filter.preferredSubjects = { $in: [new RegExp(escapeRegex(subject), 'i')] };
   }
 
   if (city) {
-    filter['address.city'] = new RegExp(city, 'i');
+    filter['address.city'] = new RegExp(escapeRegex(city), 'i');
   }
 
   const teachers = await Teacher.find(filter)
@@ -194,9 +258,10 @@ exports.createTeacher = asyncHandler(async (req, res, next) => {
   }
 
   const teacher = await Teacher.create({
-    userId: req.user.id,
-    ...req.body
+    ...pickAllowedTeacherFields(req.body),
+    userId: req.user.id
   });
+  cache.clear(SUBJECTS_CACHE_KEY);
 
   const teacherObj = teacher.toObject();
   teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
@@ -257,9 +322,10 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
 
   teacher = await Teacher.findByIdAndUpdate(
     req.params.id,
-    req.body,
+    pickAllowedTeacherFields(req.body),
     { new: true, runValidators: true }
   ).populate('userId', 'email');
+  cache.clear(SUBJECTS_CACHE_KEY);
 
   const teacherObj = teacher.toObject();
   teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
@@ -269,6 +335,30 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
   res.json({
     success: true,
     data: teacherObj
+  });
+});
+
+// @desc    Activate/deactivate a teacher profile (moderation)
+// @route   PATCH /api/teachers/:id/status
+// @access  Private/Admin
+exports.setTeacherStatus = asyncHandler(async (req, res, next) => {
+  if (typeof req.body.isActive !== 'boolean') {
+    return next(new ErrorResponse('isActive must be a boolean', 400));
+  }
+
+  const teacher = await Teacher.findByIdAndUpdate(
+    req.params.id,
+    { isActive: req.body.isActive },
+    { new: true, runValidators: true }
+  );
+
+  if (!teacher) {
+    return next(new ErrorResponse('Teacher not found', 404));
+  }
+
+  res.json({
+    success: true,
+    data: { id: teacher._id, isActive: teacher.isActive }
   });
 });
 
@@ -301,6 +391,7 @@ exports.deleteTeacher = asyncHandler(async (req, res, next) => {
   }
 
   await Teacher.findByIdAndDelete(req.params.id);
+  cache.clear(SUBJECTS_CACHE_KEY);
 
   res.json({
     success: true,

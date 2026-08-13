@@ -26,8 +26,15 @@ const userSchema = new mongoose.Schema({
   },
   role: {
     type: String,
-    enum: ['teacher'],
+    enum: ['teacher', 'admin'],
     default: 'teacher'
+  },
+  // Bumped on logout (and available for a future "log out everywhere" /
+  // password-change flow) so a previously issued JWT can be invalidated
+  // before its natural expiry — see middleware/auth.js `protect`.
+  tokenVersion: {
+    type: Number,
+    default: 0
   }
 }, {
   timestamps: true

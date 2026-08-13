@@ -15,7 +15,7 @@ services:
       - key: JWT_SECRET
         generateValue: true
       - key: JWT_EXPIRE
-        value: 30d
+        value: 7d
       - key: CLOUDINARY_CLOUD_NAME
         sync: false
       - key: CLOUDINARY_API_KEY

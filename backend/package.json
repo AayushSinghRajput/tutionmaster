@@ -13,7 +13,7 @@
     "stop:prod": "pm2 stop ecosystem.config.js",
     "restart:prod": "pm2 restart ecosystem.config.js",
     "logs:prod": "pm2 logs tutionmaster-backend",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --runInBand"
   },
   "dependencies": {
     "bcryptjs": "^2.4.0",
@@ -35,10 +35,15 @@
     "multer": "^1.4.0",
     "pdf-lib": "^1.17.1",
     "streamifier": "^0.1.1",
+    "swagger-jsdoc": "^6.3.0",
+    "swagger-ui-express": "^5.0.1",
     "winston": "^3.19.0"
   },
   "devDependencies": {
+    "jest": "^30.4.2",
+    "mongodb-memory-server": "^11.2.0",
     "nodemon": "^2.0.0",
-    "pm2": "^7.0.3"
+    "pm2": "^7.0.3",
+    "supertest": "^7.2.2"
   }
 }
