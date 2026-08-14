@@ -19,6 +19,14 @@ services:
       - CLIENT_URL=http://localhost:3000
     ports:
       - "8000:8000"
+    # The anonymous volume below caches node_modules built for Linux inside
+    # the container, so the bind mount above (for live-reload) doesn't get
+    # clobbered by a Windows/macOS-built node_modules from the host. Trade-off:
+    # it also survives image rebuilds, so after adding/changing a dependency
+    # in package.json, `docker compose up --build` alone isn't enough — the
+    # old volume still shadows the new node_modules. Run:
+    #   docker compose up -d --build --renew-anon-volumes backend
+    # (or `docker volume rm` the volume shown by `docker inspect`) to refresh it.
     volumes:
       - ./backend:/app
       - /app/node_modules
@@ -32,9 +40,12 @@ services:
     env_file:
       - ./frontend/.env
     environment:
-      - REACT_APP_API_URL=http://localhost:8000/api
+      - REACT_APP_API_URL=http://localhost:8000/api/v1
     ports:
       - "3000:3000"
+    # Same anonymous-volume caveat as the backend service above — after
+    # changing frontend/package.json, run:
+    #   docker compose up -d --build --renew-anon-volumes frontend
     volumes:
       - ./frontend:/app
       - /app/node_modules
