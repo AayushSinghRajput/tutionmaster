@@ -1,7 +1,7 @@
 import { useState,useEffect } from "react";
 import { Plus, X, AlertCircle } from "lucide-react";
 
-const SubjectsSection = ({ errors, formErrors, value = [], onChange }) => {
+const SubjectsSection = ({ formErrors, value = [], onChange }) => {
   const [subjects, setSubjects] = useState(value);
   const [inputValue, setInputValue] = useState("");
 
@@ -80,10 +80,10 @@ const SubjectsSection = ({ errors, formErrors, value = [], onChange }) => {
       </div>
 
       {/* Validation error */}
-      {(errors || formErrors) && subjects.length < 1 && (
+      {formErrors?.preferredSubjects && (
         <p className="mt-4 text-red-600 flex items-center text-base">
           <AlertCircle className="w-5 h-5 mr-2" />
-          At least one subject is required.
+          {formErrors.preferredSubjects}
         </p>
       )}
     </div>

@@ -67,15 +67,19 @@ exports.teacherProfileValidation = [
     .withMessage('ZIP code is required')
     .isInt({ min: 10000, max: 99999 })
     .withMessage('ZIP code must be a valid 5-digit number'),
-  
+
   body('contact.email')
     .isEmail()
     .withMessage('Please provide a valid contact email'),
-  
+
   body('contact.phone')
     .matches(/^\+?[\d\s\-\(\)]{10,}$/)
     .withMessage('Please provide a valid phone number'),
-  
+
+  body('avatarPublicId')
+    .notEmpty()
+    .withMessage('Profile picture is required'),
+
   body('qualifications')
     .isArray({ min: 1 })
     .withMessage('At least one qualification is required'),
@@ -95,7 +99,11 @@ exports.teacherProfileValidation = [
   body('preferredSubjects')
     .isArray({ min: 1 })
     .withMessage('At least one preferred subject is required'),
-  
+
+  body('cvPublicId')
+    .notEmpty()
+    .withMessage('CV/Resume is required'),
+
   body('bio')
     .notEmpty()
     .withMessage('Bio is required')

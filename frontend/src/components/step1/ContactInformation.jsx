@@ -6,9 +6,12 @@ const ContactInformation = ({ data, errors, formErrors, onChange, register }) =>
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 w-full">
       {/* Email */}
       <div className="w-full">
-        <label htmlFor="email" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
+        <label htmlFor="email" className="block text-base sm:text-lg font-bold text-gray-800 mb-1">
           Email Address *
         </label>
+        <p className="text-sm text-gray-500 mb-2 sm:mb-3">
+          Pre-filled from your account — use a different one if you'd like students to contact you elsewhere.
+        </p>
         <input
           type="email"
           id="email"

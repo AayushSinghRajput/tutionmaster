@@ -129,6 +129,7 @@ return errors;
 const useTeacherFormValidation=({
 
 watchAvailability,
+watchSubjects,
 setFormErrors,
 setCurrentStep,
 avatarFile,
@@ -151,18 +152,44 @@ let valid=false;
 
 
 
+setFormErrors({});
+
+
+
 if(currentStep===1){
 
 
-valid=
+const fieldsValid=
 await trigger([
 "name",
 "contact.email",
 "contact.phone",
 "address.street",
 "address.state",
-"address.city"
+"address.city",
+"address.zipCode"
 ]);
+
+
+if(!fieldsValid)
+return false;
+
+
+if(!avatarFile){
+
+setFormErrors({
+
+avatar:
+"Profile picture is required"
+
+});
+
+return false;
+
+}
+
+
+valid=true;
 
 
 }
@@ -172,11 +199,45 @@ await trigger([
 else if(currentStep===2){
 
 
-valid=
+const fieldsValid=
 await trigger([
-"qualifications",
-"preferredSubjects"
+"qualifications"
 ]);
+
+
+if(!fieldsValid)
+return false;
+
+
+const stepErrors={};
+
+
+if(!watchSubjects?.length){
+
+stepErrors.preferredSubjects=
+"At least one subject is required";
+
+}
+
+
+if(!cvFile){
+
+stepErrors.cv=
+"CV/Resume is required";
+
+}
+
+
+if(Object.keys(stepErrors).length){
+
+setFormErrors(stepErrors);
+
+return false;
+
+}
+
+
+valid=true;
 
 
 }
@@ -274,12 +335,30 @@ const validation =
 validateTeacherProfile(data);
 
 
+const errors=
+{...validation.errors};
 
-if(!validation.isValid){
 
-setFormErrors(
-validation.errors
-);
+if(!avatarFile){
+
+errors.avatar=
+"Profile picture is required";
+
+}
+
+
+if(!cvFile){
+
+errors.cv=
+"CV/Resume is required";
+
+}
+
+
+
+if(Object.keys(errors).length){
+
+setFormErrors(errors);
 
 return;
 

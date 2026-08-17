@@ -3,9 +3,12 @@ import { AlertCircle } from "lucide-react";
 const BasicInformation = ({ data, errors, formErrors, onChange, register }) => (
   <div className="grid grid-cols-1 gap-8 w-full">
     <div className="w-full">
-      <label htmlFor="name" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
+      <label htmlFor="name" className="block text-base sm:text-lg font-bold text-gray-800 mb-1">
         Enter Your Full Name *
       </label>
+      <p className="text-sm text-gray-500 mb-2 sm:mb-3">
+        Pre-filled from your account — feel free to change it.
+      </p>
       <input
         type="text"
         id="name"

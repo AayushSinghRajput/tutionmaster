@@ -19,6 +19,10 @@ import useTeacherFormPersistence
     from "./useTeacherForm/useTeacherFormPersistence";
 
 
+import useTeacherFormAccountPrefill
+    from "./useTeacherForm/useTeacherFormAccountPrefill";
+
+
 
 const useTeacherForm = ({
     initialData,
@@ -195,6 +199,21 @@ const useTeacherForm = ({
 
 
 
+    useTeacherFormAccountPrefill({
+
+        enabled: !isEdit,
+
+        user,
+
+        getValues,
+
+        setValue
+
+    });
+
+
+
+
     useTeacherFormPersistence({
 
         enabled: !isEdit,
@@ -246,6 +265,8 @@ const useTeacherForm = ({
         useTeacherFormValidation({
 
             watchAvailability,
+
+            watchSubjects,
 
             setFormErrors,
 
