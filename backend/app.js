@@ -26,6 +26,12 @@ const authRoute = require("./routes/auth");
 
 const app = express();
 
+// Trust the single reverse proxy hop in front of the app (Render's edge
+// proxy locally, or the "backend" service behind a tunnel/proxy in dev),
+// so req.ip and express-rate-limit read the real client IP from
+// X-Forwarded-For instead of throwing ERR_ERL_UNEXPECTED_X_FORWARDED_FOR.
+app.set("trust proxy", 1);
+
 // Security headers
 app.use(helmet());
 
