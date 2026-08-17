@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { teacherService } from '../services/teacherService';
+import { useAuth } from '../context/AuthContext';
+import { clearTeacherProfileDraft } from '../utils/formDraftStorage';
 import LoadingSpinner from '../components/common/LoadingSpinner';
 import ProfilePageHeader from '../components/teachers/ProfilePageHeader';
 import ProfileFormCard from '../components/teachers/ProfileFormCard';
@@ -10,11 +12,13 @@ import { toast } from 'react-toastify';
 const CreateProfile = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleSubmit = async (profileData) => {
     setLoading(true);
     try {
       await teacherService.createTeacher(profileData);
+      clearTeacherProfileDraft(user?.id);
       toast.success('Profile created successfully!');
       navigate('/dashboard');
     } catch (error) {
@@ -26,7 +30,10 @@ const CreateProfile = () => {
     }
   };
 
-  const handleCancel = () => navigate('/dashboard');
+  const handleCancel = () => {
+    clearTeacherProfileDraft(user?.id);
+    navigate('/dashboard');
+  };
 
   if (loading) {
     return <LoadingSpinner text="Creating your profile..." />;

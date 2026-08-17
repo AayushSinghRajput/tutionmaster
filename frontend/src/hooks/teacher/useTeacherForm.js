@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
+import { useAuth } from "../../context/AuthContext";
 
 
 import useTeacherFormDefaults
@@ -14,11 +15,18 @@ import useTeacherFormValidation
     from "./useTeacherForm/useTeacherFormValidation";
 
 
+import useTeacherFormPersistence
+    from "./useTeacherForm/useTeacherFormPersistence";
+
+
 
 const useTeacherForm = ({
     initialData,
-    onSubmit
+    onSubmit,
+    isEdit
 }) => {
+
+    const { user } = useAuth();
 
 
 
@@ -63,6 +71,7 @@ const useTeacherForm = ({
         control,
         watch,
         setValue,
+        getValues,
         reset,
         trigger,
         formState: {
@@ -180,6 +189,27 @@ const useTeacherForm = ({
         setSelectedState,
 
         setIsFormReady
+
+    });
+
+
+
+
+    useTeacherFormPersistence({
+
+        enabled: !isEdit,
+
+        userId: user?.id,
+
+        watch,
+
+        getValues,
+
+        reset,
+
+        currentStep,
+
+        setCurrentStep
 
     });
 
