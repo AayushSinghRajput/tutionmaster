@@ -35,6 +35,8 @@ async function makeAdmin(email) {
 function validTeacherPayload(overrides = {}) {
   return {
     name: 'Jane Doe',
+    avatarPublicId: 'test/avatars/default',
+    cvPublicId: 'test/cvs/default',
     address: {
       street: '123 Main St',
       city: 'Kathmandu',
