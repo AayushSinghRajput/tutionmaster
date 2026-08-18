@@ -14,12 +14,21 @@ describe('POST /api/ai/chat', () => {
   });
 
   it('lets a guest chat and responds gracefully when Gemini is not configured', async () => {
-    const res = await request(app).post('/api/ai/chat').send({ message: 'Hello' });
+    const originalKey = process.env.GEMINI_API_KEY;
+    delete process.env.GEMINI_API_KEY;
 
-    expect(res.status).toBe(200);
-    expect(res.body.success).toBe(true);
-    expect(res.body.message).toMatch(/isn't configured/i);
-    expect(res.body.results).toEqual([]);
+    try {
+      const res = await request(app).post('/api/ai/chat').send({ message: 'Hello' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.message).toMatch(/isn't configured/i);
+      expect(res.body.results).toEqual([]);
+    } finally {
+      if (originalKey) {
+        process.env.GEMINI_API_KEY = originalKey;
+      }
+    }
   });
 
   it('accepts an authenticated request the same way — optionalAuth does not block a valid token', async () => {

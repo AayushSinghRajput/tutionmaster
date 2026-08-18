@@ -5,7 +5,7 @@
 // utils/validateEnv.js's required list (same pattern as GOOGLE_CLIENT_ID) —
 // the rest of the platform must keep working if the AI feature isn't
 // configured yet.
-const DEFAULT_MODEL = "gemini-2.0-flash";
+const DEFAULT_MODEL = "gemini-3.6-flash";
 const DEFAULT_TEMPERATURE = 0.3;
 const DEFAULT_MAX_OUTPUT_TOKENS = 1024;
 
