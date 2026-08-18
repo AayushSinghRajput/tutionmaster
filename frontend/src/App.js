@@ -12,6 +12,7 @@ import { TeacherProvider } from "./context/TeacherContext";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import ChatWidget from "./components/ai/ChatWidget";
 
 // Protected Route
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -87,6 +88,7 @@ function App() {
             </Suspense>
           </main>
           <Footer />
+          <ChatWidget />
           <ToastContainer
             position="top-right"
             autoClose={5000}
