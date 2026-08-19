@@ -63,9 +63,12 @@ class GeminiProvider extends AIProvider {
         id: call.id,
       }));
 
+      const parts = response.candidates?.[0]?.content?.parts || [];
+
       return {
         text: functionCalls.length ? null : response.text || null,
         functionCalls,
+        parts,
         usage: response.usageMetadata || null,
       };
     } catch (error) {

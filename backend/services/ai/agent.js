@@ -105,7 +105,7 @@ async function chat({ message, history, user, provider } = {}) {
 
     contents.push({
       role: "model",
-      parts: response.functionCalls.map((call) => ({
+      parts: response.parts || response.functionCalls.map((call) => ({
         functionCall: { name: call.name, args: call.args },
       })),
     });
