@@ -5,6 +5,10 @@ import {
   TeacherListingResults,
   TeacherListingSkeleton,
 } from "../components/teacherListing";
+import {
+  getCachedTeachers,
+  setCachedTeachers,
+} from "../utils/seo/teacherCache";
 
 const TeacherListing = () => {
   const [teachers, setTeachers] = useState([]);
@@ -78,8 +82,31 @@ const TeacherListing = () => {
         }
       });
 
+      //Check frontend cache first
+      const cachedResponse = getCachedTeachers(params);
+
+      if (cachedResponse) {
+        const { data, pagination: paginationData } = cachedResponse;
+        setTeachers(data);
+        setPagination((prev) => ({
+          ...prev,
+          totalPages: paginationData.pages,
+          total: paginationData.total,
+        }));
+        setLoading(false);
+        return;
+      }
+
+      //No cache found
+      setLoading(true);
+
       const response = await teacherService.getAllTeachers(params);
       const { data, pagination: paginationData } = response.data;
+      //Save successful response to cache
+      setCachedTeachers(params, {
+        data,
+        pagination: paginationData,
+      });
       setTeachers(data);
       setPagination((prev) => ({
         ...prev,
