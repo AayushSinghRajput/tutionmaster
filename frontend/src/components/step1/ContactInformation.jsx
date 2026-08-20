@@ -9,9 +9,6 @@ const ContactInformation = ({ data, errors, formErrors, onChange, register }) =>
         <label htmlFor="email" className="block text-base sm:text-lg font-bold text-gray-800 mb-1">
           Email Address *
         </label>
-        <p className="text-sm text-gray-500 mb-2 sm:mb-3">
-          Pre-filled from your account — use a different one if you'd like students to contact you elsewhere.
-        </p>
         <input
           type="email"
           id="email"
@@ -65,3 +62,4 @@ const ContactInformation = ({ data, errors, formErrors, onChange, register }) =>
 );
 
 export default ContactInformation;
+ 
