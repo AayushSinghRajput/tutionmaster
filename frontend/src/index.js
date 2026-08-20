@@ -4,7 +4,11 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import ErrorBoundary from "./components/common/ErrorBoundary";
-import "./index.css";
+import "./index.css"; 
+import AnalyticsTracker from "./components/common/AnalyticsTracker";
+import { initGoogleAnalytics } from "./analytics/googleAnalytics";
+
+initGoogleAnalytics();
 
 // AuthProvider lives inside App.js (alongside GoogleOAuthProvider and
 // TeacherProvider, which itself depends on auth context) — do not wrap it
@@ -15,6 +19,7 @@ root.render(
   <React.StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
+        <AnalyticsTracker />
         <HelmetProvider>
           <App />
         </HelmetProvider>
