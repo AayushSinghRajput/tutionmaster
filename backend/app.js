@@ -23,6 +23,7 @@ const newsletterRoute = require("./routes/newsletterRoute");
 const uploadRoute = require("./routes/upload");
 const teacherRoute = require("./routes/teachers");
 const authRoute = require("./routes/auth");
+const aiRoute = require("./routes/ai");
 
 const app = express();
 
@@ -95,6 +96,7 @@ const mountRoutes = (prefix) => {
   app.use(`${prefix}/teachers`, teacherRoute);
   app.use(`${prefix}/upload`, uploadRoute);
   app.use(`${prefix}/newsletter`, newsletterRoute);
+  app.use(`${prefix}/ai`, aiRoute);
 };
 mountRoutes("/api");
 mountRoutes("/api/v1");

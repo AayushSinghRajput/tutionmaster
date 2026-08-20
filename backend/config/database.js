@@ -14,7 +14,13 @@ mongoose.connection.on("disconnected", () => {
 
 const connectDB = async (retriesLeft = MAX_RETRIES, delay = INITIAL_DELAY_MS) => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    const isProduction = process.env.NODE_ENV === "production";
+    const dbUri = isProduction
+      ? process.env.MONGODB_URI
+      : (process.env.MONGODB_URI_LOCAL || "mongodb://127.0.0.1:27017/tutionmaster");
+
+    logger.info(`Connecting to MongoDB (env: ${process.env.NODE_ENV || "development"})...`);
+    await mongoose.connect(dbUri, {
       maxPoolSize: 10,
     });
     logger.info("MongoDB Connected ...");

@@ -43,6 +43,31 @@ exports.googleAuthValidation = [
     .withMessage('Google credential is required')
 ];
 
+exports.aiChatValidation = [
+  body('message')
+    .trim()
+    .notEmpty()
+    .withMessage('Message is required')
+    .isLength({ max: 2000 })
+    .withMessage('Message must be less than 2000 characters'),
+
+  body('history')
+    .optional()
+    .isArray({ max: 20 })
+    .withMessage('History must be an array of at most 20 messages'),
+
+  body('history.*.role')
+    .optional()
+    .isIn(['user', 'assistant'])
+    .withMessage('History entries must have role "user" or "assistant"'),
+
+  body('history.*.content')
+    .optional()
+    .isString()
+    .isLength({ max: 2000 })
+    .withMessage('History entry content must be a string under 2000 characters'),
+];
+
 exports.teacherProfileValidation = [
   body('name')
     .notEmpty()

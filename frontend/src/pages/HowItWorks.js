@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import HeroSection from '../components/works/HeroSection';
 import StepsSection from '../components/works/StepsSection';
 import FeaturesSection from '../components/works/FeaturesSection';
@@ -5,8 +6,10 @@ import StatsSection from '../components/works/StatsSection';
 import CtaSection from '../components/works/CtaSection';
 
 const HowItWorks = () => {
+  const navigate = useNavigate();
+
   const handleWatchDemo = () => {
-    // open a demo modal/video, or navigate to a demo page
+    navigate('/how-it-works/teacher-profile');
   };
 
   const handleBookTrial = () => {

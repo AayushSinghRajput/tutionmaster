@@ -1,3 +1,10 @@
-# https://www.robotstxt.org/robotstxt.html
 User-agent: *
-Disallow:
+Allow: /
+
+Disallow: /dashboard
+Disallow: /create-profile
+Disallow: /edit-profile
+Disallow: /login
+Disallow: /register
+
+Sitemap: https://tuitionmaster.guru/sitemap.xml

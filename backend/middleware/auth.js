@@ -33,6 +33,36 @@ exports.protect = async (req, res, next) => {
   }
 };
 
+// For routes usable by both guests and logged-in users (e.g. AI chat), where
+// a missing/invalid token means "treat as guest" rather than a 401 — but a
+// *present* token still gets verified exactly like `protect`, so nothing can
+// impersonate a user with a bad token.
+exports.optionalAuth = async (req, res, next) => {
+  let token;
+
+  if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next();
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (user && (decoded.tokenVersion || 0) === user.tokenVersion) {
+      req.user = user;
+    }
+  } catch (error) {
+    // Invalid/expired token on an optional-auth route: proceed as a guest
+    // rather than rejecting the request.
+  }
+
+  next();
+};
+
 exports.authorize = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {

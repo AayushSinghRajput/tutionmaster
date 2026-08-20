@@ -12,6 +12,7 @@ import { TeacherProvider } from "./context/TeacherContext";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import LoadingSpinner from "./components/common/LoadingSpinner";
+import ChatWidget from "./components/ai/ChatWidget";
 
 // Protected Route
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -32,6 +33,7 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
+const TeacherProfileDemo = lazy(() => import("./pages/TeacherProfileDemo"));
 
 
 function App() {
@@ -56,6 +58,7 @@ function App() {
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/cookie-policy" element={<CookiePolicy />} />
               <Route path="/how-it-works" element={<HowItWorks/>}/>
+              <Route path="/how-it-works/teacher-profile" element={<TeacherProfileDemo/>}/>
 
 
               {/* Protected Routes */}
@@ -87,6 +90,7 @@ function App() {
             </Suspense>
           </main>
           <Footer />
+          <ChatWidget />
           <ToastContainer
             position="top-right"
             autoClose={5000}
