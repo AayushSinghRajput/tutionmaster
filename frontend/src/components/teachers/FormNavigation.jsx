@@ -27,12 +27,12 @@ const FormNavigation = ({
     </div>
 
     {/* Cancel + Next/Submit buttons */}
-    <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+    <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
       {onCancel && (
         <button
           type="button"
           onClick={onCancel}
-          className="w-full sm:w-auto flex items-center justify-center space-x-2 sm:space-x-3 px-6 py-3 sm:px-8 sm:py-4 text-gray-700 border-2 border-stone-300 rounded-2xl hover:bg-stone-50 hover:border-stone-400 transition-all duration-300 font-bold text-base sm:text-lg shadow-sm"
+          className="w-full sm:w-auto flex items-center justify-center space-x-2 sm:space-x-3 px-6 py-3 sm:px-8 sm:py-4 text-gray-700 border-2 border-brand-300 rounded-2xl hover:bg-brand-50 hover:border-brand-400 transition-all duration-300 font-bold text-base sm:text-lg shadow-sm"
         >
           <X className="w-5 h-5 sm:w-6 sm:h-6" />
           <span>{cancelButtonText}</span>

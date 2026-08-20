@@ -33,6 +33,7 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
+const TeacherProfileDemo = lazy(() => import("./pages/TeacherProfileDemo"));
 
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
               <Route path="/terms-of-service" element={<TermsOfService />} />
               <Route path="/cookie-policy" element={<CookiePolicy />} />
               <Route path="/how-it-works" element={<HowItWorks/>}/>
+              <Route path="/how-it-works/teacher-profile" element={<TeacherProfileDemo/>}/>
 
 
               {/* Protected Routes */}
