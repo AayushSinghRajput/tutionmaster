@@ -1,10 +1,9 @@
 import { useState, useEffect } from "react";
 import { teacherService } from "../services/teacherService";
-import LoadingSpinner from "../components/common/LoadingSpinner";
 import {
-  TeacherListingSearch,
   TeacherFilterSidebar,
   TeacherListingResults,
+  TeacherListingSkeleton,
 } from "../components/teacherListing";
 
 const TeacherListing = () => {
@@ -33,36 +32,36 @@ const TeacherListing = () => {
   const fetchTeachers = async () => {
     try {
       setLoading(true);
-      
+
       const params = {
         page: pagination.page,
         limit: 12,
       };
 
       if (filters.subjects.length > 0) {
-        params.subjects = filters.subjects.join(',');
+        params.subjects = filters.subjects.join(",");
       }
-      
+
       if (filters.teachingMode) {
         params.teachingMode = filters.teachingMode;
       }
-      
+
       if (filters.minExperience) {
         params.minExperience = parseInt(filters.minExperience);
       }
-      
+
       if (filters.maxExperience) {
         params.maxExperience = parseInt(filters.maxExperience);
       }
-      
+
       if (filters.minRate) {
         params.minRate = parseInt(filters.minRate);
       }
-      
+
       if (filters.maxRate) {
         params.maxRate = parseInt(filters.maxRate);
       }
-      
+
       if (filters.location) {
         params.city = filters.location;
       }
@@ -122,14 +121,18 @@ const TeacherListing = () => {
   };
 
   if (loading && teachers.length === 0) {
-    return <LoadingSpinner text="Loading teachers..." />;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-gold-50 py-6 sm:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <TeacherListingSkeleton />
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-gold-50 py-6 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* <TeacherListingSearch /> */}
-
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           <TeacherFilterSidebar
             filters={filters}

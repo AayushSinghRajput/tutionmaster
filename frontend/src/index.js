@@ -4,7 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import { HelmetProvider } from "react-helmet-async";
 import App from "./App";
 import ErrorBoundary from "./components/common/ErrorBoundary";
-import "./index.css";
+import "./index.css"; 
+import AnalyticsTracker from "./components/common/AnalyticsTracker";
 import { initGoogleAnalytics } from "./analytics/googleAnalytics";
 
 initGoogleAnalytics();
