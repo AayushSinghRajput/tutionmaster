@@ -1,37 +1,37 @@
-const Teacher = require('../models/Teacher');
-const ErrorResponse = require('../utils/errorResponse');
-const cloudinary = require('../config/cloudinary');
-const asyncHandler = require('../middleware/asyncHandler');
-const withRetry = require('../utils/withRetry');
-const logger = require('../utils/logger');
-const escapeRegex = require('../utils/escapeRegex');
-const cache = require('../utils/cache');
+const Teacher = require("../models/Teacher");
+const ErrorResponse = require("../utils/errorResponse");
+const cloudinary = require("../config/cloudinary");
+const asyncHandler = require("../middleware/asyncHandler");
+const withRetry = require("../utils/withRetry");
+const logger = require("../utils/logger");
+const escapeRegex = require("../utils/escapeRegex");
+const cache = require("../utils/cache");
 
-const SUBJECTS_CACHE_KEY = 'subjects';
+const SUBJECTS_CACHE_KEY = "subjects";
 const SUBJECTS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 const {
   generateImageUrl,
   generatePdfViewUrl,
   generatePdfUrl,
-} = require('../utils/cloudinaryUtils');
+} = require("../utils/cloudinaryUtils");
 
 // Fields a user is allowed to set directly on their own teacher profile.
 // userId/isActive/timestamps etc. are deliberately excluded so a client
 // can't reassign a profile to another account or flip moderation flags
 // by stuffing extra keys into the request body (mass-assignment).
 const ALLOWED_TEACHER_FIELDS = [
-  'name',
-  'address',
-  'qualifications',
-  'contact',
-  'preferredSubjects',
-  'bio',
-  'experience',
-  'availability',
-  'teachingMode',
-  'hourlyRate',
-  'avatarPublicId',
-  'cvPublicId',
+  "name",
+  "address",
+  "qualifications",
+  "contact",
+  "preferredSubjects",
+  "bio",
+  "experience",
+  "availability",
+  "teachingMode",
+  "hourlyRate",
+  "avatarPublicId",
+  "cvPublicId",
 ];
 
 function pickAllowedTeacherFields(body) {
@@ -63,7 +63,7 @@ exports.getTeachers = asyncHandler(async (req, res) => {
     minExperience,
     maxExperience,
     minRate,
-    maxRate
+    maxRate,
   } = req.query;
 
   // Build filter object
@@ -75,14 +75,14 @@ exports.getTeachers = asyncHandler(async (req, res) => {
 
     // Handle single subject (for backward compatibility)
     if (subject) {
-      subjectFilters.push(new RegExp(escapeRegex(subject), 'i'));
+      subjectFilters.push(new RegExp(escapeRegex(subject), "i"));
     }
 
     // Handle multiple subjects (comma-separated)
     if (subjects) {
-      const subjectArray = subjects.split(',');
-      subjectArray.forEach(sub => {
-        subjectFilters.push(new RegExp(escapeRegex(sub.trim()), 'i'));
+      const subjectArray = subjects.split(",");
+      subjectArray.forEach((sub) => {
+        subjectFilters.push(new RegExp(escapeRegex(sub.trim()), "i"));
       });
     }
 
@@ -90,7 +90,7 @@ exports.getTeachers = asyncHandler(async (req, res) => {
   }
 
   if (city) {
-    filter['address.city'] = new RegExp(escapeRegex(city), 'i');
+    filter["address.city"] = new RegExp(escapeRegex(city), "i");
   }
   if (teachingMode) {
     filter.teachingMode = teachingMode;
@@ -106,27 +106,29 @@ exports.getTeachers = asyncHandler(async (req, res) => {
     if (maxRate) filter.hourlyRate.$lte = parseInt(maxRate);
   }
 
-
-
   const pageNum = Math.max(1, parseInt(page) || 1);
   const limitNum = Math.min(MAX_PAGE_LIMIT, Math.max(1, parseInt(limit) || 10));
   const skip = (pageNum - 1) * limitNum;
 
   const teachers = await Teacher.find(filter)
-    .populate('userId', 'email')
+    .populate("userId", "email")
+    .sort({name:1})
     .skip(skip)
     .limit(limitNum)
-    .collation({ locale: 'en', strength: 2 })
-    .sort({ name: 1 });
+    .collation({ locale: "en", strength: 2 })
+    .lean();
 
   // Add Cloudinary URLs using helper functions
-  const teachersWithUrls = teachers.map(teacher => {
-    const teacherObj = teacher.toObject();
-    teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
-    teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId); // Use viewing URL
-    teacherObj.cvDownloadUrl = generatePdfUrl(teacher.cvPublicId); // Add download URL separately
-    return teacherObj;
-  });
+  const teachersWithUrls = teachers.map((teacher) => ({
+    ...teacher,
+    avatarUrl: teacher.avatarPublicId
+      ? generateImageUrl(teacher.avatarPublicId)
+      : null,
+    cvUrl: teacher.cvPublicId ? generatePdfViewUrl(teacher.cvPublicId) : null,
+    cvDownloadUrl: teacher.cvPublicId
+      ? generatePdfUrl(teacher.cvPublicId)
+      : null,
+  }));
 
   const total = await Teacher.countDocuments(filter);
 
@@ -136,9 +138,9 @@ exports.getTeachers = asyncHandler(async (req, res) => {
     total,
     pagination: {
       page: pageNum,
-      pages: Math.ceil(total / limitNum)
+      pages: Math.ceil(total / limitNum),
     },
-    data: teachersWithUrls
+    data: teachersWithUrls,
   });
 });
 
@@ -167,7 +169,7 @@ exports.getAllSubjects = asyncHandler(async (req, res, next) => {
   });
 
   const uniqueSubjects = Array.from(uniqueByLowerCase.values()).sort((a, b) =>
-    a.localeCompare(b)
+    a.localeCompare(b),
   );
 
   cache.set(SUBJECTS_CACHE_KEY, uniqueSubjects, SUBJECTS_CACHE_TTL_MS);
@@ -187,28 +189,28 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
   let filter = { isActive: true };
 
   if (q) {
-    const qRegex = new RegExp(escapeRegex(q), 'i');
+    const qRegex = new RegExp(escapeRegex(q), "i");
     filter.$or = [
       { name: qRegex },
       { bio: qRegex },
-      { 'address.city': qRegex }
+      { "address.city": qRegex },
     ];
   }
 
   if (subject) {
-    filter.preferredSubjects = { $in: [new RegExp(escapeRegex(subject), 'i')] };
+    filter.preferredSubjects = { $in: [new RegExp(escapeRegex(subject), "i")] };
   }
 
   if (city) {
-    filter['address.city'] = new RegExp(escapeRegex(city), 'i');
+    filter["address.city"] = new RegExp(escapeRegex(city), "i");
   }
 
   const teachers = await Teacher.find(filter)
-    .populate('userId', 'email')
+    .populate("userId", "email")
     .limit(20)
     .sort({ experience: -1 });
 
-  const teachersWithUrls = teachers.map(teacher => {
+  const teachersWithUrls = teachers.map((teacher) => {
     const teacherObj = teacher.toObject();
     teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
     teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId); // Use viewing URL
@@ -219,7 +221,7 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     count: teachers.length,
-    data: teachersWithUrls
+    data: teachersWithUrls,
   });
 });
 
@@ -227,14 +229,17 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
 // @route   GET /api/teachers/:id
 // @access  Public
 exports.getTeacher = asyncHandler(async (req, res, next) => {
-  const teacher = await Teacher.findById(req.params.id).populate('userId', 'email name');
+  const teacher = await Teacher.findById(req.params.id).populate(
+    "userId",
+    "email name",
+  );
 
   if (!teacher) {
-    return next(new ErrorResponse('Teacher not found', 404));
+    return next(new ErrorResponse("Teacher not found", 404));
   }
 
-  if (!teacher.isActive && req.user?.role !== 'admin') {
-    return next(new ErrorResponse('Teacher profile is not available', 404));
+  if (!teacher.isActive && req.user?.role !== "admin") {
+    return next(new ErrorResponse("Teacher profile is not available", 404));
   }
 
   const teacherObj = teacher.toObject();
@@ -245,7 +250,7 @@ exports.getTeacher = asyncHandler(async (req, res, next) => {
 
   res.json({
     success: true,
-    data: teacherObj
+    data: teacherObj,
   });
 });
 
@@ -255,12 +260,12 @@ exports.getTeacher = asyncHandler(async (req, res, next) => {
 exports.createTeacher = asyncHandler(async (req, res, next) => {
   const existingProfile = await Teacher.findOne({ userId: req.user.id });
   if (existingProfile) {
-    return next(new ErrorResponse('Profile already exists for this user', 400));
+    return next(new ErrorResponse("Profile already exists for this user", 400));
   }
 
   const teacher = await Teacher.create({
     ...pickAllowedTeacherFields(req.body),
-    userId: req.user.id
+    userId: req.user.id,
   });
   cache.clear(SUBJECTS_CACHE_KEY);
 
@@ -271,7 +276,7 @@ exports.createTeacher = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: teacherObj
+    data: teacherObj,
   });
 });
 
@@ -282,39 +287,49 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
   let teacher = await Teacher.findById(req.params.id);
 
   if (!teacher) {
-    return next(new ErrorResponse('Teacher not found', 404));
+    return next(new ErrorResponse("Teacher not found", 404));
   }
 
   // Check ownership
   if (teacher.userId.toString() !== req.user.id) {
-    return next(new ErrorResponse('Not authorized to update this profile', 403));
+    return next(
+      new ErrorResponse("Not authorized to update this profile", 403),
+    );
   }
 
   // If the avatar/CV is being replaced or cleared, delete the old Cloudinary
   // asset so storage isn't wasted on orphaned files.
   if (
-    'avatarPublicId' in req.body &&
+    "avatarPublicId" in req.body &&
     teacher.avatarPublicId &&
     req.body.avatarPublicId !== teacher.avatarPublicId
   ) {
     try {
       await withRetry(
-        () => cloudinary.uploader.destroy(teacher.avatarPublicId, { resource_type: 'image' }),
-        { label: 'Cloudinary old avatar deletion' },
+        () =>
+          cloudinary.uploader.destroy(teacher.avatarPublicId, {
+            resource_type: "image",
+          }),
+        { label: "Cloudinary old avatar deletion" },
       );
     } catch (err) {
-      logger.warn(`Failed to delete old avatar from Cloudinary: ${err.message}`);
+      logger.warn(
+        `Failed to delete old avatar from Cloudinary: ${err.message}`,
+      );
     }
   }
   if (
-    'cvPublicId' in req.body &&
+    "cvPublicId" in req.body &&
     teacher.cvPublicId &&
     req.body.cvPublicId !== teacher.cvPublicId
   ) {
     try {
       await withRetry(
-        () => cloudinary.uploader.destroy(teacher.cvPublicId, { resource_type: 'raw' }),
-        { label: 'Cloudinary old CV deletion' },
+        () =>
+          cloudinary.uploader.destroy(teacher.cvPublicId, {
+            resource_type: "raw",
+          }),
+        { label: "Cloudinary old CV deletion" },
       );
     } catch (err) {
       logger.warn(`Failed to delete old CV from Cloudinary: ${err.message}`);
@@ -324,8 +339,8 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
   teacher = await Teacher.findByIdAndUpdate(
     req.params.id,
     pickAllowedTeacherFields(req.body),
-    { new: true, runValidators: true }
-  ).populate('userId', 'email');
+    { new: true, runValidators: true },
+  ).populate("userId", "email");
   cache.clear(SUBJECTS_CACHE_KEY);
 
   const teacherObj = teacher.toObject();
@@ -335,7 +350,7 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
 
   res.json({
     success: true,
-    data: teacherObj
+    data: teacherObj,
   });
 });
 
@@ -343,23 +358,23 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
 // @route   PATCH /api/teachers/:id/status
 // @access  Private/Admin
 exports.setTeacherStatus = asyncHandler(async (req, res, next) => {
-  if (typeof req.body.isActive !== 'boolean') {
-    return next(new ErrorResponse('isActive must be a boolean', 400));
+  if (typeof req.body.isActive !== "boolean") {
+    return next(new ErrorResponse("isActive must be a boolean", 400));
   }
 
   const teacher = await Teacher.findByIdAndUpdate(
     req.params.id,
     { isActive: req.body.isActive },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   );
 
   if (!teacher) {
-    return next(new ErrorResponse('Teacher not found', 404));
+    return next(new ErrorResponse("Teacher not found", 404));
   }
 
   res.json({
     success: true,
-    data: { id: teacher._id, isActive: teacher.isActive }
+    data: { id: teacher._id, isActive: teacher.isActive },
   });
 });
 
@@ -370,24 +385,29 @@ exports.deleteTeacher = asyncHandler(async (req, res, next) => {
   const teacher = await Teacher.findById(req.params.id);
 
   if (!teacher) {
-    return next(new ErrorResponse('Teacher not found', 404));
+    return next(new ErrorResponse("Teacher not found", 404));
   }
 
   // Check ownership
   if (teacher.userId.toString() !== req.user.id) {
-    return next(new ErrorResponse('Not authorized to delete this profile', 403));
+    return next(
+      new ErrorResponse("Not authorized to delete this profile", 403),
+    );
   }
 
   // Delete from Cloudinary if files exist
   if (teacher.avatarPublicId) {
     await withRetry(() => cloudinary.uploader.destroy(teacher.avatarPublicId), {
-      label: 'Cloudinary avatar deletion',
+      label: "Cloudinary avatar deletion",
     });
   }
   if (teacher.cvPublicId) {
     await withRetry(
-      () => cloudinary.uploader.destroy(teacher.cvPublicId, { resource_type: 'raw' }),
-      { label: 'Cloudinary CV deletion' },
+      () =>
+        cloudinary.uploader.destroy(teacher.cvPublicId, {
+          resource_type: "raw",
+        }),
+      { label: "Cloudinary CV deletion" },
     );
   }
 
@@ -396,7 +416,7 @@ exports.deleteTeacher = asyncHandler(async (req, res, next) => {
 
   res.json({
     success: true,
-    message: 'Teacher profile deleted successfully'
+    message: "Teacher profile deleted successfully",
   });
 });
 
@@ -405,11 +425,13 @@ exports.deleteTeacher = asyncHandler(async (req, res, next) => {
 // @access  Private
 // Fetches the logged-in teacher
 exports.getMyProfile = asyncHandler(async (req, res, next) => {
-  const teacher = await Teacher.findOne({ userId: req.user.id })
-    .populate('userId', 'email');
+  const teacher = await Teacher.findOne({ userId: req.user.id }).populate(
+    "userId",
+    "email",
+  );
 
   if (!teacher) {
-    return next(new ErrorResponse('Profile not found', 404));
+    return next(new ErrorResponse("Profile not found", 404));
   }
 
   const teacherObj = teacher.toObject();
@@ -419,7 +441,6 @@ exports.getMyProfile = asyncHandler(async (req, res, next) => {
 
   res.json({
     success: true,
-    data: teacherObj
+    data: teacherObj,
   });
 });
-

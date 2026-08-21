@@ -15,7 +15,7 @@ const qualificationSchema = new mongoose.Schema(
       required: [true, "Year is required"],
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const timeSlotSchema = new mongoose.Schema(
@@ -37,7 +37,7 @@ const timeSlotSchema = new mongoose.Schema(
       ],
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const availabilitySchema = new mongoose.Schema(
@@ -66,7 +66,7 @@ const availabilitySchema = new mongoose.Schema(
       },
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const teacherSchema = new mongoose.Schema(
@@ -186,7 +186,7 @@ const teacherSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Enhanced time validation middleware with AM/PM support
@@ -213,7 +213,7 @@ teacherSchema.pre("save", function (next) {
 
         if (start >= end) {
           return next(
-            new Error(`End time must be after start time for ${daySlot.day}`)
+            new Error(`End time must be after start time for ${daySlot.day}`),
           );
         }
       }
@@ -232,6 +232,7 @@ teacherSchema.virtual("formattedAvailability").get(function () {
     })),
   }));
 });
+
 
 teacherSchema.index({ "address.city": 1 });
 teacherSchema.index({ preferredSubjects: 1 });
