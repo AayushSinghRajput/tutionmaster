@@ -2,6 +2,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import { Analytics } from "@vercel/analytics/react";
 import "react-toastify/dist/ReactToastify.css";
 import { startBackendKeepAlive } from "./utils/seo/keepBackendAlive";
 
@@ -116,6 +117,7 @@ function App() {
               draggable
               pauseOnHover
             />
+            <Analytics />
           </div>
         </TeacherProvider>
       </AuthProvider>
