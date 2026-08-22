@@ -42,7 +42,7 @@ const Dashboard = () => {
     }
 
     try {
-      await teacherService.deleteProfile(profile._id);
+      await teacherService.deleteTeacher(profile._id);
       toast.success('Profile deleted successfully');
       setProfile(null);
     } catch (error) {
