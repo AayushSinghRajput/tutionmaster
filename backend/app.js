@@ -72,9 +72,19 @@ app.use(mongoSanitize());
 app.use(hpp());
 
 // Enable CORS (restrict to the configured frontend origin)
+const allowedOrigins = ["https://tuitionmaster.guru", "http://localhost:3000"];
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "http://localhost:3000",
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
+    credentials: true,
   }),
 );
 
