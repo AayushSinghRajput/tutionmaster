@@ -151,7 +151,7 @@ router.use(protect);
  *       400:
  *         description: Validation error, or a profile already exists for this user
  */
-router.post('/', teacherProfileValidation, handleValidationErrors, createTeacher);
+router.post('/', protect, teacherProfileValidation, handleValidationErrors, createTeacher);
 
 /**
  * @openapi
@@ -173,7 +173,7 @@ router.post('/', teacherProfileValidation, handleValidationErrors, createTeacher
  *       404:
  *         description: Not found
  */
-router.put('/:id', teacherProfileValidation, handleValidationErrors, updateTeacher);
+router.put('/:id', protect, teacherProfileValidation, handleValidationErrors, updateTeacher);
 
 /**
  * @openapi
@@ -204,7 +204,7 @@ router.put('/:id', teacherProfileValidation, handleValidationErrors, updateTeach
  *       404:
  *         description: Not found
  */
-router.patch('/:id/status', authorize('admin'), setTeacherStatus);
+router.patch('/:id/status', protect, authorize('admin'), setTeacherStatus);
 
 /**
  * @openapi
@@ -226,6 +226,6 @@ router.patch('/:id/status', authorize('admin'), setTeacherStatus);
  *       404:
  *         description: Not found
  */
-router.delete('/:id', deleteTeacher);
+router.delete('/:id', protect, deleteTeacher);
 
 module.exports = router;
