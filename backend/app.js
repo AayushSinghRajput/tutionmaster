@@ -72,7 +72,7 @@ app.use(mongoSanitize());
 app.use(hpp());
 
 // Enable CORS (restrict to the configured frontend origin)
-const allowedOrigins = ["https://tuitionmaster.guru", "http://localhost:3000"];
+const allowedOrigins = ["https://tuitionmaster.guru", "http://localhost:3000","https://www.tuitionmaster.guru"];
 app.use(
   cors({
     origin: (origin, callback) => {
