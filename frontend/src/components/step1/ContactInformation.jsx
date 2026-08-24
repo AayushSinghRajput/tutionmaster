@@ -3,10 +3,10 @@ import { AlertCircle } from "lucide-react";
 const ContactInformation = ({ data, errors, formErrors, onChange, register }) => (
   <div className="bg-gradient-to-br from-brand-50 to-stone-100 rounded-2xl p-5 sm:p-8 border border-brand-200 w-full">
     <h3 className="font-serif font-bold text-gray-800 text-lg sm:text-xl mb-4 sm:mb-6">Contact Information</h3>
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 w-full">
+    <div className="grid grid-cols-2 gap-4 sm:gap-6 w-full">
       {/* Email */}
       <div className="w-full">
-        <label htmlFor="email" className="block text-base sm:text-lg font-bold text-gray-800 mb-1">
+        <label htmlFor="email" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
           Email Address *
         </label>
         <input
