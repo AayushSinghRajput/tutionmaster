@@ -24,6 +24,7 @@ const uploadRoute = require("./routes/upload");
 const teacherRoute = require("./routes/teachers");
 const authRoute = require("./routes/auth");
 const aiRoute = require("./routes/ai");
+const sitemapRoutes = require("./routes/sitemapRoutes");
 
 const app = express();
 
@@ -107,6 +108,7 @@ const mountRoutes = (prefix) => {
   app.use(`${prefix}/upload`, uploadRoute);
   app.use(`${prefix}/newsletter`, newsletterRoute);
   app.use(`${prefix}/ai`, aiRoute);
+  app.use("/", sitemapRoutes);
 };
 mountRoutes("/api");
 mountRoutes("/api/v1");
