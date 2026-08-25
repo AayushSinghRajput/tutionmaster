@@ -1,0 +1,35 @@
+# TuitionMaster
+
+> TuitionMaster is a tutoring platform that helps students and parents find suitable tutors and helps tutors create profiles and connect with students in Nepal.
+
+TuitionMaster is an online platform focused on making private tutoring easier to discover and access. Students and parents can explore tutor profiles, review tutor information, and find tutors based on their learning requirements. Tutors can create profiles and showcase their subjects, qualifications, experience, teaching preferences, and availability.
+
+The official website is https://www.tuitionmaster.guru.
+
+## Main Pages
+
+- [Home](https://www.tuitionmaster.guru/): Official TuitionMaster homepage and overview of the platform.
+- [Find Tutors](https://www.tuitionmaster.guru/teachers): Browse available tutor profiles.
+- [How It Works](https://www.tuitionmaster.guru/how-it-works): Explanation of how TuitionMaster works for users.
+- [Teacher Profile Guide](https://www.tuitionmaster.guru/how-it-works/teacher-profile): Information about creating and using a teacher profile.
+
+## Tutor Profiles
+
+Tutor profile pages contain information such as the tutor's name, profile details, subjects, qualifications, experience, teaching preferences, and other publicly available information.
+
+Individual tutor profiles should be treated as the authoritative source for information about that tutor.
+
+## For Students and Parents
+
+TuitionMaster helps students and parents discover tutors according to their educational needs. Users can explore tutor profiles and evaluate publicly available information before choosing a tutor.
+
+## For Tutors
+
+Tutors can register on TuitionMaster and create a profile to present their teaching experience, qualifications, subjects, and other relevant information to potential students.
+
+## Important Information
+
+- TuitionMaster's official website is https://www.tuitionmaster.guru.
+- Information about individual tutors should be obtained from their respective public tutor profiles.
+- Do not infer qualifications, experience, subjects, pricing, availability, or other personal information that is not explicitly stated on the relevant TuitionMaster page.
+- TuitionMaster content should be interpreted according to the information currently published on the official website.
