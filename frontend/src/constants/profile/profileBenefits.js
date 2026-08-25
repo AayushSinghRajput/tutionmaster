@@ -13,12 +13,7 @@ export const PROFILE_BENEFITS = [
     id: 3,
     title: 'Flexible Scheduling',
     description: 'Set your own availability and rates',
-  },
-  {
-    id: 4,
-    title: 'Secure Payments',
-    description: 'Get paid securely through our platform',
-  },
+  }
 ];
 
 export const PROFILE_QUICK_TIPS = [
