@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://tutionmaster-backend.onrender.com/sitemap.xml"
+    }
+  ]
+}
