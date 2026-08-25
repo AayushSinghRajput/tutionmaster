@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
   <url>
-    <loc>https://tuitionmaster.guru/</loc>
+    <loc>https://www.tuitionmaster.guru/</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/about</loc>
+    <loc>https://www.tuitionmaster.guru/about</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/contact</loc>
+    <loc>https://www.tuitionmaster.guru/contact</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/teachers</loc>
+    <loc>https://www.tuitionmaster.guru/teachers</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/privacy-policy</loc>
+    <loc>https://www.tuitionmaster.guru/privacy-policy</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/terms-of-service</loc>
+    <loc>https://www.tuitionmaster.guru/terms-of-service</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/cookie-policy</loc>
+    <loc>https://www.tuitionmaster.guru/cookie-policy</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/how-it-works</loc>
+    <loc>https://www.tuitionmaster.guru/how-it-works</loc>
   </url>
 
   <url>
-    <loc>https://tuitionmaster.guru/how-it-works/teacher-profile</loc>
+    <loc>https://www.tuitionmaster.guru/how-it-works/teacher-profile</loc>
   </url>
+
 </urlset>
