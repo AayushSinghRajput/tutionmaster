@@ -4,8 +4,6 @@ import {
   X,
   FileText,
   Image,
-  CheckCircle,
-  AlertCircle,
   Loader,
 } from "lucide-react";
 import { uploadService } from "../../services/teacherService";
@@ -80,23 +78,13 @@ const FileUpload = ({
       setTimeout(() => {
         onUploadComplete(response.data.data);
         toast.success(
-          <div className="flex items-center space-x-2">
-            <CheckCircle size={18} className="text-green-500" />
-            <span>
-              {isImage ? "Profile image" : "CV document"} uploaded successfully!
-            </span>
-          </div>,
+          `${isImage ? "Profile image" : "CV document"} uploaded successfully!`,
         );
       }, 500);
     } catch (error) {
       clearInterval(progressInterval);
       toast.error(
-        <div className="flex items-center space-x-2">
-          <AlertCircle size={18} className="text-red-500" />
-          <span>
-            Failed to upload {isImage ? "profile image" : "CV document"}
-          </span>
-        </div>,
+        `Failed to upload ${isImage ? "profile image" : "CV document"}`,
       );
       setPreview(null);
     } finally {

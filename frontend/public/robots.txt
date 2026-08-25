@@ -1,10 +1,12 @@
 User-agent: *
 Allow: /
 
+# Private/user-specific pages
 Disallow: /dashboard
 Disallow: /create-profile
 Disallow: /edit-profile
 Disallow: /login
 Disallow: /register
 
-Sitemap: https://tuitionmaster.guru/sitemap.xml
+# Sitemap
+Sitemap: https://www.tuitionmaster.guru/sitemap.xml

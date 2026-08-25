@@ -9,12 +9,12 @@ const TeachingInfoSection = ({
   TEACHING_MODES,
 }) => (
   <div className="bg-gradient-to-br from-brand-50 to-stone-100 rounded-2xl p-5 sm:p-8 border border-brand-200 w-full">
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 w-full">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8 w-full">
       {/* Years of Experience */}
       <div className="w-full">
         <label
           htmlFor="experience"
-          className="flex items-end min-h-[2.75rem] sm:min-h-[3.25rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
+          className="flex items-end min-h-[3rem] sm:min-h-[3.5rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
         >
           Years of Experience *
         </label>
@@ -55,7 +55,7 @@ const TeachingInfoSection = ({
       <div className="w-full">
         <label
           htmlFor="hourlyRate"
-          className="flex items-end min-h-[2.75rem] sm:min-h-[3.25rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
+          className="flex items-end min-h-[3rem] sm:min-h-[3.5rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
         >
           Hourly Rate (₨) *
         </label>
@@ -102,7 +102,7 @@ const TeachingInfoSection = ({
       <div className="w-full">
         <label
           htmlFor="teachingMode"
-          className="flex items-end min-h-[2.75rem] sm:min-h-[3.25rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
+          className="flex items-end min-h-[3rem] sm:min-h-[3.5rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
         >
           Teaching Mode *
         </label>
