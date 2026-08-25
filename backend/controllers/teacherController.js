@@ -6,9 +6,11 @@ const withRetry = require("../utils/withRetry");
 const logger = require("../utils/logger");
 const escapeRegex = require("../utils/escapeRegex");
 const cache = require("../utils/cache");
+const { notifyIndexNow, getTeacherUrl } = require("../utils/indexNow");
 
 const SUBJECTS_CACHE_KEY = "subjects";
 const SUBJECTS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
+
 const {
   generateImageUrl,
   generatePdfViewUrl,
@@ -36,11 +38,13 @@ const ALLOWED_TEACHER_FIELDS = [
 
 function pickAllowedTeacherFields(body) {
   const picked = {};
+
   for (const field of ALLOWED_TEACHER_FIELDS) {
     if (Object.prototype.hasOwnProperty.call(body, field)) {
       picked[field] = body[field];
     }
   }
+
   return picked;
 }
 
@@ -71,7 +75,7 @@ exports.getTeachers = asyncHandler(async (req, res) => {
 
   // Handle both single subject and multiple subjects
   if (subject || subjects) {
-    let subjectFilters = [];
+    const subjectFilters = [];
 
     // Handle single subject (for backward compatibility)
     if (subject) {
@@ -81,8 +85,11 @@ exports.getTeachers = asyncHandler(async (req, res) => {
     // Handle multiple subjects (comma-separated)
     if (subjects) {
       const subjectArray = subjects.split(",");
+
       subjectArray.forEach((sub) => {
-        subjectFilters.push(new RegExp(escapeRegex(sub.trim()), "i"));
+        subjectFilters.push(
+          new RegExp(escapeRegex(sub.trim()), "i")
+        );
       });
     }
 
@@ -92,27 +99,47 @@ exports.getTeachers = asyncHandler(async (req, res) => {
   if (city) {
     filter["address.city"] = new RegExp(escapeRegex(city), "i");
   }
+
   if (teachingMode) {
     filter.teachingMode = teachingMode;
   }
+
   if (minExperience || maxExperience) {
     filter.experience = {};
-    if (minExperience) filter.experience.$gte = parseInt(minExperience);
-    if (maxExperience) filter.experience.$lte = parseInt(maxExperience);
+
+    if (minExperience) {
+      filter.experience.$gte = parseInt(minExperience);
+    }
+
+    if (maxExperience) {
+      filter.experience.$lte = parseInt(maxExperience);
+    }
   }
+
   if (minRate || maxRate) {
     filter.hourlyRate = {};
-    if (minRate) filter.hourlyRate.$gte = parseInt(minRate);
-    if (maxRate) filter.hourlyRate.$lte = parseInt(maxRate);
+
+    if (minRate) {
+      filter.hourlyRate.$gte = parseInt(minRate);
+    }
+
+    if (maxRate) {
+      filter.hourlyRate.$lte = parseInt(maxRate);
+    }
   }
 
   const pageNum = Math.max(1, parseInt(page) || 1);
-  const limitNum = Math.min(MAX_PAGE_LIMIT, Math.max(1, parseInt(limit) || 10));
+
+  const limitNum = Math.min(
+    MAX_PAGE_LIMIT,
+    Math.max(1, parseInt(limit) || 10)
+  );
+
   const skip = (pageNum - 1) * limitNum;
 
   const teachers = await Teacher.find(filter)
     .populate("userId", "email")
-    .sort({name:1})
+    .sort({ name: 1 })
     .skip(skip)
     .limit(limitNum)
     .collation({ locale: "en", strength: 2 })
@@ -121,10 +148,15 @@ exports.getTeachers = asyncHandler(async (req, res) => {
   // Add Cloudinary URLs using helper functions
   const teachersWithUrls = teachers.map((teacher) => ({
     ...teacher,
+
     avatarUrl: teacher.avatarPublicId
       ? generateImageUrl(teacher.avatarPublicId)
       : null,
-    cvUrl: teacher.cvPublicId ? generatePdfViewUrl(teacher.cvPublicId) : null,
+
+    cvUrl: teacher.cvPublicId
+      ? generatePdfViewUrl(teacher.cvPublicId)
+      : null,
+
     cvDownloadUrl: teacher.cvPublicId
       ? generatePdfUrl(teacher.cvPublicId)
       : null,
@@ -136,43 +168,56 @@ exports.getTeachers = asyncHandler(async (req, res) => {
     success: true,
     count: teachers.length,
     total,
+
     pagination: {
       page: pageNum,
       pages: Math.ceil(total / limitNum),
     },
+
     data: teachersWithUrls,
   });
 });
 
-// @desc Get all subjects
-// @route GET /api/teachers/subject
-// @access Public
+// @desc    Get all subjects
+// @route   GET /api/teachers/subject
+// @access  Public
 exports.getAllSubjects = asyncHandler(async (req, res, next) => {
   const cached = cache.get(SUBJECTS_CACHE_KEY);
+
   if (cached) {
-    return res.status(200).json({ success: true, data: cached });
+    return res.status(200).json({
+      success: true,
+      data: cached,
+    });
   }
 
   const subjects = await Teacher.distinct("preferredSubjects");
 
-  // Teachers may enter the same subject with different casing (e.g.
-  // "Computer" vs "computer"), so `distinct` alone can return duplicates.
-  // Dedupe case-insensitively, keeping one canonical label per subject.
+  // Teachers may enter the same subject with different casing
+  // (e.g. "Computer" vs "computer"), so `distinct` alone can
+  // return duplicates.
   const uniqueByLowerCase = new Map();
+
   subjects.forEach((subject) => {
     if (!subject) return;
+
     const trimmed = subject.trim();
     const key = trimmed.toLowerCase();
+
     if (!uniqueByLowerCase.has(key)) {
       uniqueByLowerCase.set(key, trimmed);
     }
   });
 
-  const uniqueSubjects = Array.from(uniqueByLowerCase.values()).sort((a, b) =>
-    a.localeCompare(b),
-  );
+  const uniqueSubjects = Array.from(
+    uniqueByLowerCase.values()
+  ).sort((a, b) => a.localeCompare(b));
 
-  cache.set(SUBJECTS_CACHE_KEY, uniqueSubjects, SUBJECTS_CACHE_TTL_MS);
+  cache.set(
+    SUBJECTS_CACHE_KEY,
+    uniqueSubjects,
+    SUBJECTS_CACHE_TTL_MS
+  );
 
   res.status(200).json({
     success: true,
@@ -190,6 +235,7 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
 
   if (q) {
     const qRegex = new RegExp(escapeRegex(q), "i");
+
     filter.$or = [
       { name: qRegex },
       { bio: qRegex },
@@ -198,7 +244,9 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
   }
 
   if (subject) {
-    filter.preferredSubjects = { $in: [new RegExp(escapeRegex(subject), "i")] };
+    filter.preferredSubjects = {
+      $in: [new RegExp(escapeRegex(subject), "i")],
+    };
   }
 
   if (city) {
@@ -212,9 +260,19 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
 
   const teachersWithUrls = teachers.map((teacher) => {
     const teacherObj = teacher.toObject();
-    teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
-    teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId); // Use viewing URL
-    teacherObj.cvDownloadUrl = generatePdfUrl(teacher.cvPublicId); // Add download URL
+
+    teacherObj.avatarUrl = generateImageUrl(
+      teacher.avatarPublicId
+    );
+
+    teacherObj.cvUrl = generatePdfViewUrl(
+      teacher.cvPublicId
+    );
+
+    teacherObj.cvDownloadUrl = generatePdfUrl(
+      teacher.cvPublicId
+    );
+
     return teacherObj;
   });
 
@@ -229,24 +287,41 @@ exports.searchTeachers = asyncHandler(async (req, res) => {
 // @route   GET /api/teachers/:id
 // @access  Public
 exports.getTeacher = asyncHandler(async (req, res, next) => {
-  const teacher = await Teacher.findById(req.params.id).populate(
-    "userId",
-    "email name",
-  );
+  const teacher = await Teacher.findById(
+    req.params.id
+  ).populate("userId", "email name");
 
   if (!teacher) {
-    return next(new ErrorResponse("Teacher not found", 404));
+    return next(
+      new ErrorResponse("Teacher not found", 404)
+    );
   }
 
-  if (!teacher.isActive && req.user?.role !== "admin") {
-    return next(new ErrorResponse("Teacher profile is not available", 404));
+  if (
+    !teacher.isActive &&
+    req.user?.role !== "admin"
+  ) {
+    return next(
+      new ErrorResponse(
+        "Teacher profile is not available",
+        404
+      )
+    );
   }
 
   const teacherObj = teacher.toObject();
 
-  teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
-  teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId); // Use viewing URL
-  teacherObj.cvDownloadUrl = generatePdfUrl(teacher.cvPublicId); // Add download URL separately
+  teacherObj.avatarUrl = generateImageUrl(
+    teacher.avatarPublicId
+  );
+
+  teacherObj.cvUrl = generatePdfViewUrl(
+    teacher.cvPublicId
+  );
+
+  teacherObj.cvDownloadUrl = generatePdfUrl(
+    teacher.cvPublicId
+  );
 
   res.json({
     success: true,
@@ -258,21 +333,51 @@ exports.getTeacher = asyncHandler(async (req, res, next) => {
 // @route   POST /api/teachers
 // @access  Private
 exports.createTeacher = asyncHandler(async (req, res, next) => {
-  const existingProfile = await Teacher.findOne({ userId: req.user.id });
+  const existingProfile = await Teacher.findOne({
+    userId: req.user.id,
+  });
+
   if (existingProfile) {
-    return next(new ErrorResponse("Profile already exists for this user", 400));
+    return next(
+      new ErrorResponse(
+        "Profile already exists for this user",
+        400
+      )
+    );
   }
 
   const teacher = await Teacher.create({
     ...pickAllowedTeacherFields(req.body),
     userId: req.user.id,
   });
+
   cache.clear(SUBJECTS_CACHE_KEY);
 
+  // Notify IndexNow about the newly created public profile.
+  // Failure must never cause the profile creation request to fail.
+  if (teacher.isActive) {
+    notifyIndexNow(getTeacherUrl(teacher._id)).catch(
+      (error) => {
+        logger.warn(
+          `IndexNow notification failed: ${error.message}`
+        );
+      }
+    );
+  }
+
   const teacherObj = teacher.toObject();
-  teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
-  teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId);
-  teacherObj.cvDownloadUrl = generatePdfUrl(teacher.cvPublicId);
+
+  teacherObj.avatarUrl = generateImageUrl(
+    teacher.avatarPublicId
+  );
+
+  teacherObj.cvUrl = generatePdfViewUrl(
+    teacher.cvPublicId
+  );
+
+  teacherObj.cvDownloadUrl = generatePdfUrl(
+    teacher.cvPublicId
+  );
 
   res.status(201).json({
     success: true,
@@ -287,18 +392,23 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
   let teacher = await Teacher.findById(req.params.id);
 
   if (!teacher) {
-    return next(new ErrorResponse("Teacher not found", 404));
+    return next(
+      new ErrorResponse("Teacher not found", 404)
+    );
   }
 
   // Check ownership
   if (teacher.userId.toString() !== req.user.id) {
     return next(
-      new ErrorResponse("Not authorized to update this profile", 403),
+      new ErrorResponse(
+        "Not authorized to update this profile",
+        403
+      )
     );
   }
 
-  // If the avatar/CV is being replaced or cleared, delete the old Cloudinary
-  // asset so storage isn't wasted on orphaned files.
+  // If the avatar is being replaced or cleared,
+  // delete the old Cloudinary asset.
   if (
     "avatarPublicId" in req.body &&
     teacher.avatarPublicId &&
@@ -307,17 +417,25 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
     try {
       await withRetry(
         () =>
-          cloudinary.uploader.destroy(teacher.avatarPublicId, {
-            resource_type: "image",
-          }),
-        { label: "Cloudinary old avatar deletion" },
+          cloudinary.uploader.destroy(
+            teacher.avatarPublicId,
+            {
+              resource_type: "image",
+            }
+          ),
+        {
+          label: "Cloudinary old avatar deletion",
+        }
       );
     } catch (err) {
       logger.warn(
-        `Failed to delete old avatar from Cloudinary: ${err.message}`,
+        `Failed to delete old avatar from Cloudinary: ${err.message}`
       );
     }
   }
+
+  // If the CV is being replaced or cleared,
+  // delete the old Cloudinary asset.
   if (
     "cvPublicId" in req.body &&
     teacher.cvPublicId &&
@@ -326,27 +444,58 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
     try {
       await withRetry(
         () =>
-          cloudinary.uploader.destroy(teacher.cvPublicId, {
-            resource_type: "raw",
-          }),
-        { label: "Cloudinary old CV deletion" },
+          cloudinary.uploader.destroy(
+            teacher.cvPublicId,
+            {
+              resource_type: "raw",
+            }
+          ),
+        {
+          label: "Cloudinary old CV deletion",
+        }
       );
     } catch (err) {
-      logger.warn(`Failed to delete old CV from Cloudinary: ${err.message}`);
+      logger.warn(
+        `Failed to delete old CV from Cloudinary: ${err.message}`
+      );
     }
   }
 
   teacher = await Teacher.findByIdAndUpdate(
     req.params.id,
     pickAllowedTeacherFields(req.body),
-    { new: true, runValidators: true },
+    {
+      new: true,
+      runValidators: true,
+    }
   ).populate("userId", "email");
+
   cache.clear(SUBJECTS_CACHE_KEY);
 
+  // Notify IndexNow about changes to active public profiles.
+  if (teacher.isActive) {
+    notifyIndexNow(getTeacherUrl(teacher._id)).catch(
+      (error) => {
+        logger.warn(
+          `IndexNow notification failed: ${error.message}`
+        );
+      }
+    );
+  }
+
   const teacherObj = teacher.toObject();
-  teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
-  teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId);
-  teacherObj.cvDownloadUrl = generatePdfUrl(teacher.cvPublicId);
+
+  teacherObj.avatarUrl = generateImageUrl(
+    teacher.avatarPublicId
+  );
+
+  teacherObj.cvUrl = generatePdfViewUrl(
+    teacher.cvPublicId
+  );
+
+  teacherObj.cvDownloadUrl = generatePdfUrl(
+    teacher.cvPublicId
+  );
 
   res.json({
     success: true,
@@ -359,22 +508,49 @@ exports.updateTeacher = asyncHandler(async (req, res, next) => {
 // @access  Private/Admin
 exports.setTeacherStatus = asyncHandler(async (req, res, next) => {
   if (typeof req.body.isActive !== "boolean") {
-    return next(new ErrorResponse("isActive must be a boolean", 400));
+    return next(
+      new ErrorResponse(
+        "isActive must be a boolean",
+        400
+      )
+    );
   }
 
   const teacher = await Teacher.findByIdAndUpdate(
     req.params.id,
-    { isActive: req.body.isActive },
-    { new: true, runValidators: true },
+    {
+      isActive: req.body.isActive,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
   );
 
   if (!teacher) {
-    return next(new ErrorResponse("Teacher not found", 404));
+    return next(
+      new ErrorResponse("Teacher not found", 404)
+    );
+  }
+
+  // Notify IndexNow only when the profile becomes
+  // publicly available.
+  if (teacher.isActive) {
+    notifyIndexNow(getTeacherUrl(teacher._id)).catch(
+      (error) => {
+        logger.warn(
+          `IndexNow notification failed: ${error.message}`
+        );
+      }
+    );
   }
 
   res.json({
     success: true,
-    data: { id: teacher._id, isActive: teacher.isActive },
+    data: {
+      id: teacher._id,
+      isActive: teacher.isActive,
+    },
   });
 });
 
@@ -385,34 +561,64 @@ exports.deleteTeacher = asyncHandler(async (req, res, next) => {
   const teacher = await Teacher.findById(req.params.id);
 
   if (!teacher) {
-    return next(new ErrorResponse("Teacher not found", 404));
+    return next(
+      new ErrorResponse("Teacher not found", 404)
+    );
   }
 
   // Check ownership
   if (teacher.userId.toString() !== req.user.id) {
     return next(
-      new ErrorResponse("Not authorized to delete this profile", 403),
+      new ErrorResponse(
+        "Not authorized to delete this profile",
+        403
+      )
     );
   }
 
-  // Delete from Cloudinary if files exist
+  // Save the public URL before deleting the database record.
+  const teacherUrl = getTeacherUrl(teacher._id);
+
+  // Delete avatar from Cloudinary if it exists.
   if (teacher.avatarPublicId) {
-    await withRetry(() => cloudinary.uploader.destroy(teacher.avatarPublicId), {
-      label: "Cloudinary avatar deletion",
-    });
+    await withRetry(
+      () =>
+        cloudinary.uploader.destroy(
+          teacher.avatarPublicId
+        ),
+      {
+        label: "Cloudinary avatar deletion",
+      }
+    );
   }
+
+  // Delete CV from Cloudinary if it exists.
   if (teacher.cvPublicId) {
     await withRetry(
       () =>
-        cloudinary.uploader.destroy(teacher.cvPublicId, {
-          resource_type: "raw",
-        }),
-      { label: "Cloudinary CV deletion" },
+        cloudinary.uploader.destroy(
+          teacher.cvPublicId,
+          {
+            resource_type: "raw",
+          }
+        ),
+      {
+        label: "Cloudinary CV deletion",
+      }
     );
   }
 
   await Teacher.findByIdAndDelete(req.params.id);
+
   cache.clear(SUBJECTS_CACHE_KEY);
+
+  // Notify IndexNow that the public URL has been removed.
+  // This is intentionally non-blocking.
+  notifyIndexNow(teacherUrl).catch((error) => {
+    logger.warn(
+      `IndexNow notification failed: ${error.message}`
+    );
+  });
 
   res.json({
     success: true,
@@ -423,21 +629,30 @@ exports.deleteTeacher = asyncHandler(async (req, res, next) => {
 // @desc    Get current teacher's profile
 // @route   GET /api/teachers/my-profile
 // @access  Private
-// Fetches the logged-in teacher
 exports.getMyProfile = asyncHandler(async (req, res, next) => {
-  const teacher = await Teacher.findOne({ userId: req.user.id }).populate(
-    "userId",
-    "email",
-  );
+  const teacher = await Teacher.findOne({
+    userId: req.user.id,
+  }).populate("userId", "email");
 
   if (!teacher) {
-    return next(new ErrorResponse("Profile not found", 404));
+    return next(
+      new ErrorResponse("Profile not found", 404)
+    );
   }
 
   const teacherObj = teacher.toObject();
-  teacherObj.avatarUrl = generateImageUrl(teacher.avatarPublicId);
-  teacherObj.cvUrl = generatePdfViewUrl(teacher.cvPublicId);
-  teacherObj.cvDownloadUrl = generatePdfUrl(teacher.cvPublicId);
+
+  teacherObj.avatarUrl = generateImageUrl(
+    teacher.avatarPublicId
+  );
+
+  teacherObj.cvUrl = generatePdfViewUrl(
+    teacher.cvPublicId
+  );
+
+  teacherObj.cvDownloadUrl = generatePdfUrl(
+    teacher.cvPublicId
+  );
 
   res.json({
     success: true,
