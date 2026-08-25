@@ -26,20 +26,28 @@ const TeacherSEO = ({ teacher, teacherId }) => {
 
   const description =
     subjects.length > 0
-      ? `View ${teacherName}'s profile on TuitionMaster. ${teacherName} teaches ${subjects
-          .join(", ")} in ${locationText}. ${experienceText} of teaching experience.`
+      ? `View ${teacherName}'s profile on TuitionMaster. ${teacherName} teaches ${subjects.join(
+          ", "
+        )} in ${locationText}. ${experienceText} of teaching experience.`
       : `View ${teacherName}'s teacher profile on TuitionMaster. ${teacherName} has ${experienceText} of teaching experience in ${locationText}.`;
 
   const canonicalUrl = `https://www.tuitionmaster.guru/teachers/${teacherId}`;
 
-  const imageUrl = "https://www.tuitionmaster.guru/logo.png";
+  // Use the teacher's actual profile image when available.
+  // Fall back to the TuitionMaster logo if no avatar exists.
+  const imageUrl =
+    teacher.avatarUrl || "https://www.tuitionmaster.guru/logo.png";
 
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "Person",
+
     name: teacherName,
+
     description,
+
     url: canonicalUrl,
+
     image: imageUrl,
 
     jobTitle: "Teacher",
@@ -53,7 +61,7 @@ const TeacherSEO = ({ teacher, teacherId }) => {
     address: {
       "@type": "PostalAddress",
       addressLocality: city,
-      addressRegion: state || undefined,
+      ...(state && { addressRegion: state }),
       addressCountry: "NP",
     },
 
@@ -63,35 +71,46 @@ const TeacherSEO = ({ teacher, teacherId }) => {
       "@type": "Occupation",
       name: "Teacher",
       occupationalCategory: "Teacher",
-      experienceRequirements:
-        experience > 0 ? `${experience} years of experience` : undefined,
     },
   };
 
   return (
     <Helmet>
+      {/* Basic SEO */}
       <title>{title}</title>
 
       <meta name="description" content={description} />
 
       <link rel="canonical" href={canonicalUrl} />
 
-      {/* Open Graph */}
+      {/* Open Graph / Facebook */}
       <meta property="og:type" content="profile" />
+
       <meta property="og:title" content={title} />
+
       <meta property="og:description" content={description} />
+
       <meta property="og:url" content={canonicalUrl} />
+
       <meta property="og:image" content={imageUrl} />
+
       <meta property="og:site_name" content="TuitionMaster" />
+
       <meta property="og:locale" content="en_NP" />
 
       {/* Twitter / X */}
       <meta name="twitter:card" content="summary_large_image" />
+
       <meta name="twitter:title" content={title} />
-      <meta name="twitter:description" content={description} />
+
+      <meta
+        name="twitter:description"
+        content={description}
+      />
+
       <meta name="twitter:image" content={imageUrl} />
 
-      {/* Structured Data */}
+      {/* Schema.org Structured Data */}
       <script type="application/ld+json">
         {JSON.stringify(structuredData)}
       </script>
