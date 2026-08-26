@@ -19,6 +19,7 @@ const swaggerSpec = require("./config/swagger");
 const errorHandler = require("./middleware/error");
 const { globalLimiter, authLimiter } = require("./middleware/rateLimiter");
 const logger = require("./utils/logger");
+const app = express();
 const newsletterRoute = require("./routes/newsletterRoute");
 const uploadRoute = require("./routes/upload");
 const teacherRoute = require("./routes/teachers");
@@ -26,7 +27,11 @@ const authRoute = require("./routes/auth");
 const aiRoute = require("./routes/ai");
 const sitemapRoutes = require("./routes/sitemapRoutes");
 
-const app = express();
+// Admin Panel routes
+const adminAuthRoutes = require("./admin-panel-server/routes/adminAuthRoutes");
+const adminTeacherRoutes = require("./admin-panel-server/routes/adminTeacherRoutes");
+const administratorRoutes = require("./admin-panel-server/routes/administratorRoutes");
+const dashboardRoutes = require("./admin-panel-server/routes/dashboardRoutes");
 
 // Trust the single reverse proxy hop in front of the app (Render's edge
 // proxy locally, or the "backend" service behind a tunnel/proxy in dev),
@@ -73,7 +78,13 @@ app.use(mongoSanitize());
 app.use(hpp());
 
 // Enable CORS (restrict to the configured frontend origin)
-const allowedOrigins = ["https://tuitionmaster.guru", "http://localhost:3000","https://www.tuitionmaster.guru"];
+const allowedOrigins = [
+  "https://tuitionmaster.guru",
+  "https://www.tuitionmaster.guru",
+  "http://localhost:3000",  // existing frontend
+  "http://localhost:5173",  // admin panel client (Vite dev)
+  process.env.ADMIN_PANEL_ORIGIN,  // production admin panel domain
+].filter(Boolean);
 app.use(
   cors({
     origin: (origin, callback) => {
@@ -112,6 +123,12 @@ const mountRoutes = (prefix) => {
 };
 mountRoutes("/api");
 mountRoutes("/api/v1");
+
+// Admin Panel API routes (separate auth from teacher routes)
+app.use("/api/admin/auth", adminAuthRoutes);
+app.use("/api/admin/teachers", adminTeacherRoutes);
+app.use("/api/admin/administrators", administratorRoutes);
+app.use("/api/admin/dashboard", dashboardRoutes);
 
 // API documentation (read-only, public — safe to leave open)
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
