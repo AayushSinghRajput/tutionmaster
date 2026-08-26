@@ -70,8 +70,10 @@ exports.getTeachers = asyncHandler(async (req, res) => {
     maxRate,
   } = req.query;
 
-  // Build filter object
-  let filter = { isActive: true };
+  // Build filter object — only return profiles that are both active AND
+  // visible (admin-approved).  The admin API uses a different controller
+  // that intentionally skips this visibility filter.
+  let filter = { isActive: true, isVisible: true };
 
   // Handle both single subject and multiple subjects
   if (subject || subjects) {
@@ -231,7 +233,7 @@ exports.getAllSubjects = asyncHandler(async (req, res, next) => {
 exports.searchTeachers = asyncHandler(async (req, res) => {
   const { q, subject, city } = req.query;
 
-  let filter = { isActive: true };
+  let filter = { isActive: true, isVisible: true };
 
   if (q) {
     const qRegex = new RegExp(escapeRegex(q), "i");
@@ -297,8 +299,9 @@ exports.getTeacher = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Public access: reject profiles that are not visible
   if (
-    !teacher.isActive &&
+    (!teacher.isActive || !teacher.isVisible) &&
     req.user?.role !== "admin"
   ) {
     return next(
