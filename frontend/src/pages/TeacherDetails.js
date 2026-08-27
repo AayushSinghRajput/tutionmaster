@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { Mail, Phone } from "lucide-react";
-import { Helmet } from "react-helmet-async";
 import { teacherService } from "../services/teacherService";
 import LoadingSpinner from "../components/common/LoadingSpinner";
 import TeacherNotFound from "../components/teachers/TeacherNotFound";
@@ -62,6 +61,13 @@ const TeacherDetails = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8">
             <div className="lg:col-span-2 space-y-6 sm:space-y-8">
               <AboutSection bio={teacher.bio} />
+              
+              {/* Mobile-only: rendered below About section */}
+              <div className="lg:hidden space-y-6 sm:space-y-8">
+                <ContactInfoCard teacher={teacher} />
+                <TeachingDetailsCard teacher={teacher} />
+              </div>
+
               <SubjectsSection subjects={teacher.preferredSubjects} />
               <QualificationsSection qualifications={teacher.qualifications} />
               <AvailabilitySection availability={teacher.availability} />
@@ -69,8 +75,12 @@ const TeacherDetails = () => {
             </div>
 
             <div className="space-y-4 sm:space-y-6">
-              <ContactInfoCard teacher={teacher} />
-              <TeachingDetailsCard teacher={teacher} />
+              {/* Desktop-only: rendered in the right sidebar */}
+              <div className="hidden lg:block space-y-4 sm:space-y-6">
+                <ContactInfoCard teacher={teacher} />
+                <TeachingDetailsCard teacher={teacher} />
+              </div>
+
               {teacher.cvDownloadUrl && (
                 <QuickDownloadCard onDownload={handleDownloadCV} />
               )}

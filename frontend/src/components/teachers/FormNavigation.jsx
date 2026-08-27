@@ -11,14 +11,25 @@ const FormNavigation = ({
   onNext,
   onCancel,
 }) => (
-  <div className="flex flex-col sm:flex-row justify-between items-stretch sm:items-center gap-3 sm:gap-0 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-brand-200 w-full">
-    {/* Previous button */}
-    <div>
+  <div className="flex flex-col-reverse sm:flex-row justify-between items-stretch sm:items-center gap-4 mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-brand-200 w-full">
+    {/* Left side: Previous & Cancel */}
+    <div className="flex flex-col-reverse sm:flex-row gap-3 sm:gap-4 w-full sm:w-auto">
+      {onCancel && (
+        <button
+          type="button"
+          onClick={onCancel}
+          className="w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-3 sm:py-4 text-gray-500 hover:text-gray-800 hover:bg-gray-100 rounded-2xl transition-all duration-300 font-semibold text-base border-2 "
+        >
+          <X className="w-5 h-5" />
+          <span>{cancelButtonText}</span>
+        </button>
+      )}
+
       {currentStep > 1 && (
         <button
           type="button"
           onClick={onPrev}
-          className="w-full sm:w-auto flex items-center justify-center space-x-2 sm:space-x-3 px-6 py-3 sm:px-8 sm:py-4 text-gray-700 border-2 border-brand-300 rounded-2xl hover:bg-brand-50 hover:border-brand-400 transition-all duration-300 font-bold text-base sm:text-lg shadow-sm"
+          className="w-full sm:w-auto flex items-center justify-center space-x-2 sm:space-x-3 px-6 py-3 sm:px-8 sm:py-4 text-gray-700 border-2 border-brand-300 rounded-2xl hover:bg-brand-50 hover:border-brand-400 transition-all duration-300 font-bold text-base sm:text-lg shadow-sm sm:min-w-[140px]"
         >
           <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
           <span>Previous</span>
@@ -26,19 +37,8 @@ const FormNavigation = ({
       )}
     </div>
 
-    {/* Cancel + Next/Submit buttons */}
-    <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
-      {onCancel && (
-        <button
-          type="button"
-          onClick={onCancel}
-          className="w-full sm:w-auto flex items-center justify-center space-x-2 sm:space-x-3 px-6 py-3 sm:px-8 sm:py-4 text-gray-700 border-2 border-brand-300 rounded-2xl hover:bg-brand-50 hover:border-brand-400 transition-all duration-300 font-bold text-base sm:text-lg shadow-sm"
-        >
-          <X className="w-5 h-5 sm:w-6 sm:h-6" />
-          <span>{cancelButtonText}</span>
-        </button>
-      )}
-
+    {/* Right side: Next / Submit */}
+    <div className="w-full sm:w-auto">
       {currentStep < totalSteps ? (
         <button
           type="button"
