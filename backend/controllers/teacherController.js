@@ -304,7 +304,8 @@ exports.getTeacher = asyncHandler(async (req, res, next) => {
     (!teacher.isActive || !teacher.isVisible) &&
     req.user?.role !== "admin"
   ) {
-    if (req.user && req.user.id === teacher.userId.toString()) {
+    const ownerId = teacher.userId._id ? teacher.userId._id.toString() : teacher.userId.toString();
+    if (req.user && req.user.id === ownerId) {
       return next(
         new ErrorResponse(
           "Your profile is under review. It will be verified soon and you can view your public profile.",
