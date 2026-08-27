@@ -34,14 +34,13 @@ const ContactInformation = ({ data, errors, formErrors, onChange, register }) =>
       {/* Phone */}
       <div className="w-full">
         <label htmlFor="phone" className="block text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">
-          Phone Number *
+          Phone Number <span className="text-gray-400 font-normal text-sm">(Optional)</span>
         </label>
         <input
           type="tel"
           id="phone"
           {...(register
             ? register("contact.phone", {
-                required: "Phone number is required",
                 pattern: { value: /^\+?[\d\s\-\(\)]{10,}$/, message: "Invalid phone number format" },
               })
             : { value: data.contact?.phone || "", onChange: (e) => onChange?.("contact.phone", e.target.value) })}

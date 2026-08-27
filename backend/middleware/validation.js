@@ -87,17 +87,14 @@ exports.teacherProfileValidation = [
     .notEmpty()
     .withMessage('State is required'),
   
-  body('address.zipCode')
-    .notEmpty()
-    .withMessage('ZIP code is required')
-    .isInt({ min: 10000, max: 99999 })
-    .withMessage('ZIP code must be a valid 5-digit number'),
+
 
   body('contact.email')
     .isEmail()
     .withMessage('Please provide a valid contact email'),
 
   body('contact.phone')
+    .optional({ checkFalsy: true })
     .matches(/^\+?[\d\s\-\(\)]{10,}$/)
     .withMessage('Please provide a valid phone number'),
 
@@ -130,10 +127,9 @@ exports.teacherProfileValidation = [
     .withMessage('CV/Resume is required'),
 
   body('bio')
-    .notEmpty()
-    .withMessage('Bio is required')
-    .isLength({ min: 50, max: 1000 })
-    .withMessage('Bio must be between 50 and 1000 characters'),
+    .optional({ checkFalsy: true })
+    .isLength({ min: 20, max: 1000 })
+    .withMessage('Bio must be between 20 and 1000 characters'),
   
   body('experience')
     .isInt({ min: 0, max: 50 })
@@ -151,19 +147,7 @@ exports.teacherProfileValidation = [
     .isArray({ min: 1 })
     .withMessage('At least one availability day is required'),
   
-  body('availability.*.day')
+  body('availability.*')
     .isIn(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
-    .withMessage('Invalid day'),
-  
-  body('availability.*.timeSlots')
-    .isArray({ min: 1 })
-    .withMessage('At least one time slot is required per day'),
-  
-  body('availability.*.timeSlots.*.startTime')
-    .matches(/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM|am|pm)$/)
-    .withMessage('Start time must be in HH:MM AM/PM format'),
-  
-  body('availability.*.timeSlots.*.endTime')
-    .matches(/^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM|am|pm)$/)
-    .withMessage('End time must be in HH:MM AM/PM format')
+    .withMessage('Invalid day')
 ];

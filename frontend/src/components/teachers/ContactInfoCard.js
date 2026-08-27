@@ -9,14 +9,16 @@ const ContactInfoCard = ({ teacher }) => {
           <Mail className="w-5 h-5 text-brand-500 mt-0.5 flex-shrink-0" />
           <span className="text-gray-700 break-all">{teacher.contact.email}</span>
         </div>
-        <div className="flex items-start space-x-3">
-          <Phone className="w-5 h-5 text-brand-500 mt-0.5 flex-shrink-0" />
-          <span className="text-gray-700">{teacher.contact.phone}</span>
-        </div>
+        {teacher.contact.phone && (
+          <div className="flex items-start space-x-3">
+            <Phone className="w-5 h-5 text-brand-500 mt-0.5 flex-shrink-0" />
+            <span className="text-gray-700">{teacher.contact.phone}</span>
+          </div>
+        )}
         <div className="flex items-start space-x-3">
           <MapPin className="w-5 h-5 text-brand-500 mt-0.5 flex-shrink-0" />
           <span className="text-gray-700">
-            {teacher.address.street}, {teacher.address.city}, {teacher.address.state} {teacher.address.zipCode}
+            {teacher.address.street}, {teacher.address.city}, {teacher.address.state}
           </span>
         </div>
       </div>

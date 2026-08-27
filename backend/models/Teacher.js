@@ -18,56 +18,6 @@ const qualificationSchema = new mongoose.Schema(
   { _id: false },
 );
 
-const timeSlotSchema = new mongoose.Schema(
-  {
-    startTime: {
-      type: String,
-      required: [true, "Start time is required"],
-      match: [
-        /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM|am|pm)$/,
-        "Invalid time format (HH:MM AM/PM)",
-      ],
-    },
-    endTime: {
-      type: String,
-      required: [true, "End time is required"],
-      match: [
-        /^(0?[1-9]|1[0-2]):[0-5][0-9]\s?(AM|PM|am|pm)$/,
-        "Invalid time format (HH:MM AM/PM)",
-      ],
-    },
-  },
-  { _id: false },
-);
-
-const availabilitySchema = new mongoose.Schema(
-  {
-    day: {
-      type: String,
-      required: [true, "Day is required"],
-      enum: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ],
-    },
-    timeSlots: {
-      type: [timeSlotSchema],
-      required: [true, "Time slots are required"],
-      validate: {
-        validator: function (slots) {
-          return slots && slots.length > 0;
-        },
-        message: "At least one time slot is required per day",
-      },
-    },
-  },
-  { _id: false },
-);
 
 const teacherSchema = new mongoose.Schema(
   {
@@ -104,12 +54,6 @@ const teacherSchema = new mongoose.Schema(
         type: String,
         required: [true, "State is required"],
       },
-      zipCode: {
-        type: Number,
-        required: [true, "ZIP code is required"],
-        min: [10000, "ZIP code must be 5 digits"],
-        max: [99999, "ZIP code must be 5 digits"],
-      },
     },
     qualifications: {
       type: [qualificationSchema],
@@ -132,7 +76,7 @@ const teacherSchema = new mongoose.Schema(
       },
       phone: {
         type: String,
-        required: [true, "Phone number is required"],
+        default: null,
         match: [/^\+?[\d\s\-\(\)]{10,}$/, "Invalid phone number format"],
       },
     },
@@ -148,8 +92,8 @@ const teacherSchema = new mongoose.Schema(
     },
     bio: {
       type: String,
-      required: [true, "Bio is required"],
-      minlength: [50, "Bio must be at least 50 characters long"],
+      default: null,
+      minlength: [20, "Bio must be at least 20 characters long"],
       maxlength: [1000, "Bio must be less than 1000 characters"],
     },
     experience: {
@@ -159,13 +103,21 @@ const teacherSchema = new mongoose.Schema(
       max: [50, "Experience cannot exceed 50 years"],
     },
     availability: {
-      type: [availabilitySchema],
+      type: [String],
       required: [true, "Availability is required"],
       validate: {
         validator: function (availability) {
-          return availability && availability.length > 0;
+          const validDays = [
+            "Monday", "Tuesday", "Wednesday", "Thursday",
+            "Friday", "Saturday", "Sunday",
+          ];
+          return (
+            availability &&
+            availability.length > 0 &&
+            availability.every((d) => validDays.includes(d))
+          );
         },
-        message: "At least one availability day is required",
+        message: "Availability must contain valid day names and at least one day must be selected",
       },
     },
     teachingMode: {
@@ -189,48 +141,9 @@ const teacherSchema = new mongoose.Schema(
   },
 );
 
-// Enhanced time validation middleware with AM/PM support
-teacherSchema.pre("save", function (next) {
-  if (this.availability && this.availability.length > 0) {
-    const convertTo24Hour = (timeStr) => {
-      const [time, period] = timeStr.split(/(?=[AP]M)/i);
-      const [hours, minutes] = time.split(":").map(Number);
-
-      let hour24 = hours;
-      if (period.toLowerCase() === "pm" && hours !== 12) {
-        hour24 += 12;
-      } else if (period.toLowerCase() === "am" && hours === 12) {
-        hour24 = 0;
-      }
-
-      return hour24 * 100 + minutes; // Return as comparable number
-    };
-
-    for (const daySlot of this.availability) {
-      for (const timeSlot of daySlot.timeSlots) {
-        const start = convertTo24Hour(timeSlot.startTime);
-        const end = convertTo24Hour(timeSlot.endTime);
-
-        if (start >= end) {
-          return next(
-            new Error(`End time must be after start time for ${daySlot.day}`),
-          );
-        }
-      }
-    }
-  }
-  next();
-});
-
-// Virtual for formatted availability
+// Virtual for formatted availability (string[] of day names)
 teacherSchema.virtual("formattedAvailability").get(function () {
-  return this.availability.map((daySlot) => ({
-    day: daySlot.day,
-    timeSlots: daySlot.timeSlots.map((slot) => ({
-      startTime: slot.startTime.toUpperCase(),
-      endTime: slot.endTime.toUpperCase(),
-    })),
-  }));
+  return this.availability;
 });
 
 

@@ -11,11 +11,7 @@ import {
 import { useState, useEffect, useRef } from "react";
 import { teacherService } from "../../services/teacherService";
 
-const TeacherFilters = ({
-  filters,
-  onFilterChange,
-  onClearFilters
-}) => {
+const TeacherFilters = ({ filters, onFilterChange, onClearFilters }) => {
   const [subjectSearch, setSubjectSearch] = useState("");
   const [subjects, setSubjects] = useState([]);
   const [filteredSubjects, setFilteredSubjects] = useState([]);
@@ -48,7 +44,7 @@ const TeacherFilters = ({
       setFilteredSubjects(subjects);
     } else {
       const filtered = subjects.filter((subject) =>
-        subject.toLowerCase().includes(subjectSearch.toLowerCase())
+        subject.toLowerCase().includes(subjectSearch.toLowerCase()),
       );
       setFilteredSubjects(filtered);
     }
@@ -129,9 +125,9 @@ const TeacherFilters = ({
       const res = await teacherService.getAllSubjects();
       setSubjects(res.data.data);
       setFilteredSubjects(res.data.data);
-    }
+    };
     fetchSubjects();
-  }, [])
+  }, []);
 
   return (
     <div className="w-full lg:w-80 bg-white rounded-2xl shadow-xl border border-stone-200 h-fit lg:sticky lg:top-8 transition-all duration-300 hover:shadow-2xl">
@@ -231,10 +227,11 @@ const TeacherFilters = ({
                     )}
                   </div>
                   <span
-                    className={`text-gray-700 group-hover:text-brand-800 transition-colors duration-200 flex-1 ${filters.subjects.includes(subject)
-                      ? "font-semibold text-brand-700"
-                      : "font-medium"
-                      }`}
+                    className={`text-gray-700 group-hover:text-brand-800 transition-colors duration-200 flex-1 ${
+                      filters.subjects.includes(subject)
+                        ? "font-semibold text-brand-700"
+                        : "font-medium"
+                    }`}
                   >
                     {subject}
                   </span>
@@ -243,6 +240,40 @@ const TeacherFilters = ({
             ) : (
               <div className="text-center py-4 text-gray-500">
                 No subjects found matching "{subjectSearch}"
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Location Filter with Debouncing */}
+        <div className="space-y-4">
+          <div className="flex items-center space-x-3">
+            <div className="p-2 bg-brand-100 rounded-lg">
+              <MapPin size={18} className="text-brand-600" />
+            </div>
+            <h4 className="font-bold text-gray-800 text-base sm:text-lg">
+              Location Preference
+            </h4>
+          </div>
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search by city or region..."
+              value={localLocation}
+              onChange={handleLocationChange}
+              className="w-full px-4 py-3.5 pl-11 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
+            />
+            <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-400">
+              <Search size={16} />
+            </div>
+            {localLocation && (
+              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                <button
+                  onClick={handleClearLocation}
+                  className="text-gray-400 hover:text-brand-600"
+                >
+                  <X size={16} />
+                </button>
               </div>
             )}
           </div>
@@ -316,7 +347,9 @@ const TeacherFilters = ({
                   />
                 </div>
                 <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center">
-                  <span className="text-brand-600 font-semibold text-sm">→</span>
+                  <span className="text-brand-600 font-semibold text-sm">
+                    →
+                  </span>
                 </div>
                 <div className="flex-1 relative">
                   <input
@@ -360,7 +393,9 @@ const TeacherFilters = ({
                   />
                 </div>
                 <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center">
-                  <span className="text-brand-600 font-semibold text-sm">→</span>
+                  <span className="text-brand-600 font-semibold text-sm">
+                    →
+                  </span>
                 </div>
                 <div className="flex-1 relative">
                   <input
@@ -377,40 +412,6 @@ const TeacherFilters = ({
               <div className="text-xs text-brand-700 font-semibold text-center bg-brand-50 py-1.5 rounded-lg">
                 Nepali Rupee (₨) per hour
               </div>
-            </div>
-          </div>
-
-          {/* Location Filter with Debouncing */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-3">
-              <div className="p-2 bg-brand-100 rounded-lg">
-                <MapPin size={18} className="text-brand-600" />
-              </div>
-              <h4 className="font-bold text-gray-800 text-base sm:text-lg">
-                Location Preference
-              </h4>
-            </div>
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search by city or region..."
-                value={localLocation}
-                onChange={handleLocationChange}
-                className="w-full px-4 py-3.5 pl-11 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
-              />
-              <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-brand-400">
-                <Search size={16} />
-              </div>
-              {localLocation && (
-                <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                  <button
-                    onClick={handleClearLocation}
-                    className="text-gray-400 hover:text-brand-600"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-              )}
             </div>
           </div>
         </div>
