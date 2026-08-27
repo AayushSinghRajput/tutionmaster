@@ -31,7 +31,8 @@ const TeacherDetails = () => {
       const response = await teacherService.getTeacherById(id);
       setTeacher(response.data.data);
     } catch (error) {
-      setError("Teacher not found");
+      const errorMsg = error.response?.data?.error || "Teacher not found";
+      setError(errorMsg);
       console.error("Error fetching teacher:", error);
     } finally {
       setLoading(false);
@@ -48,7 +49,7 @@ const TeacherDetails = () => {
   }
 
   if (error || !teacher) {
-    return <TeacherNotFound />;
+    return <TeacherNotFound customMessage={error} />;
   }
 
   return (
