@@ -1,56 +1,6 @@
 import { validateTeacherProfile } from "../../../utils/validation";
 import { toast } from "react-toastify";
 
-const toMinutes = (time) => {
-  const match = /^(\d{1,2}):(\d{2})\s?(AM|PM)$/i.exec(time);
-
-  if (!match) return null;
-
-  let hour = Number(match[1]);
-
-  const minute = Number(match[2]);
-
-  const period = match[3].toUpperCase();
-
-  if (period === "PM" && hour !== 12) hour += 12;
-
-  if (period === "AM" && hour === 12) hour = 0;
-
-  return hour * 60 + minute;
-};
-
-const validateAvailability = (availability) => {
-  const errors = {};
-
-  availability.forEach((day, index) => {
-    day.timeSlots.forEach((slot, slotIndex) => {
-      const start = toMinutes(slot.startTime);
-
-      const end = toMinutes(slot.endTime);
-
-      if (start === null) {
-        errors[index] = {
-          startTime: "Invalid start time",
-        };
-      }
-
-      if (end === null) {
-        errors[index] = {
-          endTime: "Invalid end time",
-        };
-      }
-
-      if (start !== null && end !== null && start >= end) {
-        errors[index] = {
-          timeLogic: "End time must be after start time",
-        };
-      }
-    });
-  });
-
-  return errors;
-};
-
 const useTeacherFormValidation = ({
   watchAvailability,
   watchSubjects,
@@ -69,11 +19,9 @@ const useTeacherFormValidation = ({
       const fieldsValid = await trigger([
         "name",
         "contact.email",
-        "contact.phone",
         "address.street",
         "address.state",
         "address.city",
-        "address.zipCode",
       ]);
 
       if (!fieldsValid) return false;
@@ -110,24 +58,17 @@ const useTeacherFormValidation = ({
         "experience",
         "hourlyRate",
         "teachingMode",
-        "bio",
       ]);
+      // bio is optional — only validate format if it has content
+      const bioValid = await trigger(["bio"]);
+      if (!bioValid) return false;
+      valid = true;
     } else {
       const availability = watchAvailability || [];
 
       if (!availability.length) {
         setFormErrors({
-          availability: "Please add availability",
-        });
-
-        return false;
-      }
-
-      const errors = validateAvailability(availability);
-
-      if (Object.keys(errors).length) {
-        setFormErrors({
-          availability: errors,
+          availability: "Please select at least one available day",
         });
 
         return false;

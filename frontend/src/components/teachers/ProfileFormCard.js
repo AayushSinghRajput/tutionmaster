@@ -1,4 +1,4 @@
-import { Star, BookOpen } from 'lucide-react';
+import { Star } from 'lucide-react';
 import TeacherForm from './TeacherForm';
 
 const ProfileFormCard = ({ onSubmit, onCancel }) => {
@@ -20,8 +20,7 @@ const ProfileFormCard = ({ onSubmit, onCancel }) => {
           onCancel={onCancel}
           submitButtonText={
             <div className="flex items-center justify-center">
-              <BookOpen className="w-5 h-5 mr-2" />
-              Create Professional Profile
+              Create Profile
             </div>
           }
           cancelButtonText="Cancel"

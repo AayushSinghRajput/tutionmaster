@@ -22,9 +22,8 @@ const validateContactFields = (contact, errors) => {
     errors.contact = { ...errors.contact, email: "Invalid email address" };
   }
 
-  if (!contact?.phone?.trim()) {
-    errors.contact = { ...errors.contact, phone: "Phone number is required" };
-  } else if (!phoneRegex.test(contact.phone)) {
+  // Phone is optional — only validate format if provided
+  if (contact?.phone?.trim() && !phoneRegex.test(contact.phone)) {
     errors.contact = { ...errors.contact, phone: "Invalid phone number" };
   }
 };
@@ -36,9 +35,6 @@ const validateAddressFields = (address, errors) => {
       errors.address = { ...errors.address, [key]: `${label} is required` };
     }
   });
-  if (!address?.zipCode) {
-    errors.address = { ...errors.address, zipCode: "ZIP code is required" };
-  }
 };
 
 const validateQualificationsFields = (qualifications, errors) => {
@@ -73,98 +69,17 @@ const validateAvailabilityFields = (availability, errors) => {
     return;
   }
 
+  // New format: string[] of day names
+  if (typeof availability[0] === "string") {
+    // Valid if at least one day is selected (already checked above)
+    return;
+  }
+
+  // Legacy format: [{day, timeSlots}] — basic validation
   availability.forEach((slot, dayIdx) => {
     if (!slot.day) {
       setNestedError(errors, "availability", dayIdx, "day", "Day is required");
     }
-
-    if (!slot.timeSlots?.length) {
-      setNestedError(errors, "availability", dayIdx, "timeSlots", "At least one time slot is required");
-      return;
-    }
-
-    slot.timeSlots.forEach((timeSlot, slotIdx) => {
-      const addTimeError = (field, msg) => {
-        if (!errors.availability || typeof errors.availability === "string") errors.availability = {};
-        if (!errors.availability[dayIdx]) errors.availability[dayIdx] = {};
-        if (!errors.availability[dayIdx].timeSlots) errors.availability[dayIdx].timeSlots = {};
-        if (!errors.availability[dayIdx].timeSlots[slotIdx]) errors.availability[dayIdx].timeSlots[slotIdx] = {};
-        errors.availability[dayIdx].timeSlots[slotIdx][field] = msg;
-      };
-
-      if (!timeSlot.startTime) {
-        addTimeError("startTime", "Start time is required");
-      } else if (!timeRegex.test(timeSlot.startTime.trim())) {
-        addTimeError("startTime", "Invalid time format (HH:MM AM/PM)");
-      }
-
-      if (!timeSlot.endTime) {
-        addTimeError("endTime", "End time is required");
-      } else if (!timeRegex.test(timeSlot.endTime.trim())) {
-        addTimeError("endTime", "Invalid time format (HH:MM AM/PM)");
-      }
-
-      if (timeSlot.startTime && timeSlot.endTime) {
-
-        const convertToMinutes = (time) => {
-
-          const match =
-            time.match(
-              /^(\d+):(\d+)\s?(AM|PM)$/i
-            );
-
-
-          if (!match)
-            return null;
-
-
-          let hour =
-            Number(match[1]);
-
-          const minute =
-            Number(match[2]);
-
-
-          const period =
-            match[3].toUpperCase();
-
-
-          if (period === "PM" && hour !== 12)
-            hour += 12;
-
-
-          if (period === "AM" && hour === 12)
-            hour = 0;
-
-
-          return hour * 60 + minute;
-
-        };
-
-
-        const start =
-          convertToMinutes(
-            timeSlot.startTime
-          );
-
-
-        const end =
-          convertToMinutes(
-            timeSlot.endTime
-          );
-
-
-        if (start >= end) {
-
-          addTimeError(
-            "timeLogic",
-            "End time must be after start time"
-          );
-
-        }
-
-      }
-    });
   });
 };
 
@@ -207,9 +122,11 @@ export const validateTeacherProfile = (data) => {
     errors.teachingMode = "Invalid teaching mode";
   }
 
-  if (!data.bio?.trim()) errors.bio = "Bio is required";
-  else if (data.bio.length < 50) errors.bio = "Bio must be at least 50 characters long";
-  else if (data.bio.length > 1000) errors.bio = "Bio must be less than 1000 characters";
+  // Bio is optional — only validate length if provided
+  if (data.bio?.trim()) {
+    if (data.bio.length < 20) errors.bio = "Bio must be at least 20 characters long";
+    else if (data.bio.length > 1000) errors.bio = "Bio must be less than 1000 characters";
+  }
 
   validateAvailabilityFields(data.availability, errors);
 

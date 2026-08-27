@@ -517,22 +517,29 @@ const ProfileTab = ({ teacher }) => {
             <Calendar size={20} className="text-brand-600" />
             <h4 className="text-lg font-serif font-bold text-gray-900">Teaching Availability</h4>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-            {availability.map((slot, index) => (
-              <div key={index} className="bg-white rounded-xl p-4 border border-stone-200 hover:border-brand-200 transition-all duration-300">
-                <strong className="block text-gray-900 font-bold text-lg mb-3">{slot.day}:</strong>
-                <div className="space-y-2">
-                  {slot.timeSlots.map((timeSlot, timeIndex) => (
-                    <div key={timeIndex} className="flex items-center justify-between bg-brand-50 rounded-lg px-3 py-2">
-                      <span className="text-brand-700 font-semibold">{timeSlot.start}</span>
-                      <span className="text-brand-500 mx-2">→</span>
-                      <span className="text-brand-700 font-semibold">{timeSlot.end}</span>
-                    </div>
-                  ))}
+          {typeof availability[0] === 'string' ? (
+            // New format: string[] of day names
+            <div className="flex flex-wrap gap-2">
+              {availability.map((day, index) => (
+                <span
+                  key={index}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-50 border border-brand-200 text-brand-700 rounded-xl text-sm font-semibold"
+                >
+                  <Calendar size={14} />
+                  {day}
+                </span>
+              ))}
+            </div>
+          ) : (
+            // Legacy format: [{day, timeSlots}]
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              {availability.map((slot, index) => (
+                <div key={index} className="bg-white rounded-xl p-4 border border-stone-200 hover:border-brand-200 transition-all duration-300">
+                  <strong className="block text-gray-900 font-bold text-lg mb-1">{slot.day}</strong>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       )}
     </div>
