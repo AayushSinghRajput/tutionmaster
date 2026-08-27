@@ -55,9 +55,10 @@ const validateQualificationsFields = (qualifications, errors) => {
     if (!qual.degree?.trim()) addError("degree", "Degree is required");
     if (!qual.institution?.trim()) addError("institution", "Institution is required");
 
+    const yearNum = Number(qual.year);
     if (!qual.year) {
       addError("year", "Year is required");
-    } else if (qual.year < 1900 || qual.year > currentYear) {
+    } else if (isNaN(yearNum) || yearNum < 1900) {
       addError("year", "Invalid year");
     }
   });

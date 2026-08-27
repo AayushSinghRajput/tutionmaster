@@ -93,8 +93,13 @@ const teacherSchema = new mongoose.Schema(
     bio: {
       type: String,
       default: null,
-      minlength: [20, "Bio must be at least 20 characters long"],
-      maxlength: [1000, "Bio must be less than 1000 characters"],
+      validate: {
+        validator: function (v) {
+          if (!v || !v.trim()) return true; // Allow optional/empty bio
+          return v.trim().length >= 20 && v.trim().length <= 1000;
+        },
+        message: "Bio must be at least 20 characters long and less than 1000 characters",
+      },
     },
     experience: {
       type: Number,

@@ -16,14 +16,12 @@ const BioSection = ({ data, errors, formErrors, register, onChange, bioLength })
         id="bio"
         {...(register
           ? register("bio", {
-              minLength: {
-                value: 20,
-                message: "Bio must be at least 20 characters long",
-              },
-              maxLength: {
-                value: 1000,
-                message: "Bio must be less than 1000 characters",
-              },
+              validate: (value) => {
+                if (!value || !value.trim()) return true;
+                if (value.trim().length < 20) return "Bio must be at least 20 characters long";
+                if (value.trim().length > 1000) return "Bio must be less than 1000 characters";
+                return true;
+              }
             })
           : {
               value: data.bio || "",
