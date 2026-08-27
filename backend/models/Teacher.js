@@ -135,6 +135,24 @@ const teacherSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+    // isVisible controls public listing visibility, managed by admins.
+    // New profiles default to false so they require admin approval before
+    // appearing on the public /teachers page.
+    // Existing profiles that were already public retain their previous
+    // behaviour via the migration script / seed.
+    isVisible: {
+      type: Boolean,
+      default: false,
+    },
+    visibilityUpdatedAt: {
+      type: Date,
+      default: null,
+    },
+    visibilityUpdatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Admin",
+      default: null,
+    },
   },
   {
     timestamps: true,
@@ -151,5 +169,6 @@ teacherSchema.index({ "address.city": 1 });
 teacherSchema.index({ preferredSubjects: 1 });
 teacherSchema.index({ teachingMode: 1 });
 teacherSchema.index({ userId: 1 });
+teacherSchema.index({ isVisible: 1 });
 
 module.exports = mongoose.model("Teacher", teacherSchema);
