@@ -14,7 +14,7 @@ const {
   teacherProfileValidation,
   handleValidationErrors
 } = require('../middleware/validation');
-const { protect, authorize } = require('../middleware/auth');
+const { protect, authorize, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
@@ -132,7 +132,7 @@ router.get('/my-profile', protect, getMyProfile);
  *         description: Not found (or inactive, and caller isn't an admin)
  */
 // This MUST come after specific paths
-router.get('/:id', getTeacher);
+router.get('/:id', optionalAuth, getTeacher);
 
 // Protected routes
 router.use(protect);

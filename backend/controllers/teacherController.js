@@ -304,6 +304,14 @@ exports.getTeacher = asyncHandler(async (req, res, next) => {
     (!teacher.isActive || !teacher.isVisible) &&
     req.user?.role !== "admin"
   ) {
+    if (req.user && req.user.id === teacher.userId.toString()) {
+      return next(
+        new ErrorResponse(
+          "Your profile is under review. It will be verified soon and you can view your public profile.",
+          403
+        )
+      );
+    }
     return next(
       new ErrorResponse(
         "Teacher profile is not available",
