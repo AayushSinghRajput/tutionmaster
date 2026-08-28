@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import HeroBanner from "../components/section/HeroBanner";
 import HowItWorks from "../components/section/HowItWorks";
 import Features from "../components/section/Feature";
@@ -7,7 +7,19 @@ import VideoOverlayBanner from "../components/video/VideoOverlayBanner";
 
 const Home = () => {
   const howItWorksRef = useRef(null);
-  const [showVideoModal, setShowVideoModal] = useState(true);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+
+  useEffect(() => {
+    const hasSeenVideo = localStorage.getItem("hasSeenVideoTutorial");
+    if (!hasSeenVideo) {
+      setShowVideoModal(true);
+    }
+  }, []);
+
+  const handleCloseVideo = () => {
+    setShowVideoModal(false);
+    localStorage.setItem("hasSeenVideoTutorial", "true");
+  };
 
   const scrollToHowItWorks = () => {
     howItWorksRef.current?.scrollIntoView({
@@ -20,7 +32,7 @@ const Home = () => {
     <div className="min-h-screen relative">
       {/* Centered Video Overlay Banner */}
       {showVideoModal && (
-        <VideoOverlayBanner onClose={() => setShowVideoModal(false)} />
+        <VideoOverlayBanner onClose={handleCloseVideo} />
       )}
 
       {/* Hero Banner Section */}
