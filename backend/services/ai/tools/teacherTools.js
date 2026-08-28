@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Teacher = require("../../../models/Teacher");
 const User = require("../../../models/User");
 const Requirement = require("../../../models/Requirement");
+const AnalyticsEvent = require("../../../models/AnalyticsEvent");
 const escapeRegex = require("../../../utils/escapeRegex");
 const { generateImageUrl, generatePdfViewUrl } = require("../../../utils/cloudinaryUtils");
 
@@ -168,6 +169,13 @@ const searchTeachers = {
     // Limit results
     const topMatches = scoredTeachers.slice(0, CHAT_RESULT_LIMIT);
 
+    // Log Analytics Event (Fire and forget)
+    AnalyticsEvent.create({
+      eventType: "AI_SEARCH",
+      searchContext: args,
+      metadata: { resultsCount: topMatches.length }
+    }).catch(() => {});
+
     return {
       forModel: { count: topMatches.length, teachers: topMatches.map(item => toModelSummary(item.teacher, item.score)) },
       publicResults: topMatches.map(item => toPublicCard(item.teacher, item.score)),
@@ -203,6 +211,13 @@ const getTeacherProfile = {
     if (!match) {
       return { forModel: { found: false } };
     }
+
+    // Log Analytics Event (Fire and forget)
+    AnalyticsEvent.create({
+      eventType: "PROFILE_VIEWED",
+      tutorId: match._id,
+      metadata: { requestedId: id, requestedName: name }
+    }).catch(() => {});
 
     const teacher = withUrls(match);
     return {
@@ -304,6 +319,13 @@ const shortlistTutor = {
     dbUser.savedTutors.push(id);
     await dbUser.save();
 
+    // Log Analytics Event
+    AnalyticsEvent.create({
+      eventType: "TUTOR_SHORTLISTED",
+      userId: user._id,
+      tutorId: id
+    }).catch(() => {});
+
     return { forModel: { success: true, message: "Tutor successfully saved to your shortlist." } };
   }
 };
@@ -362,6 +384,14 @@ const postRequirement = {
         userId: user ? user._id : null
       });
       await newRequirement.save();
+
+      // Log Analytics Event
+      AnalyticsEvent.create({
+        eventType: "REQUIREMENT_POSTED",
+        userId: user ? user._id : null,
+        metadata: { subject: args.subject, location: args.location }
+      }).catch(() => {});
+
       return { forModel: { success: true, requirementId: newRequirement._id } };
     } catch (error) {
       return { forModel: { error: "SERVER_ERROR", message: "Failed to post requirement." } };
