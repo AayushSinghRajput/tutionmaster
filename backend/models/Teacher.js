@@ -136,6 +136,17 @@ const teacherSchema = new mongoose.Schema(
       min: [0, "Hourly rate cannot be negative"],
       max: [10000, "Hourly rate cannot exceed ₨10,000"],
     },
+    profileViews: {
+      type: Number,
+      default: 0,
+    },
+    viewedByUsers: [{
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    }],
+    viewedByIps: [{
+      type: String,
+    }],
     isActive: {
       type: Boolean,
       default: true,
