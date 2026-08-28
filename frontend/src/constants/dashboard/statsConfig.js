@@ -5,8 +5,8 @@ export const STATS_CONFIG = [
     id: 'views',
     icon: Eye,
     label: 'Profile Views',
-    sublabel: 'This month',
-    getValue: () => 0,
+    sublabel: 'Total views',
+    getValue: (profile) => profile.profileViews || 0,
   },
   {
     id: 'availability',

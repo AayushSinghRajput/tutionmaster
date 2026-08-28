@@ -321,6 +321,37 @@ exports.getTeacher = asyncHandler(async (req, res, next) => {
     );
   }
 
+  // Increment profile views if viewer is not owner and not admin
+  const ownerId = teacher.userId._id ? teacher.userId._id.toString() : teacher.userId.toString();
+  const isOwner = req.user && req.user.id === ownerId;
+  const isAdmin = req.user && req.user.role === 'admin';
+
+  if (!isOwner && !isAdmin) {
+    let hasViewed = false;
+    const clientIp = req.headers['x-forwarded-for'] || req.socket.remoteAddress || req.ip;
+
+    if (req.user) {
+      // Check if user has already viewed
+      if (teacher.viewedByUsers && teacher.viewedByUsers.includes(req.user.id)) {
+        hasViewed = true;
+      } else {
+        teacher.viewedByUsers.push(req.user.id);
+      }
+    } else if (clientIp) {
+      // Check if IP has already viewed
+      if (teacher.viewedByIps && teacher.viewedByIps.includes(clientIp)) {
+        hasViewed = true;
+      } else {
+        teacher.viewedByIps.push(clientIp);
+      }
+    }
+
+    if (!hasViewed) {
+      teacher.profileViews = (teacher.profileViews || 0) + 1;
+      await teacher.save({ validateBeforeSave: false });
+    }
+  }
+
   const teacherObj = teacher.toObject();
 
   teacherObj.avatarUrl = generateImageUrl(
