@@ -6,7 +6,7 @@ import TeacherCard from "../common/TeacherCard";
 const WELCOME_MESSAGE = {
   role: "assistant",
   content:
-    "Hi! I'm the TuitionMaster assistant. Ask me to find a tutor, check if someone's registered, or how the platform works.",
+    "Hi! I'm the TuitionMaster assistant. I can help you find tutors by name, subject, location, hourly rate, teaching mode, availability, or experience.\n\nTry asking:\n- \"Find a Math tutor in Kathmandu.\"\n- \"Is there a teacher named Aayush?\"\n- \"Find a tutor under Rs. 500/hour who teaches online.\"",
 };
 
 const ChatWidget = () => {
