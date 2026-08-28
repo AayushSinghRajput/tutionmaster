@@ -1,10 +1,12 @@
 const mongoose = require("mongoose");
 const Teacher = require("../../../models/Teacher");
+const User = require("../../../models/User");
+const Requirement = require("../../../models/Requirement");
 const escapeRegex = require("../../../utils/escapeRegex");
 const { generateImageUrl, generatePdfViewUrl } = require("../../../utils/cloudinaryUtils");
 
 const TEACHING_MODES = ["Online", "In-person", "Both"];
-const CHAT_RESULT_LIMIT = 6;
+const CHAT_RESULT_LIMIT = 5;
 
 function withUrls(teacherDoc) {
   const teacher = teacherDoc.toObject ? teacherDoc.toObject() : teacherDoc;
@@ -15,8 +17,8 @@ function withUrls(teacherDoc) {
   };
 }
 
-function toPublicCard(teacher) {
-  return {
+function toPublicCard(teacher, matchScore = null) {
+  const card = {
     type: "teacher",
     _id: teacher._id,
     name: teacher.name,
@@ -28,10 +30,14 @@ function toPublicCard(teacher) {
     preferredSubjects: teacher.preferredSubjects,
     teachingMode: teacher.teachingMode,
   };
+  if (matchScore !== null) {
+    card.matchScore = matchScore;
+  }
+  return card;
 }
 
-function toModelSummary(teacher) {
-  return {
+function toModelSummary(teacher, matchScore = null) {
+  const summary = {
     id: teacher._id,
     name: teacher.name,
     city: teacher.address?.city,
@@ -40,6 +46,20 @@ function toModelSummary(teacher) {
     hourlyRate: teacher.hourlyRate,
     teachingMode: teacher.teachingMode,
   };
+  if (matchScore !== null) {
+    summary.matchScore = matchScore;
+  }
+  return summary;
+}
+
+function calculateMatchScore(teacher) {
+  let score = 80; // Base score for meeting hard requirements
+  if (teacher.experience) {
+    score += Math.min(teacher.experience, 10); // Up to 10 points for experience
+  }
+  if (teacher.avatarPublicId) score += 5; // 5 points for having a profile picture
+  if (teacher.bio && teacher.bio.length > 50) score += 5; // 5 points for a detailed bio
+  return Math.min(score, 100);
 }
 
 const checkTeacherExists = {
@@ -88,7 +108,7 @@ const searchTeachers = {
       properties: {
         query: { type: "string", description: "Free-text search across tutor name, bio, and city." },
         subject: { type: "string", description: "A subject the tutor should teach, e.g. 'Mathematics'." },
-        city: { type: "string", description: "City the tutor is located in, e.g. 'Dharan'." },
+        city: { type: "string", description: "City the tutor is located in, e.g. 'Kathmandu'." },
         teachingMode: { type: "string", enum: TEACHING_MODES, description: "Preferred teaching mode." },
         minExperience: { type: "number", description: "Minimum years of experience." },
         maxExperience: { type: "number", description: "Maximum years of experience." },
@@ -103,6 +123,7 @@ const searchTeachers = {
     const { query, subject, city, teachingMode, minExperience, maxExperience, minRate, maxRate } = args || {};
     const filter = { isActive: true };
 
+    // Apply Hard Constraints First
     if (query && query.trim()) {
       const regex = new RegExp(escapeRegex(query.trim()), "i");
       filter.$or = [{ name: regex }, { bio: regex }, { "address.city": regex }];
@@ -132,16 +153,24 @@ const searchTeachers = {
       if (maxRate !== undefined) filter.hourlyRate.$lte = Number(maxRate);
     }
 
-    const matches = await Teacher.find(filter)
-      .collation({ locale: "en", strength: 2 })
-      .sort({ experience: -1 })
-      .limit(CHAT_RESULT_LIMIT);
+    const matches = await Teacher.find(filter).collation({ locale: "en", strength: 2 });
+    
+    // Calculate Match Scores
+    let scoredTeachers = matches.map(match => {
+      const teacher = withUrls(match);
+      const score = calculateMatchScore(teacher);
+      return { teacher, score };
+    });
 
-    const teachers = matches.map(withUrls);
+    // Rank from highest to lowest compatibility
+    scoredTeachers.sort((a, b) => b.score - a.score);
+    
+    // Limit results
+    const topMatches = scoredTeachers.slice(0, CHAT_RESULT_LIMIT);
 
     return {
-      forModel: { count: teachers.length, teachers: teachers.map(toModelSummary) },
-      publicResults: teachers.map(toPublicCard),
+      forModel: { count: topMatches.length, teachers: topMatches.map(item => toModelSummary(item.teacher, item.score)) },
+      publicResults: topMatches.map(item => toPublicCard(item.teacher, item.score)),
     };
   },
 };
@@ -192,6 +221,154 @@ const getTeacherProfile = {
   },
 };
 
+const getSimilarTutors = {
+  definition: {
+    name: "getSimilarTutors",
+    description: "Find tutors similar to a specific tutor based on subject, location, and rate.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        id: { type: "string", description: "The ID of the tutor to find similarities for." },
+      },
+      required: ["id"],
+    },
+  },
+  requiresAuth: false,
+  async execute({ id }) {
+    if (!id || !mongoose.isValidObjectId(id)) {
+      return { forModel: { error: "INVALID_ARGS", message: "A valid tutor id is required." } };
+    }
+
+    const sourceTeacher = await Teacher.findById(id);
+    if (!sourceTeacher) {
+      return { forModel: { error: "NOT_FOUND", message: "Tutor not found." } };
+    }
+
+    // Similarity logic: Same subjects, or same city, slightly flexible rate
+    const filter = {
+      _id: { $ne: sourceTeacher._id },
+      isActive: true,
+      $or: [
+        { preferredSubjects: { $in: sourceTeacher.preferredSubjects } },
+        { "address.city": sourceTeacher.address.city }
+      ]
+    };
+
+    const matches = await Teacher.find(filter).limit(CHAT_RESULT_LIMIT);
+    
+    let scoredTeachers = matches.map(match => {
+      const teacher = withUrls(match);
+      const score = calculateMatchScore(teacher);
+      return { teacher, score };
+    });
+    
+    scoredTeachers.sort((a, b) => b.score - a.score);
+    const topMatches = scoredTeachers.slice(0, 3); // Return top 3 similar
+
+    return {
+      forModel: { count: topMatches.length, teachers: topMatches.map(item => toModelSummary(item.teacher, item.score)) },
+      publicResults: topMatches.map(item => toPublicCard(item.teacher, item.score)),
+    };
+  }
+};
+
+const shortlistTutor = {
+  definition: {
+    name: "shortlistTutor",
+    description: "Save or shortlist a tutor to the user's profile. Use this when the user says 'Save this tutor' or 'Shortlist Aayush'.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        id: { type: "string", description: "The ID of the tutor to save." },
+      },
+      required: ["id"],
+    },
+  },
+  requiresAuth: true,
+  async execute({ id }, { user }) {
+    if (!user) {
+      return { forModel: { error: "AUTH_REQUIRED", message: "You must be logged in to save a tutor." } };
+    }
+    if (!id || !mongoose.isValidObjectId(id)) {
+      return { forModel: { error: "INVALID_ARGS", message: "A valid tutor id is required." } };
+    }
+
+    const dbUser = await User.findById(user._id);
+    if (!dbUser) return { forModel: { error: "NOT_FOUND", message: "User not found." } };
+
+    if (dbUser.savedTutors && dbUser.savedTutors.includes(id)) {
+       return { forModel: { success: true, message: "Tutor was already saved in your shortlist." } };
+    }
+
+    if (!dbUser.savedTutors) dbUser.savedTutors = [];
+    dbUser.savedTutors.push(id);
+    await dbUser.save();
+
+    return { forModel: { success: true, message: "Tutor successfully saved to your shortlist." } };
+  }
+};
+
+const getShortlistedTutors = {
+  definition: {
+    name: "getShortlistedTutors",
+    description: "Get the user's saved or shortlisted tutors.",
+    parametersJsonSchema: { type: "object", properties: {}, required: [] },
+  },
+  requiresAuth: true,
+  async execute(args, { user }) {
+    if (!user) {
+      return { forModel: { error: "AUTH_REQUIRED", message: "You must be logged in to view saved tutors." } };
+    }
+    
+    const dbUser = await User.findById(user._id).populate("savedTutors");
+    if (!dbUser || !dbUser.savedTutors || dbUser.savedTutors.length === 0) {
+      return { forModel: { count: 0, teachers: [] } };
+    }
+
+    const teachers = dbUser.savedTutors.filter(t => t.isActive).map(withUrls);
+    
+    return {
+      forModel: { count: teachers.length, teachers: teachers.map(t => toModelSummary(t)) },
+      publicResults: teachers.map(t => toPublicCard(t)),
+    };
+  }
+};
+
+const postRequirement = {
+  definition: {
+    name: "postRequirement",
+    description: "Post a tutoring requirement when a student cannot find a suitable tutor.",
+    parametersJsonSchema: {
+      type: "object",
+      properties: {
+        subject: { type: "string" },
+        academicLevel: { type: "string" },
+        location: { type: "string" },
+        budget: { type: "string" },
+        teachingMode: { type: "string" },
+        preferredTime: { type: "string" },
+        additionalRequirements: { type: "string" },
+        contactEmail: { type: "string", description: "Email address if user is a guest." },
+        contactPhone: { type: "string", description: "Phone number if user is a guest." },
+      },
+      required: ["subject", "location", "budget"],
+    },
+  },
+  requiresAuth: false,
+  async execute(args, { user }) {
+    try {
+      const newRequirement = new Requirement({
+        ...args,
+        userId: user ? user._id : null
+      });
+      await newRequirement.save();
+      return { forModel: { success: true, requirementId: newRequirement._id } };
+    } catch (error) {
+      return { forModel: { error: "SERVER_ERROR", message: "Failed to post requirement." } };
+    }
+  }
+};
+
 const getSubjects = {
   definition: {
     name: "getSubjects",
@@ -228,4 +405,14 @@ const getLocations = {
   },
 };
 
-module.exports = { checkTeacherExists, searchTeachers, getTeacherProfile, getSubjects, getLocations };
+module.exports = { 
+  checkTeacherExists, 
+  searchTeachers, 
+  getTeacherProfile, 
+  getSubjects, 
+  getLocations,
+  getSimilarTutors,
+  shortlistTutor,
+  getShortlistedTutors,
+  postRequirement
+};

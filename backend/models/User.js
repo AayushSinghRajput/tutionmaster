@@ -35,7 +35,11 @@ const userSchema = new mongoose.Schema({
   tokenVersion: {
     type: Number,
     default: 0
-  }
+  },
+  savedTutors: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Teacher'
+  }]
 }, {
   timestamps: true
 });
