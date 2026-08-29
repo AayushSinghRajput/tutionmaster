@@ -30,9 +30,19 @@ const TeacherCard = ({ teacher }) => {
             }}
           />
           <div className="flex-1 min-w-0">
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate">
-              {name}
-            </h3>
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate max-w-full">
+                {name}
+              </h3>
+              {teacher.isVisible && (
+                <span
+                  className="inline-flex items-center text-[10px] sm:text-xs font-medium text-brand-700 bg-brand-50 px-1.5 py-0.5 rounded border border-brand-200"
+                  title="Profile reviewed and approved by TuitionMaster"
+                >
+                  TuitionMaster Verified
+                </span>
+              )}
+            </div>
             <div className="flex items-center space-x-1 mt-1">
               <MapPin size={14} className="text-gray-500 flex-shrink-0" />
               <span className="text-sm text-gray-600 truncate">
