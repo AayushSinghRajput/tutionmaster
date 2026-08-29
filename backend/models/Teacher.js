@@ -140,6 +140,15 @@ const teacherSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    averageRating: {
+      type: Number,
+      min: [1, 'Rating must be at least 1'],
+      max: [5, 'Rating must can not be more than 5']
+    },
+    totalReviews: {
+      type: Number,
+      default: 0
+    },
     viewedByUsers: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

@@ -18,6 +18,10 @@ const { protect, authorize, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
+const reviewRouter = require('./reviewRoute');
+// Mount reviews router
+router.use('/:teacherId/reviews', reviewRouter);
+
 /**
  * @openapi
  * /teachers:

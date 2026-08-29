@@ -31,6 +31,8 @@ function toPublicCard(teacher, matchScore = null) {
     preferredSubjects: teacher.preferredSubjects,
     teachingMode: teacher.teachingMode,
     isVisible: teacher.isVisible,
+    averageRating: teacher.averageRating,
+    totalReviews: teacher.totalReviews,
   };
   if (matchScore !== null) {
     card.matchScore = matchScore;
@@ -48,6 +50,8 @@ function toModelSummary(teacher, matchScore = null) {
     hourlyRate: teacher.hourlyRate,
     teachingMode: teacher.teachingMode,
     isVisible: teacher.isVisible,
+    averageRating: teacher.averageRating,
+    totalReviews: teacher.totalReviews,
   };
   if (matchScore !== null) {
     summary.matchScore = matchScore;

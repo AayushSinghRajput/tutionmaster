@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 const NAV = [
   { to: '/dashboard',      icon: '📊', label: 'Dashboard' },
   { to: '/teachers',       icon: '👩‍🏫', label: 'Teacher Profiles' },
+  { to: '/reviews',        icon: '⭐', label: 'Review Moderation' },
 ];
 
 const SUPER_ADMIN_NAV = [

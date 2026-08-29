@@ -7,6 +7,7 @@ import DashboardPage from './pages/DashboardPage';
 import TeachersPage from './pages/TeachersPage';
 import TeacherDetailPage from './pages/TeacherDetailPage';
 import AdministratorsPage from './pages/AdministratorsPage';
+import ReviewsPage from './pages/ReviewsPage';
 
 export default function App() {
   return (
@@ -21,6 +22,7 @@ export default function App() {
             <Route path="/dashboard"      element={<DashboardPage />} />
             <Route path="/teachers"       element={<TeachersPage />} />
             <Route path="/teachers/:id"   element={<TeacherDetailPage />} />
+            <Route path="/reviews"        element={<ReviewsPage />} />
             <Route path="/administrators" element={<AdministratorsPage />} />
           </Route>
 

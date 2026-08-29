@@ -83,6 +83,13 @@ const TeacherCard = ({ teacher }) => {
             <div className="flex items-center space-x-1 text-gray-600">
               <span>Rs {hourlyRate}/hr</span>
             </div>
+            {teacher.averageRating && (
+              <div className="flex items-center space-x-1 text-yellow-600">
+                <span className="text-yellow-500">⭐</span>
+                <span className="font-medium">{teacher.averageRating.toFixed(1)}</span>
+                <span className="text-gray-500 text-xs">({teacher.totalReviews})</span>
+              </div>
+            )}
           </div>
           <span className="inline-flex items-center px-2 py-1 rounded-md text-xs font-medium bg-success-100 text-success-700">
             {teachingMode}
