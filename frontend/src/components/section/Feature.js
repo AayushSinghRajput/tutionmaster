@@ -1,13 +1,50 @@
-import React from "react";
-import {
-  Award,
-  User,
-  Search,
-  Calendar,
-  Clock,
-  Phone,
-  CheckCircle,
-} from "lucide-react";
+
+import { Award, Sparkles, Target, Search, ClipboardCheck, ShieldCheck, Globe } from "lucide-react";
+
+const WHY_CHOOSE_FEATURES = [
+  {
+    icon: Sparkles,
+    gradient: "from-brand-600 to-brand-700",
+    title: "AI-Powered Tutor Matching",
+    description:
+      "Our AI helps you discover tutors that best match your learning needs, subjects, preferences, and requirements.",
+  },
+  {
+    icon: Target,
+    gradient: "from-gold-500 to-gold-600",
+    title: "Personalized Recommendations",
+    description:
+      "Get tutor recommendations tailored to your learning goals, subject requirements, location, and preferences.",
+  },
+  {
+    icon: Search,
+    gradient: "from-success-500 to-success-600",
+    title: "Search Your Way",
+    description:
+      "Find tutors using subjects, location, teaching preferences, and other filters that matter to you.",
+  },
+  {
+    icon: ClipboardCheck,
+    gradient: "from-brand-600 to-brand-700",
+    title: "Detailed Tutor Profiles",
+    description:
+      "Explore tutor qualifications, experience, subjects, and teaching information before making your choice.",
+  },
+  {
+    icon: ShieldCheck,
+    gradient: "from-gold-500 to-gold-600",
+    title: "Transparent & Trustworthy",
+    description:
+      "Make informed decisions with clear tutor information, verification indicators, reviews, and ratings.",
+  },
+  {
+    icon: Globe,
+    gradient: "from-success-500 to-success-600",
+    title: "Local & Online Learning",
+    description:
+      "Connect with tutors near you for local learning, or choose online tutoring for greater flexibility.",
+  },
+];
 
 const Features = () => {
   return (
@@ -19,104 +56,33 @@ const Features = () => {
             WHY CHOOSE US
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 font-serif">
-            The <span className="text-brand-600">TuitionMaster</span> Advantage
+            Why Choose <span className="text-brand-600">TuitionMaster</span>?
           </h2>
           <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-            A complete platform connecting qualified tutors with students
-            seamlessly
+            Find the right tutor faster with personalized recommendations, transparent
+            profiles, and flexible learning options — all in one place.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-stone-200 group">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-brand-600 to-brand-700 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <User className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Teacher Profiles
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              Teachers create comprehensive profiles with qualifications,
-              experience, and teaching subjects
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-stone-200 group">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-gold-500 to-gold-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Search className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Browse &amp; Connect
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              Students can view teacher profiles and contact directly via
-              provided contact information — no account required
-            </p>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2 border border-stone-200 group">
-            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-success-500 to-success-600 rounded-2xl mb-6 group-hover:scale-110 transition-transform duration-300">
-              <Calendar className="w-8 h-8 text-white" />
-            </div>
-            <h3 className="text-xl font-bold text-gray-900 mb-4">
-              Schedule &amp; Book
-            </h3>
-            <p className="text-gray-600 leading-relaxed">
-              Teachers set available time slots; students book tuition classes
-              directly from teacher profiles
-            </p>
-          </div>
-        </div>
-
-        {/* Additional Feature Row */}
-        <div className="mt-10 sm:mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-2xl p-6 border border-stone-200 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
-                <Clock className="w-6 h-6 text-brand-600" />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+          {WHY_CHOOSE_FEATURES.map(({ icon: Icon, gradient, title, description }) => (
+            <div
+              key={title}
+              className="bg-white rounded-2xl p-6 sm:p-8 shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-stone-200 hover:border-brand-200 group"
+            >
+              <div
+                className={`inline-flex items-center justify-center w-14 h-14 bg-gradient-to-br ${gradient} rounded-2xl mb-5 sm:mb-6 group-hover:scale-110 transition-transform duration-300`}
+              >
+                <Icon className="w-7 h-7 text-white" strokeWidth={2} />
               </div>
-              <div>
-                <h4 className="font-semibold text-gray-900">
-                  Flexible Scheduling
-                </h4>
-                <p className="text-sm text-gray-600 mt-1">
-                  Teachers customize their availability
-                </p>
-              </div>
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">
+                {title}
+              </h3>
+              <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
+                {description}
+              </p>
             </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 border border-stone-200 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
-                <Phone className="w-6 h-6 text-brand-600" />
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900">
-                  Direct Communication
-                </h4>
-                <p className="text-sm text-gray-600 mt-1">
-                  Students connect with teachers directly
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl p-6 border border-stone-200 hover:shadow-lg transition-shadow duration-300">
-            <div className="flex items-center gap-4">
-              <div className="flex-shrink-0 w-12 h-12 bg-brand-100 rounded-xl flex items-center justify-center">
-                <CheckCircle className="w-6 h-6 text-brand-600" />
-              </div>
-              <div>
-                <h4 className="font-semibold text-gray-900">
-                  Quality Education
-                </h4>
-                <p className="text-sm text-gray-600 mt-1">
-                  Well-qualified teachers ensure quality
-                </p>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>
