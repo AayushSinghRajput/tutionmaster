@@ -12,7 +12,17 @@ const TeacherHeader = ({ teacher }) => {
             className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg shrink-0"
           />
           <div className="flex-1 min-w-0">
-            <h1 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 mb-3 sm:mb-4 break-words">{teacher.name}</h1>
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1 mb-3 sm:mb-4">
+              <h1 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 break-words">{teacher.name}</h1>
+              {teacher.isVisible && (
+                <span
+                  className="inline-flex items-center text-xs sm:text-sm font-medium text-brand-700 bg-brand-50 px-2 py-1 rounded-md border border-brand-200"
+                  title="Profile reviewed and approved by TuitionMaster"
+                >
+                  TuitionMaster Verified
+                </span>
+              )}
+            </div>
             <div className="flex flex-wrap justify-center md:justify-start gap-3 sm:gap-4 text-sm sm:text-base">
               <div className="flex items-center text-gray-600">
                 <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-2 shrink-0 text-brand-600" />
