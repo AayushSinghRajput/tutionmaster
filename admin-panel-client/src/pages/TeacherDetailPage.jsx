@@ -152,12 +152,11 @@ export default function TeacherDetailPage() {
             <div className="card card-sm">
               <div className="detail-section">
                 <h4>Availability</h4>
-                {t.availability.map((a, i) => (
-                  <div key={i} style={{ marginBottom: '6px', fontSize: '.83rem' }}>
-                    <strong style={{ color: 'var(--brand-500)' }}>{a.day}:</strong>{' '}
-                    {a.timeSlots.map(s => `${s.startTime} – ${s.endTime}`).join(', ')}
-                  </div>
-                ))}
+                <div className="chips">
+                  {t.availability.map(day => (
+                    <span key={day} className="chip">{day}</span>
+                  ))}
+                </div>
               </div>
             </div>
           )}

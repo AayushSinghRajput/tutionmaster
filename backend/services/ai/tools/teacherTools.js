@@ -30,6 +30,7 @@ function toPublicCard(teacher, matchScore = null) {
     hourlyRate: teacher.hourlyRate,
     preferredSubjects: teacher.preferredSubjects,
     teachingMode: teacher.teachingMode,
+    isVisible: teacher.isVisible,
   };
   if (matchScore !== null) {
     card.matchScore = matchScore;
@@ -46,6 +47,7 @@ function toModelSummary(teacher, matchScore = null) {
     experience: teacher.experience,
     hourlyRate: teacher.hourlyRate,
     teachingMode: teacher.teachingMode,
+    isVisible: teacher.isVisible,
   };
   if (matchScore !== null) {
     summary.matchScore = matchScore;
@@ -84,6 +86,7 @@ const checkTeacherExists = {
 
     const match = await Teacher.findOne({
       isActive: true,
+      isVisible: true,
       name: new RegExp(escapeRegex(name.trim()), "i"),
     });
 
@@ -122,7 +125,7 @@ const searchTeachers = {
   requiresAuth: false,
   async execute(args) {
     const { query, subject, city, teachingMode, minExperience, maxExperience, minRate, maxRate } = args || {};
-    const filter = { isActive: true };
+    const filter = { isActive: true, isVisible: true };
 
     // Apply Hard Constraints First
     if (query && query.trim()) {
@@ -201,9 +204,9 @@ const getTeacherProfile = {
     let match = null;
 
     if (id && mongoose.isValidObjectId(id)) {
-      match = await Teacher.findOne({ _id: id, isActive: true });
+      match = await Teacher.findOne({ _id: id, isActive: true, isVisible: true });
     } else if (name && name.trim()) {
-      match = await Teacher.findOne({ isActive: true, name: new RegExp(escapeRegex(name.trim()), "i") });
+      match = await Teacher.findOne({ isActive: true, isVisible: true, name: new RegExp(escapeRegex(name.trim()), "i") });
     } else {
       return { forModel: { error: "INVALID_ARGS", message: "Either id or name is required." } };
     }
@@ -263,6 +266,7 @@ const getSimilarTutors = {
     const filter = {
       _id: { $ne: sourceTeacher._id },
       isActive: true,
+      isVisible: true,
       $or: [
         { preferredSubjects: { $in: sourceTeacher.preferredSubjects } },
         { "address.city": sourceTeacher.address.city }
@@ -347,7 +351,7 @@ const getShortlistedTutors = {
       return { forModel: { count: 0, teachers: [] } };
     }
 
-    const teachers = dbUser.savedTutors.filter(t => t.isActive).map(withUrls);
+    const teachers = dbUser.savedTutors.filter(t => t.isActive && t.isVisible).map(withUrls);
     
     return {
       forModel: { count: teachers.length, teachers: teachers.map(t => toModelSummary(t)) },
@@ -407,7 +411,7 @@ const getSubjects = {
   },
   requiresAuth: false,
   async execute() {
-    const raw = await Teacher.distinct("preferredSubjects", { isActive: true });
+    const raw = await Teacher.distinct("preferredSubjects", { isActive: true, isVisible: true });
     const seen = new Map();
     for (const subject of raw) {
       const key = subject.trim().toLowerCase();
@@ -426,7 +430,7 @@ const getLocations = {
   },
   requiresAuth: false,
   async execute() {
-    const raw = await Teacher.distinct("address.city", { isActive: true });
+    const raw = await Teacher.distinct("address.city", { isActive: true, isVisible: true });
     const cities = raw
       .filter(Boolean)
       .map((city) => city.trim())
