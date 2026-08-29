@@ -15,6 +15,7 @@ import TeachingDetailsCard from "../components/teachers/TeachingDetailsCard";
 import QuickDownloadCard from "../components/teachers/QuickDownloadCard";
 import ContactActionsCard from "../components/teachers/ContactActionCard";
 import TeacherSEO from "../components/seo/TeacherSEO";
+import RatingsAndReviewsSection from "../components/teachers/RatingsAndReviewsSection";
 
 const TeacherDetails = () => {
   const { id } = useParams();
@@ -72,6 +73,9 @@ const TeacherDetails = () => {
               <SubjectsSection subjects={teacher.preferredSubjects} />
               <QualificationsSection qualifications={teacher.qualifications} />
               <AvailabilitySection availability={teacher.availability} />
+              {(teacher.reviews?.length > 0 || teacher.averageRating) && (
+                <RatingsAndReviewsSection teacher={teacher} />
+              )}
               <CvViewer teacher={teacher} onDownload={handleDownloadCV} />
             </div>
 
