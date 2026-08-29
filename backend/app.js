@@ -32,6 +32,7 @@ const adminAuthRoutes = require("./admin-panel-server/routes/adminAuthRoutes");
 const adminTeacherRoutes = require("./admin-panel-server/routes/adminTeacherRoutes");
 const administratorRoutes = require("./admin-panel-server/routes/administratorRoutes");
 const dashboardRoutes = require("./admin-panel-server/routes/dashboardRoutes");
+const adminReviewRoutes = require("./admin-panel-server/routes/adminReviewRoutes");
 
 // Trust the single reverse proxy hop in front of the app (Render's edge
 // proxy locally, or the "backend" service behind a tunnel/proxy in dev),
@@ -129,6 +130,7 @@ app.use("/api/admin/auth", adminAuthRoutes);
 app.use("/api/admin/teachers", adminTeacherRoutes);
 app.use("/api/admin/administrators", administratorRoutes);
 app.use("/api/admin/dashboard", dashboardRoutes);
+app.use("/api/admin/reviews", adminReviewRoutes);
 
 // API documentation (read-only, public — safe to leave open)
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

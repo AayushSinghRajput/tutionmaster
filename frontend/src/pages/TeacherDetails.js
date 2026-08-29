@@ -73,13 +73,11 @@ const TeacherDetails = () => {
               <SubjectsSection subjects={teacher.preferredSubjects} />
               <QualificationsSection qualifications={teacher.qualifications} />
               <AvailabilitySection availability={teacher.availability} />
-              {(teacher.reviews?.length > 0 || teacher.averageRating) && (
-                <RatingsAndReviewsSection teacher={teacher} />
-              )}
+              <RatingsAndReviewsSection teacher={teacher} />
               <CvViewer teacher={teacher} onDownload={handleDownloadCV} />
             </div>
 
-            <div className="space-y-4 sm:space-y-6">
+            <div className="space-y-4 sm:space-y-6 lg:sticky lg:top-24 lg:self-start">
               {/* Desktop-only: rendered in the right sidebar */}
               <div className="hidden lg:block space-y-4 sm:space-y-6">
                 <ContactInfoCard teacher={teacher} />
