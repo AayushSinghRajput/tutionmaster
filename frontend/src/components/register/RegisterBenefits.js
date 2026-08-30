@@ -1,5 +1,6 @@
 import React from 'react';
-import { Star, Globe, Clock } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { Star, Globe, Clock, PlayCircle, ArrowRight } from 'lucide-react';
 import { teacherBenefits, quickStartSteps } from '../../constants/register/registerData';
 
 const RegisterBenefits = () => {
@@ -59,6 +60,24 @@ const RegisterBenefits = () => {
             </li>
           ))}
         </ul>
+      </div>
+
+      {/* Teacher Profile Demo Promo */}
+      <div className="bg-gradient-to-br from-gold-500 to-gold-600 rounded-2xl p-4 sm:p-6 text-white shadow-lg">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-xl flex items-center justify-center mb-3 sm:mb-4">
+          <PlayCircle className="w-5 h-5 sm:w-6 sm:h-6" />
+        </div>
+        <h4 className="font-bold text-base sm:text-lg mb-2">New to Teaching Here?</h4>
+        <p className="text-white/90 text-sm mb-4">
+          See a step-by-step walkthrough of how tutors create their profile and get discovered by students.
+        </p>
+        <Link
+          to="/how-it-works/teacher-profile"
+          className="inline-flex items-center justify-center w-full bg-white text-gold-700 px-4 sm:px-5 py-2.5 sm:py-3 rounded-lg font-semibold hover:bg-gold-50 transition-colors group"
+        >
+          See How It Works
+          <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+        </Link>
       </div>
     </div>
   );
