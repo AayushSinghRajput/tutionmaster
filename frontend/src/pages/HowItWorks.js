@@ -1,32 +1,23 @@
-import { useNavigate } from 'react-router-dom';
 import HeroSection from '../components/works/HeroSection';
-import StepsSection from '../components/works/StepsSection';
-import FeaturesSection from '../components/works/FeaturesSection';
 import StatsSection from '../components/works/StatsSection';
+import StudentJourneySection from '../components/works/StudentJourneySection';
+import TutorJourneySection from '../components/works/TutorJourneySection';
+import AiMatchingSection from '../components/works/AiMatchingSection';
+import FeaturesSection from '../components/works/FeaturesSection';
+import TrustSection from '../components/works/TrustSection';
 import CtaSection from '../components/works/CtaSection';
 
 const HowItWorks = () => {
-  const navigate = useNavigate();
-
-  const handleWatchDemo = () => {
-    navigate('/how-it-works/teacher-profile');
-  };
-
-  const handleBookTrial = () => {
-    // navigate to booking flow
-  };
-
-  const handleSpeakToAdvisor = () => {
-    // open contact/chat widget, or navigate to advisor page
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 to-gold-50">
-      <HeroSection onWatchDemo={handleWatchDemo} />
-      <StepsSection />
-      <FeaturesSection />
+      <HeroSection />
       <StatsSection />
-      <CtaSection onBookTrial={handleBookTrial} onSpeakToAdvisor={handleSpeakToAdvisor} />
+      <StudentJourneySection />
+      <TutorJourneySection />
+      <AiMatchingSection />
+      <FeaturesSection />
+      <TrustSection />
+      <CtaSection />
     </div>
   );
 };
