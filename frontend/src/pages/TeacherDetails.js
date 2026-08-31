@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate, useLocation } from "react-router-dom";
 import { Mail, Phone } from "lucide-react";
 import { teacherService } from "../services/teacherService";
 import LoadingSpinner from "../components/common/LoadingSpinner";
@@ -16,12 +16,17 @@ import QuickDownloadCard from "../components/teachers/QuickDownloadCard";
 import ContactActionsCard from "../components/teachers/ContactActionCard";
 import TeacherSEO from "../components/seo/TeacherSEO";
 import RatingsAndReviewsSection from "../components/teachers/RatingsAndReviewsSection";
+import { useAuth } from "../context/AuthContext";
+import { Lock } from "lucide-react";
 
 const TeacherDetails = () => {
   const { id } = useParams();
   const [teacher, setTeacher] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     fetchTeacher();
@@ -107,17 +112,29 @@ const TeacherDetails = () => {
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <a
-                href={`mailto:${teacher.contact.email}`}
+                href={isAuthenticated ? `mailto:${teacher.contact.email}` : '#'}
                 className="btn-brand-outline px-3 py-2 text-xs"
+                onClick={(e) => {
+                  if (!isAuthenticated) {
+                    e.preventDefault();
+                    navigate('/login', { state: { from: location } });
+                  }
+                }}
               >
-                <Mail size={14} />
+                {!isAuthenticated ? <Lock size={14} /> : <Mail size={14} />}
                 <span>Message</span>
               </a>
               <a
-                href={`tel:${teacher.contact.phone}`}
+                href={isAuthenticated ? `tel:${teacher.contact.phone}` : '#'}
                 className="btn-brand-primary px-3 py-2 text-xs"
+                onClick={(e) => {
+                  if (!isAuthenticated) {
+                    e.preventDefault();
+                    navigate('/login', { state: { from: location } });
+                  }
+                }}
               >
-                <Phone size={14} />
+                {!isAuthenticated ? <Lock size={14} /> : <Phone size={14} />}
                 <span>Call</span>
               </a>
             </div>

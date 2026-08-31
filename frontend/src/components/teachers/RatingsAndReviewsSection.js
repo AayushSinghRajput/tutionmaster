@@ -10,11 +10,9 @@ const RatingsAndReviewsSection = ({ teacher }) => {
   const [showForm, setShowForm] = useState(false);
   const [rating, setRating] = useState(0);
   const [hoverRating, setHoverRating] = useState(0);
-  const [reviewerName, setReviewerName] = useState('');
-  const [reviewerEmail, setReviewerEmail] = useState('');
   const [reviewText, setReviewText] = useState('');
   const [submitting, setSubmitting] = useState(false);
-  const { user } = useAuth();
+  const { user, isAuthenticated } = useAuth();
 
   useEffect(() => {
     fetchReviews();
@@ -37,14 +35,6 @@ const RatingsAndReviewsSection = ({ teacher }) => {
       toast.error('Please select a rating');
       return;
     }
-    if (!reviewerName.trim()) {
-      toast.error('Please provide your name');
-      return;
-    }
-    if (!reviewerEmail.trim()) {
-      toast.error('Please provide your email');
-      return;
-    }
     if (!reviewText.trim() || reviewText.length < 10) {
       toast.error('Please write a review of at least 10 characters');
       return;
@@ -54,15 +44,11 @@ const RatingsAndReviewsSection = ({ teacher }) => {
     try {
       const response = await reviewService.addReview(teacher._id, {
         rating,
-        reviewText,
-        reviewerName,
-        reviewerEmail
+        reviewText
       });
       toast.success(response.data.message || 'Review submitted successfully!');
       setRating(0);
       setReviewText('');
-      setReviewerName('');
-      setReviewerEmail('');
       setShowForm(false);
     } catch (error) {
       toast.error(error.response?.data?.error || 'Failed to submit review');
@@ -71,8 +57,8 @@ const RatingsAndReviewsSection = ({ teacher }) => {
     }
   };
 
-  // Anyone can review unless they are logged in and happen to be the teacher
-  const isEligibleToReview = !user || (user._id !== teacher.userId && user.id !== teacher.userId && user._id !== teacher.userId._id);
+  // Must be logged in, must be a student, and cannot be the teacher reviewing themselves
+  const isEligibleToReview = isAuthenticated && user && user.role === 'student' && (user._id !== teacher.userId && user.id !== teacher.userId && user._id !== teacher.userId._id);
 
   const ratingDistribution = [5, 4, 3, 2, 1].map((star) => {
     const count = reviews.filter((r) => r.rating === star).length;
@@ -209,29 +195,6 @@ const RatingsAndReviewsSection = ({ teacher }) => {
                             />
                           </button>
                         ))}
-                      </div>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Your Name</label>
-                        <input
-                          type="text"
-                          className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-                          placeholder="Jane Doe"
-                          value={reviewerName}
-                          onChange={(e) => setReviewerName(e.target.value)}
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-2">Your Email</label>
-                        <input
-                          type="email"
-                          className="w-full px-3 py-2 border border-stone-300 rounded-lg focus:ring-brand-500 focus:border-brand-500 sm:text-sm"
-                          placeholder="jane@example.com"
-                          value={reviewerEmail}
-                          onChange={(e) => setReviewerEmail(e.target.value)}
-                        />
-                        <p className="text-xs text-gray-500 mt-1">Your email will not be published.</p>
                       </div>
                     </div>
                     <div className="mb-4">

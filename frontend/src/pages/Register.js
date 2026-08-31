@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import {
   RegisterHeader,
@@ -8,14 +8,22 @@ import {
 } from '../components/register';
 
 const Register = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname;
 
   useEffect(() => {
-    if (isAuthenticated) {
-      navigate('/dashboard');
+    if (isAuthenticated && user) {
+      if (from) {
+        navigate(from, { replace: true });
+      } else if (user.role === 'student') {
+        navigate('/teachers', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
     }
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, user, navigate, from]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50 py-6 sm:py-8">

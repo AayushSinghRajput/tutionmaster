@@ -15,7 +15,7 @@ const googleClient = process.env.GOOGLE_CLIENT_ID
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { username, email, password, confirmPassword } = req.body;
+  const { username, email, password, confirmPassword, role = 'student' } = req.body;
 
   if (password !== confirmPassword) {
     return next(new ErrorResponse('Passwords do not match', 400));
@@ -32,7 +32,7 @@ exports.register = asyncHandler(async (req, res, next) => {
     username,
     email,
     password,
-    role: 'teacher'
+    role
   });
 
   const token = generateToken(user._id, user.tokenVersion);
@@ -127,7 +127,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Google sign-in is not configured', 501));
   }
 
-  const { credential } = req.body;
+  const { credential, role = 'student' } = req.body;
 
   let payload;
   try {
@@ -160,7 +160,7 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
         username: name || email.split('@')[0],
         email,
         googleId,
-        role: 'teacher',
+        role,
       });
     }
   }

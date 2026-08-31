@@ -6,14 +6,22 @@ import LoginCard from '../components/login/LoginCard';
 import LoginSidebar from '../components/login/LoginSidebar';
 
 const Login = () => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
-  const from = location.state?.from?.pathname || '/dashboard';
+  const from = location.state?.from?.pathname;
 
   useEffect(() => {
-    if (isAuthenticated) navigate(from, { replace: true });
-  }, [isAuthenticated, navigate, from]);
+    if (isAuthenticated && user) {
+      if (from) {
+        navigate(from, { replace: true });
+      } else if (user.role === 'student') {
+        navigate('/teachers', { replace: true });
+      } else {
+        navigate('/dashboard', { replace: true });
+      }
+    }
+  }, [isAuthenticated, user, navigate, from]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-stone-50 via-white to-brand-50 flex items-center justify-center py-8 sm:py-12 px-4 sm:px-6 lg:px-8">

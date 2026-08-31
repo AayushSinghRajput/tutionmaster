@@ -10,6 +10,7 @@ const RegisterForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [role, setRole] = useState('student');
   const { register: registerUser } = useAuth();
   
   const {
@@ -23,7 +24,7 @@ const RegisterForm = () => {
 
   const onSubmit = async (data) => {
     setIsLoading(true);
-    const result = await registerUser(data.username, data.email, data.password, data.confirmPassword);
+    const result = await registerUser(data.username, data.email, data.password, data.confirmPassword, role);
     setIsLoading(false);
 
     if (result.success) {
@@ -43,7 +44,37 @@ const RegisterForm = () => {
           <UserPlus className="w-7 h-7 sm:w-8 sm:h-8 text-brand-600" />
         </div>
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Join TuitionMaster</h2>
-        <p className="mt-2 text-sm sm:text-base text-gray-600">Create your tutor profile and start hearing from students</p>
+        <p className="mt-2 text-sm sm:text-base text-gray-600">
+          {role === 'teacher' 
+            ? 'Create your tutor profile and start hearing from students'
+            : 'Join as a student to find your perfect tutor'}
+        </p>
+      </div>
+
+      <div className="flex justify-center gap-4 mb-6">
+        <label className={`flex items-center p-3 sm:p-4 border rounded-xl cursor-pointer transition-all duration-200 flex-1 ${role === 'student' ? 'border-brand-500 bg-brand-50 shadow-sm' : 'border-gray-200 hover:border-gray-300'}`}>
+          <input
+            type="radio"
+            name="role"
+            value="student"
+            checked={role === 'student'}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-4 h-4 text-brand-600 focus:ring-brand-500 border-gray-300"
+          />
+          <span className={`ml-3 font-medium ${role === 'student' ? 'text-brand-700' : 'text-gray-700'}`}>I am a Student</span>
+        </label>
+        
+        <label className={`flex items-center p-3 sm:p-4 border rounded-xl cursor-pointer transition-all duration-200 flex-1 ${role === 'teacher' ? 'border-brand-500 bg-brand-50 shadow-sm' : 'border-gray-200 hover:border-gray-300'}`}>
+          <input
+            type="radio"
+            name="role"
+            value="teacher"
+            checked={role === 'teacher'}
+            onChange={(e) => setRole(e.target.value)}
+            className="w-4 h-4 text-brand-600 focus:ring-brand-500 border-gray-300"
+          />
+          <span className={`ml-3 font-medium ${role === 'teacher' ? 'text-brand-700' : 'text-gray-700'}`}>I am a Teacher</span>
+        </label>
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 sm:space-y-6">
@@ -221,7 +252,7 @@ const RegisterForm = () => {
           ) : (
             <>
               <UserPlus className="w-5 h-5 mr-2" />
-              Create Your Tutor Profile
+              {role === 'teacher' ? 'Create Your Tutor Profile' : 'Create Student Account'}
             </>
           )}
         </button>
@@ -240,7 +271,7 @@ const RegisterForm = () => {
           </div>
         </div>
         <div className="mt-4">
-          <GoogleAuthButton />
+          <GoogleAuthButton role={role} />
         </div>
       </div>
     </div>

@@ -5,12 +5,12 @@ export const authService = {
     return api.post('/auth/login', { email, password });
   },
 
-  register: (username, email, password, confirmPassword) => {
-    return api.post('/auth/register', { username, email, password, confirmPassword });
+  register: (username, email, password, confirmPassword, role) => {
+    return api.post('/auth/register', { username, email, password, confirmPassword, role });
   },
 
-  googleLogin: (credential) => {
-    return api.post('/auth/google', { credential });
+  googleLogin: (credential, role) => {
+    return api.post('/auth/google', { credential, role });
   },
 
   getCurrentUser: async () => {

@@ -9,7 +9,10 @@ import {
   RefreshCw,
   ChevronLeft,
   ChevronRight,
+  Lock,
 } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
+import { Link, useLocation } from 'react-router-dom';
 import { useCvViewer } from '../../hooks/useCvViewer';
 import CvInfoCard from './CvInfoCard';
 import { CV_INFO_CARDS } from '../../constants/cv/cvInfoCards';
@@ -20,6 +23,8 @@ const MAX_PAGE_WIDTH = 720;
 const MIN_PAGE_WIDTH = 240;
 
 const CvViewer = ({ teacher, onDownload }) => {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
   const {
     zoomLevel,
     isFullscreen,
@@ -86,8 +91,9 @@ const CvViewer = ({ teacher, onDownload }) => {
             <span className="hidden sm:inline">{isFullscreen ? 'Exit' : 'Fullscreen'}</span>
           </button>
           <button
-            onClick={onDownload}
-            className="btn-brand-primary px-4 py-2 text-sm"
+            onClick={isAuthenticated ? onDownload : undefined}
+            className={`btn-brand-primary px-4 py-2 text-sm ${!isAuthenticated ? 'opacity-50 cursor-not-allowed' : ''}`}
+            disabled={!isAuthenticated}
           >
             <Download className="w-4 h-4" />
             <span className="hidden sm:inline">Download</span>
@@ -95,11 +101,12 @@ const CvViewer = ({ teacher, onDownload }) => {
         </div>
       </div>
 
-      <div
-        id="cv-container"
-        ref={containerRef}
-        className="border border-stone-300 rounded-xl bg-stone-50 py-5 px-3 sm:py-8 sm:px-4 flex flex-col items-center w-full max-w-full overflow-x-auto"
-      >
+      <div className="relative">
+        <div
+          id="cv-container"
+          ref={containerRef}
+          className={`border border-stone-300 rounded-xl bg-stone-50 py-5 px-3 sm:py-8 sm:px-4 flex flex-col items-center w-full max-w-full overflow-x-auto ${!isAuthenticated ? 'blur-md select-none' : ''}`}
+        >
         {pdfError ? (
           <div className="w-full max-w-lg flex flex-col items-center justify-center bg-white rounded-lg py-16">
             <div className="text-center p-8">
@@ -182,6 +189,22 @@ const CvViewer = ({ teacher, onDownload }) => {
               </div>
             )}
           </>
+        )}
+        </div>
+
+        {!isAuthenticated && (
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-white/30 backdrop-blur-[2px] rounded-xl border border-stone-200 shadow-inner p-6 text-center">
+            <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-md mb-4">
+              <Lock className="w-8 h-8 text-brand-600" />
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">CV is Protected</h3>
+            <p className="text-gray-600 mb-6 max-w-md mx-auto">
+              You must be logged in to view and download {teacher.name}'s professional CV and qualifications.
+            </p>
+            <Link to="/login" state={{ from: location }} className="btn-brand-primary px-6 py-3 shadow-lg hover:shadow-xl transition-all">
+              Log In to View CV
+            </Link>
+          </div>
         )}
       </div>
 

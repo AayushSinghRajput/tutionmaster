@@ -53,10 +53,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (username, email, password, confirmPassword) => {
+  const register = async (username, email, password, confirmPassword, role) => {
     try {
       setError('');
-      const response = await authService.register(username, email, password, confirmPassword);
+      const response = await authService.register(username, email, password, confirmPassword, role);
       const { token, user: userData } = response.data;
 
       localStorage.setItem('token', token);
@@ -70,10 +70,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const loginWithGoogle = async (credential) => {
+  const loginWithGoogle = async (credential, role) => {
     try {
       setError('');
-      const response = await authService.googleLogin(credential);
+      const response = await authService.googleLogin(credential, role);
       const { token, user: userData } = response.data;
 
       localStorage.setItem('token', token);

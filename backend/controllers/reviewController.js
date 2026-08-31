@@ -19,10 +19,16 @@ exports.getReviews = asyncHandler(async (req, res, next) => {
 
 // @desc    Add a review
 // @route   POST /api/teachers/:teacherId/reviews
-// @access  Public (Guest students can review)
+// @access  Private (Authenticated users can review)
 exports.addReview = asyncHandler(async (req, res, next) => {
   req.body.teacher = req.params.teacherId;
+  req.body.reviewerName = req.user.username;
+  req.body.reviewerEmail = req.user.email;
   const { reviewerName, reviewerEmail } = req.body;
+
+  if (req.user.role !== 'student') {
+    return next(new ErrorResponse(`Only students are allowed to write reviews.`, 403));
+  }
 
   if (!reviewerName || !reviewerEmail) {
     return next(new ErrorResponse(`Please provide your name and email`, 400));
