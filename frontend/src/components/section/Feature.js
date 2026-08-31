@@ -48,7 +48,7 @@ const WHY_CHOOSE_FEATURES = [
 
 const Features = () => {
   return (
-    <section className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-stone-50 to-brand-50">
+    <section id="why-tuitionmaster" className="py-12 sm:py-16 md:py-20 bg-gradient-to-br from-stone-50 to-brand-50 scroll-mt-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-10 sm:mb-16">
           <div className="inline-flex items-center gap-2 bg-gold-100 text-gold-700 px-4 py-2 rounded-full text-sm font-semibold mb-4">
