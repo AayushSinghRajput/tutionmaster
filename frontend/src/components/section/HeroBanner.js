@@ -1,173 +1,181 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import {
   Search,
   TrendingUp,
-  BookOpen,
-  Calculator,
-  Cpu,
-  Code,
+  MapPin,
+  Clock,
+  Wallet,
+  Sparkles,
+  Star,
+  BadgeCheck,
+  CheckCircle2,
 } from "lucide-react";
 
-const HeroBanner = ({ scrollToHowItWorks }) => {
+const TRUST_POINTS = [
+  "Match by subject, level & location",
+  "Flexible schedules & budgets",
+  "Tutors across Nepal",
+  "Message tutors directly",
+];
+
+const FILTER_CHIPS = [
+  { icon: MapPin, label: "Kathmandu" },
+  { icon: Clock, label: "Online" },
+  { icon: Wallet, label: "NPR 300–500/hr" },
+];
+
+const HeroVisual = () => (
+  <div className="relative max-w-md mx-auto lg:max-w-none w-full">
+    <div className="absolute -top-8 -right-6 w-40 h-40 bg-gold-200/50 rounded-full blur-3xl" aria-hidden="true" />
+    <div className="absolute -bottom-10 -left-8 w-48 h-48 bg-brand-200/40 rounded-full blur-3xl" aria-hidden="true" />
+
+    <div className="relative bg-white rounded-3xl border border-stone-200 shadow-xl p-4 sm:p-6">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[11px] sm:text-xs font-bold text-gray-400 tracking-wider">
+          FIND A TUTOR
+        </span>
+        <div className="flex gap-1" aria-hidden="true">
+          <span className="w-1.5 h-1.5 rounded-full bg-stone-200" />
+          <span className="w-1.5 h-1.5 rounded-full bg-stone-200" />
+          <span className="w-1.5 h-1.5 rounded-full bg-stone-200" />
+        </div>
+      </div>
+
+      <div className="flex items-center gap-2 bg-stone-50 border border-stone-200 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 mb-3">
+        <Search className="w-4 h-4 text-gray-400 shrink-0" />
+        <span className="text-sm sm:text-base text-gray-700 font-medium truncate">
+          Mathematics tutor in Kathmandu
+        </span>
+      </div>
+
+      <div className="flex flex-wrap gap-1.5 sm:gap-2 mb-4 sm:mb-5">
+        {FILTER_CHIPS.map(({ icon: Icon, label }) => (
+          <span
+            key={label}
+            className="inline-flex items-center gap-1 text-[11px] sm:text-xs font-medium bg-brand-50 text-brand-700 border border-brand-100 px-2.5 py-1 rounded-full"
+          >
+            <Icon className="w-3 h-3" />
+            {label}
+          </span>
+        ))}
+      </div>
+
+      <div className="flex items-center gap-2 text-[11px] sm:text-xs font-bold text-gold-700 mb-3 sm:mb-4">
+        <Sparkles className="w-3.5 h-3.5 shrink-0" />
+        MATCHING YOU WITH TUTORS
+        <span className="flex-1 h-px bg-stone-200" />
+      </div>
+
+      <div className="relative flex items-center gap-3 bg-brand-50/40 border-2 border-brand-300 rounded-2xl p-3 sm:p-4 mb-3 shadow-sm">
+        <span className="absolute -top-2.5 left-3 inline-flex items-center gap-1 bg-brand-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+          <BadgeCheck className="w-3 h-3" />
+          Best Match
+        </span>
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-brand-100 flex items-center justify-center font-bold text-brand-700 shrink-0">
+          SK
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-gray-900 text-sm sm:text-base truncate">
+              Sujata K.
+            </span>
+            <Star className="w-3.5 h-3.5 text-gold-500 fill-gold-500 shrink-0" />
+            <span className="text-xs text-gray-500 font-medium">4.9</span>
+          </div>
+          <div className="text-xs sm:text-sm text-gray-500 truncate">
+            Mathematics · Kathmandu
+          </div>
+        </div>
+        <div className="text-right shrink-0">
+          <div className="text-sm sm:text-base font-bold text-gray-900">NPR 300</div>
+          <div className="text-[10px] sm:text-xs text-gray-400">per hour</div>
+        </div>
+      </div>
+
+      <div className="relative flex items-center gap-3 bg-white border border-stone-200 rounded-2xl p-3 sm:p-4 opacity-80">
+        <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gold-100 flex items-center justify-center font-bold text-gold-700 shrink-0">
+          BT
+        </div>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <span className="font-bold text-gray-900 text-sm sm:text-base truncate">
+              Bikash T.
+            </span>
+            <Star className="w-3.5 h-3.5 text-gold-500 fill-gold-500 shrink-0" />
+            <span className="text-xs text-gray-500 font-medium">4.8</span>
+          </div>
+          <div className="text-xs sm:text-sm text-gray-500 truncate">
+            Physics · Mathematics · Lalitpur
+          </div>
+        </div>
+        <div className="text-right shrink-0">
+          <div className="text-sm sm:text-base font-bold text-gray-900">NPR 450</div>
+          <div className="text-[10px] sm:text-xs text-gray-400">per hour</div>
+        </div>
+      </div>
+    </div>
+
+    <div className="absolute -bottom-4 -left-3 sm:-left-6 bg-white border border-stone-200 rounded-2xl shadow-lg px-3 sm:px-4 py-2 sm:py-2.5 flex items-center gap-2">
+      <div className="w-8 h-8 rounded-full bg-success-100 flex items-center justify-center shrink-0">
+        <CheckCircle2 className="w-4 h-4 text-success-600" />
+      </div>
+      <div>
+        <div className="text-xs sm:text-sm font-bold text-gray-900 leading-tight">Perfect Match</div>
+        <div className="text-[10px] sm:text-xs text-gray-500 leading-tight">Ready to connect</div>
+      </div>
+    </div>
+  </div>
+);
+
+const HeroBanner = () => {
   return (
-    <section className="relative pt-4 pb-12 sm:pt-6 sm:pb-16 md:pt-8 md:pb-20 bg-gradient-to-b from-brand-100 via-brand-50 to-stone-50 overflow-hidden">
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center max-w-2xl mx-auto">
-          <h1 className="font-serif text-xl sm:text-3xl md:text-5xl font-bold leading-tight mb-1.5 sm:mb-4 text-gray-900">
-            Learning goes further with the right person guiding it
-          </h1>
-          <p className="hidden sm:block text-base sm:text-lg text-gray-600 leading-relaxed mb-5 sm:mb-8 max-w-xl mx-auto">
-            TuitionMaster connects students and parents across Nepal with
-            qualified, subject-matched tutors — and gives tutors a real way
-            to reach students.
-          </p>
-        </div>
-
-        {/* Dual path cards */}
-        <div className="grid grid-cols-2 gap-2.5 sm:gap-5 max-w-2xl mx-auto mb-12 sm:mb-16 items-stretch">
-          <div className="flex flex-col bg-white rounded-2xl p-3 sm:p-6 border border-stone-200 shadow-sm text-left">
-            <div className="hidden sm:flex w-11 h-11 rounded-xl bg-brand-100 items-center justify-center mb-4">
-              <Search className="w-5 h-5 text-brand-600" />
+    <section className="relative pt-8 pb-16 sm:pt-12 sm:pb-20 md:pt-16 md:pb-24 bg-gradient-to-b from-brand-100 via-brand-50 to-stone-50 overflow-hidden">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-10 sm:gap-12 lg:gap-16 items-center">
+          <div className="text-center lg:text-left">
+            <div className="inline-flex items-center gap-1.5 bg-white/80 backdrop-blur border border-brand-200 text-brand-700 px-3.5 py-1.5 rounded-full text-xs sm:text-sm font-semibold mb-4 sm:mb-6 shadow-sm">
+              <MapPin className="w-3.5 h-3.5" />
+              Tutors Across Nepal
             </div>
-            <h2 className="font-bold text-gray-900 text-sm sm:text-lg mb-1 sm:mb-1.5">
-              I&apos;m looking for a tutor
-            </h2>
-            <p className="hidden sm:block text-sm text-gray-600 mb-5">
-              Browse qualified profiles by subject, level, and location —
-              message a tutor directly, no account needed.
+
+            <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold leading-tight text-gray-900 mb-4 sm:mb-5">
+              Find the Right Tutor.
+              <br />
+              Start Learning.
+            </h1>
+
+            <p className="text-base sm:text-lg text-gray-600 leading-relaxed mb-6 sm:mb-8 max-w-xl mx-auto lg:mx-0">
+              Tell us your subject, level, location, schedule, and budget —
+              we&apos;ll help you find tutors who match, so you can connect
+              and start learning sooner.
             </p>
-            <Link to="/teachers" className="btn-brand-primary w-full text-sm sm:text-base px-2 sm:px-5 py-2 sm:py-2.5 gap-1 sm:gap-2 mt-auto whitespace-nowrap">
-              Find a Tutor <Search className="w-4 h-4 shrink-0" />
-            </Link>
-          </div>
 
-          <div className="flex flex-col bg-white rounded-2xl p-3 sm:p-6 border border-stone-200 shadow-sm text-left">
-            <div className="hidden sm:flex w-11 h-11 rounded-xl bg-gold-100 items-center justify-center mb-4">
-              <TrendingUp className="w-5 h-5 text-gold-600" />
-            </div>
-            <h2 className="font-bold text-gray-900 text-sm sm:text-lg mb-1 sm:mb-1.5">
-              I want to teach
-            </h2>
-            <p className="hidden sm:block text-sm text-gray-600 mb-5">
-              Build a profile, set your subjects and rate, and start hearing
-              from students in your area.
-            </p>
-            <Link to="/register" className="btn-brand-outline w-full text-sm sm:text-base px-2 sm:px-5 py-2 sm:py-2.5 gap-1 sm:gap-2 mt-auto whitespace-nowrap">
-              Become a Tutor <TrendingUp className="w-4 h-4 shrink-0" />
-            </Link>
-          </div>
-        </div>
-
-        {/* Curriculum programs — TuitionMaster's strongest, most locally-specific asset */}
-        <div className="bg-white rounded-2xl p-5 sm:p-8 border border-stone-200 shadow-md">
-          <div className="text-center mb-6">
-            <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 font-serif">
-              Comprehensive Learning Programs
-            </h3>
-            <p className="text-gray-600 text-sm">
-              Complete curriculum coverage for all educational levels in
-              Nepal
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div className="bg-stone-50 rounded-xl p-4 sm:p-6 text-center border border-stone-200">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-100 rounded-xl mb-3">
-                <BookOpen className="w-6 h-6 text-brand-600" />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">
-                School Level (1-10)
-              </h3>
-              <p className="text-sm text-gray-600">
-                All Subjects: Nepali, English, Math, Science, Social
-              </p>
-              <div className="flex justify-center gap-1 mt-2 flex-wrap">
-                <span className="text-xs bg-brand-100 text-brand-700 px-2 py-1 rounded-full">Class 1-5</span>
-                <span className="text-xs bg-success-100 text-success-600 px-2 py-1 rounded-full">Class 6-8</span>
-                <span className="text-xs bg-gold-100 text-gold-700 px-2 py-1 rounded-full">Class 9-10</span>
-              </div>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start mb-8 sm:mb-10">
+              <Link
+                to="/teachers"
+                className="btn-brand-primary text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-3.5 shadow-lg shadow-brand-600/20"
+              >
+                Find a Tutor <Search className="w-5 h-5 shrink-0" />
+              </Link>
+              <Link
+                to="/register"
+                className="btn-brand-outline text-base sm:text-lg px-6 sm:px-8 py-3 sm:py-3.5"
+              >
+                Teach on TuitionMaster <TrendingUp className="w-5 h-5 shrink-0" />
+              </Link>
             </div>
 
-            <div className="bg-stone-50 rounded-xl p-4 sm:p-6 text-center border border-stone-200">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-success-100 rounded-xl mb-3">
-                <Calculator className="w-6 h-6 text-success-600" />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">
-                +2 Level (Science/Management)
-              </h3>
-              <p className="text-sm text-gray-600">
-                Physics, Chemistry, Biology, Math, English, Nepali
-              </p>
-              <div className="flex justify-center gap-1 mt-2 flex-wrap">
-                <span className="text-xs bg-success-100 text-success-600 px-2 py-1 rounded-full">Grade 11</span>
-                <span className="text-xs bg-gold-100 text-gold-700 px-2 py-1 rounded-full">Grade 12</span>
-              </div>
-            </div>
-
-            <div className="bg-stone-50 rounded-xl p-4 sm:p-6 text-center border border-stone-200">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-gold-100 rounded-xl mb-3">
-                <Cpu className="w-6 h-6 text-gold-600" />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">
-                Engineering (Bachelor&apos;s)
-              </h3>
-              <p className="text-sm text-gray-600">
-                All semesters &amp; subjects for Nepal Engineering colleges
-              </p>
-              <div className="flex justify-center gap-1 mt-2 flex-wrap">
-                <span className="text-xs bg-gold-100 text-gold-700 px-2 py-1 rounded-full">Bachelor</span>
-                <span className="text-xs bg-brand-100 text-brand-700 px-2 py-1 rounded-full">BE/BTech</span>
-              </div>
-            </div>
-
-            <div className="bg-stone-50 rounded-xl p-4 sm:p-6 text-center border border-stone-200">
-              <div className="inline-flex items-center justify-center w-12 h-12 bg-brand-100 rounded-xl mb-3">
-                <Code className="w-6 h-6 text-brand-600" />
-              </div>
-              <h3 className="font-bold text-gray-900 mb-2">
-                Programming &amp; IT
-              </h3>
-              <p className="text-sm text-gray-600">
-                JavaScript, Python, Web Development, Data Science
-              </p>
-              <div className="flex justify-center gap-1 mt-2 flex-wrap">
-                <span className="text-xs bg-success-100 text-success-600 px-2 py-1 rounded-full">Beginner</span>
-                <span className="text-xs bg-gold-100 text-gold-700 px-2 py-1 rounded-full">Advanced</span>
-              </div>
-            </div>
           </div>
 
-          <div className="grid grid-cols-3 gap-2 sm:gap-3 mt-6">
-            <button onClick={scrollToHowItWorks} className="bg-stone-100 hover:bg-stone-200 transition-colors rounded-lg p-2 sm:p-3 text-center border border-stone-200">
-              <span className="text-gray-700 text-xs sm:text-sm font-medium">SEE Preparation</span>
-            </button>
-            <button onClick={scrollToHowItWorks} className="bg-stone-100 hover:bg-stone-200 transition-colors rounded-lg p-2 sm:p-3 text-center border border-stone-200">
-              <span className="text-gray-700 text-xs sm:text-sm font-medium">+2 Entrance</span>
-            </button>
-            <button onClick={scrollToHowItWorks} className="bg-stone-100 hover:bg-stone-200 transition-colors rounded-lg p-2 sm:p-3 text-center border border-stone-200">
-              <span className="text-gray-700 text-xs sm:text-sm font-medium">Engineering Entrance</span>
-            </button>
-          </div>
-        </div>
+          <HeroVisual />
 
-        {/* Real, falsifiable stats — no unproven superlatives */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-6 mt-10 sm:mt-14 max-w-2xl mx-auto text-center">
-          <div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900 font-serif">Nepal-Wide</div>
-            <div className="text-gray-600 text-xs sm:text-sm">Tutor network</div>
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900 font-serif">40+</div>
-            <div className="text-gray-600 text-xs sm:text-sm">Subjects listed</div>
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900 font-serif">All Levels</div>
-            <div className="text-gray-600 text-xs sm:text-sm">School to Bachelor&apos;s</div>
-          </div>
-          <div>
-            <div className="text-xl sm:text-2xl font-bold text-gray-900 font-serif">1-on-1</div>
-            <div className="text-gray-600 text-xs sm:text-sm">Personalized learning</div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-x-4 gap-y-3 max-w-xl mx-auto lg:mx-0 text-left">
+            {TRUST_POINTS.map((point) => (
+              <div key={point} className="flex items-center gap-2">
+                <CheckCircle2 className="w-4 h-4 text-success-600 shrink-0" />
+                <span className="text-sm text-gray-700 font-medium">{point}</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

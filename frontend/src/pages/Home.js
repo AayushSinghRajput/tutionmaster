@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import HeroBanner from "../components/section/HeroBanner";
+import LearningPrograms from "../components/section/LearningPrograms";
 import HowItWorks from "../components/section/HowItWorks";
 import Features from "../components/section/Feature";
 import CTA from "../components/section/CTA";
@@ -21,13 +22,6 @@ const Home = () => {
     localStorage.setItem("hasSeenVideoTutorial", "true");
   };
 
-  const scrollToHowItWorks = () => {
-    howItWorksRef.current?.scrollIntoView({
-      behavior: "smooth",
-      block: "start",
-    });
-  };
-
   return (
     <div className="min-h-screen relative">
       {/* Centered Video Overlay Banner */}
@@ -36,7 +30,10 @@ const Home = () => {
       )}
 
       {/* Hero Banner Section */}
-      <HeroBanner scrollToHowItWorks={scrollToHowItWorks} />
+      <HeroBanner />
+
+      {/* Learning Programs Section */}
+      <LearningPrograms />
 
       {/* How It Works Section */}
       <HowItWorks howItWorksRef={howItWorksRef} />
