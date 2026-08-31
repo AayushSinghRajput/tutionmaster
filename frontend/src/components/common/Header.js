@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { Menu, X, LogOut } from 'lucide-react';
+import { Menu, X, LogOut, Search } from 'lucide-react';
 
 const Logo = ({ size = 30 }) => (
   <img
@@ -37,10 +37,10 @@ const Header = () => {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
             <Link
-              to="/teachers"
+              to="/"
               className="text-gray-700 hover:text-brand-700 transition-all font-medium text-base"
             >
-              Find a Tutor
+              Home
             </Link>
 
             <Link
@@ -51,17 +51,17 @@ const Header = () => {
             </Link>
 
             <Link
-              to="/about"
+              to="/#why-tuitionmaster"
               className="text-gray-700 hover:text-brand-700 font-medium text-base"
             >
-              About
+              Why TuitionMaster
             </Link>
 
             <Link
-              to="/contact"
+              to="/#for-tutors"
               className="text-gray-700 hover:text-brand-700 font-medium text-base"
             >
-              Contact
+              For Tutors
             </Link>
 
             {isAuthenticated ? (
@@ -80,6 +80,11 @@ const Header = () => {
                   <LogOut size={18} />
                   Logout
                 </button>
+
+                <Link to="/teachers" className="btn-brand-primary text-sm px-4 py-2 gap-1.5">
+                  <Search size={16} />
+                  Find a Tutor
+                </Link>
               </div>
             ) : (
               <div className="flex items-center gap-3 pl-2 border-l border-stone-200">
@@ -90,8 +95,9 @@ const Header = () => {
                   Log in
                 </Link>
 
-                <Link to="/register" className="btn-brand-primary text-sm px-4 py-2">
-                  Become a Tutor
+                <Link to="/teachers" className="btn-brand-primary text-sm px-4 py-2 gap-1.5">
+                  <Search size={16} />
+                  Find a Tutor
                 </Link>
               </div>
             )}
@@ -122,14 +128,6 @@ const Header = () => {
               </Link>
 
               <Link
-                to="/teachers"
-                className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Find a Tutor
-              </Link>
-
-              <Link
                 to="/how-it-works"
                 className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
@@ -138,19 +136,19 @@ const Header = () => {
               </Link>
 
               <Link
-                to="/about"
+                to="/#why-tuitionmaster"
                 className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
-                About
+                Why TuitionMaster
               </Link>
 
               <Link
-                to="/contact"
+                to="/#for-tutors"
                 className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
                 onClick={() => setIsMenuOpen(false)}
               >
-                Contact
+                For Tutors
               </Link>
 
               {isAuthenticated ? (
@@ -172,24 +170,25 @@ const Header = () => {
                   </button>
                 </>
               ) : (
-                <div className="flex flex-col gap-2 mt-2 px-1">
-                  <Link
-                    to="/login"
-                    className="btn-brand-ghost text-sm"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Log in
-                  </Link>
-
-                  <Link
-                    to="/register"
-                    className="btn-brand-primary text-sm"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Become a Tutor
-                  </Link>
-                </div>
+                <Link
+                  to="/login"
+                  className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Log in
+                </Link>
               )}
+
+              <div className="mt-2 px-1">
+                <Link
+                  to="/teachers"
+                  className="btn-brand-primary text-sm w-full gap-1.5"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <Search size={16} />
+                  Find a Tutor
+                </Link>
+              </div>
             </div>
           </nav>
         )}

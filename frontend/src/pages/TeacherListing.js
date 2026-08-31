@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { teacherService } from "../services/teacherService";
 import {
   TeacherFilterSidebar,
@@ -11,17 +12,20 @@ import {
 } from "../utils/seo/teacherCache";
 
 const TeacherListing = () => {
+  const [searchParams] = useSearchParams();
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [filters, setFilters] = useState({
-    subjects: [],
-    teachingMode: "",
+    subjects: searchParams.get("subjects")
+      ? searchParams.get("subjects").split(",").filter(Boolean)
+      : [],
+    teachingMode: searchParams.get("teachingMode") || "",
     minExperience: "",
     maxExperience: "",
     minRate: "",
     maxRate: "",
-    location: "",
+    location: searchParams.get("city") || "",
   });
   const [pagination, setPagination] = useState({
     page: 1,
