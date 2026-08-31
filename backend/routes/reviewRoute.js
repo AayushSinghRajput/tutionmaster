@@ -8,6 +8,6 @@ const router = express.Router({ mergeParams: true });
 router
   .route('/')
   .get(getReviews)
-  .post(addReview);
+  .post(protect, addReview);
 
 module.exports = router;

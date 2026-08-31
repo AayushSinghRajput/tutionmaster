@@ -14,7 +14,7 @@ const Logo = ({ size = 30 }) => (
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { logout, isAuthenticated } = useAuth();
+  const { logout, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -66,12 +66,14 @@ const Header = () => {
 
             {isAuthenticated ? (
               <div className="flex items-center gap-5 pl-2 border-l border-stone-200">
-                <Link
-                  to="/dashboard"
-                  className="flex items-center gap-2 text-gray-700 hover:text-brand-700 transition-all font-medium text-base"
-                >
-                  Dashboard
-                </Link>
+                {user?.role !== 'student' && (
+                  <Link
+                    to="/dashboard"
+                    className="flex items-center gap-2 text-gray-700 hover:text-brand-700 transition-all font-medium text-base"
+                  >
+                    Dashboard
+                  </Link>
+                )}
 
                 <button
                   onClick={handleLogout}
@@ -153,13 +155,15 @@ const Header = () => {
 
               {isAuthenticated ? (
                 <>
-                  <Link
-                    to="/dashboard"
-                    className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    Dashboard
-                  </Link>
+                  {user?.role !== 'student' && (
+                    <Link
+                      to="/dashboard"
+                      className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
+                      onClick={() => setIsMenuOpen(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
 
                   <button
                     onClick={handleLogout}
