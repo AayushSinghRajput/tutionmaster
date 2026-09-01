@@ -6,9 +6,16 @@ import {
   ContactMap
 } from '../components/contact';
 
+import SEO from '../components/seo/SEO';
+
 const Contact = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-brand-50 to-white">
+      <SEO 
+        title="Contact Us | TuitionMaster"
+        description="Get in touch with the TuitionMaster team. We are here to help you find the right tutor or assist you with any questions regarding our platform."
+        canonicalUrl="https://www.tuitionmaster.guru/contact"
+      />
       <ContactHero />
       <ContactMethods />
       <section className="py-12 sm:py-16 lg:py-20 bg-gradient-to-br from-brand-50 to-gold-50">

@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import SEO from "../components/seo/SEO";
 import HeroBanner from "../components/section/HeroBanner";
 import QuickSearch from "../components/section/QuickSearch";
 import TutorDiscoveryPreview from "../components/section/TutorDiscoveryPreview";
@@ -62,6 +63,11 @@ const Home = () => {
 
   return (
     <div className="min-h-screen relative">
+      <SEO 
+        title="TuitionMaster | Find Qualified Tutors in Nepal"
+        description="Find qualified tutors across Nepal with TuitionMaster. Connect with subject-matched teachers for school, +2, entrance preparation, and more."
+        canonicalUrl="https://www.tuitionmaster.guru/"
+      />
       <Helmet>
         <script type="application/ld+json">
           {JSON.stringify(organizationSchema)}
