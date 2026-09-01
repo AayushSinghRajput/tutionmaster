@@ -24,6 +24,7 @@ const AboutTeam = () => {
               <div className="w-24 h-24 rounded-full mx-auto mb-4 overflow-hidden bg-brand-100 flex items-center justify-center group-hover:bg-brand-200 transition-colors">
                 {member.image ? (
                   <img
+                    loading="lazy"
                     src={member.image}
                     alt={member.name}
                     className="w-full h-full object-cover"

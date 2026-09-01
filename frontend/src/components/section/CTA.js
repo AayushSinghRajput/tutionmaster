@@ -11,7 +11,7 @@ const CTA = () => {
 
       <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="inline-flex items-center justify-center w-16 h-16 sm:w-20 sm:h-20 bg-white/10 backdrop-blur-sm rounded-2xl mb-6 border border-white/20 p-2 sm:p-2.5">
-          <img src="/logo.png" alt="TuitionMaster" className="w-full h-full rounded-xl object-cover" />
+          <img src="/logo.png" alt="TuitionMaster" loading="lazy" className="w-full h-full rounded-xl object-cover" />
         </div>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 sm:mb-6 font-serif">
           Ready to Find Your Tutor?
