@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
+import { useSearchParams, useLocation } from "react-router-dom";
 import { teacherService } from "../services/teacherService";
 import {
   TeacherFilterSidebar,
@@ -12,7 +13,8 @@ import {
 } from "../utils/seo/teacherCache";
 
 const TeacherListing = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const [teachers, setTeachers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -28,7 +30,7 @@ const TeacherListing = () => {
     location: searchParams.get("city") || "",
   });
   const [pagination, setPagination] = useState({
-    page: 1,
+    page: parseInt(searchParams.get("page")) || 1,
     totalPages: 1,
     total: 0,
   });
@@ -148,6 +150,10 @@ const TeacherListing = () => {
 
   const handlePageChange = (newPage) => {
     setPagination((prev) => ({ ...prev, page: newPage }));
+    setSearchParams(prev => {
+      prev.set("page", newPage);
+      return prev;
+    });
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -161,8 +167,22 @@ const TeacherListing = () => {
     );
   }
 
+  const getPageUrl = (pageNumber) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", pageNumber);
+    return `${location.pathname}?${params.toString()}`;
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-gold-50 py-6 sm:py-8">
+      <Helmet>
+        {pagination.page > 1 && (
+          <link rel="prev" href={getPageUrl(pagination.page - 1)} />
+        )}
+        {pagination.page < pagination.totalPages && (
+          <link rel="next" href={getPageUrl(pagination.page + 1)} />
+        )}
+      </Helmet>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           <TeacherFilterSidebar

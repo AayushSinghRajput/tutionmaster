@@ -22,6 +22,7 @@ const TeacherCard = ({ teacher }) => {
       <div className="p-4 sm:p-6 pb-4">
         <div className="flex items-start space-x-3 sm:space-x-4">
           <img
+            loading="lazy"
             src={avatarUrl || "/default-avatar.png"}
             alt={name}
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-stone-100 flex-shrink-0"

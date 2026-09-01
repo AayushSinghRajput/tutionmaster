@@ -14,6 +14,7 @@ const ProfileOverviewCard = ({ profile }) => {
         <div className="flex flex-col md:flex-row md:items-start space-y-6 md:space-y-0 md:space-x-6">
           <div className="flex items-start space-x-4 min-w-0">
             <img
+              loading="lazy"
               src={profile.avatarUrl || '/default-avatar.png'}
               alt={profile.name}
               className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover flex-shrink-0"
