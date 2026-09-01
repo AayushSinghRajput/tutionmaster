@@ -38,9 +38,9 @@ const TeacherListingResults = ({
       <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-4 sm:p-6 mb-6">
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
           <div>
-            <h3 className="text-base sm:text-lg font-semibold text-gray-900">
+            <h1 className="text-base sm:text-lg font-semibold text-gray-900">
               Available Teachers
-            </h3>
+            </h1>
             <p className="text-xs sm:text-sm text-gray-600 mt-1">
               Showing {teachers.length} of {pagination.total} results
               {pagination.totalPages > 1 &&

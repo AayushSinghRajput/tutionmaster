@@ -26,7 +26,7 @@ const AboutTeam = () => {
                   <img
                     loading="lazy"
                     src={member.image}
-                    alt={member.name}
+                    alt={`${member.name} - Team Member at TuitionMaster`}
                     className="w-full h-full object-cover"
                   />
                 ) : (

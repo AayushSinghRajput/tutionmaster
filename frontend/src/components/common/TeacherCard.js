@@ -24,7 +24,7 @@ const TeacherCard = ({ teacher }) => {
           <img
             loading="lazy"
             src={avatarUrl || "/default-avatar.png"}
-            alt={name}
+            alt={`Teacher ${name} profile picture`}
             className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-stone-100 flex-shrink-0"
             onError={(e) => {
               e.target.src = "/default-avatar.png";

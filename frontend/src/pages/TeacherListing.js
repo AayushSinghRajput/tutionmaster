@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams, useLocation } from "react-router-dom";
+import SEO from "../components/seo/SEO";
 import { teacherService } from "../services/teacherService";
 import {
   TeacherFilterSidebar,
@@ -175,6 +176,11 @@ const TeacherListing = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-brand-50 via-white to-gold-50 py-6 sm:py-8">
+      <SEO 
+        title="Find Qualified Tutors | TuitionMaster"
+        description="Search our directory of qualified tutors in Nepal. Filter by subject, experience, mode of teaching, and hourly rate to find your perfect match."
+        canonicalUrl="https://www.tuitionmaster.guru/teachers"
+      />
       <Helmet>
         {pagination.page > 1 && (
           <link rel="prev" href={getPageUrl(pagination.page - 1)} />
