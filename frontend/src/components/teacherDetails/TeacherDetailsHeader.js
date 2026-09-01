@@ -9,7 +9,7 @@ const TeacherDetailsHeader = ({ teacher }) => {
         <div className="flex flex-col md:flex-row items-start md:items-center space-y-4 sm:space-y-6 md:space-y-0 md:space-x-6">
           <img
             src={teacher.avatarUrl || '/default-avatar.png'}
-            alt={teacher.name}
+            alt={`Profile picture of teacher ${teacher.name}`}
             className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg"
           />
           <div className="flex-1 min-w-0">

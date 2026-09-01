@@ -1,5 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 import HeroBanner from "../components/section/HeroBanner";
 import QuickSearch from "../components/section/QuickSearch";
 import TutorDiscoveryPreview from "../components/section/TutorDiscoveryPreview";
@@ -47,8 +48,25 @@ const Home = () => {
     localStorage.setItem("hasSeenVideoTutorial", "true");
   };
 
+  const organizationSchema = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "TuitionMaster",
+    "url": "https://www.tuitionmaster.guru/",
+    "logo": "https://www.tuitionmaster.guru/logo.png",
+    "description": "Find qualified tutors across Nepal with TuitionMaster. Connect with subject-matched teachers for school, +2, entrance preparation, and more.",
+    "sameAs": [
+      "https://www.facebook.com/profile.php?id=61577776648214"
+    ]
+  };
+
   return (
     <div className="min-h-screen relative">
+      <Helmet>
+        <script type="application/ld+json">
+          {JSON.stringify(organizationSchema)}
+        </script>
+      </Helmet>
       {/* Centered Video Overlay Banner */}
       {showVideoModal && (
         <VideoOverlayBanner onClose={handleCloseVideo} />

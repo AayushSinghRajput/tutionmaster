@@ -16,7 +16,7 @@ const ProfileOverviewCard = ({ profile }) => {
             <img
               loading="lazy"
               src={profile.avatarUrl || '/default-avatar.png'}
-              alt={profile.name}
+              alt={`Profile picture of ${profile.name}`}
               className="w-16 h-16 sm:w-20 sm:h-20 rounded-full object-cover flex-shrink-0"
             />
             <div className="min-w-0">

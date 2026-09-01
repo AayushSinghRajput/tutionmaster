@@ -74,6 +74,31 @@ const TeacherSEO = ({ teacher, teacherId }) => {
     },
   };
 
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Home",
+        "item": "https://www.tuitionmaster.guru/"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Teachers",
+        "item": "https://www.tuitionmaster.guru/teachers"
+      },
+      {
+        "@type": "ListItem",
+        "position": 3,
+        "name": teacherName,
+        "item": canonicalUrl
+      }
+    ]
+  };
+
   return (
     <Helmet>
       {/* Basic SEO */}
@@ -112,7 +137,7 @@ const TeacherSEO = ({ teacher, teacherId }) => {
 
       {/* Schema.org Structured Data */}
       <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
+        {JSON.stringify([structuredData, breadcrumbData])}
       </script>
     </Helmet>
   );
