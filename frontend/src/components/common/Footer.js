@@ -1,5 +1,22 @@
 import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Facebook, Twitter, Instagram } from 'lucide-react';
+import { Mail, Phone, MapPin, Facebook, Linkedin, Instagram } from 'lucide-react';
+
+const TikTok = ({ size = 24, className = "" }) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={className}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5v3a3 3 0 0 1-3-3" />
+  </svg>
+);
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { newsletterService } from '../../services/newsletterService';
@@ -43,10 +60,13 @@ const Footer = () => {
               <a href="https://www.facebook.com/profile.php?id=61577776648214" className="bg-brand-100 hover:bg-brand-200 p-2 rounded-full transition-colors duration-300">
                 <Facebook size={18} className="text-brand-600" />
               </a>
-              <a href="#" className="bg-brand-100 hover:bg-brand-200 p-2 rounded-full transition-colors duration-300">
-                <Twitter size={18} className="text-brand-600" />
+              <a href="https://www.linkedin.com/in/tuition-master-a4254b42b/" target="_blank" rel="noopener noreferrer" className="bg-brand-100 hover:bg-brand-200 p-2 rounded-full transition-colors duration-300">
+                <Linkedin size={18} className="text-brand-600" />
               </a>
-              <a href="#" className="bg-brand-100 hover:bg-brand-200 p-2 rounded-full transition-colors duration-300">
+              <a href="https://www.tiktok.com/@tuitionmasterguru" target="_blank" rel="noopener noreferrer" className="bg-brand-100 hover:bg-brand-200 p-2 rounded-full transition-colors duration-300">
+                <TikTok size={18} className="text-brand-600" />
+              </a>
+              <a href="https://www.instagram.com/tuitionmasterguru/" className="bg-brand-100 hover:bg-brand-200 p-2 rounded-full transition-colors duration-300">
                 <Instagram size={18} className="text-brand-600" />
               </a>
             </div>
