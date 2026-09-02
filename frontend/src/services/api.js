@@ -33,6 +33,12 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    
+    // Prevent infinite loops by not intercepting the refresh call itself
+    if (originalRequest.url && originalRequest.url.includes('/auth/refresh')) {
+      return Promise.reject(error);
+    }
+    
     // If it's a 401 and we haven't already retried this exact request
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -45,7 +51,11 @@ api.interceptors.response.use(
       } catch (refreshError) {
         // Refresh failed (e.g. cookie expired or missing)
         setAccessToken(null);
-        window.location.href = "/login";
+        // Only force redirect if not already on public auth pages or home
+        const currentPath = window.location.pathname;
+        if (currentPath !== '/login' && currentPath !== '/register' && currentPath !== '/') {
+          window.location.href = "/login";
+        }
         return Promise.reject(refreshError);
       }
     }
