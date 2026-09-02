@@ -4,7 +4,8 @@ const {
   login,
   getMe,
   logout,
-  googleAuth
+  googleAuth,
+  refresh
 } = require('../controllers/authController');
 const {
   registerValidation,
@@ -124,5 +125,19 @@ router.get('/me', protect, getMe);
  */
 //route to logout the account
 router.post('/logout', protect, logout);
+
+/**
+ * @openapi
+ * /auth/refresh:
+ *   get:
+ *     summary: Refresh the access token using the HttpOnly refresh token cookie
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Returns a new access token
+ *       401:
+ *         description: Not authorized (cookie missing or invalid)
+ */
+router.get('/refresh', refresh);
 
 module.exports = router;

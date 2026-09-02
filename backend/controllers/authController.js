@@ -1,13 +1,24 @@
 const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
-const generateToken = require("../utils/generateToken");
+const { generateAccessToken, generateRefreshToken } = require("../utils/generateToken");
 const asyncHandler = require('../middleware/asyncHandler');
 const logger = require('../utils/logger');
 
 const googleClient = process.env.GOOGLE_CLIENT_ID
   ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
   : null;
+
+const jwt = require("jsonwebtoken");
+
+const setTokenCookie = (res, token) => {
+  res.cookie("refreshToken", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  });
+};
 
 
 
@@ -35,11 +46,13 @@ exports.register = asyncHandler(async (req, res, next) => {
     role
   });
 
-  const token = generateToken(user._id, user.tokenVersion);
+  const accessToken = generateAccessToken(user._id, user.tokenVersion);
+  const refreshToken = generateRefreshToken(user._id, user.tokenVersion);
+  setTokenCookie(res, refreshToken);
 
   res.status(201).json({
     success: true,
-    token,
+    token: accessToken,
     user: {
       id: user._id,
       username: user.username,
@@ -72,11 +85,13 @@ exports.login = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Invalid credentials', 401));
   }
 
-  const token = generateToken(user._id, user.tokenVersion);
+  const accessToken = generateAccessToken(user._id, user.tokenVersion);
+  const refreshToken = generateRefreshToken(user._id, user.tokenVersion);
+  setTokenCookie(res, refreshToken);
 
   res.json({
     success: true,
-    token,
+    token: accessToken,
     user: {
       id: user._id,
       username: user.username,
@@ -112,6 +127,12 @@ exports.logout = asyncHandler(async (req, res) => {
   // store to revoke a single token individually.
   req.user.tokenVersion += 1;
   await req.user.save();
+
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+  });
 
   res.json({
     success: true,
@@ -165,11 +186,13 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     }
   }
 
-  const token = generateToken(user._id, user.tokenVersion);
+  const accessToken = generateAccessToken(user._id, user.tokenVersion);
+  const refreshToken = generateRefreshToken(user._id, user.tokenVersion);
+  setTokenCookie(res, refreshToken);
 
   res.json({
     success: true,
-    token,
+    token: accessToken,
     user: {
       id: user._id,
       username: user.username,
@@ -177,4 +200,35 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
       role: user.role,
     },
   });
+});
+
+// @desc    Refresh access token
+// @route   GET /api/auth/refresh
+// @access  Public
+exports.refresh = asyncHandler(async (req, res, next) => {
+  const token = req.cookies.refreshToken;
+
+  if (!token) {
+    return next(new ErrorResponse('Not authorized, no refresh token', 401));
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(decoded.id);
+
+    if (!user || user.tokenVersion !== decoded.tokenVersion) {
+      return next(new ErrorResponse('Token is no longer valid', 401));
+    }
+
+    const accessToken = generateAccessToken(user._id, user.tokenVersion);
+    const refreshToken = generateRefreshToken(user._id, user.tokenVersion);
+    setTokenCookie(res, refreshToken);
+
+    res.json({
+      success: true,
+      token: accessToken
+    });
+  } catch (err) {
+    return next(new ErrorResponse('Not authorized, token failed', 401));
+  }
 });

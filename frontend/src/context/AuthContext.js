@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { authService } from '../services/authSerive';
+import api, { setAccessToken } from '../services/api';
 
 const AuthContext = createContext();
 
@@ -23,13 +24,16 @@ export const AuthProvider = ({ children }) => {
   const checkAuthStatus = async () => {
     setLoading(true);
     try {
-      const token = localStorage.getItem('token');
-      if (token) {
-        const userData = await authService.getCurrentUser();
-        setUser(userData); // persist user after refresh
-      }
+      // Attempt to refresh the token using the HttpOnly cookie
+      const response = await api.get('/auth/refresh');
+      setAccessToken(response.data.token);
+      
+      // If refresh succeeded, fetch user profile
+      const userData = await authService.getCurrentUser();
+      setUser(userData);
     } catch (err) {
-      localStorage.removeItem('token');
+      // No valid cookie, user is logged out
+      setAccessToken(null);
       setUser(null);
     } finally {
       setLoading(false);
@@ -42,7 +46,7 @@ export const AuthProvider = ({ children }) => {
       const response = await authService.login(email, password);
       const { token, user: userData } = response.data;
 
-      localStorage.setItem('token', token);
+      setAccessToken(token);
       setUser(userData);
 
       return { success: true };
@@ -59,7 +63,7 @@ export const AuthProvider = ({ children }) => {
       const response = await authService.register(username, email, password, confirmPassword, role);
       const { token, user: userData } = response.data;
 
-      localStorage.setItem('token', token);
+      setAccessToken(token);
       setUser(userData);
 
       return { success: true };
@@ -76,7 +80,7 @@ export const AuthProvider = ({ children }) => {
       const response = await authService.googleLogin(credential, role);
       const { token, user: userData } = response.data;
 
-      localStorage.setItem('token', token);
+      setAccessToken(token);
       setUser(userData);
 
       return { success: true };
@@ -88,18 +92,10 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    // Update UI state immediately so logout feels instant regardless of
-    // network conditions. The API call happens in the background — but the
-    // request interceptor (services/api.js) reads the token from
-    // localStorage asynchronously, after this function returns, so the
-    // token must stay in storage until that request has actually been
-    // sent (not removed synchronously here) or it goes out unauthenticated
-    // and never reaches the tokenVersion bump on the backend.
+    setAccessToken(null);
     setUser(null);
     setError('');
-    authService.logout().catch(() => {}).finally(() => {
-      localStorage.removeItem('token');
-    });
+    authService.logout().catch(() => {});
   };
 
   const value = {

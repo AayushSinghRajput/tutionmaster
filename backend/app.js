@@ -14,6 +14,7 @@ const morgan = require("morgan");
 const hpp = require("hpp");
 const mongoSanitize = require("express-mongo-sanitize");
 const fileUpload = require("express-fileupload");
+const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const errorHandler = require("./middleware/error");
@@ -41,7 +42,19 @@ const adminReviewRoutes = require("./admin-panel-server/routes/adminReviewRoutes
 app.set("trust proxy", 1);
 
 // Security headers
-app.use(helmet());
+app.use(helmet({
+  contentSecurityPolicy: {
+    directives: {
+      defaultSrc: ["'self'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https://maps.googleapis.com", "https://www.googletagmanager.com", "https://www.google-analytics.com", "https://accounts.google.com"],
+      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://accounts.google.com"],
+      imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "https://maps.gstatic.com", "https://maps.googleapis.com", "https://www.google-analytics.com", "https://lh3.googleusercontent.com"],
+      fontSrc: ["'self'", "data:", "https://fonts.gstatic.com"],
+      connectSrc: ["'self'", "https://api.tuitionmaster.guru", "http://localhost:8000", "https://maps.googleapis.com", "https://www.google-analytics.com", "https://accounts.google.com"],
+      frameSrc: ["'self'", "https://accounts.google.com"],
+    },
+  }
+}));
 
 // Gzip responses
 app.use(compression());
@@ -71,6 +84,9 @@ if (process.env.NODE_ENV !== "test") {
 // Body parser middleware
 app.use(express.json({ limit: "2mb" }));
 app.use(express.urlencoded({ extended: true, limit: "2mb" }));
+
+// Cookie parser middleware
+app.use(cookieParser());
 
 // Strip Mongo operators ($ and .) from user input to block NoSQL injection
 app.use(mongoSanitize());
