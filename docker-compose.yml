@@ -4,7 +4,7 @@ services:
     container_name: tutionmaster-mongo
     restart: unless-stopped
     ports:
-      - "27017:27017"
+      - "127.0.0.1:27017:27017"
     volumes:
       - mongo_data:/data/db
 
@@ -20,6 +20,7 @@ services:
     environment:
       - MONGODB_URI=mongodb://mongo:27017/tutionmaster
       - CLIENT_URL=http://localhost:3000
+      - DOCKER=true
     ports:
       - "8000:8000"
     # The anonymous volume below caches node_modules built for Linux inside
