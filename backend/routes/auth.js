@@ -14,6 +14,7 @@ const {
   googleAuthValidation
 } = require('../middleware/validation');
 const { protect } = require('../middleware/auth');
+const { authLimiter } = require('../middleware/rateLimiter');
 
 const router = express.Router();
 
@@ -42,7 +43,7 @@ const router = express.Router();
  *         description: Validation error or email already registered
  */
 //route to register a teacher
-router.post('/register', registerValidation, handleValidationErrors, register);
+router.post('/register', authLimiter, registerValidation, handleValidationErrors, register);
 
 /**
  * @openapi
@@ -67,7 +68,7 @@ router.post('/register', registerValidation, handleValidationErrors, register);
  *         description: Invalid credentials
  */
 //route to login a teacher
-router.post('/login', loginValidation, handleValidationErrors, login);
+router.post('/login', authLimiter, loginValidation, handleValidationErrors, login);
 
 /**
  * @openapi
@@ -91,7 +92,7 @@ router.post('/login', loginValidation, handleValidationErrors, login);
  *         description: Invalid or unverified Google credential
  */
 //route to login or register a teacher via Google
-router.post('/google', googleAuthValidation, handleValidationErrors, googleAuth);
+router.post('/google', authLimiter, googleAuthValidation, handleValidationErrors, googleAuth);
 
 /**
  * @openapi
