@@ -18,7 +18,7 @@ const cookieParser = require("cookie-parser");
 const swaggerUi = require("swagger-ui-express");
 const swaggerSpec = require("./config/swagger");
 const errorHandler = require("./middleware/error");
-const { globalLimiter, authLimiter } = require("./middleware/rateLimiter");
+const { globalLimiter } = require("./middleware/rateLimiter");
 const logger = require("./utils/logger");
 const app = express();
 const newsletterRoute = require("./routes/newsletterRoute");
@@ -131,7 +131,7 @@ app.use(globalLimiter);
 // Same router instances, so this is purely additive — nothing that already
 // calls /api/* breaks, and new/updated clients can move to /api/v1/*.
 const mountRoutes = (prefix) => {
-  app.use(`${prefix}/auth`, authLimiter, authRoute);
+  app.use(`${prefix}/auth`, authRoute);
   app.use(`${prefix}/teachers`, teacherRoute);
   app.use(`${prefix}/upload`, uploadRoute);
   app.use(`${prefix}/newsletter`, newsletterRoute);
