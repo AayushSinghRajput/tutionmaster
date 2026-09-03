@@ -21,15 +21,23 @@ const TeacherCard = ({ teacher }) => {
       {/* Header Section */}
       <div className="p-4 sm:p-6 pb-4">
         <div className="flex items-start space-x-3 sm:space-x-4">
-          <img
-            loading="lazy"
-            src={avatarUrl || "/default-avatar.png"}
-            alt={`Teacher ${name} profile picture`}
-            className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-stone-100 flex-shrink-0"
-            onError={(e) => {
-              e.target.src = "/default-avatar.png";
-            }}
-          />
+          {avatarUrl && !avatarUrl.includes('sample.jpg') ? (
+            <img
+              loading="lazy"
+              src={avatarUrl}
+              alt={`Teacher ${name} profile picture`}
+              className="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover border-2 border-stone-100 flex-shrink-0"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                if (e.target.nextSibling) e.target.nextSibling.style.display = 'flex';
+              }}
+            />
+          ) : null}
+          {(!avatarUrl || avatarUrl.includes('sample.jpg')) && (
+            <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-bold text-base sm:text-lg border-2 border-stone-100 flex-shrink-0">
+              {name ? name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : '?'}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
               <h3 className="text-base sm:text-lg font-semibold text-gray-900 truncate max-w-full">

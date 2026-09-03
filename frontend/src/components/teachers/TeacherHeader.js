@@ -6,11 +6,20 @@ const TeacherHeader = ({ teacher }) => {
     <section className="bg-white border-b border-stone-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="flex flex-col md:flex-row items-center md:items-center text-center md:text-left space-y-4 sm:space-y-6 md:space-y-0 md:space-x-6">
-          <img
-            src={teacher.avatarUrl || '/default-avatar.png'}
-            alt={teacher.name}
-            className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg shrink-0"
-          />
+          {teacher.avatarUrl && !teacher.avatarUrl.includes('sample.jpg') ? (
+            <img
+              src={teacher.avatarUrl}
+              alt={teacher.name}
+              className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full object-cover border-4 border-white shadow-lg shrink-0"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="w-20 h-20 sm:w-24 sm:h-24 md:w-32 md:h-32 rounded-full bg-brand-100 text-brand-700 flex items-center justify-center font-serif font-bold text-2xl sm:text-3xl border-4 border-white shadow-lg shrink-0">
+              {teacher.name ? teacher.name.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() : '?'}
+            </div>
+          )}
           <div className="flex-1 min-w-0">
             <div className="flex flex-wrap items-center justify-center md:justify-start gap-x-3 gap-y-1 mb-3 sm:mb-4">
               <h1 className="font-serif text-2xl sm:text-3xl font-bold text-gray-900 break-words">{teacher.name}</h1>

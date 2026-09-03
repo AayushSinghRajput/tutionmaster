@@ -21,13 +21,48 @@ export default function TeacherDetailPage() {
   const [error, setError]     = useState('');
   const [confirm, setConfirm] = useState(false);
   const [toggling, setToggling] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editForm, setEditForm] = useState({});
 
   useEffect(() => {
     teacherService.get(id)
-      .then(res => setTeacher(res.data.data))
+      .then(res => {
+        const d = res.data.data;
+        setTeacher(d);
+        setEditForm({
+          name: d.name || '',
+          city: d.address?.city || '',
+          state: d.address?.state || '',
+          street: d.address?.street || '',
+          email: d.contact?.email || '',
+          phone: d.contact?.phone || '',
+          preferredSubjects: Array.isArray(d.preferredSubjects) ? d.preferredSubjects.join(', ') : '',
+          bio: d.bio || '',
+          experience: d.experience || 0,
+          hourlyRate: d.hourlyRate || 0,
+          teachingMode: d.teachingMode || 'In-person',
+          avatarPublicId: d.avatarPublicId || '',
+        });
+      })
       .catch(() => setError('Teacher not found or failed to load.'))
       .finally(() => setLoading(false));
   }, [id]);
+
+  const handleSaveEdit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try {
+      const res = await teacherService.update(id, editForm);
+      setTeacher(res.data.data);
+      setEditing(false);
+      toast.success('Teacher profile updated successfully!');
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to update profile');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const handleToggle = async () => {
     setToggling(true);
@@ -102,6 +137,14 @@ export default function TeacherDetailPage() {
                   ? <span className="spinner spinner-sm" />
                   : t.isVisible ? '🙈 Hide Profile' : '👁️ Make Public'
                 }
+              </button>
+
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => setEditing(true)}
+              >
+                ✏️ Edit Details
               </button>
             </div>
           </div>
@@ -222,6 +265,77 @@ export default function TeacherDetailPage() {
           onCancel={() => setConfirm(false)}
           loading={toggling}
         />
+      )}
+
+      {/* Edit Profile Modal */}
+      {editing && (
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
+          <div className="card" style={{ maxWidth: '650px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '24px' }}>
+            <h3 style={{ marginBottom: '16px' }}>✏️ Edit Tutor Profile</h3>
+            <form onSubmit={handleSaveEdit}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <div>
+                  <label className="form-label" style={{ fontWeight: 600 }}>Full Name</label>
+                  <input type="text" className="form-control" value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} required />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontWeight: 600 }}>Phone</label>
+                  <input type="text" className="form-control" value={editForm.phone} onChange={e => setEditForm({ ...editForm, phone: e.target.value })} />
+                </div>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <div>
+                  <label className="form-label" style={{ fontWeight: 600 }}>City</label>
+                  <input type="text" className="form-control" value={editForm.city} onChange={e => setEditForm({ ...editForm, city: e.target.value })} required />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontWeight: 600 }}>State / Region</label>
+                  <input type="text" className="form-control" value={editForm.state} onChange={e => setEditForm({ ...editForm, state: e.target.value })} />
+                </div>
+              </div>
+
+              <div className="form-group" style={{ marginBottom: '12px' }}>
+                <label className="form-label" style={{ fontWeight: 600 }}>Preferred Subjects (comma-separated)</label>
+                <input type="text" className="form-control" value={editForm.preferredSubjects} onChange={e => setEditForm({ ...editForm, preferredSubjects: e.target.value })} required />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
+                <div>
+                  <label className="form-label" style={{ fontWeight: 600 }}>Teaching Mode</label>
+                  <select className="form-control" value={editForm.teachingMode} onChange={e => setEditForm({ ...editForm, teachingMode: e.target.value })}>
+                    <option value="In-person">In-person</option>
+                    <option value="Online">Online</option>
+                    <option value="Both">Both</option>
+                  </select>
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontWeight: 600 }}>Hourly Rate (₨)</label>
+                  <input type="number" className="form-control" value={editForm.hourlyRate} onChange={e => setEditForm({ ...editForm, hourlyRate: e.target.value })} />
+                </div>
+                <div>
+                  <label className="form-label" style={{ fontWeight: 600 }}>Experience (Yrs)</label>
+                  <input type="number" className="form-control" value={editForm.experience} onChange={e => setEditForm({ ...editForm, experience: e.target.value })} />
+                </div>
+              </div>
+
+              <div className="form-group" style={{ marginBottom: '12px' }}>
+                <label className="form-label" style={{ fontWeight: 600 }}>Cloudinary Avatar Public ID / Image URL</label>
+                <input type="text" className="form-control" placeholder="e.g. tutionmaster/avatars/user123" value={editForm.avatarPublicId} onChange={e => setEditForm({ ...editForm, avatarPublicId: e.target.value })} />
+              </div>
+
+              <div className="form-group" style={{ marginBottom: '20px' }}>
+                <label className="form-label" style={{ fontWeight: 600 }}>Bio / Summary</label>
+                <textarea className="form-control" rows="3" value={editForm.bio} onChange={e => setEditForm({ ...editForm, bio: e.target.value })} />
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
+                <button type="button" className="btn btn-ghost" onClick={() => setEditing(false)}>Cancel</button>
+                <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
+              </div>
+            </form>
+          </div>
+        </div>
       )}
     </>
   );

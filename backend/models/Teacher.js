@@ -156,6 +156,19 @@ const teacherSchema = new mongoose.Schema(
     viewedByIps: [{
       type: String,
     }],
+    isManuallyCreatedByAdmin: {
+      type: Boolean,
+      default: false,
+    },
+    profileStatus: {
+      type: String,
+      enum: ["Draft", "Under Review", "Active", "Published"],
+      default: "Published",
+    },
+    onboardingCompleted: {
+      type: Boolean,
+      default: true,
+    },
     isActive: {
       type: Boolean,
       default: true,
