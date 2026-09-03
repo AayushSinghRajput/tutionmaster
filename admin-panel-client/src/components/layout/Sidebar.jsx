@@ -5,6 +5,8 @@ import toast from 'react-hot-toast';
 const NAV = [
   { to: '/dashboard',      icon: '📊', label: 'Dashboard' },
   { to: '/teachers',       icon: '👩‍🏫', label: 'Teacher Profiles' },
+  { to: '/blogs',          icon: '📝', label: 'Blog Posts' },
+  { to: '/jobs',           icon: '💼', label: 'Tuition Vacancies' },
   { to: '/reviews',        icon: '⭐', label: 'Review Moderation' },
 ];
 

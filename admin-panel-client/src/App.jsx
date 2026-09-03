@@ -8,6 +8,8 @@ import TeachersPage from './pages/TeachersPage';
 import TeacherDetailPage from './pages/TeacherDetailPage';
 import AdministratorsPage from './pages/AdministratorsPage';
 import ReviewsPage from './pages/ReviewsPage';
+import JobListPage from './pages/JobListPage';
+import JobEditorPage from './pages/JobEditorPage';
 
 export default function App() {
   return (
@@ -22,6 +24,9 @@ export default function App() {
             <Route path="/dashboard"      element={<DashboardPage />} />
             <Route path="/teachers"       element={<TeachersPage />} />
             <Route path="/teachers/:id"   element={<TeacherDetailPage />} />
+            <Route path="/jobs"           element={<JobListPage />} />
+            <Route path="/jobs/new"       element={<JobEditorPage />} />
+            <Route path="/jobs/:id/edit"  element={<JobEditorPage />} />
             <Route path="/reviews"        element={<ReviewsPage />} />
             <Route path="/administrators" element={<AdministratorsPage />} />
           </Route>

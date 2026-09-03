@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler");
 const Teacher = require("../models/Teacher");
+const Job = require("../models/Job");
 
 exports.getSitemap = asyncHandler(async (req, res) => {
   const baseUrl = "https://www.tuitionmaster.guru";
@@ -10,12 +11,19 @@ exports.getSitemap = asyncHandler(async (req, res) => {
     { _id: 1, updatedAt: 1 }
   ).lean();
 
+  // Fetch all published & open jobs
+  const jobs = await Job.find(
+    { published: true, status: { $ne: 'Closed' } },
+    { slug: 1, updatedAt: 1 }
+  ).lean();
+
   // Static public pages
   const staticUrls = [
     "/",
     "/about",
     "/contact",
     "/teachers",
+    "/jobs",
     "/privacy-policy",
     "/terms-of-service",
     "/cookie-policy",
@@ -29,8 +37,8 @@ exports.getSitemap = asyncHandler(async (req, res) => {
     ...staticUrls.map((url) => ({
       loc: `${baseUrl}${url}`,
       lastmod: today,
-      changefreq: url === "/" ? "daily" : "weekly",
-      priority: url === "/" ? "1.0" : "0.8",
+      changefreq: url === "/" || url === "/jobs" ? "daily" : "weekly",
+      priority: url === "/" ? "1.0" : url === "/jobs" ? "0.9" : "0.8",
     })),
     ...teachers.map((teacher) => ({
       loc: `${baseUrl}/teachers/${teacher._id}`,
@@ -39,6 +47,14 @@ exports.getSitemap = asyncHandler(async (req, res) => {
         : today,
       changefreq: "daily",
       priority: "0.9",
+    })),
+    ...jobs.map((job) => ({
+      loc: `${baseUrl}/jobs/${job.slug}`,
+      lastmod: job.updatedAt 
+        ? new Date(job.updatedAt).toISOString().split("T")[0] 
+        : today,
+      changefreq: "daily",
+      priority: "0.8",
     })),
   ];
 

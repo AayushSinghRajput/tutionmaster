@@ -51,6 +51,13 @@ const Header = () => {
             </Link>
 
             <Link
+              to="/jobs"
+              className="text-gray-700 hover:text-brand-700 font-medium text-base"
+            >
+              Tuition Jobs
+            </Link>
+
+            <Link
               to="/#why-tuitionmaster"
               className="text-gray-700 hover:text-brand-700 font-medium text-base"
             >
@@ -135,6 +142,14 @@ const Header = () => {
                 onClick={() => setIsMenuOpen(false)}
               >
                 How it Works
+              </Link>
+
+              <Link
+                to="/jobs"
+                className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Tuition Jobs
               </Link>
 
               <Link

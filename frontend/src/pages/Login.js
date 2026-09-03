@@ -14,7 +14,7 @@ const Login = () => {
   useEffect(() => {
     if (isAuthenticated && user) {
       if (from) {
-        navigate(from, { replace: true });
+        navigate(from.pathname ? `${from.pathname}${from.search || ''}` : from, { replace: true });
       } else if (user.role === 'student') {
         navigate('/teachers', { replace: true });
       } else {
