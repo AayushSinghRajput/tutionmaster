@@ -35,6 +35,8 @@ const TermsOfService = lazy(() => import("./pages/TermsOfService"));
 const CookiePolicy = lazy(() => import("./pages/CookiePolicy"));
 const HowItWorks = lazy(() => import("./pages/HowItWorks"));
 const TeacherProfileDemo = lazy(() => import("./pages/TeacherProfileDemo"));
+const BlogIndex = lazy(() => import("./pages/BlogIndex"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 
 function App() {
   useEffect(() => {
@@ -74,6 +76,8 @@ function App() {
                     path="/how-it-works/teacher-profile"
                     element={<TeacherProfileDemo />}
                   />
+                  <Route path="/blog" element={<BlogIndex />} />
+                  <Route path="/blog/:slug" element={<BlogDetail />} />
 
                   {/* Protected Routes */}
                   <Route
