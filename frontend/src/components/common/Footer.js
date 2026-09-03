@@ -124,6 +124,15 @@ const Footer = () => {
                   Contact Us
                 </Link>
               </li>
+              <li>
+                <Link
+                  to="/blog"
+                  className="text-gray-700 hover:text-brand-600 transition-all duration-300 text-sm flex items-center group"
+                >
+                  <div className="w-1.5 h-1.5 bg-gold-400 rounded-full mr-3 group-hover:scale-125 transition-transform"></div>
+                  Blog
+                </Link>
+              </li>
             </ul>
           </div>
 

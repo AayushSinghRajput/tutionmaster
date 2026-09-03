@@ -26,6 +26,7 @@ const uploadRoute = require("./routes/upload");
 const teacherRoute = require("./routes/teachers");
 const authRoute = require("./routes/auth");
 const aiRoute = require("./routes/ai");
+const blogRoute = require("./routes/blogRoutes");
 const sitemapRoutes = require("./routes/sitemapRoutes");
 
 // Admin Panel routes
@@ -34,6 +35,7 @@ const adminTeacherRoutes = require("./admin-panel-server/routes/adminTeacherRout
 const administratorRoutes = require("./admin-panel-server/routes/administratorRoutes");
 const dashboardRoutes = require("./admin-panel-server/routes/dashboardRoutes");
 const adminReviewRoutes = require("./admin-panel-server/routes/adminReviewRoutes");
+const adminBlogRoutes = require("./admin-panel-server/routes/adminBlogRoutes");
 
 // Trust the single reverse proxy hop in front of the app (Render's edge
 // proxy locally, or the "backend" service behind a tunnel/proxy in dev),
@@ -136,6 +138,7 @@ const mountRoutes = (prefix) => {
   app.use(`${prefix}/upload`, uploadRoute);
   app.use(`${prefix}/newsletter`, newsletterRoute);
   app.use(`${prefix}/ai`, aiRoute);
+  app.use(`${prefix}/blogs`, blogRoute);
   app.use("/", sitemapRoutes);
 };
 mountRoutes("/api");
@@ -147,6 +150,7 @@ app.use("/api/admin/teachers", adminTeacherRoutes);
 app.use("/api/admin/administrators", administratorRoutes);
 app.use("/api/admin/dashboard", dashboardRoutes);
 app.use("/api/admin/reviews", adminReviewRoutes);
+app.use("/api/admin/blogs", adminBlogRoutes);
 
 // API documentation (read-only, public — safe to leave open)
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
