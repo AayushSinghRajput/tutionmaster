@@ -1,13 +1,19 @@
 import { useState } from 'react';
-import { Clock, Shield, Phone, Mail, BookOpen } from 'lucide-react';
+import { Clock, Shield, Phone, Mail, BookOpen, PlayCircle } from 'lucide-react';
 import { faqs, officeHours } from '../../constants/contact/contactData';
+import VideoOverlayBanner from '../video/VideoOverlayBanner';
 
 const ContactSidebar = () => {
   const [showAllFaqs, setShowAllFaqs] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
   const visibleFaqs = showAllFaqs ? faqs : faqs.slice(0, 3);
 
   return (
     <div className="space-y-8">
+      {showVideoModal && (
+        <VideoOverlayBanner onClose={() => setShowVideoModal(false)} />
+      )}
+
       {/* Office Hours */}
       <div className="bg-white rounded-2xl shadow-lg border border-stone-200 p-6">
         <div className="flex items-center gap-3 mb-4">
@@ -54,12 +60,22 @@ const ContactSidebar = () => {
         <div className="space-y-4">
           {visibleFaqs.map((faq, index) => (
             <div key={index} className="border-l-4 border-brand-200 pl-4">
-              <h4 className="font-semibold text-gray-900 text-sm mb-1">
+              <h4 className="font-semibold text-gray-900 text-sm mb-1 flex items-center gap-1.5">
                 {faq.question}
               </h4>
-              <p className="text-gray-600 text-xs">
+              <p className="text-gray-600 text-xs mb-2">
                 {faq.answer}
               </p>
+              {faq.isVideoFaq && (
+                <button
+                  type="button"
+                  onClick={() => setShowVideoModal(true)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-600 hover:text-brand-800 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  <PlayCircle className="w-3.5 h-3.5 text-brand-600" />
+                  Watch Video Guide
+                </button>
+              )}
             </div>
           ))}
         </div>
