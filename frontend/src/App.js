@@ -23,6 +23,8 @@ import ProtectedRoute from "./components/common/ProtectedRoute";
 const Home = lazy(() => import("./pages/Home"));
 const TeacherListing = lazy(() => import("./pages/TeacherListing"));
 const TeacherDetails = lazy(() => import("./pages/TeacherDetails"));
+const JobListing = lazy(() => import("./pages/JobListing"));
+const JobDetail = lazy(() => import("./pages/JobDetail"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
 const Dashboard = lazy(() => import("./pages/Dashboard"));
@@ -63,6 +65,15 @@ function App() {
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/teachers" element={<TeacherListing />} />
                   <Route path="/teachers/:id" element={<TeacherDetails />} />
+                  <Route path="/jobs" element={<JobListing />} />
+                  <Route
+                    path="/jobs/:slug"
+                    element={
+                      <ProtectedRoute>
+                        <JobDetail />
+                      </ProtectedRoute>
+                    }
+                  />
                   <Route path="/login" element={<Login />} />
                   <Route path="/register" element={<Register />} />
                   <Route path="/privacy-policy" element={<PrivacyPolicy />} />
