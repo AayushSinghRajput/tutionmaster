@@ -109,11 +109,14 @@ export default function TeachersPage() {
 
   return (
     <>
-      <div className="page-header">
+      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div>
           <h1>Teacher Profiles</h1>
           <p>Manage visibility of all teacher profiles</p>
         </div>
+        <Link to="/teachers/create-manual" className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          🛠️ Create Manual Profile
+        </Link>
       </div>
 
       {/* Filters */}
@@ -183,7 +186,14 @@ export default function TeachersPage() {
                   <div className="teacher-cell">
                     <Avatar teacher={t} />
                     <div className="info">
-                      <p>{t.name}</p>
+                      <p style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                        {t.name}
+                        {t.isManuallyCreatedByAdmin && (
+                          <span className="badge badge-warning" style={{ fontSize: '10px', padding: '2px 6px' }}>
+                            Admin Created
+                          </span>
+                        )}
+                      </p>
                       <p>{t.contact?.email || t.userId?.email || '—'}</p>
                     </div>
                   </div>
@@ -206,7 +216,7 @@ export default function TeachersPage() {
                     {t.teachingMode || '—'}
                   </span>
                 </td>
-                <td style={{ fontSize: '.82rem' }}>₹{t.hourlyRate}/hr</td>
+                <td style={{ fontSize: '.82rem' }}>₨{t.hourlyRate}/hr</td>
                 <td>
                   <span className={`badge ${t.isActive ? 'badge-green' : 'badge-red'}`}>
                     {t.isActive ? 'Active' : 'Inactive'}
@@ -216,13 +226,32 @@ export default function TeachersPage() {
                   <VisibilityToggle teacher={t} onToggle={handleToggle} />
                 </td>
                 <td>
-                  <Link
-                    to={`/teachers/${t._id}`}
-                    className="btn btn-ghost btn-sm"
-                    id={`view-teacher-${t._id}`}
-                  >
-                    View
-                  </Link>
+                  <div style={{ display: 'flex', gap: '4px' }}>
+                    <Link
+                      to={`/teachers/${t._id}`}
+                      className="btn btn-ghost btn-sm"
+                      id={`view-teacher-${t._id}`}
+                    >
+                      View
+                    </Link>
+                    {t.isManuallyCreatedByAdmin && (
+                      <button
+                        type="button"
+                        className="btn btn-ghost btn-sm"
+                        title="Resend onboarding email notification"
+                        onClick={async () => {
+                          try {
+                            await teacherService.resendNotification(t._id);
+                            toast.success('Onboarding email resent!');
+                          } catch (err) {
+                            toast.error(err.response?.data?.message || 'Failed to resend email');
+                          }
+                        }}
+                      >
+                        ✉️
+                      </button>
+                    )}
+                  </div>
                 </td>
               </tr>
             ))}

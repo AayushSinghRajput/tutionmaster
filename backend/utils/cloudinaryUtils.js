@@ -2,7 +2,7 @@ const cloudinary = require('../config/cloudinary');
 const logger = require('./logger');
 
 exports.generateImageUrl = (publicId, transformations = {}) => {
-  if (!publicId) return null;
+  if (!publicId) return 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg';
   
   const url = cloudinary.url(publicId, {
     width: transformations.width || 500,

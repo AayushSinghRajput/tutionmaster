@@ -139,3 +139,226 @@ exports.adminSetVisibility = asyncHandler(async (req, res, next) => {
     },
   });
 });
+
+// @desc    Update teacher profile (Admin / Super Admin view)
+// @route   PUT /api/admin/teachers/:id
+// @access  Admin
+exports.adminUpdateTeacher = asyncHandler(async (req, res, next) => {
+  let teacher = await Teacher.findById(req.params.id);
+
+  if (!teacher) {
+    return next(new ErrorResponse("Teacher profile not found", 404));
+  }
+
+  const {
+    name,
+    street,
+    city,
+    state,
+    qualifications,
+    email,
+    phone,
+    preferredSubjects,
+    bio,
+    experience,
+    availability,
+    teachingMode,
+    hourlyRate,
+    avatarPublicId,
+    cvPublicId,
+    isVisible,
+    isActive,
+  } = req.body;
+
+  if (name !== undefined) teacher.name = name;
+  if (street !== undefined || city !== undefined || state !== undefined) {
+    teacher.address = {
+      street: street !== undefined ? street : teacher.address?.street,
+      city: city !== undefined ? city : teacher.address?.city,
+      state: state !== undefined ? state : teacher.address?.state,
+    };
+  }
+  if (email !== undefined || phone !== undefined) {
+    teacher.contact = {
+      email: email !== undefined ? email : teacher.contact?.email,
+      phone: phone !== undefined ? phone : teacher.contact?.phone,
+    };
+  }
+  if (qualifications !== undefined) teacher.qualifications = qualifications;
+  if (preferredSubjects !== undefined) {
+    teacher.preferredSubjects = Array.isArray(preferredSubjects)
+      ? preferredSubjects
+      : preferredSubjects.split(",").map((s) => s.trim()).filter(Boolean);
+  }
+  if (bio !== undefined) teacher.bio = bio;
+  if (experience !== undefined) teacher.experience = Number(experience);
+  if (availability !== undefined) teacher.availability = availability;
+  if (teachingMode !== undefined) teacher.teachingMode = teachingMode;
+  if (hourlyRate !== undefined) teacher.hourlyRate = Number(hourlyRate);
+  if (avatarPublicId !== undefined) teacher.avatarPublicId = avatarPublicId;
+  if (cvPublicId !== undefined) teacher.cvPublicId = cvPublicId;
+  if (isVisible !== undefined) teacher.isVisible = Boolean(isVisible);
+  if (isActive !== undefined) teacher.isActive = Boolean(isActive);
+
+  await teacher.save();
+
+  res.json({
+    success: true,
+    message: "Tutor profile updated successfully",
+    data: attachUrls(teacher),
+  });
+});
+
+const User = require("../../models/User");
+const { sendManualTutorOnboardingEmail } = require("../../services/emailService");
+
+// @desc    Get unonboarded users (registered users without a Tutor profile)
+// @route   GET /api/admin/teachers/unonboarded-users
+// @access  Super Admin
+exports.getUnonboardedUsers = asyncHandler(async (req, res) => {
+  const { search } = req.query;
+
+  // Find all user IDs that already have a Teacher profile
+  const existingTeacherUserIds = await Teacher.find().distinct("userId");
+
+  const query = {
+    _id: { $nin: existingTeacherUserIds },
+  };
+
+  if (search) {
+    const searchRegex = new RegExp(escapeRegex(search), "i");
+    query.$or = [{ name: searchRegex }, { username: searchRegex }, { email: searchRegex }];
+  }
+
+  const users = await User.find(query).select("username email googleId role createdAt").sort({ createdAt: -1 }).lean();
+
+  const data = users.map((u) => ({
+    id: u._id,
+    name: u.username || u.email.split("@")[0],
+    email: u.email,
+    authProvider: u.googleId ? "google" : "email",
+    googleId: u.googleId || null,
+    createdAt: u.createdAt,
+  }));
+
+  res.json({
+    success: true,
+    count: data.length,
+    data,
+  });
+});
+
+// @desc    Manually create & publish a tutor profile for an unonboarded user
+// @route   POST /api/admin/teachers/create-manual
+// @access  Super Admin
+exports.createManualTeacher = asyncHandler(async (req, res, next) => {
+  const {
+    userId,
+    name,
+    street,
+    city,
+    state,
+    qualifications,
+    email,
+    phone,
+    preferredSubjects,
+    bio,
+    experience,
+    availability,
+    teachingMode,
+    hourlyRate,
+    publishImmediately = true,
+    sendNotification = true,
+  } = req.body;
+
+  if (!userId) {
+    return next(new ErrorResponse("User ID is required", 400));
+  }
+
+  const user = await User.findById(userId);
+  if (!user) {
+    return next(new ErrorResponse("Registered user not found", 404));
+  }
+
+  const existingProfile = await Teacher.findOne({ userId });
+  if (existingProfile) {
+    return next(new ErrorResponse("This user already has a Tutor profile", 400));
+  }
+
+  const teacherData = {
+    userId: user._id,
+    name: name || user.username,
+    address: {
+      street: street || "N/A",
+      city: city || "Kathmandu",
+      state: state || "Bagmati",
+    },
+    qualifications: qualifications && qualifications.length > 0 ? qualifications : [{ degree: "Bachelors", institution: "Tribhuvan University", year: 2022 }],
+    contact: {
+      email: email || user.email,
+      phone: phone || null,
+    },
+    preferredSubjects: preferredSubjects || ["Mathematics"],
+    bio: bio || "Experienced tutor dedicated to helping students build strong academic foundations and achieve their goals.",
+    experience: Number(experience) || 1,
+    availability: availability || ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+    teachingMode: teachingMode || "In-person",
+    hourlyRate: Number(hourlyRate) || 500,
+    isVisible: Boolean(publishImmediately),
+    isManuallyCreatedByAdmin: true,
+    profileStatus: publishImmediately ? "Published" : "Draft",
+    onboardingCompleted: true,
+    visibilityUpdatedAt: publishImmediately ? new Date() : null,
+    visibilityUpdatedBy: req.admin._id,
+  };
+
+  const teacher = await Teacher.create(teacherData);
+
+  // Update User role to teacher
+  if (user.role !== "teacher") {
+    user.role = "teacher";
+    await user.save();
+  }
+
+  // Trigger automated notification email (non-blocking for DB transaction)
+  if (sendNotification) {
+    sendManualTutorOnboardingEmail({
+      user,
+      teacher,
+      sendNotification: true,
+    }).catch((err) => console.error("Email send error:", err));
+  }
+
+  res.status(201).json({
+    success: true,
+    message: "Tutor profile manually created successfully",
+    data: attachUrls(teacher),
+  });
+});
+
+// @desc    Resend onboarding email notification to a tutor
+// @route   POST /api/admin/teachers/:id/resend-notification
+// @access  Super Admin
+exports.resendTutorNotification = asyncHandler(async (req, res, next) => {
+  const teacher = await Teacher.findById(req.params.id);
+  if (!teacher) {
+    return next(new ErrorResponse("Teacher not found", 404));
+  }
+
+  const user = await User.findById(teacher.userId);
+  if (!user) {
+    return next(new ErrorResponse("Associated user account not found", 404));
+  }
+
+  await sendManualTutorOnboardingEmail({
+    user,
+    teacher,
+    sendNotification: true,
+  });
+
+  res.json({
+    success: true,
+    message: `Notification email successfully resent to ${user.email}`,
+  });
+});
+

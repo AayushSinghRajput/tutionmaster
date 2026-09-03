@@ -12,6 +12,7 @@ import BlogListPage from './pages/BlogListPage';
 import BlogEditorPage from './pages/BlogEditorPage';
 import JobListPage from './pages/JobListPage';
 import JobEditorPage from './pages/JobEditorPage';
+import ManualTutorCreationPage from './pages/ManualTutorCreationPage';
 
 export default function App() {
   return (
@@ -24,8 +25,9 @@ export default function App() {
           <Route element={<AdminLayout />}>
             <Route index element={<Navigate to="/dashboard" replace />} />
             <Route path="/dashboard"      element={<DashboardPage />} />
-            <Route path="/teachers"       element={<TeachersPage />} />
-            <Route path="/teachers/:id"   element={<TeacherDetailPage />} />
+            <Route path="/teachers" element={<TeachersPage />} />
+            <Route path="/teachers/create-manual" element={<ManualTutorCreationPage />} />
+            <Route path="/teachers/:id" element={<TeacherDetailPage />} />
             <Route path="/blogs"          element={<BlogListPage />} />
             <Route path="/blogs/new"      element={<BlogEditorPage />} />
             <Route path="/blogs/:id/edit" element={<BlogEditorPage />} />
