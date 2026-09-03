@@ -33,6 +33,11 @@ export const contactMethods = [
 
 export const faqs = [
   {
+    question: "Having trouble creating your Tutor Profile?",
+    answer: "Watch our quick step-by-step video guide or follow our easy profile setup form to highlight your qualifications and attract students.",
+    isVideoFaq: true,
+  },
+  {
     question: "How do I become a tutor on TuitionMaster?",
     answer: "Visit our 'Become a Tutor' page and complete your profile — subjects, qualifications, and availability. Once submitted, your profile is live and visible to students right away."
   },
