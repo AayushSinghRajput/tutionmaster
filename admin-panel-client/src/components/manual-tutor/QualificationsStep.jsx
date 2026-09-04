@@ -42,7 +42,7 @@ export default function QualificationsStep({ formData, setFormData, onAddSubject
           <input
             type="text"
             className="form-input"
-            value={formData.degree}
+            value={formData.degree || ''}
             onChange={(e) => setFormData({ ...formData, degree: e.target.value })}
             placeholder="e.g. B.Sc. Physics / B.E. Computer"
             required
@@ -54,7 +54,7 @@ export default function QualificationsStep({ formData, setFormData, onAddSubject
           <input
             type="text"
             className="form-input"
-            value={formData.institution}
+            value={formData.institution || ''}
             onChange={(e) => setFormData({ ...formData, institution: e.target.value })}
             placeholder="e.g. Tribhuvan University (IOE / IOST)"
             required
@@ -66,7 +66,7 @@ export default function QualificationsStep({ formData, setFormData, onAddSubject
           <input
             type="number"
             className="form-input"
-            value={formData.experience}
+            value={formData.experience ?? ''}
             onChange={(e) => setFormData({ ...formData, experience: e.target.value })}
             min={0}
             max={40}
@@ -79,7 +79,7 @@ export default function QualificationsStep({ formData, setFormData, onAddSubject
         <input
           type="text"
           className="form-input"
-          value={formData.preferredSubjects}
+          value={formData.preferredSubjects || ''}
           onChange={(e) => setFormData({ ...formData, preferredSubjects: e.target.value })}
           placeholder="Mathematics, Physics, Chemistry, Computer Science"
           required
@@ -113,7 +113,7 @@ export default function QualificationsStep({ formData, setFormData, onAddSubject
         <textarea
           className="form-textarea"
           rows={3}
-          value={formData.bio}
+          value={formData.bio || ''}
           onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
           placeholder="Detailed description of teaching philosophy, exam prep track record, and strengths..."
         />
