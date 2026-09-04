@@ -8,7 +8,8 @@ const {
   deleteTeacher,
   getMyProfile,
   getAllSubjects,
-  setTeacherStatus
+  setTeacherStatus,
+  shareProfile
 } = require('../controllers/teacherController');
 const {
   teacherProfileValidation,
@@ -231,5 +232,27 @@ router.patch('/:id/status', protect, authorize('admin'), setTeacherStatus);
  *         description: Not found
  */
 router.delete('/:id', protect, deleteTeacher);
+
+/**
+ * @openapi
+ * /teachers/{id}/share:
+ *   post:
+ *     summary: Generate share link metadata (owner only)
+ *     tags: [Teachers]
+ *     security: [{ bearerAuth: [] }]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema: { type: string }
+ *     responses:
+ *       200:
+ *         description: Share metadata generated
+ *       403:
+ *         description: Forbidden - Not the owner of this profile
+ *       404:
+ *         description: Profile not found
+ */
+router.post('/:id/share', protect, shareProfile);
 
 module.exports = router;

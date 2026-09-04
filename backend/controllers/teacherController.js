@@ -702,3 +702,35 @@ exports.getMyProfile = asyncHandler(async (req, res, next) => {
     data: teacherObj,
   });
 });
+
+// @desc    Generate share metadata / track share action for a teacher profile
+// @route   POST /api/teachers/:id/share
+// @access  Private (Profile Owner Only)
+exports.shareProfile = asyncHandler(async (req, res, next) => {
+  const teacher = await Teacher.findById(req.params.id);
+
+  if (!teacher) {
+    return next(new ErrorResponse("Teacher profile not found", 404));
+  }
+
+  // Strict ownership authorization check
+  const teacherUserId = teacher.userId._id ? teacher.userId._id.toString() : teacher.userId.toString();
+  if (teacherUserId !== req.user.id.toString() && teacherUserId !== req.user._id.toString()) {
+    return next(
+      new ErrorResponse("Forbidden: You do not have permission to perform share actions on this profile", 403)
+    );
+  }
+
+  const shareUrl = `${process.env.CLIENT_URL || 'https://www.tuitionmaster.guru'}/teachers/${teacher._id}`;
+
+  res.status(200).json({
+    success: true,
+    message: "Profile share link generated successfully",
+    data: {
+      teacherId: teacher._id,
+      shareUrl,
+      title: `${teacher.name} - TuitionMaster Tutor Profile`,
+      description: `Hire ${teacher.name} for tutoring on TuitionMaster`,
+    },
+  });
+});
