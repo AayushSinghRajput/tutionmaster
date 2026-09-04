@@ -7,6 +7,7 @@ const NAV = [
   { to: '/teachers',       icon: '👩‍🏫', label: 'Teacher Profiles' },
   { to: '/blogs',          icon: '📝', label: 'Blog Posts' },
   { to: '/jobs',           icon: '💼', label: 'Tuition Vacancies' },
+  { to: '/support-tickets',icon: '🎫', label: 'Support Tickets' },
   { to: '/reviews',        icon: '⭐', label: 'Review Moderation' },
 ];
 

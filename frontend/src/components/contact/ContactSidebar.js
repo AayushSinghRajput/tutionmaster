@@ -31,23 +31,32 @@ const ContactSidebar = () => {
       </div>
 
       {/* Quick Support */}
-      <div className="bg-gradient-to-r from-brand-600 to-brand-700 rounded-2xl p-6 text-white">
-        <div className="flex items-center gap-3 mb-4">
+      <div className="bg-gradient-to-r from-brand-600 to-brand-700 rounded-2xl p-6 text-white shadow-xl">
+        <div className="flex items-center gap-3 mb-3">
           <Shield className="w-6 h-6 text-gold-300" />
-          <h3 className="text-xl font-bold">Need to Reach Us Quickly?</h3>
+          <h3 className="text-xl font-bold">Need Instant Support?</h3>
         </div>
-        <p className="text-brand-100 mb-4">
-          Have an urgent question about your account? Call or email us directly and we'll get back to you as soon as we can.
+        <p className="text-brand-100 text-sm mb-5">
+          Having trouble creating a profile or have questions about tuition jobs? Reach out directly via WhatsApp or phone.
         </p>
-        <div className="space-y-2 text-sm">
-          <div className="flex items-center gap-2">
-            <Phone className="w-4 h-4" />
-            <span>+977 (980) 598-1168</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <Mail className="w-4 h-4" />
-            <span>hello.tuitionmaster@gmail.com</span>
-          </div>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <a
+            href="https://wa.me/9779805981168?text=Hi%20TuitionMaster%20Support%2C%20I%20need%20assistance"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-transform hover:-translate-y-0.5 text-xs sm:text-sm"
+          >
+            <span>💬 Chat on WhatsApp</span>
+          </a>
+
+          <a
+            href="tel:+9779805981168"
+            className="flex-1 bg-white hover:bg-stone-100 text-gray-900 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-transform hover:-translate-y-0.5 text-xs sm:text-sm"
+          >
+            <Phone className="w-4 h-4 text-brand-600" />
+            <span>Call Support</span>
+          </a>
         </div>
       </div>
 

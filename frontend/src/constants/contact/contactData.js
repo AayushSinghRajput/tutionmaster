@@ -23,11 +23,11 @@ export const contactMethods = [
     action: "https://maps.google.com"
   },
   {
-    icon: <MessageCircle className="w-6 h-6" />,
-    title: "Message Us",
-    description: "Send us a message anytime",
-    details: "We usually reply within a day",
-    action: "mailto:aayushsinghrajput3003@gmail.com"
+    icon: <MessageCircle className="w-6 h-6 text-emerald-600" />,
+    title: "WhatsApp Support",
+    description: "Chat with us instantly on WhatsApp",
+    details: "+977 (980) 598-1168",
+    action: "https://wa.me/9779805981168?text=Hi%20TuitionMaster%20Support%2C%20I%20need%20assistance"
   }
 ];
 

@@ -2,6 +2,8 @@ const teacherTools = require("./teacherTools");
 const userTools = require("./userTools");
 const knowledgeTools = require("./knowledgeTools");
 const insightTools = require("./insightTools");
+const jobTools = require("./jobTools");
+const supportTools = require("./supportTools");
 const logger = require("../../../utils/logger");
 
 const ALL_TOOLS = {
@@ -9,6 +11,8 @@ const ALL_TOOLS = {
   ...userTools,
   ...knowledgeTools,
   ...insightTools,
+  ...jobTools,
+  ...supportTools,
 };
 
 // What we hand to Gemini as function declarations.

@@ -33,9 +33,16 @@ const ENTRIES = [
   {
     id: "profile-requirements",
     title: "What a tutor profile requires",
-    keywords: ["profile requirements", "what do i need", "required fields", "cv", "profile picture", "avatar"],
+    keywords: ["profile requirements", "what do i need", "required fields", "cv", "profile picture", "avatar", "requirements", "create profile", "register profile"],
     content:
       "A complete tutor profile requires: full name, contact email and phone, address (street, city, state, ZIP), at least one qualification (degree, institution, year), at least one subject taught, a bio of 50-1000 characters, years of experience, hourly rate, teaching mode, at least one weekly availability slot, a profile picture, and a CV (PDF).",
+  },
+  {
+    id: "home-vs-online-tuition",
+    title: "Home Tuition vs Online Tuition Comparison",
+    keywords: ["home tuition vs online", "online vs home", "compare home tuition", "online tuition benefits", "home tuition benefits", "grade 10", "tuition mode", "in-person vs online"],
+    content:
+      "### Home Tuition (In-Person)\n- **Pros:** High personal interaction, direct supervision, better focus for practical subjects (e.g., Grade 10 Math & Science), and hands-on paper problem solving.\n- **Cons:** Higher cost, schedule inflexibility, and travel requirements.\n\n### Online Tuition\n- **Pros:** Flexible scheduling, access to top tutors nationwide without geographic limits, screen sharing/digital whiteboards, and recorded sessions for review.\n- **Cons:** Requires stable internet & device, potential screen fatigue, and requires student self-discipline.\n\n**Recommendation for Grade 10:** For board exam preparation (SEE/Grade 10), Home Tuition is recommended for difficult subjects like Science and Math, while Online Tuition is excellent for language, revision, or flexible practice.",
   },
   {
     id: "accounts-and-roles",
@@ -69,8 +76,17 @@ const ENTRIES = [
 
 function score(entry, queryLower) {
   let points = 0;
+  // 1. Phrase matching
   for (const keyword of entry.keywords) {
-    if (queryLower.includes(keyword)) points += keyword.split(" ").length;
+    if (queryLower.includes(keyword)) points += keyword.split(" ").length * 3;
+  }
+  // 2. Token / word matching for multi-word prompts
+  const queryTokens = queryLower.split(/\s+/).filter(t => t.length > 2);
+  for (const keyword of entry.keywords) {
+    const kwTokens = keyword.toLowerCase().split(/\s+/);
+    for (const token of queryTokens) {
+      if (kwTokens.includes(token)) points += 1;
+    }
   }
   return points;
 }

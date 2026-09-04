@@ -3,43 +3,51 @@ const logger = require('./logger');
 
 exports.generateImageUrl = (publicId, transformations = {}) => {
   if (!publicId) return 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg';
-  
-  const url = cloudinary.url(publicId, {
-    width: transformations.width || 500,
-    height: transformations.height || 500,
-    crop: transformations.crop || 'fill',
-    format: transformations.format || 'webp',
-    quality: transformations.quality || 'auto',
-    secure:true,
-    ...transformations
-  });
-  return url;
+  try {
+    const url = cloudinary.url(publicId, {
+      width: transformations.width || 500,
+      height: transformations.height || 500,
+      crop: transformations.crop || 'fill',
+      format: transformations.format || 'webp',
+      quality: transformations.quality || 'auto',
+      secure: true,
+      ...transformations
+    });
+    return url;
+  } catch (err) {
+    logger.warn('Failed to generate Cloudinary image URL:', err.message);
+    return 'https://res.cloudinary.com/demo/image/upload/v1312461204/sample.jpg';
+  }
 };
 
 exports.generatePdfUrl = (publicId) => {
   if (!publicId) return null;
-  
-  const url = cloudinary.url(publicId, {
-    resource_type: 'raw',
-    secure: true,
-    flags: 'attachment'
-  });
-  return url;
+  try {
+    const url = cloudinary.url(publicId, {
+      resource_type: 'raw',
+      secure: true,
+      flags: 'attachment'
+    });
+    return url;
+  } catch (err) {
+    logger.warn('Failed to generate Cloudinary PDF URL:', err.message);
+    return null;
+  }
 };
 
 // Function specifically for PDF viewing (without attachment flag)
 exports.generatePdfViewUrl = (publicId) => {
   if (!publicId) return null;
-
-  
-  // REMOVE the format: 'pdf' parameter as it's causing double extension
-  const url = cloudinary.url(publicId, {
-    resource_type: 'raw',
-    secure: true
-    // Remove: format: 'pdf' - this causes the double .pdf.pdf extension
-  });
-  
-  return url;
+  try {
+    const url = cloudinary.url(publicId, {
+      resource_type: 'raw',
+      secure: true
+    });
+    return url;
+  } catch (err) {
+    logger.warn('Failed to generate Cloudinary PDF View URL:', err.message);
+    return null;
+  }
 };
 
 // Generic function to generate Cloudinary URLs (legacy support)

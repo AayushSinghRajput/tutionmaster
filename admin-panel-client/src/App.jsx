@@ -13,6 +13,7 @@ import BlogEditorPage from './pages/BlogEditorPage';
 import JobListPage from './pages/JobListPage';
 import JobEditorPage from './pages/JobEditorPage';
 import ManualTutorCreationPage from './pages/ManualTutorCreationPage';
+import SupportTicketsPage from './pages/SupportTicketsPage';
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/jobs"           element={<JobListPage />} />
             <Route path="/jobs/new"       element={<JobEditorPage />} />
             <Route path="/jobs/:id/edit"  element={<JobEditorPage />} />
+            <Route path="/support-tickets" element={<SupportTicketsPage />} />
             <Route path="/reviews"        element={<ReviewsPage />} />
             <Route path="/administrators" element={<AdministratorsPage />} />
           </Route>
