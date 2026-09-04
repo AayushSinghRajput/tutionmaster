@@ -2,6 +2,26 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { blogAdminService } from '../services/blogAdminService';
+import { BLOG_CATEGORIES as CATEGORIES } from '../constants';
+import {
+  FileText,
+  ArrowLeft,
+  Save,
+  Send,
+  Image,
+  Tag,
+  Lock,
+  Unlock,
+  Eye,
+  Globe,
+  Bold,
+  Italic,
+  Heading2,
+  List,
+  Quote,
+  Code,
+  Link2,
+} from 'lucide-react';
 
 export default function BlogEditorPage() {
   const { id } = useParams();
@@ -10,7 +30,7 @@ export default function BlogEditorPage() {
 
   const [loading, setLoading] = useState(isEditing);
   const [submitting, setSubmitting] = useState(false);
-  const [autoSlug, setAutoSlug] = useState(true);
+  const [autoSlug, setAutoSlug] = useState(!isEditing);
   const [showSeo, setShowSeo] = useState(false);
 
   const [formData, setFormData] = useState({
@@ -19,8 +39,8 @@ export default function BlogEditorPage() {
     content: '',
     excerpt: '',
     coverImage: '',
-    author: 'TuitionMaster Team',
-    category: 'General',
+    author: 'TuitionMaster Editorial',
+    category: 'Tutoring Tips & Guides',
     tags: '',
     published: false,
     metaTitle: '',
@@ -39,16 +59,16 @@ export default function BlogEditorPage() {
             content: b.content || '',
             excerpt: b.excerpt || '',
             coverImage: b.coverImage || '',
-            author: b.author || 'TuitionMaster Team',
-            category: b.category || 'General',
-            tags: Array.isArray(b.tags) ? b.tags.join(', ') : '',
+            author: b.author || 'TuitionMaster Editorial',
+            category: b.category || 'Tutoring Tips & Guides',
+            tags: Array.isArray(b.tags) ? b.tags.join(', ') : b.tags || '',
             published: Boolean(b.published),
             metaTitle: b.metaTitle || '',
             metaDescription: b.metaDescription || '',
           });
           setAutoSlug(false);
         })
-        .catch((err) => {
+        .catch(() => {
           toast.error('Failed to load blog post');
           navigate('/blogs');
         })
@@ -74,18 +94,25 @@ export default function BlogEditorPage() {
     }));
   };
 
-  const handleSlugChange = (e) => {
-    setAutoSlug(false);
-    setFormData((prev) => ({ ...prev, slug: e.target.value }));
+  const insertMarkdown = (syntaxBefore, syntaxAfter = '') => {
+    const textarea = document.getElementById('blog-content-area');
+    if (!textarea) return;
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = formData.content.substring(start, end);
+    const replacement = syntaxBefore + selected + syntaxAfter;
+    const newContent =
+      formData.content.substring(0, start) + replacement + formData.content.substring(end);
+    setFormData((prev) => ({ ...prev, content: newContent }));
   };
 
   const handleSubmit = async (publishState) => {
     if (!formData.title.trim()) {
-      toast.error('Title is required');
+      toast.error('Article Title is required');
       return;
     }
     if (!formData.content.trim()) {
-      toast.error('Content is required');
+      toast.error('Article Content is required');
       return;
     }
 
@@ -93,20 +120,25 @@ export default function BlogEditorPage() {
     const payload = {
       ...formData,
       published: publishState !== undefined ? publishState : formData.published,
-      tags: formData.tags ? formData.tags.split(',').map((t) => t.trim()).filter(Boolean) : [],
+      tags: formData.tags
+        ? formData.tags
+            .split(',')
+            .map((t) => t.trim())
+            .filter(Boolean)
+        : [],
     };
 
     try {
       if (isEditing) {
         await blogAdminService.updateBlog(id, payload);
-        toast.success('Blog updated successfully!');
+        toast.success('Blog post updated successfully');
       } else {
         await blogAdminService.createBlog(payload);
-        toast.success(payload.published ? 'Blog published successfully!' : 'Blog saved as draft!');
+        toast.success('Blog post created successfully');
       }
       navigate('/blogs');
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to save blog');
+      toast.error(err.response?.data?.error || 'Failed to save blog post');
     } finally {
       setSubmitting(false);
     }
@@ -114,225 +146,341 @@ export default function BlogEditorPage() {
 
   if (loading) {
     return (
-      <div style={{ padding: '60px', textAlign: 'center' }}>
+      <div className="state-center" style={{ minHeight: '50vh' }}>
         <div className="spinner" />
+        <p>Loading editorial post…</p>
       </div>
     );
   }
 
   return (
-    <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <>
+      <div className="page-header">
         <div>
-          <Link to="/blogs" style={{ color: 'var(--text-muted)', textDecoration: 'none', fontSize: '14px' }}>
-            ← Back to Blogs
+          <Link
+            to="/blogs"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '.82rem',
+              color: 'var(--text-muted)',
+              textDecoration: 'none',
+              marginBottom: '6px',
+            }}
+          >
+            <ArrowLeft size={14} />
+            <span>Back to Articles</span>
           </Link>
-          <h1 style={{ marginTop: '8px' }}>{isEditing ? '✏️ Edit Blog Post' : '➕ Create New Blog Post'}</h1>
-        </div>
-      </div>
-
-      <div className="card" style={{ padding: '24px' }}>
-        {/* Title */}
-        <div className="form-group" style={{ marginBottom: '20px' }}>
-          <label className="form-label" style={{ fontWeight: 600 }}>
-            Blog Title <span style={{ color: 'red' }}>*</span>
-          </label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="e.g. 10 Essential Tips for Mastering High School Physics"
-            value={formData.title}
-            onChange={handleTitleChange}
-          />
+          <h1>{isEditing ? 'Edit Editorial Article' : 'Write New Article'}</h1>
+          <p>Create educational content, student resources, and tutor guidelines</p>
         </div>
 
-        {/* Slug */}
-        <div className="form-group" style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
-            <label className="form-label" style={{ fontWeight: 600, margin: 0 }}>
-              URL Slug <span style={{ color: 'red' }}>*</span>
-            </label>
-            <button
-              type="button"
-              className="btn btn-ghost"
-              style={{ fontSize: '12px', padding: '2px 8px' }}
-              onClick={() => {
-                setAutoSlug(true);
-                setFormData((prev) => ({ ...prev, slug: generateSlug(prev.title) }));
-              }}
-            >
-              🔄 Auto-generate
-            </button>
-          </div>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="slug-url-format"
-            value={formData.slug}
-            onChange={handleSlugChange}
-          />
-        </div>
-
-        {/* Category & Author & Tags */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '20px' }}>
-          <div className="form-group">
-            <label className="form-label" style={{ fontWeight: 600 }}>Category</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="e.g. Study Tips, Exam Prep"
-              value={formData.category}
-              onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" style={{ fontWeight: 600 }}>Author Name</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="e.g. TuitionMaster Team"
-              value={formData.author}
-              onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-            />
-          </div>
-
-          <div className="form-group">
-            <label className="form-label" style={{ fontWeight: 600 }}>Tags (comma-separated)</label>
-            <input
-              type="text"
-              className="form-control"
-              placeholder="e.g. physics, study, nepal"
-              value={formData.tags}
-              onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
-            />
-          </div>
-        </div>
-
-        {/* Cover Image URL */}
-        <div className="form-group" style={{ marginBottom: '20px' }}>
-          <label className="form-label" style={{ fontWeight: 600 }}>Cover Image URL</label>
-          <input
-            type="text"
-            className="form-control"
-            placeholder="https://images.unsplash.com/photo-..."
-            value={formData.coverImage}
-            onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
-          />
-          {formData.coverImage && (
-            <div style={{ marginTop: '10px', height: '120px', borderRadius: '8px', overflow: 'hidden', border: '1px solid var(--border)' }}>
-              <img src={formData.coverImage} alt="Cover preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-            </div>
-          )}
-        </div>
-
-        {/* Excerpt */}
-        <div className="form-group" style={{ marginBottom: '20px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-            <label className="form-label" style={{ fontWeight: 600, margin: 0 }}>Excerpt (Summary for cards & meta)</label>
-            <span style={{ fontSize: '12px', color: formData.excerpt.length > 160 ? 'orange' : 'var(--text-muted)' }}>
-              {formData.excerpt.length}/160 chars
-            </span>
-          </div>
-          <textarea
-            className="form-control"
-            rows="3"
-            placeholder="Brief overview of the article content..."
-            value={formData.excerpt}
-            onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
-          />
-        </div>
-
-        {/* Content Body */}
-        <div className="form-group" style={{ marginBottom: '24px' }}>
-          <label className="form-label" style={{ fontWeight: 600 }}>
-            Article Content (HTML / Markdown / Rich Text) <span style={{ color: 'red' }}>*</span>
-          </label>
-          <textarea
-            className="form-control"
-            rows="12"
-            placeholder="<p>Write your blog post HTML or formatted content here...</p>"
-            value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-            style={{ fontFamily: 'monospace', fontSize: '14px' }}
-          />
-        </div>
-
-        {/* SEO Collapsible Section */}
-        <div style={{ border: '1px solid var(--border)', borderRadius: '8px', marginBottom: '24px', overflow: 'hidden' }}>
+        <div style={{ display: 'flex', gap: '10px' }}>
           <button
             type="button"
-            style={{
-              width: '100%',
-              padding: '12px 16px',
-              background: 'var(--bg-card)',
-              border: 'none',
-              display: 'flex',
-              justify: 'space-between',
-              alignItems: 'center',
-              cursor: 'pointer',
-              fontWeight: 600,
-              color: 'var(--text-main)',
-            }}
-            onClick={() => setShowSeo(!showSeo)}
+            className="btn btn-ghost"
+            disabled={submitting}
+            onClick={() => handleSubmit(false)}
           >
-            <span>🔍 SEO Settings (Custom Meta Tags)</span>
-            <span>{showSeo ? '▲' : '▼'}</span>
+            <Save size={15} />
+            <span>Save Draft</span>
           </button>
+          <button
+            type="button"
+            className="btn btn-primary"
+            disabled={submitting}
+            onClick={() => handleSubmit(true)}
+          >
+            <Send size={15} />
+            <span>{isEditing ? 'Update & Publish' : 'Publish Article'}</span>
+          </button>
+        </div>
+      </div>
 
-          {showSeo && (
-            <div style={{ padding: '16px', borderTop: '1px solid var(--border)', background: 'var(--bg-subtle)' }}>
-              <div className="form-group" style={{ marginBottom: '16px' }}>
-                <label className="form-label">Meta Title (falls back to Title if empty)</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder="Custom SEO Title"
-                  value={formData.metaTitle}
-                  onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
-                />
+      <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 340px', gap: '24px', alignItems: 'start' }}>
+        {/* Main Content Area */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          {/* Card: Title & Slug */}
+          <div className="card">
+            <div className="form-group">
+              <label className="form-label">Article Title *</label>
+              <input
+                type="text"
+                className="form-input"
+                style={{ fontSize: '1.1rem', fontWeight: 600 }}
+                placeholder="e.g. 10 Proven Strategies to Excel in SEE Optional Mathematics"
+                value={formData.title}
+                onChange={handleTitleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '4px' }}>
+                <label className="form-label" style={{ margin: 0 }}>URL Slug</label>
+                <button
+                  type="button"
+                  onClick={() => setAutoSlug(!autoSlug)}
+                  style={{ fontSize: '.72rem', color: 'var(--brand-300)', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '4px' }}
+                >
+                  {autoSlug ? <Lock size={12} /> : <Unlock size={12} />}
+                  <span>{autoSlug ? 'Auto-generated' : 'Manual Slug'}</span>
+                </button>
               </div>
+              <input
+                type="text"
+                className="form-input"
+                value={formData.slug}
+                onChange={(e) => {
+                  setAutoSlug(false);
+                  setFormData({ ...formData, slug: e.target.value });
+                }}
+                placeholder="proven-strategies-see-opt-maths"
+              />
+            </div>
+          </div>
 
-              <div className="form-group">
-                <label className="form-label">Meta Description (falls back to Excerpt if empty)</label>
-                <textarea
-                  className="form-control"
-                  rows="2"
-                  placeholder="Custom SEO Description"
-                  value={formData.metaDescription}
-                  onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
-                />
+          {/* Card: Excerpt & Cover Image */}
+          <div className="card">
+            <div className="form-group">
+              <label className="form-label">Cover Image URL</label>
+              <input
+                type="url"
+                className="form-input"
+                placeholder="https://images.unsplash.com/... or Cloudinary URL"
+                value={formData.coverImage}
+                onChange={(e) => setFormData({ ...formData, coverImage: e.target.value })}
+              />
+              {formData.coverImage && (
+                <div style={{ marginTop: '10px', borderRadius: 'var(--radius)', overflow: 'hidden', height: '160px', border: '1px solid var(--border)' }}>
+                  <img
+                    src={formData.coverImage}
+                    alt="Cover Preview"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    onError={(e) => (e.currentTarget.style.display = 'none')}
+                  />
+                </div>
+              )}
+            </div>
+
+            <div className="form-group" style={{ marginBottom: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '4px' }}>
+                <label className="form-label" style={{ margin: 0 }}>Excerpt / Short Summary</label>
+                <span style={{ fontSize: '.72rem', color: 'var(--text-muted)' }}>
+                  {formData.excerpt.length} characters
+                </span>
+              </div>
+              <textarea
+                className="form-textarea"
+                rows={2}
+                placeholder="Brief 1-2 sentence teaser shown on blog card listings..."
+                value={formData.excerpt}
+                onChange={(e) => setFormData({ ...formData, excerpt: e.target.value })}
+              />
+            </div>
+          </div>
+
+          {/* Card: Article Content Editor */}
+          <div className="card">
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+              <label className="form-label" style={{ margin: 0 }}>Article Content (Markdown Supported) *</label>
+              <div style={{ display: 'flex', gap: '4px' }}>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  style={{ padding: '4px 8px' }}
+                  onClick={() => insertMarkdown('**', '**')}
+                  title="Bold"
+                >
+                  <Bold size={13} />
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  style={{ padding: '4px 8px' }}
+                  onClick={() => insertMarkdown('*', '*')}
+                  title="Italic"
+                >
+                  <Italic size={13} />
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  style={{ padding: '4px 8px' }}
+                  onClick={() => insertMarkdown('## ')}
+                  title="Heading 2"
+                >
+                  <Heading2 size={13} />
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  style={{ padding: '4px 8px' }}
+                  onClick={() => insertMarkdown('- ')}
+                  title="Bullet List"
+                >
+                  <List size={13} />
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  style={{ padding: '4px 8px' }}
+                  onClick={() => insertMarkdown('> ')}
+                  title="Quote"
+                >
+                  <Quote size={13} />
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-sm"
+                  style={{ padding: '4px 8px' }}
+                  onClick={() => insertMarkdown('`', '`')}
+                  title="Code"
+                >
+                  <Code size={13} />
+                </button>
               </div>
             </div>
-          )}
+
+            <textarea
+              id="blog-content-area"
+              className="form-textarea"
+              rows={14}
+              placeholder="Write comprehensive article content in markdown format..."
+              value={formData.content}
+              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+              required
+            />
+          </div>
+
+          {/* Card: Collapsible SEO & Social Meta */}
+          <div className="card">
+            <div
+              style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer' }}
+              onClick={() => setShowSeo(!showSeo)}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Globe size={18} color="var(--gold-400)" />
+                <h3 style={{ fontSize: '1rem', fontWeight: 700, margin: 0 }}>Search Engine Optimization (SEO)</h3>
+              </div>
+              <span style={{ fontSize: '.78rem', color: 'var(--brand-300)' }}>
+                {showSeo ? 'Hide Meta' : 'Configure Meta'}
+              </span>
+            </div>
+
+            {showSeo && (
+              <div style={{ marginTop: '18px', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                <div className="form-group">
+                  <label className="form-label">SEO Meta Title</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    placeholder="Custom Google title tag (defaults to article title)"
+                    value={formData.metaTitle}
+                    onChange={(e) => setFormData({ ...formData, metaTitle: e.target.value })}
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">SEO Meta Description</label>
+                  <textarea
+                    className="form-textarea"
+                    rows={2}
+                    placeholder="Custom Google meta description..."
+                    value={formData.metaDescription}
+                    onChange={(e) => setFormData({ ...formData, metaDescription: e.target.value })}
+                  />
+                </div>
+
+                {/* Google Snippet Simulator */}
+                <div style={{ padding: '14px', background: 'var(--bg-input)', borderRadius: 'var(--radius)', border: '1px solid var(--border)' }}>
+                  <div style={{ fontSize: '.72rem', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    Google Search Preview
+                  </div>
+                  <div style={{ fontSize: '.84rem', color: '#60a5fa', fontWeight: 600 }}>
+                    {formData.metaTitle || formData.title || 'Article Title'} · TuitionMaster
+                  </div>
+                  <div style={{ fontSize: '.72rem', color: 'var(--success-light)', margin: '2px 0' }}>
+                    https://tuitionmaster.guru/blog/{formData.slug || 'article-slug'}
+                  </div>
+                  <div style={{ fontSize: '.78rem', color: 'var(--text-secondary)' }}>
+                    {formData.metaDescription || formData.excerpt || 'Article summary description snippet...'}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
-        {/* Submit Actions */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: '16px', borderTop: '1px solid var(--border)' }}>
-          <button type="button" className="btn btn-ghost" onClick={() => navigate('/blogs')}>
-            Cancel
-          </button>
+        {/* Sidebar Controls */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          <div className="card">
+            <h3 style={{ fontSize: '.95rem', fontWeight: 700, marginBottom: '14px' }}>Publishing Settings</h3>
 
-          <div style={{ display: 'flex', gap: '12px' }}>
-            <button
-              type="button"
-              className="btn btn-secondary"
-              disabled={submitting}
-              onClick={() => handleSubmit(false)}
-            >
-              💾 Save as Draft
-            </button>
-            <button
-              type="button"
-              className="btn btn-primary"
-              disabled={submitting}
-              onClick={() => handleSubmit(true)}
-            >
-              🚀 {isEditing ? 'Update & Publish' : 'Publish Now'}
-            </button>
+            <div className="form-group">
+              <label className="form-label">Category</label>
+              <select
+                className="form-select"
+                value={formData.category}
+                onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+              >
+                {CATEGORIES.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Author Byline</label>
+              <input
+                type="text"
+                className="form-input"
+                value={formData.author}
+                onChange={(e) => setFormData({ ...formData, author: e.target.value })}
+                placeholder="TuitionMaster Editorial"
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Tags (Comma-separated)</label>
+              <input
+                type="text"
+                className="form-input"
+                value={formData.tags}
+                onChange={(e) => setFormData({ ...formData, tags: e.target.value })}
+                placeholder="SEE, Mathematics, Exam Prep"
+              />
+            </div>
+
+            <label style={{ display: 'flex', alignItems: 'center', gap: '10px', marginTop: '14px', cursor: 'pointer' }}>
+              <input
+                type="checkbox"
+                checked={formData.published}
+                onChange={(e) => setFormData({ ...formData, published: e.target.checked })}
+              />
+              <span style={{ fontSize: '.88rem', fontWeight: 600, color: 'var(--text-primary)' }}>
+                Published on Live Website
+              </span>
+            </label>
+
+            <div style={{ marginTop: '20px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                style={{ width: '100%', justifyContent: 'center' }}
+                disabled={submitting}
+                onClick={() => handleSubmit(formData.published)}
+              >
+                <Save size={16} />
+                <span>Save Article</span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }

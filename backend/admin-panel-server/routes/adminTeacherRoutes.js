@@ -4,6 +4,7 @@ const {
   adminGetTeacher,
   adminUpdateTeacher,
   adminSetVisibility,
+  adminVerifyTeacher,
   getUnonboardedUsers,
   createManualTeacher,
   resendTutorNotification,
@@ -34,5 +35,8 @@ router.put("/:id", adminUpdateTeacher);
 
 // PATCH /api/admin/teachers/:id/visibility
 router.patch("/:id/visibility", adminSetVisibility);
+
+// PATCH /api/admin/teachers/:id/verification
+router.patch("/:id/verification", adminVerifyTeacher);
 
 module.exports = router;
