@@ -362,3 +362,50 @@ exports.resendTutorNotification = asyncHandler(async (req, res, next) => {
   });
 });
 
+// @desc    1-Click Tutor Document & Profile Verification
+// @route   PATCH /api/admin/teachers/:id/verification
+// @access  Admin
+exports.adminVerifyTeacher = asyncHandler(async (req, res, next) => {
+  const { action, reason, feedbackNotes } = req.body;
+
+  const teacher = await Teacher.findById(req.params.id);
+  if (!teacher) {
+    return next(new ErrorResponse("Teacher not found", 404));
+  }
+
+  if (action === "APPROVE") {
+    teacher.isVisible = true;
+    teacher.profileStatus = "Active";
+    teacher.visibilityUpdatedAt = new Date();
+    teacher.visibilityUpdatedBy = req.admin._id;
+  } else if (action === "REQUEST_RESUBMISSION") {
+    teacher.isVisible = false;
+    teacher.profileStatus = "Under Review";
+  } else if (action === "REJECT") {
+    teacher.isVisible = false;
+    teacher.profileStatus = "Draft";
+  } else {
+    return next(new ErrorResponse("Invalid verification action. Must be APPROVE, REQUEST_RESUBMISSION, or REJECT", 400));
+  }
+
+  await teacher.save();
+
+  res.json({
+    success: true,
+    message:
+      action === "APPROVE"
+        ? `Tutor profile approved and made publicly visible`
+        : action === "REQUEST_RESUBMISSION"
+        ? `Resubmission requested with reason: ${reason || "Documents require update"}`
+        : `Tutor profile rejected (${reason || "Quality standard not met"})`,
+    data: attachUrls(teacher),
+    verificationDetails: {
+      action,
+      reason: reason || null,
+      feedbackNotes: feedbackNotes || null,
+      verifiedBy: req.admin?.name,
+      verifiedAt: new Date(),
+    },
+  });
+});
+

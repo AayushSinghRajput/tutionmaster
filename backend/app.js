@@ -38,6 +38,8 @@ const dashboardRoutes = require("./admin-panel-server/routes/dashboardRoutes");
 const adminReviewRoutes = require("./admin-panel-server/routes/adminReviewRoutes");
 const adminBlogRoutes = require("./admin-panel-server/routes/adminBlogRoutes");
 const adminJobRoutes = require("./admin-panel-server/routes/adminJobRoutes");
+const adminRequirementRoutes = require("./admin-panel-server/routes/adminRequirementRoutes");
+const adminCurriculumRoutes = require("./admin-panel-server/routes/adminCurriculumRoutes");
 
 const supportRoute = require("./routes/supportRoutes");
 const adminSupportRoutes = require("./admin-panel-server/routes/adminSupportRoutes");
@@ -159,6 +161,8 @@ app.use("/api/admin/dashboard", dashboardRoutes);
 app.use("/api/admin/reviews", adminReviewRoutes);
 app.use("/api/admin/blogs", adminBlogRoutes);
 app.use("/api/admin/jobs", adminJobRoutes);
+app.use("/api/admin/requirements", adminRequirementRoutes);
+app.use("/api/admin/curriculum", adminCurriculumRoutes);
 app.use("/api/admin/support-tickets", adminSupportRoutes);
 
 // API documentation (read-only, public — safe to leave open)

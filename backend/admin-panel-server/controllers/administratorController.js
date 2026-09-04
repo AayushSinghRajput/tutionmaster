@@ -1,9 +1,38 @@
 const Admin = require("../models/Admin");
+const User = require("../../models/User");
 const ErrorResponse = require("../../utils/errorResponse");
 const asyncHandler = require("../../middleware/asyncHandler");
 
 const SUPER_ADMIN_EMAIL =
   process.env.SUPER_ADMIN_EMAIL || "aayusinghrajput812@gmail.com";
+
+// @desc    List registered users for administrator creation dropdown
+// @route   GET /api/admin/administrators/users
+// @access  Super Admin
+exports.listRegisteredUsers = asyncHandler(async (req, res) => {
+  const existingAdminEmails = await Admin.find().distinct("email");
+
+  const users = await User.find({
+    email: { $nin: existingAdminEmails },
+  })
+    .select("username email role createdAt")
+    .sort({ username: 1 })
+    .lean();
+
+  const data = users.map((u) => ({
+    id: u._id,
+    name: u.username || u.email.split("@")[0],
+    email: u.email,
+    role: u.role,
+    createdAt: u.createdAt,
+  }));
+
+  res.json({
+    success: true,
+    count: data.length,
+    data,
+  });
+});
 
 // @desc    List all administrators
 // @route   GET /api/admin/administrators

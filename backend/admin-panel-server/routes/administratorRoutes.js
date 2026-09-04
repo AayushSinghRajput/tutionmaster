@@ -1,5 +1,6 @@
 const express = require("express");
 const {
+  listRegisteredUsers,
   listAdministrators,
   createAdministrator,
   updateAdministrator,
@@ -11,6 +12,9 @@ const router = express.Router();
 
 // All administrator management requires Super Admin
 router.use(protectAdmin, requireSuperAdmin);
+
+// GET  /api/admin/administrators/users
+router.get("/users", listRegisteredUsers);
 
 // GET  /api/admin/administrators
 router.get("/", listAdministrators);
