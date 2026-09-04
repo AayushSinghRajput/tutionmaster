@@ -247,8 +247,8 @@ export default function TeachersPage() {
 
                     <td>
                       <div style={{ fontWeight: 700, color: 'var(--gold-400)' }}>
-                        ₨ {teacher.hourlyRate ? teacher.hourlyRate.toLocaleString() : '—'}
-                        <span style={{ fontSize: '.72rem', color: 'var(--text-muted)', fontWeight: 400 }}> /hr</span>
+                        ₨ {(teacher.monthlyRate ?? (teacher.hourlyRate ? teacher.hourlyRate * 20 : null)) ? (teacher.monthlyRate ?? (teacher.hourlyRate * 20)).toLocaleString() : '—'}
+                        <span style={{ fontSize: '.72rem', color: 'var(--text-muted)', fontWeight: 400 }}> /mo</span>
                       </div>
                     </td>
 

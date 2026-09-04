@@ -16,8 +16,8 @@ const TeachingDetailsCard = ({ teacher }) => {
         <div className="flex items-center space-x-3">
           <IndianRupee className="w-5 h-5 text-brand-500 flex-shrink-0" />
           <div>
-            <div className="font-medium text-gray-900">Hourly Rate</div>
-            <div className="text-gray-600">Rs {teacher.hourlyRate}</div>
+            <div className="font-medium text-gray-900">Monthly Fee</div>
+            <div className="text-gray-600">Rs {(teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0)).toLocaleString()} / month</div>
           </div>
         </div>
         <div className="flex items-center space-x-3">

@@ -46,8 +46,7 @@ const addQualification=()=>{
 appendQualification({
 
 degree:"",
-institution:"",
-year:new Date().getFullYear()
+institution:""
 
 });
 

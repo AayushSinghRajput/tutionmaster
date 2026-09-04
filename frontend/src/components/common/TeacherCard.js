@@ -89,8 +89,8 @@ const TeacherCard = ({ teacher }) => {
               <Clock size={14} />
               <span>{formatExperience(experience)}</span>
             </div>
-            <div className="flex items-center space-x-1 text-gray-600">
-              <span>Rs {hourlyRate}/hr</span>
+            <div className="flex items-center space-x-1 text-gray-600 font-semibold">
+              <span>Rs {(teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : hourlyRate)).toLocaleString()}/mo</span>
             </div>
             {teacher.averageRating && (
               <div className="flex items-center space-x-1 text-yellow-600">
@@ -130,7 +130,8 @@ TeacherCard.propTypes = {
     }).isRequired,
     bio: PropTypes.string.isRequired,
     experience: PropTypes.number.isRequired,
-    hourlyRate: PropTypes.number.isRequired,
+    monthlyRate: PropTypes.number,
+    hourlyRate: PropTypes.number,
     preferredSubjects: PropTypes.arrayOf(PropTypes.string).isRequired,
     teachingMode: PropTypes.string.isRequired,
   }).isRequired,

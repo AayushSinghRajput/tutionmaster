@@ -124,6 +124,7 @@ const TeacherForm = ({
           <Step3
             data={{
               experience: watch("experience"),
+              monthlyRate: watch("monthlyRate"),
               hourlyRate: watch("hourlyRate"),
               teachingMode: watch("teachingMode"),
               bio: watch("bio"),

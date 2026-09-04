@@ -453,7 +453,7 @@ const ProfileTab = ({ teacher }) => {
           <div className="space-y-4">
             {[
               { label: 'Teaching Experience', value: `${experience} years` },
-              { label: 'Hourly Rate', value: `Rs ${hourlyRate}/hour` },
+              { label: 'Monthly Fee', value: `Rs ${(teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : hourlyRate)).toLocaleString()} / month` },
               { label: 'Teaching Mode', value: teachingMode }
             ].map((item, index) => (
               <div key={index} className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-1 py-3 border-b border-stone-100 last:border-b-0">
@@ -492,7 +492,7 @@ const ProfileTab = ({ teacher }) => {
             {qualifications.map((qual, index) => (
               <div key={index} className="py-3 border-b border-stone-100 last:border-b-0">
                 <strong className="block text-gray-900 font-semibold text-lg">{qual.degree}</strong>
-                <span className="text-gray-600 font-medium">{qual.institution} ({qual.year})</span>
+                <span className="text-gray-600 font-medium">{qual.institution}</span>
               </div>
             ))}
           </div>

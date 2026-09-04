@@ -25,8 +25,8 @@ export const STATS_CONFIG = [
   {
     id: 'rate',
     icon: IndianRupee,
-    label: 'Hourly Rate',
-    sublabel: 'Per hour',
-    getValue: (profile) => `Rs ${profile.hourlyRate}`,
+    label: 'Monthly Fee',
+    sublabel: 'Per month',
+    getValue: (profile) => `Rs ${(profile.monthlyRate || (profile.hourlyRate ? profile.hourlyRate * 20 : 0)).toLocaleString()}`,
   },
 ];

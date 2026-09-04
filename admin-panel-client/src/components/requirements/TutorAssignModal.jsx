@@ -73,7 +73,7 @@ export default function TutorAssignModal({
                     {tutor.name}
                   </div>
                   <div style={{ fontSize: '.78rem', color: 'var(--text-secondary)' }}>
-                    {tutor.address?.city} · ₨ {tutor.hourlyRate || '0'}/hr · {tutor.teachingMode}
+                    {tutor.address?.city} · ₨ {(tutor.monthlyRate ?? (tutor.hourlyRate ? tutor.hourlyRate * 20 : 0)).toLocaleString()}/mo · {tutor.teachingMode}
                   </div>
                 </div>
                 <button

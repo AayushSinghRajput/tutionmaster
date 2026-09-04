@@ -46,17 +46,11 @@ const useTeacherFormValidation = ({
         return false;
       }
 
-      if (!cvFile) {
-        toast.error("CV/Resume is required");
-
-        return false;
-      }
-
       valid = true;
     } else if (currentStep === 3) {
       valid = await trigger([
         "experience",
-        "hourlyRate",
+        "monthlyRate",
         "teachingMode",
       ]);
       // bio is optional — only validate format if it has content
@@ -83,12 +77,6 @@ const useTeacherFormValidation = ({
   const handleFormSubmit = async (data) => {
     if (!avatarFile) {
       toast.error("Profile picture is required");
-
-      return;
-    }
-
-    if (!cvFile) {
-      toast.error("CV/Resume is required");
 
       return;
     }

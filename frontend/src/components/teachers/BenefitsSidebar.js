@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Star, PlayCircle } from 'lucide-react';
 import BenefitItem from './BenefitItem';
-import { PROFILE_BENEFITS, PROFILE_QUICK_TIPS } from '../../constants/profile/profileBenefits';
+import { PROFILE_BENEFITS } from '../../constants/profile/profileBenefits';
 import VideoOverlayBanner from '../video/VideoOverlayBanner';
 
 const BenefitsSidebar = () => {
@@ -14,15 +14,22 @@ const BenefitsSidebar = () => {
       )}
 
       {/* Video Guide Card */}
-      <div className="mb-6 bg-brand-50 p-4 rounded-xl border border-brand-200 text-center">
-        <h4 className="font-bold text-gray-900 text-sm mb-1">Need help with registration?</h4>
-        <p className="text-xs text-gray-600 mb-3">Watch our 2-minute video walkthrough</p>
+      <div className="mb-6 bg-gradient-to-br from-brand-50 via-brand-100/50 to-gold-50/40 p-5 sm:p-6 rounded-2xl border-2 border-brand-300 shadow-sm text-center">
+        <div className="w-11 h-11 mx-auto mb-3 bg-brand-600 text-gold-300 rounded-xl flex items-center justify-center shadow-sm">
+          <PlayCircle className="w-6 h-6" />
+        </div>
+        <h4 className="font-serif font-bold text-gray-900 text-lg sm:text-xl mb-1.5 leading-snug">
+          Need help with registration?
+        </h4>
+        <p className="text-sm sm:text-base text-gray-700 font-medium mb-4 leading-relaxed">
+          Watch our 2-minute step-by-step video walkthrough to complete your profile quickly.
+        </p>
         <button
           type="button"
           onClick={() => setShowVideoModal(true)}
-          className="w-full btn-brand-primary py-2 text-xs font-bold gap-1.5 justify-center"
+          className="w-full bg-gradient-to-r from-brand-600 to-brand-800 hover:from-brand-700 hover:to-brand-900 text-white py-3 px-4 rounded-xl text-sm sm:text-base font-bold shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2"
         >
-          <PlayCircle className="w-4 h-4" />
+          <PlayCircle className="w-5 h-5 text-gold-300" />
           Watch Video Guide
         </button>
       </div>
@@ -40,15 +47,6 @@ const BenefitsSidebar = () => {
             description={benefit.description}
           />
         ))}
-      </div>
-
-      <div className="mt-6 p-4 bg-gold-50 rounded-xl border border-gold-200">
-        <h4 className="font-semibold text-gold-800 text-sm mb-2">Quick Tips</h4>
-        <ul className="text-xs text-gold-700 space-y-1">
-          {PROFILE_QUICK_TIPS.map((tip) => (
-            <li key={tip}>• {tip}</li>
-          ))}
-        </ul>
       </div>
     </div>
   );

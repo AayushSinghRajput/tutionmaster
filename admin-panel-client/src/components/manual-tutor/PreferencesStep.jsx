@@ -99,15 +99,16 @@ export default function PreferencesStep({ formData, setFormData, onDayToggle }) 
         </div>
 
         <div className="form-group">
-          <label className="form-label">Hourly Rate (NPR / hr) *</label>
+          <label className="form-label">Monthly Fee (NPR / month) *</label>
           <input
             type="number"
             className="form-input"
-            value={formData.hourlyRate}
-            onChange={(e) => setFormData({ ...formData, hourlyRate: e.target.value })}
-            placeholder="700"
-            min={100}
-            step={50}
+            value={formData.monthlyRate ?? (formData.hourlyRate ? formData.hourlyRate * 20 : 8000)}
+            onChange={(e) => setFormData({ ...formData, monthlyRate: e.target.value, hourlyRate: Math.round(Number(e.target.value) / 20) })}
+            placeholder="8000"
+            min={500}
+            max={200000}
+            step={500}
             required
           />
         </div>

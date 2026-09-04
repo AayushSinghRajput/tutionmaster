@@ -43,8 +43,6 @@ const validateQualificationsFields = (qualifications, errors) => {
     return;
   }
 
-  const currentYear = new Date().getFullYear();
-
   qualifications.forEach((qual, index) => {
     const addError = (field, msg) => {
       if (typeof errors.qualifications !== "object") errors.qualifications = {};
@@ -54,13 +52,6 @@ const validateQualificationsFields = (qualifications, errors) => {
 
     if (!qual.degree?.trim()) addError("degree", "Degree is required");
     if (!qual.institution?.trim()) addError("institution", "Institution is required");
-
-    const yearNum = Number(qual.year);
-    if (!qual.year) {
-      addError("year", "Year is required");
-    } else if (isNaN(yearNum) || yearNum < 1900) {
-      addError("year", "Invalid year");
-    }
   });
 };
 
@@ -109,12 +100,16 @@ export const validateTeacherProfile = (data) => {
   } else if (data.experience > 50) {
     errors.experience = "Experience cannot exceed 50 years";
   }
-  if (data.hourlyRate === undefined || data.hourlyRate === null) {
-    errors.hourlyRate = "Hourly rate is required";
-  } else if (data.hourlyRate < 0) {
-    errors.hourlyRate = "Hourly rate cannot be negative";
-  } else if (data.hourlyRate > 10000) {
-    errors.hourlyRate = "Hourly rate cannot exceed ₨10,000";
+  const effectiveRate = data.monthlyRate !== undefined && data.monthlyRate !== null
+    ? Number(data.monthlyRate)
+    : (data.hourlyRate !== undefined && data.hourlyRate !== null ? Number(data.hourlyRate) * 20 : null);
+
+  if (effectiveRate === null || isNaN(effectiveRate)) {
+    errors.monthlyRate = "Monthly fee is required";
+  } else if (effectiveRate < 500) {
+    errors.monthlyRate = "Monthly fee cannot be less than ₨500";
+  } else if (effectiveRate > 200000) {
+    errors.monthlyRate = "Monthly fee cannot exceed ₨2,00,000";
   }
 
   if (!data.teachingMode) {

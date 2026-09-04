@@ -1,6 +1,5 @@
 import StepHeader from "../step4/StepHeader";
 import AvailabilitySection from "../step4/AvailabilitySection";
-import ProfileReadyBanner from "../step4/ProfileReadyBanner";
 
 const Step4 = ({
   formErrors,
@@ -21,8 +20,6 @@ const Step4 = ({
         onAvailabilityChange={onAvailabilityChange}
         formErrors={formErrors}
       />
-
-      <ProfileReadyBanner />
     </div>
   );
 };

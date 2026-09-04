@@ -33,13 +33,13 @@ export default function ManualTutorCreationPage() {
     city: 'Kathmandu',
     degree: 'Bachelors in Education / Science',
     institution: 'Tribhuvan University',
-    year: 2022,
     preferredSubjects: 'Mathematics, Science',
     bio: 'Dedicated tutor with experience in interactive teaching and personalized academic support for students in Nepal.',
     experience: 3,
     availability: INITIAL_AVAILABILITY,
     teachingMode: 'Both',
-    hourlyRate: 700,
+    monthlyRate: 8000,
+    hourlyRate: 400,
     publishImmediately: true,
     sendNotification: true,
   });
@@ -174,7 +174,6 @@ export default function ManualTutorCreationPage() {
           {
             degree: formData.degree,
             institution: formData.institution,
-            year: Number(formData.year) || 2022,
           },
         ],
         preferredSubjects: formData.preferredSubjects
@@ -185,7 +184,8 @@ export default function ManualTutorCreationPage() {
         experience: Number(formData.experience) || 0,
         availability: formData.availability,
         teachingMode: formData.teachingMode,
-        hourlyRate: Number(formData.hourlyRate) || 500,
+        monthlyRate: Number(formData.monthlyRate) || (Number(formData.hourlyRate) ? Number(formData.hourlyRate) * 20 : 8000),
+        hourlyRate: Number(formData.hourlyRate) || Math.round(Number(formData.monthlyRate || 8000) / 20),
         publishImmediately: formData.publishImmediately,
       };
 

@@ -12,7 +12,7 @@ const qualificationSchema = new mongoose.Schema(
     },
     year: {
       type: Number,
-      required: [true, "Year is required"],
+      default: null,
     },
   },
   { _id: false },
@@ -130,11 +130,15 @@ const teacherSchema = new mongoose.Schema(
       enum: ["Online", "In-person", "Both"],
       required: [true, "Teaching mode is required"],
     },
+    monthlyRate: {
+      type: Number,
+      required: [true, "Monthly fee is required"],
+      min: [500, "Monthly fee cannot be less than ₨500"],
+      max: [200000, "Monthly fee cannot exceed ₨2,00,000"],
+    },
     hourlyRate: {
       type: Number,
-      required: [true, "Hourly rate is required"],
-      min: [0, "Hourly rate cannot be negative"],
-      max: [10000, "Hourly rate cannot exceed ₨10,000"],
+      default: null,
     },
     profileViews: {
       type: Number,

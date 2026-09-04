@@ -23,13 +23,18 @@ const Header = () => {
     setIsMenuOpen(false);
   };
 
+  const handleHomeClick = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="bg-white shadow-sm border-b border-stone-200 fixed top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex justify-between items-center h-16 sm:h-20">
 
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2 min-w-0">
+          <Link to="/" onClick={handleHomeClick} className="flex items-center gap-2 min-w-0">
             <Logo size={30} />
             <span className="text-lg sm:text-xl font-serif font-bold text-gray-900 tracking-tight truncate">TuitionMaster</span>
           </Link>
@@ -38,6 +43,7 @@ const Header = () => {
           <nav className="hidden md:flex items-center gap-8">
             <Link
               to="/"
+              onClick={handleHomeClick}
               className="text-gray-700 hover:text-brand-700 transition-all font-medium text-base"
             >
               Home
@@ -131,7 +137,7 @@ const Header = () => {
               <Link
                 to="/"
                 className="text-gray-700 hover:text-brand-700 hover:bg-stone-50 font-medium text-base py-2.5 px-3 rounded-lg"
-                onClick={() => setIsMenuOpen(false)}
+                onClick={handleHomeClick}
               >
                 Home
               </Link>

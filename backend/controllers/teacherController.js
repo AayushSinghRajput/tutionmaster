@@ -31,6 +31,7 @@ const ALLOWED_TEACHER_FIELDS = [
   "experience",
   "availability",
   "teachingMode",
+  "monthlyRate",
   "hourlyRate",
   "avatarPublicId",
   "cvPublicId",
@@ -43,6 +44,17 @@ function pickAllowedTeacherFields(body) {
     if (Object.prototype.hasOwnProperty.call(body, field)) {
       picked[field] = body[field];
     }
+  }
+
+  // Ensure two-way rate compatibility
+  if (picked.monthlyRate !== undefined && picked.monthlyRate !== null) {
+    picked.monthlyRate = Number(picked.monthlyRate);
+    if (!picked.hourlyRate) {
+      picked.hourlyRate = Math.round(picked.monthlyRate / 20);
+    }
+  } else if (picked.hourlyRate !== undefined && picked.hourlyRate !== null) {
+    picked.hourlyRate = Number(picked.hourlyRate);
+    picked.monthlyRate = picked.hourlyRate * 20;
   }
 
   return picked;
@@ -119,15 +131,26 @@ exports.getTeachers = asyncHandler(async (req, res) => {
   }
 
   if (minRate || maxRate) {
-    filter.hourlyRate = {};
+    const rateCondition = {};
 
     if (minRate) {
-      filter.hourlyRate.$gte = parseInt(minRate);
+      rateCondition.$gte = parseInt(minRate);
     }
 
     if (maxRate) {
-      filter.hourlyRate.$lte = parseInt(maxRate);
+      rateCondition.$lte = parseInt(maxRate);
     }
+
+    filter.$or = [
+      { monthlyRate: rateCondition },
+      {
+        monthlyRate: { $exists: false },
+        hourlyRate: {
+          ...(minRate ? { $gte: Math.round(parseInt(minRate) / 20) } : {}),
+          ...(maxRate ? { $lte: Math.round(parseInt(maxRate) / 20) } : {}),
+        },
+      },
+    ];
   }
 
   const pageNum = Math.max(1, parseInt(page) || 1);

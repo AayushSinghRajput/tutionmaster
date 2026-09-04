@@ -12,7 +12,6 @@ const TeacherQualificationsSection = ({ qualifications = [] }) => {
             <div className="flex-1 min-w-0">
               <h4 className="text-base sm:text-lg font-semibold text-gray-900">{qual.degree}</h4>
               <p className="text-gray-600 text-sm sm:text-base">{qual.institution}</p>
-              <span className="text-sm text-gray-500">{qual.year}</span>
             </div>
           </div>
         ))}

@@ -27,6 +27,7 @@ function toPublicCard(teacher, matchScore = null) {
     address: teacher.address,
     bio: teacher.bio,
     experience: teacher.experience,
+    monthlyRate: teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0),
     hourlyRate: teacher.hourlyRate,
     preferredSubjects: teacher.preferredSubjects,
     teachingMode: teacher.teachingMode,
@@ -47,6 +48,7 @@ function toModelSummary(teacher, matchScore = null) {
     city: teacher.address?.city,
     subjects: teacher.preferredSubjects,
     experience: teacher.experience,
+    monthlyRate: teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0),
     hourlyRate: teacher.hourlyRate,
     teachingMode: teacher.teachingMode,
     isVisible: teacher.isVisible,
@@ -177,9 +179,20 @@ const searchTeachers = {
     }
 
     if (minRate !== undefined || maxRate !== undefined) {
-      filter.hourlyRate = {};
-      if (minRate !== undefined) filter.hourlyRate.$gte = Number(minRate);
-      if (maxRate !== undefined) filter.hourlyRate.$lte = Number(maxRate);
+      const rateCondition = {};
+      if (minRate !== undefined) rateCondition.$gte = Number(minRate);
+      if (maxRate !== undefined) rateCondition.$lte = Number(maxRate);
+
+      filter.$or = [
+        { monthlyRate: rateCondition },
+        {
+          monthlyRate: { $exists: false },
+          hourlyRate: {
+            ...(minRate !== undefined ? { $gte: Math.round(Number(minRate) / 20) } : {}),
+            ...(maxRate !== undefined ? { $lte: Math.round(Number(maxRate) / 20) } : {}),
+          },
+        },
+      ];
     }
 
     const matches = await Teacher.find(filter).collation({ locale: "en", strength: 2 });

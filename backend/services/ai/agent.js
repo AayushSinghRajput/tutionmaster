@@ -37,11 +37,47 @@ function buildContents(history, message) {
   return [...historyContents, { role: "user", parts: [{ text: message }] }];
 }
 
+const OFF_TOPIC_DECLINE_MESSAGE =
+  "I am the TuitionMaster Assistant, designed specifically to help you find verified tutors, browse tuition jobs, post tutoring requirements, and navigate the TuitionMaster platform in Nepal. I cannot solve general programming or homework problems directly, but I would be glad to help you find an expert tutor for JavaScript, Mathematics, or any other subject on TuitionMaster!";
+
+function isOffTopicQuery(message) {
+  const msg = (message || "").toLowerCase().trim();
+  if (!msg) return false;
+
+  // If user query mentions platform domain terms, let it pass to agent/tools
+  const hasPlatformIntent =
+    /\b(tutor|tutors|teacher|teachers|tuition|tuitions|class|classes|hire|find|rate|rates|hourly|budget|npr|nepal|kathmandu|lalitpur|bhaktapur|pokhara|job|jobs|vacancy|vacancies|requirement|requirements|profile|login|signup|register|support|contact|subject|subjects|curriculum|see|neb|ioe|iost|tu)\b/i.test(
+      msg
+    );
+  if (hasPlatformIntent) return false;
+
+  // Patterns for generic coding, homework problem solving, or unrelated non-platform requests
+  const offTopicPatterns = [
+    /\b(write|give|generate|create|provide|show)\s+(me\s+)?(the\s+)?(code|program|script|function|algorithm|class|regex|sql|query|html|css)\b/i,
+    /\b(how to|code to)\s+(sum|add|multiply|divide|sort|reverse|loop|fetch|print|implement|calculate|merge|find the)\b/i,
+    /\b(sum\s+(the\s+)?(two|2)?\s*integers?|sum\s+of\s+two\s+numbers|fibonacci|factorial|palindrome|bubble\s*sort|binary\s*search)\b/i,
+    /\b(solve|calculate)\s+([0-9\+\-\*\/\^\(\)\=\.\,]{3,}|this\s+equation|this\s+math\s+problem)\b/i,
+    /\b(write\s+(an?\s+)?(essay|poem|story|song|article|letter|email\s+to\s+my))\b/i,
+  ];
+
+  for (const pattern of offTopicPatterns) {
+    if (pattern.test(msg)) return true;
+  }
+  return false;
+}
+
 /**
  * Intelligent Local Fallback Engine
  * Shielding users from Gemini Free API rate limits (HTTP 429) & network errors.
  */
 async function fallbackLocalChat(message, user) {
+  if (isOffTopicQuery(message)) {
+    return {
+      message: OFF_TOPIC_DECLINE_MESSAGE,
+      results: [],
+    };
+  }
+
   const msgLower = (message || "").toLowerCase();
   const collectedResults = [];
 
@@ -163,6 +199,13 @@ async function fallbackLocalChat(message, user) {
 }
 
 async function chat({ message, history, user, provider } = {}) {
+  if (isOffTopicQuery(message)) {
+    return {
+      message: OFF_TOPIC_DECLINE_MESSAGE,
+      results: [],
+    };
+  }
+
   const activeProvider = provider || getDefaultProvider();
 
   if (!activeProvider) {

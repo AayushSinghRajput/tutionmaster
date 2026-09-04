@@ -14,6 +14,7 @@ import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 import LoadingSpinner from "./components/common/LoadingSpinner";
 import ChatWidget from "./components/ai/ChatWidget";
+import ScrollToTop from "./components/common/ScrollToTop";
 
 // Protected Route
 import ProtectedRoute from "./components/common/ProtectedRoute";
@@ -52,6 +53,7 @@ function App() {
     >
       <AuthProvider>
         <TeacherProvider>
+          <ScrollToTop />
           <div className=" min-h-screen flex flex-col bg-gray-50">
             <Header />
             <main className="flex-1 pt-16 sm:pt-20">
