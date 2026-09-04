@@ -201,11 +201,55 @@ const teacherSchema = new mongoose.Schema(
   },
 );
 
+// Pre-validate hook to automatically normalize availability into a clean array of day strings
+teacherSchema.pre("validate", function (next) {
+  const validDays = [
+    "Monday", "Tuesday", "Wednesday", "Thursday",
+    "Friday", "Saturday", "Sunday",
+  ];
+
+  if (this.availability !== undefined && this.availability !== null) {
+    let raw = this.availability;
+    if (typeof raw === "string") {
+      try {
+        raw = JSON.parse(raw);
+      } catch (e) {
+        raw = raw.split(",").map((s) => s.trim());
+      }
+    }
+
+    if (Array.isArray(raw)) {
+      this.availability = raw
+        .map((item) => {
+          if (typeof item === "object" && item !== null && item.day) return item.day;
+          if (typeof item === "string") {
+            if (item.trim().startsWith("{") || item.trim().startsWith("[")) {
+              try {
+                const parsed = JSON.parse(item);
+                if (Array.isArray(parsed)) return parsed.map((p) => p.day || p);
+                if (parsed && parsed.day) return parsed.day;
+              } catch (e) {}
+            }
+            return item.trim();
+          }
+          return String(item);
+        })
+        .flat()
+        .filter((d) => validDays.includes(d));
+    }
+  }
+
+  if (!Array.isArray(this.availability) || this.availability.length === 0) {
+    this.availability = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
+  }
+
+  next();
+});
+
 // Virtual for formatted availability (string[] of day names)
 teacherSchema.virtual("formattedAvailability").get(function () {
   return this.availability;
 });
-
 
 teacherSchema.index({ "address.city": 1 });
 teacherSchema.index({ preferredSubjects: 1 });

@@ -193,7 +193,17 @@ exports.adminUpdateTeacher = asyncHandler(async (req, res, next) => {
   }
   if (bio !== undefined) teacher.bio = bio;
   if (experience !== undefined) teacher.experience = Number(experience);
-  if (availability !== undefined) teacher.availability = availability;
+  if (availability !== undefined) {
+    if (typeof availability === "string") {
+      try {
+        teacher.availability = JSON.parse(availability);
+      } catch (e) {
+        teacher.availability = availability.split(",").map((s) => s.trim()).filter(Boolean);
+      }
+    } else {
+      teacher.availability = availability;
+    }
+  }
   if (teachingMode !== undefined) teacher.teachingMode = teachingMode;
   if (monthlyRate !== undefined) {
     teacher.monthlyRate = Number(monthlyRate);
