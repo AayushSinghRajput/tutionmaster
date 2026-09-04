@@ -48,12 +48,7 @@ function validTeacherPayload(overrides = {}) {
     preferredSubjects: ['Math'],
     bio: 'x'.repeat(60),
     experience: 5,
-    availability: [
-      {
-        day: 'Monday',
-        timeSlots: [{ startTime: '09:00 AM', endTime: '11:00 AM' }],
-      },
-    ],
+    availability: ['Monday'],
     teachingMode: 'Online',
     hourlyRate: 500,
     ...overrides,

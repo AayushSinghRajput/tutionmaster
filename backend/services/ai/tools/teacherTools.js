@@ -133,12 +133,33 @@ const searchTeachers = {
 
     // Apply Hard Constraints First
     if (query && query.trim()) {
-      const regex = new RegExp(escapeRegex(query.trim()), "i");
-      filter.$or = [{ name: regex }, { bio: regex }, { "address.city": regex }];
+      const q = query.trim();
+      const regexList = [new RegExp(escapeRegex(q), "i")];
+
+      // Handle common educational synonyms (e.g. Mathematics <-> Math)
+      if (/^math(?:ematics)?$/i.test(q)) {
+        regexList.push(new RegExp("math", "i"));
+        regexList.push(new RegExp("mathematics", "i"));
+      } else if (/^comp(?:uter)?(?:\s*science)?$/i.test(q)) {
+        regexList.push(new RegExp("computer", "i"));
+      }
+
+      filter.$or = [
+        { name: { $in: regexList } },
+        { bio: { $in: regexList } },
+        { "address.city": { $in: regexList } },
+        { preferredSubjects: { $in: regexList } },
+      ];
     }
 
     if (subject && subject.trim()) {
-      filter.preferredSubjects = { $in: [new RegExp(escapeRegex(subject.trim()), "i")] };
+      const sub = subject.trim();
+      const subRegexList = [new RegExp(escapeRegex(sub), "i")];
+      if (/^math(?:ematics)?$/i.test(sub)) {
+        subRegexList.push(new RegExp("math", "i"));
+        subRegexList.push(new RegExp("mathematics", "i"));
+      }
+      filter.preferredSubjects = { $in: subRegexList };
     }
 
     if (city && city.trim()) {

@@ -1,23 +1,16 @@
 const aiConfig = require("../../config/aiConfig");
 const GeminiProvider = require("./providers/geminiProvider");
 const { buildSystemPrompt } = require("./systemPrompt");
+const { searchKnowledgeBase } = require("./knowledgeBase");
 const toolRegistry = require("./tools");
 const AIProviderError = require("./AIProviderError");
 const logger = require("../../utils/logger");
 
-// A tool-calling round trip is: model asks for a tool -> we run it -> model
-// gets the result -> model may ask for another tool. Cap the loop so a
-// confused model can't spin forever (and rack up API cost) on one request.
 const MAX_TOOL_ITERATIONS = 4;
-
-// Client-sent history is untrusted input size-wise — cap how much of it we
-// forward to Gemini regardless of what the frontend sends.
 const MAX_HISTORY_MESSAGES = 20;
 
 let cachedProvider = null;
 
-// Lazily built (and memoized) so importing this module never throws when
-// GEMINI_API_KEY isn't set — the rest of the backend must keep working.
 function getDefaultProvider() {
   if (!aiConfig.isEnabled) return null;
   if (!cachedProvider) {
@@ -44,31 +37,131 @@ function buildContents(history, message) {
   return [...historyContents, { role: "user", parts: [{ text: message }] }];
 }
 
-function friendlyErrorMessage(error) {
-  if (error instanceof AIProviderError) {
-    switch (error.category) {
-      case AIProviderError.CATEGORIES.RATE_LIMIT:
-        return "I'm getting a lot of requests right now — please try again in a moment.";
-      case AIProviderError.CATEGORIES.AUTH:
-        logger.error("Gemini auth error — check that GEMINI_API_KEY is valid.");
-        return "The AI assistant is temporarily unavailable. Please try again later.";
-      case AIProviderError.CATEGORIES.NETWORK:
-        return "I'm having trouble connecting right now. Please try again shortly.";
-      default:
-        return "Something went wrong while processing that. Please try again.";
+/**
+ * Intelligent Local Fallback Engine
+ * Shielding users from Gemini Free API rate limits (HTTP 429) & network errors.
+ */
+async function fallbackLocalChat(message, user) {
+  const msgLower = (message || "").toLowerCase();
+  const collectedResults = [];
+
+  // 1. Query teacher search if user asks to find/search tutors OR asks about teacher/tutor attributes
+  const isExplicitTeacherSearch =
+    msgLower.includes("tutor") ||
+    msgLower.includes("teacher") ||
+    msgLower.includes("engineer") ||
+    msgLower.includes("rate") ||
+    msgLower.includes("experience") ||
+    msgLower.includes("subject") ||
+    msgLower.includes("faculty") ||
+    msgLower.includes("looking for");
+
+  if (isExplicitTeacherSearch) {
+    try {
+      const searchArgs = {};
+
+      // 1. Dynamic budget parsing (look for rate context or 700/hr, Rs 700, under 700)
+      const rateMatch = message.match(/(?:less than|under|below|max|<|=|rate is|rate of|budget|hourly rate|\/hr|\/hour|rs\.?|npr)\s*(\d{3,4})|(\d{3,4})\s*(?:\/|\s*per)?\s*(?:hr|hour)/i);
+      const extractedRate = rateMatch ? (rateMatch[1] || rateMatch[2]) : null;
+      if (extractedRate) {
+        searchArgs.maxRate = Number(extractedRate);
+      }
+
+      // 2. Dynamic experience parsing: "1 year experience", "2+ years", "at least 3 years"
+      const expMatch = message.match(/(\d+)\s*(?:\+|\s*plus|\s*year|\s*yrs|\s*years)/i);
+      if (expMatch && expMatch[1]) {
+        searchArgs.minExperience = Number(expMatch[1]);
+      }
+
+      // 3. Robust domain keyword extraction: filter out natural language stopwords & number patterns
+      const stopwords = new Set([
+        "find", "a", "an", "the", "tutor", "teacher", "who", "teaches", "teach", "is", "there", "any", "looking", "for", "with",
+        "at", "least", "more", "than", "less", "under", "below", "above", "rate", "of", "budget", "hourly", "hr", "hour", "hours",
+        "year", "years", "yrs", "experience", "exp", "in", "available", "can", "please", "show", "me", "give", "list", "and", "or",
+        "has", "have", "per", "npr", "rs", "kathmandu", "pokhara", "lalitpur", "bhaktapur"
+      ]);
+
+      // If user specified location, set city
+      if (msgLower.includes("kathmandu")) searchArgs.city = "Kathmandu";
+      else if (msgLower.includes("lalitpur")) searchArgs.city = "Lalitpur";
+      else if (msgLower.includes("bhaktapur")) searchArgs.city = "Bhaktapur";
+      else if (msgLower.includes("pokhara")) searchArgs.city = "Pokhara";
+
+      const words = msgLower
+        .replace(/[^\w\s]/g, " ")
+        .split(/\s+/)
+        .filter(w => w.length > 1 && !stopwords.has(w) && !/^\d+$/.test(w));
+
+      if (words.length > 0) {
+        searchArgs.query = words.join(" ");
+      }
+
+      const searchRes = await toolRegistry.execute("searchTeachers", searchArgs, { user });
+      if (searchRes.publicResults?.length) {
+        collectedResults.push(...searchRes.publicResults);
+      }
+    } catch (e) {
+      // Ignore
     }
   }
-  logger.error(`Unexpected AI agent error: ${error.stack || error.message}`);
-  return "Something went wrong while processing that. Please try again.";
+
+  // 2. Only query jobs if user EXPLICITLY asks for job vacancies
+  const isExplicitJobSearch =
+    msgLower.includes("job vacancy") ||
+    msgLower.includes("job vacancies") ||
+    msgLower.includes("tuition vacancy") ||
+    msgLower.includes("tuition vacancies") ||
+    msgLower.includes("teaching jobs") ||
+    msgLower.includes("available jobs");
+
+  if (isExplicitJobSearch) {
+    try {
+      const jobRes = await toolRegistry.execute("searchJobs", {}, { user });
+      if (jobRes.publicResults?.length) {
+        collectedResults.push(...jobRes.publicResults);
+      }
+    } catch (e) {
+      // Ignore
+    }
+  }
+
+  // 3. Search local static knowledge base entries ONLY if no direct DB results found AND query is not a tutor/job search
+  let kbResponse = "";
+  if (collectedResults.length === 0 && !isExplicitTeacherSearch && !isExplicitJobSearch) {
+    const kbMatches = searchKnowledgeBase(message, 2);
+    if (kbMatches.length > 0) {
+      kbResponse = kbMatches.map((m) => `**${m.title}**\n${m.content}`).join("\n\n");
+    }
+  }
+
+  if (collectedResults.length > 0 || kbResponse) {
+    let reply = "";
+    if (kbResponse) {
+      reply += `${kbResponse}\n\n`;
+    }
+    if (collectedResults.length > 0) {
+      reply += `Here are matching tutors/jobs found on TuitionMaster:`;
+    }
+    return {
+      message: reply.trim(),
+      results: collectedResults,
+    };
+  }
+
+  if (isExplicitTeacherSearch) {
+    return {
+      message: "No verified tutors matching those exact criteria (subject, rate, location, experience) were found right now. You can browse all available tutors at [/teachers](/teachers) or submit a custom tuition request.",
+      results: [],
+    };
+  }
+
+  return {
+    message:
+      "I'm receiving high traffic right now — please try again in a moment, or browse our verified tutors at [/teachers](/teachers) or tuition jobs at [/jobs](/jobs). You can also contact support directly on **WhatsApp (+977 980-5981168)**.",
+    results: [],
+  };
 }
 
-/**
- * @param {object} params
- * @param {string} params.message - the user's new message
- * @param {Array<{role: string, content: string}>} [params.history] - prior turns, client-supplied
- * @param {object} [params.user] - the authenticated User document, or undefined for a guest
- * @param {object} [params.provider] - injectable AIProvider, for tests. Defaults to the Gemini provider.
- */
 async function chat({ message, history, user, provider } = {}) {
   const activeProvider = provider || getDefaultProvider();
 
@@ -93,7 +186,8 @@ async function chat({ message, history, user, provider } = {}) {
         tools: toolRegistry.definitions,
       });
     } catch (error) {
-      return { message: friendlyErrorMessage(error), results: collectedResults };
+      logger.warn(`AI Provider rate-limited or failed (${error.message}). Invoking fallback local chat.`);
+      return fallbackLocalChat(message, user);
     }
 
     if (!response.functionCalls.length) {

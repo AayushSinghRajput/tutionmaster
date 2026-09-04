@@ -39,6 +39,9 @@ const adminReviewRoutes = require("./admin-panel-server/routes/adminReviewRoutes
 const adminBlogRoutes = require("./admin-panel-server/routes/adminBlogRoutes");
 const adminJobRoutes = require("./admin-panel-server/routes/adminJobRoutes");
 
+const supportRoute = require("./routes/supportRoutes");
+const adminSupportRoutes = require("./admin-panel-server/routes/adminSupportRoutes");
+
 // Trust the single reverse proxy hop in front of the app (Render's edge
 // proxy locally, or the "backend" service behind a tunnel/proxy in dev),
 // so req.ip and express-rate-limit read the real client IP from
@@ -142,6 +145,7 @@ const mountRoutes = (prefix) => {
   app.use(`${prefix}/ai`, aiRoute);
   app.use(`${prefix}/blogs`, blogRoute);
   app.use(`${prefix}/jobs`, jobRoute);
+  app.use(`${prefix}/support`, supportRoute);
   app.use("/", sitemapRoutes);
 };
 mountRoutes("/api");
@@ -155,6 +159,7 @@ app.use("/api/admin/dashboard", dashboardRoutes);
 app.use("/api/admin/reviews", adminReviewRoutes);
 app.use("/api/admin/blogs", adminBlogRoutes);
 app.use("/api/admin/jobs", adminJobRoutes);
+app.use("/api/admin/support-tickets", adminSupportRoutes);
 
 // API documentation (read-only, public — safe to leave open)
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

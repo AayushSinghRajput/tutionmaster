@@ -11,7 +11,7 @@ async function createTeacher(overrides = {}) {
     email: `tool-user-${counter}@example.com`,
     password: 'password123',
   });
-  const teacher = await Teacher.create({ ...validTeacherPayload(overrides), userId: user._id });
+  const teacher = await Teacher.create({ ...validTeacherPayload(overrides), userId: user._id, isVisible: true });
   return { user, teacher };
 }
 

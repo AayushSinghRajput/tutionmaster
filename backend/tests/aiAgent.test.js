@@ -42,7 +42,7 @@ describe('AI agent — tool-calling loop', () => {
     const Teacher = require('../models/Teacher');
     const { validTeacherPayload } = require('./helpers');
     const user = await User.create({ username: 'carddemo', email: 'carddemo@example.com', password: 'password123' });
-    await Teacher.create({ ...validTeacherPayload({ name: 'Card Demo Teacher' }), userId: user._id });
+    await Teacher.create({ ...validTeacherPayload({ name: 'Card Demo Teacher' }), userId: user._id, isVisible: true });
 
     const provider = scriptedProvider([
       { text: null, functionCalls: [{ name: 'checkTeacherExists', args: { name: 'Card Demo' } }] },
