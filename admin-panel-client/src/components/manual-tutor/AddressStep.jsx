@@ -51,7 +51,7 @@ export default function AddressStep({
           <input
             type="text"
             className="form-input"
-            value={formData.name}
+            value={formData.name || ''}
             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
             placeholder="e.g. Ramesh Karki"
             required
@@ -63,7 +63,7 @@ export default function AddressStep({
           <input
             type="email"
             className="form-input"
-            value={formData.email}
+            value={formData.email || ''}
             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
             placeholder="tutor@gmail.com"
             required
@@ -75,7 +75,7 @@ export default function AddressStep({
           <input
             type="tel"
             className="form-input"
-            value={formData.phone}
+            value={formData.phone || ''}
             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
             placeholder="+977 98XXXXXXXX"
           />
@@ -95,7 +95,7 @@ export default function AddressStep({
           <input
             type="text"
             className="form-input"
-            value={formData.street}
+            value={formData.street || ''}
             onChange={(e) => setFormData({ ...formData, street: e.target.value })}
             placeholder="e.g. Tinkune, New Baneshwor"
             required
@@ -106,7 +106,7 @@ export default function AddressStep({
           <label className="form-label">State / Province *</label>
           <select
             className="form-select"
-            value={formData.state}
+            value={formData.state || ''}
             onChange={onStateChange}
             required
           >
@@ -122,7 +122,7 @@ export default function AddressStep({
           <label className="form-label">City *</label>
           <select
             className="form-select"
-            value={isCustomCity ? 'Other' : formData.city}
+            value={isCustomCity ? 'Other' : (formData.city || '')}
             onChange={onCitySelectChange}
             required
           >
@@ -142,7 +142,7 @@ export default function AddressStep({
               type="text"
               className="form-input"
               placeholder="e.g. Banepa, Dhading Besi, Gorkha Bazar"
-              value={customCityName}
+              value={customCityName || ''}
               onChange={(e) => {
                 const val = e.target.value;
                 setCustomCityName(val);

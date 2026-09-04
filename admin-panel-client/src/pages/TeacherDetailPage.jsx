@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { teacherService } from '../services/adminServices';
 import ConfirmModal from '../components/common/ConfirmModal';
 import toast from 'react-hot-toast';
+import { Edit3, X } from 'lucide-react';
 
 function DetailRow({ label, value }) {
   if (!value && value !== 0) return null;
@@ -270,56 +271,143 @@ export default function TeacherDetailPage() {
 
       {/* Edit Profile Modal */}
       {editing && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)', backdropFilter: 'blur(4px)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div className="card" style={{ maxWidth: '650px', width: '100%', maxHeight: '90vh', overflowY: 'auto', padding: '24px' }}>
-            <h3 style={{ marginBottom: '16px' }}>✏️ Edit Tutor Profile</h3>
+        <div className="modal-backdrop" onClick={() => setEditing(false)}>
+          <div
+            className="modal-box"
+            style={{ maxWidth: '720px', maxHeight: '90vh', overflowY: 'auto' }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                marginBottom: '20px',
+                paddingBottom: '16px',
+                borderBottom: '1px solid var(--border)',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <div
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '10px',
+                    background: 'rgba(138, 56, 97, 0.2)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: 'var(--brand-300)',
+                  }}
+                >
+                  <Edit3 size={20} />
+                </div>
+                <div>
+                  <h3 className="modal-title" style={{ margin: 0, fontSize: '1.2rem' }}>
+                    Edit Tutor Profile
+                  </h3>
+                  <p style={{ margin: 0, fontSize: '.8rem', color: 'var(--text-muted)' }}>
+                    Update contact info, location, fee, and credentials for {t.name}
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                className="btn btn-ghost btn-icon"
+                onClick={() => setEditing(false)}
+                aria-label="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
             <form onSubmit={handleSaveEdit}>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>Full Name</label>
-                  <input type="text" className="form-control" value={editForm.name} onChange={e => setEditForm({ ...editForm, name: e.target.value })} required />
+              {/* Personal & Contact Details */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">Full Name *</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={editForm.name || ''}
+                    onChange={(e) => setEditForm({ ...editForm, name: e.target.value })}
+                    required
+                  />
                 </div>
-                <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>Phone</label>
-                  <input type="text" className="form-control" value={editForm.phone} onChange={e => setEditForm({ ...editForm, phone: e.target.value })} />
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">Contact Phone</label>
+                  <input
+                    type="tel"
+                    className="form-input"
+                    value={editForm.phone || ''}
+                    onChange={(e) => setEditForm({ ...editForm, phone: e.target.value })}
+                    placeholder="+977 98XXXXXXXX"
+                  />
                 </div>
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>City</label>
-                  <input type="text" className="form-control" value={editForm.city} onChange={e => setEditForm({ ...editForm, city: e.target.value })} required />
+              {/* Location Details */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">City *</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={editForm.city || ''}
+                    onChange={(e) => setEditForm({ ...editForm, city: e.target.value })}
+                    placeholder="e.g. Kathmandu"
+                    required
+                  />
                 </div>
-                <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>State / Region</label>
-                  <input type="text" className="form-control" value={editForm.state} onChange={e => setEditForm({ ...editForm, state: e.target.value })} />
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">State / Province</label>
+                  <input
+                    type="text"
+                    className="form-input"
+                    value={editForm.state || ''}
+                    onChange={(e) => setEditForm({ ...editForm, state: e.target.value })}
+                    placeholder="e.g. Bagmati Province"
+                  />
                 </div>
               </div>
 
-              <div className="form-group" style={{ marginBottom: '12px' }}>
-                <label className="form-label" style={{ fontWeight: 600 }}>Preferred Subjects (comma-separated)</label>
-                <input type="text" className="form-control" value={editForm.preferredSubjects} onChange={e => setEditForm({ ...editForm, preferredSubjects: e.target.value })} required />
+              {/* Preferred Subjects */}
+              <div className="form-group" style={{ marginBottom: '16px' }}>
+                <label className="form-label">Preferred Subjects (Comma-separated) *</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  value={editForm.preferredSubjects || ''}
+                  onChange={(e) => setEditForm({ ...editForm, preferredSubjects: e.target.value })}
+                  placeholder="Mathematics, Physics, Science"
+                  required
+                />
               </div>
 
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '12px', marginBottom: '12px' }}>
-                <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>Teaching Mode</label>
-                  <select className="form-control" value={editForm.teachingMode} onChange={e => setEditForm({ ...editForm, teachingMode: e.target.value })}>
-                    <option value="In-person">In-person</option>
-                    <option value="Online">Online</option>
+              {/* Teaching Mode, Monthly Fee, Experience */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">Teaching Mode</label>
+                  <select
+                    className="form-select"
+                    value={editForm.teachingMode || 'In-person'}
+                    onChange={(e) => setEditForm({ ...editForm, teachingMode: e.target.value })}
+                  >
+                    <option value="In-person">In-person (Physical)</option>
+                    <option value="Online">Online Only</option>
                     <option value="Both">Both</option>
                   </select>
                 </div>
-                <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>Monthly Fee (₨)</label>
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">Monthly Fee (NPR / mo) *</label>
                   <input
                     type="number"
                     min="500"
                     max="200000"
                     step="500"
-                    className="form-control"
+                    className="form-input"
                     value={editForm.monthlyRate ?? ''}
-                    onChange={e => {
+                    onChange={(e) => {
                       const val = e.target.value;
                       setEditForm({
                         ...editForm,
@@ -327,27 +415,70 @@ export default function TeacherDetailPage() {
                         hourlyRate: val ? Math.round(Number(val) / 20) : '',
                       });
                     }}
+                    required
                   />
                 </div>
-                <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>Experience (Yrs)</label>
-                  <input type="number" className="form-control" value={editForm.experience} onChange={e => setEditForm({ ...editForm, experience: e.target.value })} />
+                <div className="form-group" style={{ margin: 0 }}>
+                  <label className="form-label">Experience (Years)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="50"
+                    className="form-input"
+                    value={editForm.experience ?? ''}
+                    onChange={(e) => setEditForm({ ...editForm, experience: e.target.value })}
+                  />
                 </div>
               </div>
 
-              <div className="form-group" style={{ marginBottom: '12px' }}>
-                <label className="form-label" style={{ fontWeight: 600 }}>Cloudinary Avatar Public ID / Image URL</label>
-                <input type="text" className="form-control" placeholder="e.g. tutionmaster/avatars/user123" value={editForm.avatarPublicId} onChange={e => setEditForm({ ...editForm, avatarPublicId: e.target.value })} />
+              {/* Avatar Public ID */}
+              <div className="form-group" style={{ marginBottom: '16px' }}>
+                <label className="form-label">Cloudinary Avatar Public ID / Image URL</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="e.g. tutionmaster/avatars/user123"
+                  value={editForm.avatarPublicId || ''}
+                  onChange={(e) => setEditForm({ ...editForm, avatarPublicId: e.target.value })}
+                />
               </div>
 
-              <div className="form-group" style={{ marginBottom: '20px' }}>
-                <label className="form-label" style={{ fontWeight: 600 }}>Bio / Summary</label>
-                <textarea className="form-control" rows="3" value={editForm.bio} onChange={e => setEditForm({ ...editForm, bio: e.target.value })} />
+              {/* Bio */}
+              <div className="form-group" style={{ marginBottom: '24px' }}>
+                <label className="form-label">Bio / Summary</label>
+                <textarea
+                  className="form-textarea"
+                  rows={3}
+                  value={editForm.bio || ''}
+                  onChange={(e) => setEditForm({ ...editForm, bio: e.target.value })}
+                  placeholder="Tutor's background, teaching philosophy, and specializations..."
+                />
               </div>
 
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px' }}>
-                <button type="button" className="btn btn-ghost" onClick={() => setEditing(false)}>Cancel</button>
-                <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? 'Saving...' : 'Save Changes'}</button>
+              {/* Actions */}
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  gap: '12px',
+                  paddingTop: '16px',
+                  borderTop: '1px solid var(--border)',
+                }}
+              >
+                <button
+                  type="button"
+                  className="btn btn-ghost"
+                  onClick={() => setEditing(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={saving}
+                >
+                  {saving ? 'Saving...' : 'Save Changes'}
+                </button>
               </div>
             </form>
           </div>

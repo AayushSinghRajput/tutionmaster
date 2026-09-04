@@ -163,6 +163,7 @@ exports.adminUpdateTeacher = asyncHandler(async (req, res, next) => {
     experience,
     availability,
     teachingMode,
+    monthlyRate,
     hourlyRate,
     avatarPublicId,
     cvPublicId,
