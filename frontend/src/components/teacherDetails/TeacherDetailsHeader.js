@@ -33,8 +33,8 @@ const TeacherDetailsHeader = ({ teacher }) => {
                 <Clock className="w-5 h-5 mr-2" />
                 <span>{formatExperience(teacher.experience)} experience</span>
               </div>
-              <div className="flex items-center text-gray-600">
-                <span>Rs {teacher.hourlyRate}/hour</span>
+              <div className="flex items-center text-gray-600 font-semibold">
+                <span>Rs {(teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0)).toLocaleString()}/month</span>
               </div>
               <div className="flex items-center text-gray-600">
                 <BookOpen className="w-5 h-5 mr-2" />

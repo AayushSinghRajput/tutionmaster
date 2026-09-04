@@ -79,7 +79,9 @@ const TeacherDetails = () => {
               <QualificationsSection qualifications={teacher.qualifications} />
               <AvailabilitySection availability={teacher.availability} />
               <RatingsAndReviewsSection teacher={teacher} />
-              <CvViewer teacher={teacher} onDownload={handleDownloadCV} />
+              {teacher.cvUrl && (
+                <CvViewer teacher={teacher} onDownload={handleDownloadCV} />
+              )}
             </div>
 
             <div className="space-y-4 sm:space-y-6 lg:sticky lg:top-24 lg:self-start">
@@ -105,9 +107,9 @@ const TeacherDetails = () => {
         <div className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-stone-200 shadow-[0_-2px_12px_rgba(0,0,0,0.08)] px-4 py-2.5 pb-[calc(0.625rem+env(safe-area-inset-bottom))]">
           <div className="flex items-center justify-between gap-3">
             <div className="min-w-0">
-              <div className="text-[11px] text-gray-500 leading-none">Rate</div>
+              <div className="text-[11px] text-gray-500 leading-none">Monthly Fee</div>
               <div className="text-sm font-bold text-brand-700 truncate">
-                Rs {teacher.hourlyRate}/hr
+                Rs {(teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0)).toLocaleString()}/mo
               </div>
             </div>
             <div className="flex items-center gap-2 shrink-0">

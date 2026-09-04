@@ -51,49 +51,49 @@ const TeachingInfoSection = ({
         )}
       </div>
 
-      {/* Hourly Rate */}
+      {/* Monthly Fee */}
       <div className="w-full">
         <label
-          htmlFor="hourlyRate"
+          htmlFor="monthlyRate"
           className="flex items-end min-h-[3rem] sm:min-h-[3.5rem] text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3"
         >
-          Hourly Rate (₨) *
+          Monthly Fee (₨) *
         </label>
         <div className="relative w-full">
           <input
             type="number"
-            id="hourlyRate"
+            id="monthlyRate"
             {...(register
-              ? register("hourlyRate", {
-                  required: "Hourly rate is required",
-                  min: { value: 0, message: "Hourly rate cannot be negative" },
+              ? register("monthlyRate", {
+                  required: "Monthly fee is required",
+                  min: { value: 500, message: "Monthly fee cannot be less than ₨500" },
                   max: {
-                    value: 10000,
-                    message: "Hourly rate cannot exceed ₨10,000",
+                    value: 200000,
+                    message: "Monthly fee cannot exceed ₨2,00,000",
                   },
                 })
               : {
-                  value: data.hourlyRate || 0,
-                  onChange: (e) => onChange?.("hourlyRate", e.target.value),
+                  value: data.monthlyRate ?? (data.hourlyRate ? data.hourlyRate * 20 : 8000),
+                  onChange: (e) => onChange?.("monthlyRate", e.target.value),
                 })}
-            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg pr-14 sm:pr-16 border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
-              errors?.hourlyRate || formErrors?.hourlyRate
+            className={`w-full px-4 py-3 sm:px-5 sm:py-4 text-base sm:text-lg pr-16 sm:pr-20 border-2 rounded-2xl shadow-sm focus:outline-none focus:ring-4 focus:ring-brand-200 focus:border-brand-500 transition-all duration-300 ${
+              errors?.monthlyRate || formErrors?.monthlyRate || errors?.hourlyRate || formErrors?.hourlyRate
                 ? "border-red-500 bg-red-50"
                 : "border-brand-200 hover:border-brand-400"
             }`}
-            placeholder="500"
-            min="0"
-            max="10000"
-            step="50"
+            placeholder="8000"
+            min="500"
+            max="200000"
+            step="500"
           />
           <div className="absolute right-4 sm:right-6 top-1/2 transform -translate-y-1/2">
-            <span className="text-brand-600 font-bold text-base sm:text-lg">₨/hr</span>
+            <span className="text-brand-600 font-bold text-sm sm:text-base">₨/month</span>
           </div>
         </div>
-        {(errors?.hourlyRate || formErrors?.hourlyRate) && (
+        {(errors?.monthlyRate || formErrors?.monthlyRate || errors?.hourlyRate || formErrors?.hourlyRate) && (
           <p className="mt-3 text-red-600 flex items-center text-base">
             <AlertCircle className="w-5 h-5 mr-2" />
-            {errors?.hourlyRate?.message || formErrors?.hourlyRate}
+            {errors?.monthlyRate?.message || formErrors?.monthlyRate || errors?.hourlyRate?.message || formErrors?.hourlyRate}
           </p>
         )}
       </div>

@@ -68,7 +68,9 @@ const useTeacherForm = ({ initialData, onSubmit, isEdit }) => {
 
       experience: 0,
 
-      hourlyRate: 0,
+      monthlyRate: 8000,
+
+      hourlyRate: 400,
 
       teachingMode: "Both",
 

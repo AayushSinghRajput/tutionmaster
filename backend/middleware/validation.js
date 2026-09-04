@@ -115,6 +115,7 @@ exports.teacherProfileValidation = [
     .withMessage('Institution is required for all qualifications'),
   
   body('qualifications.*.year')
+    .optional({ nullable: true, checkFalsy: true })
     .isInt()
     .withMessage('Year must be a valid year'),
   
@@ -123,8 +124,7 @@ exports.teacherProfileValidation = [
     .withMessage('At least one preferred subject is required'),
 
   body('cvPublicId')
-    .notEmpty()
-    .withMessage('CV/Resume is required'),
+    .optional({ checkFalsy: true, nullable: true }),
 
   body('bio')
     .optional({ checkFalsy: true })
@@ -135,9 +135,13 @@ exports.teacherProfileValidation = [
     .isInt({ min: 0, max: 50 })
     .withMessage('Experience must be between 0 and 50 years'),
   
+  body('monthlyRate')
+    .optional({ checkFalsy: true })
+    .isFloat({ min: 500, max: 200000 })
+    .withMessage('Monthly fee must be between ₨500 and ₨2,00,000'),
+  
   body('hourlyRate')
-    .isFloat({ min: 0, max: 10000 })
-    .withMessage('Hourly rate must be between 0 and ₨10,000'),
+    .optional({ checkFalsy: true, nullable: true }),
   
   body('teachingMode')
     .isIn(['Online', 'In-person', 'Both'])

@@ -331,10 +331,10 @@ export default function TutorReviewDrawer({ teacher, onClose, onVerified }) {
                   }}
                 >
                   <div style={{ fontSize: '.74rem', color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                    Hourly Rate
+                    Monthly Fee
                   </div>
                   <div style={{ fontSize: '.95rem', fontWeight: 700, color: 'var(--gold-400)', marginTop: '4px' }}>
-                    ₨ {teacher.hourlyRate?.toLocaleString() || '0'} / hr
+                    ₨ {(teacher.monthlyRate ?? (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0)).toLocaleString()} / mo
                   </div>
                 </div>
                 <div
@@ -425,7 +425,7 @@ export default function TutorReviewDrawer({ teacher, onClose, onVerified }) {
                       {q.degree}
                     </div>
                     <div style={{ fontSize: '.82rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
-                      {q.institution} ({q.year})
+                      {q.institution}
                     </div>
                   </div>
                 ))}

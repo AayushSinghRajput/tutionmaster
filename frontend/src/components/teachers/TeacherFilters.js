@@ -369,14 +369,14 @@ const TeacherFilters = ({ filters, onFilterChange, onClearFilters }) => {
             </div>
           </div>
 
-          {/* Hourly Rate Filter */}
+          {/* Monthly Fee Filter */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <div className="w-9 h-9 flex items-center justify-center bg-gradient-to-br from-brand-500 to-brand-600 rounded-lg shadow-sm">
                 <span className="text-white font-bold text-sm">₨</span>
               </div>
               <h4 className="font-bold text-gray-800 text-base sm:text-lg">
-                Hourly Rate Range
+                Monthly Fee Range
               </h4>
             </div>
             <div className="space-y-3">
@@ -384,15 +384,16 @@ const TeacherFilters = ({ filters, onFilterChange, onClearFilters }) => {
                 <div className="flex-1 relative">
                   <input
                     type="number"
-                    placeholder="Min rate"
+                    placeholder="Min (e.g. 3000)"
                     value={filters.minRate}
                     onChange={handleMinRateChange}
-                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
-                    min="0"
-                    max="10000"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm text-sm"
+                    min="500"
+                    max="200000"
+                    step="500"
                   />
                 </div>
-                <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center">
+                <div className="w-8 h-8 bg-brand-100 rounded-lg flex items-center justify-center shrink-0">
                   <span className="text-brand-600 font-semibold text-sm">
                     →
                   </span>
@@ -400,17 +401,18 @@ const TeacherFilters = ({ filters, onFilterChange, onClearFilters }) => {
                 <div className="flex-1 relative">
                   <input
                     type="number"
-                    placeholder="Max rate"
+                    placeholder="Max (e.g. 15000)"
                     value={filters.maxRate}
                     onChange={handleMaxRateChange}
-                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm"
-                    min="0"
-                    max="10000"
+                    className="w-full px-4 py-3.5 pl-4 border-2 border-stone-200 rounded-xl bg-white placeholder-gray-400 text-gray-700 focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-200 hover:border-stone-300 shadow-sm text-sm"
+                    min="500"
+                    max="200000"
+                    step="500"
                   />
                 </div>
               </div>
               <div className="text-xs text-brand-700 font-semibold text-center bg-brand-50 py-1.5 rounded-lg">
-                Nepali Rupee (₨) per hour
+                Nepali Rupee (₨) per month
               </div>
             </div>
           </div>

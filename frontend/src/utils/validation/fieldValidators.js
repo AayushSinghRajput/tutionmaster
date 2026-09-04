@@ -118,15 +118,19 @@ export const validateExperience = (experience) => {
 };
 
 /**
- * Validates an hourly rate
+ * Validates a monthly fee / rate
  */
-export const validateHourlyRate = (rate) => {
-  if (isMissing(rate)) return fail("Hourly rate is required");
+export const validateMonthlyRate = (rate) => {
+  if (isMissing(rate)) return fail("Monthly fee is required");
   const numRate = Number(rate);
-  if (isNaN(numRate)) return fail("Hourly rate must be a number");
-  if (numRate < 0) return fail("Hourly rate cannot be negative");
-  if (numRate > 1000) return fail("Hourly rate cannot exceed $1000");
+  if (isNaN(numRate)) return fail("Monthly fee must be a number");
+  if (numRate < 500) return fail("Monthly fee must be at least ₨500");
+  if (numRate > 200000) return fail("Monthly fee cannot exceed ₨2,00,000");
   return pass();
+};
+
+export const validateHourlyRate = (rate) => {
+  return validateMonthlyRate(rate);
 };
 
 /**
@@ -147,7 +151,6 @@ export const validateQualifications = (qualifications) => {
     return { isValid: false, errors: [], message: "At least one qualification is required" };
   }
 
-  const currentYear = new Date().getFullYear();
   const errors = [];
 
   qualifications.forEach((qual, index) => {
@@ -155,16 +158,6 @@ export const validateQualifications = (qualifications) => {
 
     if (!qual.degree?.trim()) qualErrors.degree = "Degree is required";
     if (!qual.institution?.trim()) qualErrors.institution = "Institution is required";
-
-    if (!qual.year) {
-      qualErrors.year = "Year is required";
-    } else {
-      const year = Number(qual.year);
-      if (isNaN(year)) qualErrors.year = "Year must be a number";
-      else if (year < 1950) qualErrors.year = "Year cannot be before 1950";
-      else if (year > currentYear)
-        qualErrors.year = `Year cannot be in the future (max ${currentYear})`;
-    }
 
     if (Object.keys(qualErrors).length > 0) {
       errors.push({ index, errors: qualErrors });

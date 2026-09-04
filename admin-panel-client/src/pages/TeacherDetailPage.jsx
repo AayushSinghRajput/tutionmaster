@@ -40,7 +40,8 @@ export default function TeacherDetailPage() {
           preferredSubjects: Array.isArray(d.preferredSubjects) ? d.preferredSubjects.join(', ') : '',
           bio: d.bio || '',
           experience: d.experience || 0,
-          hourlyRate: d.hourlyRate || 0,
+          monthlyRate: d.monthlyRate || (d.hourlyRate ? d.hourlyRate * 20 : 8000),
+          hourlyRate: d.hourlyRate || Math.round((d.monthlyRate || 8000) / 20),
           teachingMode: d.teachingMode || 'In-person',
           avatarPublicId: d.avatarPublicId || '',
         });
@@ -115,7 +116,7 @@ export default function TeacherDetailPage() {
             <div className="meta">
               <span>📍 {t.address?.city}, {t.address?.state}</span>
               <span>💼 {t.experience} yr{t.experience !== 1 ? 's' : ''} exp.</span>
-              <span>💰 ₹{t.hourlyRate}/hr</span>
+              <span>💰 ₨ {(t.monthlyRate ?? (t.hourlyRate ? t.hourlyRate * 20 : 0)).toLocaleString()}/month</span>
               {t.teachingMode && <span>🖥️ {t.teachingMode}</span>}
             </div>
 
@@ -183,7 +184,7 @@ export default function TeacherDetailPage() {
                 <h4>Qualifications</h4>
                 {t.qualifications.map((q, i) => (
                   <div key={i} style={{ marginBottom: '8px', padding: '8px 0', borderBottom: '1px solid var(--border)', fontSize: '.84rem' }}>
-                    <strong>{q.degree}</strong> — {q.institution} ({q.year})
+                    <strong>{q.degree}</strong> — {q.institution}
                   </div>
                 ))}
               </div>
@@ -310,8 +311,23 @@ export default function TeacherDetailPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="form-label" style={{ fontWeight: 600 }}>Hourly Rate (₨)</label>
-                  <input type="number" className="form-control" value={editForm.hourlyRate} onChange={e => setEditForm({ ...editForm, hourlyRate: e.target.value })} />
+                  <label className="form-label" style={{ fontWeight: 600 }}>Monthly Fee (₨)</label>
+                  <input
+                    type="number"
+                    min="500"
+                    max="200000"
+                    step="500"
+                    className="form-control"
+                    value={editForm.monthlyRate ?? ''}
+                    onChange={e => {
+                      const val = e.target.value;
+                      setEditForm({
+                        ...editForm,
+                        monthlyRate: val,
+                        hourlyRate: val ? Math.round(Number(val) / 20) : '',
+                      });
+                    }}
+                  />
                 </div>
                 <div>
                   <label className="form-label" style={{ fontWeight: 600 }}>Experience (Yrs)</label>

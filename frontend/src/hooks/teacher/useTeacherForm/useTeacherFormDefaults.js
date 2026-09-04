@@ -58,7 +58,6 @@ const useTeacherFormDefaults = ({
           {
             degree: "",
             institution: "",
-            year: new Date().getFullYear(),
           },
         ],
 
@@ -66,7 +65,9 @@ const useTeacherFormDefaults = ({
 
       bio: initialData.bio || "",
 
-      experience: initialData.experience || 0,
+      monthlyRate:
+        initialData.monthlyRate ||
+        (initialData.hourlyRate ? initialData.hourlyRate * 20 : 8000),
 
       hourlyRate: initialData.hourlyRate || 0,
 

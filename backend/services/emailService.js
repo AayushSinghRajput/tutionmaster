@@ -121,8 +121,8 @@ exports.sendManualTutorOnboardingEmail = async ({ user, teacher, sendNotificatio
                 <td style="padding: 6px 0;">${teacher.teachingMode}</td>
               </tr>
               <tr>
-                <td style="padding: 6px 0; font-weight: 600;">Hourly Rate:</td>
-                <td style="padding: 6px 0;">₨ ${teacher.hourlyRate} / hr</td>
+                <td style="padding: 6px 0; font-weight: 600;">Monthly Fee:</td>
+                <td style="padding: 6px 0;">₨ ${(teacher.monthlyRate || (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0)).toLocaleString()} / month</td>
               </tr>
             </table>
           </div>

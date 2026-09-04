@@ -62,18 +62,6 @@ export default function QualificationsStep({ formData, setFormData, onAddSubject
         </div>
 
         <div className="form-group">
-          <label className="form-label">Graduation Year</label>
-          <input
-            type="number"
-            className="form-input"
-            value={formData.year}
-            onChange={(e) => setFormData({ ...formData, year: e.target.value })}
-            min={1990}
-            max={2030}
-          />
-        </div>
-
-        <div className="form-group">
           <label className="form-label">Years of Experience</label>
           <input
             type="number"

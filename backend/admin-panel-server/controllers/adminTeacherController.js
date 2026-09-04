@@ -194,7 +194,13 @@ exports.adminUpdateTeacher = asyncHandler(async (req, res, next) => {
   if (experience !== undefined) teacher.experience = Number(experience);
   if (availability !== undefined) teacher.availability = availability;
   if (teachingMode !== undefined) teacher.teachingMode = teachingMode;
-  if (hourlyRate !== undefined) teacher.hourlyRate = Number(hourlyRate);
+  if (monthlyRate !== undefined) {
+    teacher.monthlyRate = Number(monthlyRate);
+    teacher.hourlyRate = Math.round(Number(monthlyRate) / 20);
+  } else if (hourlyRate !== undefined) {
+    teacher.hourlyRate = Number(hourlyRate);
+    teacher.monthlyRate = Number(hourlyRate) * 20;
+  }
   if (avatarPublicId !== undefined) teacher.avatarPublicId = avatarPublicId;
   if (cvPublicId !== undefined) teacher.cvPublicId = cvPublicId;
   if (isVisible !== undefined) teacher.isVisible = Boolean(isVisible);
@@ -303,7 +309,8 @@ exports.createManualTeacher = asyncHandler(async (req, res, next) => {
     experience: Number(experience) || 1,
     availability: availability || ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
     teachingMode: teachingMode || "In-person",
-    hourlyRate: Number(hourlyRate) || 500,
+    monthlyRate: Number(req.body.monthlyRate) || (Number(hourlyRate) ? Number(hourlyRate) * 20 : 8000),
+    hourlyRate: Number(hourlyRate) || (Number(req.body.monthlyRate) ? Math.round(Number(req.body.monthlyRate) / 20) : 400),
     isVisible: Boolean(publishImmediately),
     isManuallyCreatedByAdmin: true,
     profileStatus: publishImmediately ? "Published" : "Draft",
