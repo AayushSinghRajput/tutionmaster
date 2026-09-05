@@ -46,7 +46,7 @@ const TeacherListing = () => {
 
       const params = {
         page: pagination.page,
-        limit: 12,
+        limit: 9,
       };
 
       if (filters.subjects.length > 0) {

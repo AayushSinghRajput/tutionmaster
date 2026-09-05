@@ -71,7 +71,7 @@ const MAX_PAGE_LIMIT = 50;
 exports.getTeachers = asyncHandler(async (req, res) => {
   const {
     page = 1,
-    limit = 10,
+    limit = 9,
     subject,
     subjects,
     city,
@@ -157,7 +157,7 @@ exports.getTeachers = asyncHandler(async (req, res) => {
 
   const limitNum = Math.min(
     MAX_PAGE_LIMIT,
-    Math.max(1, parseInt(limit) || 10)
+    Math.max(1, parseInt(limit) || 9)
   );
 
   const skip = (pageNum - 1) * limitNum;

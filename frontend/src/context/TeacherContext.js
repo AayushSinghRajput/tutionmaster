@@ -51,7 +51,7 @@ const initialState = {
   // Pagination
   pagination: {
     page: 1,
-    limit: 12,
+    limit: 9,
     totalPages: 1,
     totalTeachers: 0,
     hasNext: false,
