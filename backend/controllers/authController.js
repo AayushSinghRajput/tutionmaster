@@ -1,9 +1,11 @@
+const crypto = require('crypto');
 const { OAuth2Client } = require('google-auth-library');
 const User = require('../models/User');
 const ErrorResponse = require('../utils/errorResponse');
 const { generateAccessToken, generateRefreshToken } = require("../utils/generateToken");
 const asyncHandler = require('../middleware/asyncHandler');
 const logger = require('../utils/logger');
+const { sendPasswordResetEmail } = require('../services/emailService');
 
 const googleClient = process.env.GOOGLE_CLIENT_ID
   ? new OAuth2Client(process.env.GOOGLE_CLIENT_ID)
@@ -22,15 +24,11 @@ const setTokenCookie = (res, token) => {
 
 
 
-// @desc    Register teacher
+// @desc    Register teacher / student
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { username, email, password, confirmPassword, role = 'student' } = req.body;
-
-  if (password !== confirmPassword) {
-    return next(new ErrorResponse('Passwords do not match', 400));
-  }
+  const { username, email, password, role = 'student' } = req.body;
 
   // Check if user exists
   const existingUser = await User.findOne({ email });
@@ -231,4 +229,95 @@ exports.refresh = asyncHandler(async (req, res, next) => {
   } catch (err) {
     return next(new ErrorResponse('Not authorized, token failed', 401));
   }
+});
+
+// @desc    Forgot Password - send password reset email
+// @route   POST /api/auth/forgot-password
+// @access  Public
+exports.forgotPassword = asyncHandler(async (req, res, next) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return next(new ErrorResponse('Please provide an email address', 400));
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase().trim() });
+
+  if (!user) {
+    // For security and privacy, return 200 without disclosing whether user exists
+    return res.status(200).json({
+      success: true,
+      message: 'If an account exists with that email, a password reset link has been sent.'
+    });
+  }
+
+  // Get reset token and set expiry
+  const resetToken = user.getResetPasswordToken();
+  await user.save({ validateBeforeSave: false });
+
+  // Create reset URL
+  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
+
+  try {
+    await sendPasswordResetEmail({ user, resetUrl });
+
+    res.status(200).json({
+      success: true,
+      message: 'Password reset link has been sent to your email.'
+    });
+  } catch (err) {
+    logger.error(`Failed to send reset email to ${user.email}:`, err);
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save({ validateBeforeSave: false });
+
+    return next(new ErrorResponse('Email could not be sent. Please try again later.', 500));
+  }
+});
+
+// @desc    Reset Password using token
+// @route   PUT /api/auth/reset-password/:resettoken
+// @access  Public
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  // Hash token to match database record
+  const resetPasswordToken = crypto
+    .createHash('sha256')
+    .update(req.params.resettoken)
+    .digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken,
+    resetPasswordExpire: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return next(new ErrorResponse('Invalid or expired password reset token', 400));
+  }
+
+  const { password } = req.body;
+
+  // Set new password
+  user.password = password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpire = undefined;
+  // Invalidate previous sessions
+  user.tokenVersion += 1;
+  await user.save();
+
+  const accessToken = generateAccessToken(user._id, user.tokenVersion);
+  const refreshToken = generateRefreshToken(user._id, user.tokenVersion);
+  setTokenCookie(res, refreshToken);
+
+  res.status(200).json({
+    success: true,
+    message: 'Password has been reset successfully',
+    token: accessToken,
+    user: {
+      id: user._id,
+      username: user.username,
+      email: user.email,
+      role: user.role
+    }
+  });
 });

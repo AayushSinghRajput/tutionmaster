@@ -5,8 +5,8 @@ export const authService = {
     return api.post('/auth/login', { email, password });
   },
 
-  register: (username, email, password, confirmPassword, role) => {
-    return api.post('/auth/register', { username, email, password, confirmPassword, role });
+  register: (username, email, password, role) => {
+    return api.post('/auth/register', { username, email, password, role });
   },
 
   googleLogin: (credential, role) => {
@@ -20,5 +20,13 @@ export const authService = {
 
   logout: () => {
     return api.post('/auth/logout');
+  },
+
+  forgotPassword: (email) => {
+    return api.post('/auth/forgot-password', { email });
+  },
+
+  resetPassword: (token, password) => {
+    return api.put(`/auth/reset-password/${token}`, { password });
   }
 };

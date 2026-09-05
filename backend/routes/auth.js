@@ -5,13 +5,17 @@ const {
   getMe,
   logout,
   googleAuth,
-  refresh
+  refresh,
+  forgotPassword,
+  resetPassword
 } = require('../controllers/authController');
 const {
   registerValidation,
   handleValidationErrors,
   loginValidation,
-  googleAuthValidation
+  googleAuthValidation,
+  forgotPasswordValidation,
+  resetPasswordValidation
 } = require('../middleware/validation');
 const { protect } = require('../middleware/auth');
 const { authLimiter } = require('../middleware/rateLimiter');
@@ -30,12 +34,11 @@ const router = express.Router();
  *         application/json:
  *           schema:
  *             type: object
- *             required: [username, email, password, confirmPassword]
+ *             required: [username, email, password]
  *             properties:
  *               username: { type: string }
  *               email: { type: string, format: email }
  *               password: { type: string, minLength: 6 }
- *               confirmPassword: { type: string, minLength: 6 }
  *     responses:
  *       201:
  *         description: User created, returns a JWT
@@ -93,6 +96,58 @@ router.post('/login', authLimiter, loginValidation, handleValidationErrors, logi
  */
 //route to login or register a teacher via Google
 router.post('/google', authLimiter, googleAuthValidation, handleValidationErrors, googleAuth);
+
+/**
+ * @openapi
+ * /auth/forgot-password:
+ *   post:
+ *     summary: Request password reset email
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [email]
+ *             properties:
+ *               email: { type: string, format: email }
+ *     responses:
+ *       200:
+ *         description: Reset email sent (or generic success message)
+ *       400:
+ *         description: Validation error
+ */
+router.post('/forgot-password', authLimiter, forgotPasswordValidation, handleValidationErrors, forgotPassword);
+
+/**
+ * @openapi
+ * /auth/reset-password/{resettoken}:
+ *   put:
+ *     summary: Reset password using reset token
+ *     tags: [Auth]
+ *     parameters:
+ *       - in: path
+ *         name: resettoken
+ *         required: true
+ *         schema:
+ *           type: string
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [password]
+ *             properties:
+ *               password: { type: string, minLength: 6 }
+ *     responses:
+ *       200:
+ *         description: Password reset successful, returns new JWT and session
+ *       400:
+ *         description: Invalid or expired token / validation error
+ */
+router.put('/reset-password/:resettoken', authLimiter, resetPasswordValidation, handleValidationErrors, resetPassword);
 
 /**
  * @openapi

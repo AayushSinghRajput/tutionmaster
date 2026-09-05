@@ -1,10 +1,11 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../context/AuthContext";
 import { toast } from "react-toastify";
 import LoadingSpinner from "../common/LoadingSpinner";
 import GoogleAuthButton from "./GoogleAuthButton";
-import { Eye, EyeOff, Mail, Lock, LogIn, BookOpen } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, LogIn } from "lucide-react";
 
 const LoginForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -35,19 +36,9 @@ const LoginForm = () => {
     }
   };
 
-  const fillDemoCredentials = (role) => {
-    if (role === "teacher") {
-      document.getElementById("email").value = "teacher@demo.com";
-      document.getElementById("password").value = "demo123";
-    }
-  };
-
   return (
     <div className="w-full">
       <div className="text-center mb-6 sm:mb-8">
-        <div className="mx-auto w-14 h-14 sm:w-16 sm:h-16 bg-brand-100 rounded-2xl flex items-center justify-center mb-4 shadow-inner">
-          <LogIn className="w-7 h-7 sm:w-8 sm:h-8 text-brand-600" />
-        </div>
         <h2 className="text-xl sm:text-2xl font-bold text-gray-900">Welcome Back</h2>
         <p className="text-sm sm:text-base text-gray-600 mt-2">
           Log in to manage your tutor profile
@@ -105,12 +96,12 @@ const LoginForm = () => {
             >
               Password
             </label>
-            <a
-              href="/forgot-password"
+            <Link
+              to="/forgot-password"
               className="text-sm text-brand-600 hover:text-brand-700 font-medium transition-colors"
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
           <div className="relative group">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none transition-colors duration-300 group-focus-within:text-brand-600">
@@ -205,36 +196,6 @@ const LoginForm = () => {
         </div>
         <div className="mt-4">
           <GoogleAuthButton />
-        </div>
-      </div>
-
-      {/* Demo Access */}
-      <div className="mt-6 sm:mt-8">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-gray-200"></div>
-          </div>
-          <div className="relative flex justify-center text-sm">
-            <span className="px-4 bg-white text-gray-500 font-medium">
-              Quick Demo Access
-            </span>
-          </div>
-        </div>
-
-        <div className="mt-4 grid grid-cols-1 gap-3">
-          <button
-            onClick={() => fillDemoCredentials("teacher")}
-            className="flex items-center justify-center gap-3 px-4 py-3 border-2 border-brand-200 rounded-xl text-brand-700 hover:bg-brand-50 hover:border-brand-300 hover:shadow-md transition-all duration-200 group"
-          >
-            <BookOpen
-              size={18}
-              className="text-brand-600 group-hover:scale-110 transition-transform"
-            />
-            <div className="text-left">
-              <div className="font-semibold text-sm">Teacher</div>
-              <div className="text-xs text-gray-500">Demo account</div>
-            </div>
-          </button>
         </div>
       </div>
     </div>
