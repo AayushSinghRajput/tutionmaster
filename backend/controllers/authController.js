@@ -256,24 +256,18 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   await user.save({ validateBeforeSave: false });
 
   // Create reset URL
-  const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+  const frontendUrl = process.env.FRONTEND_URL || 'https://www.tuitionmaster.guru';
   const resetUrl = `${frontendUrl}/reset-password/${resetToken}`;
 
-  try {
-    await sendPasswordResetEmail({ user, resetUrl });
-
-    res.status(200).json({
-      success: true,
-      message: 'Password reset link has been sent to your email.'
-    });
-  } catch (err) {
+  // Dispatch email in background (prevents HTTP timeouts if SMTP takes time to connect)
+  sendPasswordResetEmail({ user, resetUrl }).catch((err) => {
     logger.error(`Failed to send reset email to ${user.email}:`, err);
-    user.resetPasswordToken = undefined;
-    user.resetPasswordExpire = undefined;
-    await user.save({ validateBeforeSave: false });
+  });
 
-    return next(new ErrorResponse('Email could not be sent. Please try again later.', 500));
-  }
+  return res.status(200).json({
+    success: true,
+    message: 'Password reset link has been sent to your email.'
+  });
 });
 
 // @desc    Reset Password using token

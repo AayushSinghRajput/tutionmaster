@@ -1,34 +1,49 @@
-const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const logger = require('../utils/logger');
 
-// Create reusable transporter object using SMTP transport or Ethereal/test fallback
-const createTransporter = () => {
-  const host = process.env.SMTP_HOST;
-  const port = parseInt(process.env.SMTP_PORT, 10) || 587;
-  const user = process.env.SMTP_USER;
-  const pass = process.env.SMTP_PASS;
+// Initialize Resend Client
+const getResendClient = () => {
+  const apiKey =
+    process.env.RESEND_API_KEY ||
+    (process.env.SMTP_PASS && process.env.SMTP_PASS.startsWith('re_') ? process.env.SMTP_PASS : null);
 
-  if (host && user && pass) {
-    return nodemailer.createTransport({
-      host,
-      port,
-      secure: port === 465,
-      auth: { user, pass },
-    });
+  if (!apiKey) {
+    return null;
   }
 
-  // Fallback dev transporter (logs email output if no real SMTP credentials)
-  return {
-    sendMail: async (mailOptions) => {
-      logger.info(`[DEV EMAIL SERVICE] Simulated sending email to ${mailOptions.to}:`);
-      logger.info(`Subject: ${mailOptions.subject}`);
-      logger.info(`Body preview: ${mailOptions.text || 'HTML Content'}`);
-      return { messageId: 'simulated-' + Date.now() };
-    },
-  };
+  return new Resend(apiKey);
 };
 
-const transporter = createTransporter();
+// Generic dispatch function using Resend
+const sendEmail = async ({ from, to, subject, html }) => {
+  const sender = from || process.env.FROM_EMAIL || 'TuitionMaster <onboarding@tuitionmaster.guru>';
+  const resend = getResendClient();
+
+  if (!resend) {
+    logger.warn(`[EMAIL] Resend API Key is missing. Simulating email send to ${to}`);
+    return { id: 'simulated-' + Date.now() };
+  }
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: sender,
+      to,
+      subject,
+      html,
+    });
+
+    if (error) {
+      logger.error(`[EMAIL] Resend error delivering to ${to}:`, error);
+      throw new Error(error.message || 'Resend email delivery failed');
+    }
+
+    logger.info(`[EMAIL] Email successfully sent via Resend to ${to} (ID: ${data?.id})`);
+    return data;
+  } catch (err) {
+    logger.error(`[EMAIL] Exception sending email via Resend to ${to}:`, err);
+    throw err;
+  }
+};
 
 /**
  * Send onboarding email to a tutor after an admin manually creates their profile.
@@ -143,22 +158,15 @@ exports.sendManualTutorOnboardingEmail = async ({ user, teacher, sendNotificatio
     </html>
   `;
 
-  try {
-    const fromAddress = process.env.FROM_EMAIL || 'TuitionMaster <noreply@tuitionmaster.guru>';
-    await transporter.sendMail({
-      from: fromAddress,
-      to: userEmail,
-      subject,
-      html: htmlContent,
-    });
-    logger.info(`Successfully sent manual profile creation email to ${userEmail}`);
-  } catch (error) {
-    logger.error(`Failed to send manual tutor onboarding email to ${userEmail}:`, error);
-  }
+  return sendEmail({
+    to: userEmail,
+    subject,
+    html: htmlContent,
+  });
 };
 
 /**
- * Send password reset email with secure token link.
+ * Send password reset email with secure token link via Resend.
  */
 exports.sendPasswordResetEmail = async ({ user, resetUrl }) => {
   const userEmail = user.email;
@@ -223,12 +231,11 @@ exports.sendPasswordResetEmail = async ({ user, resetUrl }) => {
     </html>
   `;
 
-  const fromAddress = process.env.FROM_EMAIL || 'TuitionMaster <noreply@tuitionmaster.guru>';
-  await transporter.sendMail({
-    from: fromAddress,
+  return sendEmail({
     to: userEmail,
     subject,
     html: htmlContent,
   });
-  logger.info(`Password reset email sent successfully to ${userEmail}`);
 };
+
+exports.sendEmail = sendEmail;
