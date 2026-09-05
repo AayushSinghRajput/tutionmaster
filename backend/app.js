@@ -59,7 +59,7 @@ app.use(helmet({
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://accounts.google.com"],
       imgSrc: ["'self'", "data:", "https://res.cloudinary.com", "https://maps.gstatic.com", "https://maps.googleapis.com", "https://www.google-analytics.com", "https://lh3.googleusercontent.com"],
       fontSrc: ["'self'", "data:", "https://fonts.gstatic.com"],
-      connectSrc: ["'self'", "https://api.tuitionmaster.guru", "http://localhost:8000", "https://maps.googleapis.com", "https://www.google-analytics.com", "https://accounts.google.com"],
+      connectSrc: ["'self'", "https://api.tuitionmaster.guru", "https://tuitionmaster.guru", "https://www.tuitionmaster.guru", "https://tutionmaster-backend.onrender.com", "http://localhost:8000", "http://localhost:3000", "http://localhost:5173", "https://maps.googleapis.com", "https://www.google-analytics.com", "https://accounts.google.com"],
       frameSrc: ["'self'", "https://accounts.google.com"],
     },
   }
@@ -103,28 +103,31 @@ app.use(mongoSanitize());
 // Prevent HTTP parameter pollution
 app.use(hpp());
 
-// Enable CORS (restrict to the configured frontend origin)
+// Enable CORS (restrict to configured origins + tuitionmaster domains)
 const allowedOrigins = [
   "https://tuitionmaster.guru",
   "https://www.tuitionmaster.guru",
   "http://localhost:3000",  // existing frontend
   "http://localhost:5173",  // admin panel client (Vite dev)
   process.env.ADMIN_PANEL_ORIGIN,  // production admin panel domain
+  process.env.FRONTEND_URL,
 ].filter(Boolean);
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Not allowed by CORS"));
-      }
-    },
-    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Accept"],
-    credentials: true,
-  }),
-);
+
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin) || origin.endsWith("tuitionmaster.guru")) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept", "X-Request-Id"],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(
   fileUpload({

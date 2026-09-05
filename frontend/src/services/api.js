@@ -53,7 +53,13 @@ api.interceptors.response.use(
         setAccessToken(null);
         // Only force redirect if not already on public auth pages or home
         const currentPath = window.location.pathname;
-        if (currentPath !== '/login' && currentPath !== '/register' && currentPath !== '/') {
+        if (
+          currentPath !== '/login' &&
+          currentPath !== '/register' &&
+          currentPath !== '/forgot-password' &&
+          !currentPath.startsWith('/reset-password') &&
+          currentPath !== '/'
+        ) {
           window.location.href = "/login";
         }
         return Promise.reject(refreshError);
