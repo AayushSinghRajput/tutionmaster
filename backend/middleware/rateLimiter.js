@@ -1,11 +1,14 @@
 const rateLimit = require('express-rate-limit');
 
+const isDevOrTest = process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'test' || !process.env.NODE_ENV;
+
 // Applied to every request
 const globalLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 300,
+  max: isDevOrTest ? 20000 : 1000,
   standardHeaders: true,
   legacyHeaders: false,
+  skip: (req) => isDevOrTest && (req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1'),
   message: {
     success: false,
     message: 'Too many requests from this IP, please try again later.',
@@ -15,10 +18,11 @@ const globalLimiter = rateLimit({
 // Stricter limiter for auth routes (login/register) to slow down brute force/credential stuffing
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 10,
+  max: isDevOrTest ? 500 : 20,
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: true,
+  skip: (req) => isDevOrTest && (req.ip === '127.0.0.1' || req.ip === '::1' || req.ip === '::ffff:127.0.0.1'),
   message: {
     success: false,
     message: 'Too many attempts, please try again later.',
@@ -31,7 +35,7 @@ const authLimiter = rateLimit({
 // loop from being monopolized by chat traffic.
 const aiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 30,
+  max: isDevOrTest ? 500 : 30,
   standardHeaders: true,
   legacyHeaders: false,
   message: {

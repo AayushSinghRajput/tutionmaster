@@ -1026,7 +1026,8 @@ tbody tr:hover {
 }
 
 /* ── Modal Dialogs ────────────────────────────────────────── */
-.modal-backdrop {
+.modal-backdrop,
+.modal-overlay {
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.75);
@@ -1040,7 +1041,8 @@ tbody tr:hover {
   animation: fadeIn .18s ease;
 }
 
-.modal-box {
+.modal-box,
+.modal {
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
@@ -1401,4 +1403,612 @@ tbody tr:hover {
   padding-top: 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.06);
 }
+
+/* ── Teacher Detail Page Redesign ─────────────────────────── */
+.teacher-detail-page {
+  animation: fadeIn 0.25s ease-out;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Breadcrumb Navigation */
+.breadcrumb-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  margin-bottom: 4px;
+}
+
+.breadcrumb-nav a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: color var(--transition);
+}
+
+.breadcrumb-nav a:hover {
+  color: var(--gold-300);
+}
+
+.breadcrumb-separator {
+  color: var(--border-light);
+  font-size: 0.75rem;
+}
+
+.breadcrumb-current {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Enhanced Teacher Hero Banner */
+.teacher-hero-card {
+  background: linear-gradient(135deg, rgba(22, 32, 53, 0.95) 0%, rgba(17, 23, 38, 0.98) 100%);
+  border: 1px solid rgba(138, 56, 97, 0.3);
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+}
+
+.teacher-hero-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--brand-500), var(--gold-400), var(--brand-500));
+}
+
+.teacher-hero-content {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .teacher-hero-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+}
+
+.teacher-avatar-container {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.teacher-avatar-img {
+  width: 96px;
+  height: 96px;
+  border-radius: 20px;
+  object-fit: cover;
+  border: 2px solid rgba(217, 183, 106, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  background: var(--bg-hover);
+}
+
+.teacher-avatar-fallback {
+  width: 96px;
+  height: 96px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-800));
+  border: 2px solid rgba(217, 183, 106, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--gold-100);
+  box-shadow: 0 8px 24px rgba(138, 56, 97, 0.3);
+}
+
+.teacher-avatar-status-badge {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  background: var(--bg-card);
+  border-radius: 50%;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.teacher-hero-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.teacher-hero-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.teacher-hero-name-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.teacher-hero-name {
+  font-size: 1.7rem;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.3px;
+  margin: 0;
+}
+
+.teacher-hero-badges {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.teacher-hero-meta-row {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-wrap: wrap;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  margin-top: 6px;
+  margin-bottom: 16px;
+}
+
+.teacher-hero-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.teacher-hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+/* Stats Ribbon Grid */
+.teacher-stats-ribbon {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+}
+
+.teacher-stat-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  transition: all var(--transition);
+}
+
+.teacher-stat-box:hover {
+  border-color: var(--border-light);
+  transform: translateY(-2px);
+  background: var(--bg-card-elevated);
+}
+
+.teacher-stat-icon-wrapper {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.teacher-stat-content {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.teacher-stat-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.teacher-stat-value {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fff;
+  margin-top: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.teacher-stat-subtext {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  margin-top: 1px;
+}
+
+/* Two-column Layout */
+.teacher-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .teacher-detail-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.teacher-detail-main-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.teacher-detail-side-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Section Cards */
+.detail-section-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: border-color var(--transition);
+}
+
+.detail-section-card:hover {
+  border-color: var(--border-light);
+}
+
+.detail-card-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(255, 255, 255, 0.015);
+}
+
+.detail-card-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.detail-card-header-icon {
+  color: var(--brand-300);
+  display: flex;
+  align-items: center;
+}
+
+.detail-card-title {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+}
+
+.detail-card-body {
+  padding: 20px;
+}
+
+/* Bio Text */
+.teacher-bio-quote {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  position: relative;
+  background: rgba(255, 255, 255, 0.015);
+  padding: 16px 18px;
+  border-left: 3px solid var(--brand-400);
+  border-radius: 0 var(--radius) var(--radius) 0;
+}
+
+/* Subjects Cloud */
+.subject-badges-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.subject-badge-item {
+  background: rgba(138, 56, 97, 0.16);
+  color: var(--brand-200);
+  border: 1px solid rgba(138, 56, 97, 0.35);
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all var(--transition);
+}
+
+.subject-badge-item:hover {
+  background: rgba(138, 56, 97, 0.28);
+  border-color: var(--brand-300);
+}
+
+/* Qualifications Timeline */
+.qualification-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.qualification-card-item {
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: all var(--transition);
+}
+
+.qualification-card-item:hover {
+  border-color: rgba(217, 183, 106, 0.35);
+}
+
+.qualification-icon-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(217, 183, 106, 0.12);
+  color: var(--gold-300);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.qualification-content {
+  flex: 1;
+}
+
+.qualification-degree {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+.qualification-institution {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.qualification-meta-row {
+  display: flex;
+  gap: 12px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+/* Availability 7-day Grid */
+.availability-week-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .availability-week-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.day-schedule-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 6px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  transition: all var(--transition);
+  text-align: center;
+}
+
+.day-schedule-card.day-active {
+  background: var(--success-bg);
+  border-color: var(--success-border);
+  color: var(--success-light);
+}
+
+.day-schedule-card.day-inactive {
+  opacity: 0.45;
+  background: transparent;
+  border-style: dashed;
+}
+
+.day-name-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.day-status-indicator {
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Interactive Contact & Meta Rows */
+.interactive-data-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.interactive-data-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  font-size: 0.84rem;
+  transition: background var(--transition);
+}
+
+.interactive-data-item:hover {
+  background: var(--bg-hover);
+}
+
+.interactive-data-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+.interactive-data-value {
+  font-weight: 600;
+  color: var(--text-primary);
+  word-break: break-all;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.copy-mini-btn {
+  background: none;
+  border: none;
+  padding: 4px;
+  border-radius: 4px;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--transition);
+}
+
+.copy-mini-btn:hover {
+  color: var(--gold-300);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* CV Action Box */
+.cv-action-box {
+  background: linear-gradient(135deg, rgba(138, 56, 97, 0.12), rgba(189, 138, 46, 0.08));
+  border: 1px solid rgba(138, 56, 97, 0.3);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+/* Enhanced Contact Channel Box */
+.contact-channel-card {
+  background: var(--bg-card-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all var(--transition);
+}
+
+.contact-channel-card:hover {
+  border-color: rgba(138, 56, 97, 0.45);
+  background: #19243c;
+}
+
+.contact-channel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.contact-channel-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.contact-channel-value-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding-left: 2px;
+}
+
+.contact-channel-link {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  word-break: break-all;
+  overflow-wrap: anywhere;
+  line-height: 1.45;
+  transition: color var(--transition);
+}
+
+.contact-channel-link:hover {
+  color: var(--gold-300);
+}
+
+.nepali-rupee-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-family: inherit;
+  line-height: 1;
+}
+
+
 
