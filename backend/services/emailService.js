@@ -156,3 +156,79 @@ exports.sendManualTutorOnboardingEmail = async ({ user, teacher, sendNotificatio
     logger.error(`Failed to send manual tutor onboarding email to ${userEmail}:`, error);
   }
 };
+
+/**
+ * Send password reset email with secure token link.
+ */
+exports.sendPasswordResetEmail = async ({ user, resetUrl }) => {
+  const userEmail = user.email;
+  const userName = user.username || 'User';
+  const subject = `Reset Your TuitionMaster Password`;
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px 12px; color: #334155; }
+        .card { max-width: 560px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); border: 1px solid #e2e8f0; }
+        .header { background: linear-gradient(135deg, #701a35 0%, #881337 100%); padding: 32px 24px; text-align: center; color: #ffffff; }
+        .content { padding: 32px 28px; }
+        .btn-container { text-align: center; margin: 32px 0; }
+        .btn { display: inline-block; background-color: #881337; color: #ffffff !important; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-size: 15px; box-shadow: 0 4px 12px rgba(136, 19, 55, 0.25); }
+        .btn:hover { background-color: #701a35; }
+        .security-notice { background-color: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b; padding: 14px 16px; border-radius: 8px; margin: 24px 0; font-size: 13px; color: #92400e; }
+        .url-box { background-color: #f1f5f9; padding: 12px; border-radius: 8px; font-size: 12px; word-break: break-all; color: #64748b; margin-top: 16px; }
+        .footer { text-align: center; padding: 20px 24px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px;">TuitionMaster</h1>
+          <p style="margin: 6px 0 0 0; color: #fecdd3; font-size: 13px;">Password Reset Request</p>
+        </div>
+        
+        <div class="content">
+          <h2 style="margin-top: 0; color: #0f172a; font-size: 19px;">Hello ${userName},</h2>
+          
+          <p style="font-size: 15px; line-height: 1.6; color: #475569;">
+            We received a request to reset your password for your <strong>TuitionMaster</strong> account. Click the button below to choose a new password:
+          </p>
+
+          <div class="btn-container">
+            <a href="${resetUrl}" class="btn">Reset My Password</a>
+          </div>
+
+          <div class="security-notice">
+            <strong>Security Notice:</strong> This password reset link is valid for <strong>15 minutes</strong>. If you did not request a password reset, you can safely ignore this email—your account remains secure.
+          </div>
+
+          <p style="font-size: 13px; color: #64748b; margin-bottom: 6px;">
+            If the button above does not work, copy and paste this URL into your browser:
+          </p>
+          <div class="url-box">
+            <a href="${resetUrl}" style="color: #881337; text-decoration: underline;">${resetUrl}</a>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p style="margin: 0 0 4px 0;">© ${new Date().getFullYear()} TuitionMaster. All rights reserved.</p>
+          <p style="margin: 0;">Need help? Reply to this email or visit our support page.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  const fromAddress = process.env.FROM_EMAIL || 'TuitionMaster <noreply@tuitionmaster.guru>';
+  await transporter.sendMail({
+    from: fromAddress,
+    to: userEmail,
+    subject,
+    html: htmlContent,
+  });
+  logger.info(`Password reset email sent successfully to ${userEmail}`);
+};

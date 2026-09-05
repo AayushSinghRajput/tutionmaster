@@ -57,10 +57,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (username, email, password, confirmPassword, role) => {
+  const register = async (username, email, password, role) => {
     try {
       setError('');
-      const response = await authService.register(username, email, password, confirmPassword, role);
+      const response = await authService.register(username, email, password, role);
       const { token, user: userData } = response.data;
 
       setAccessToken(token);

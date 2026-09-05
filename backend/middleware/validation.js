@@ -17,14 +17,7 @@ exports.registerValidation = [
     .withMessage('Please provide a valid email'),
   body('password')
     .isLength({ min: 6 })
-    .withMessage('Password must be at least 6 characters long'),
-  body('confirmPassword')
-    .custom((value, { req }) => {
-      if (value !== req.body.password) {
-        throw new Error('Passwords do not match');
-      }
-      return true;
-    })
+    .withMessage('Password must be at least 6 characters long')
 ];
 
 exports.loginValidation = [
@@ -35,7 +28,20 @@ exports.loginValidation = [
   body('password')
   .isLength({min:6})
   .withMessage('Password must be atleast 6 characters long')
-]
+];
+
+exports.forgotPasswordValidation = [
+  body('email')
+    .trim()
+    .isEmail()
+    .withMessage('Please provide a valid email')
+];
+
+exports.resetPasswordValidation = [
+  body('password')
+    .isLength({ min: 6 })
+    .withMessage('Password must be at least 6 characters long')
+];
 
 exports.googleAuthValidation = [
   body('credential')
