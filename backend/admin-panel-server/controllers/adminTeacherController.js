@@ -3,6 +3,11 @@ const Admin = require("../models/Admin");
 const ErrorResponse = require("../../utils/errorResponse");
 const asyncHandler = require("../../middleware/asyncHandler");
 const escapeRegex = require("../../utils/escapeRegex");
+const cloudinary = require("../../config/cloudinary");
+const streamifier = require("streamifier");
+const withRetry = require("../../utils/withRetry");
+const logger = require("../../utils/logger");
+const { PDFDocument } = require("pdf-lib");
 const {
   generateImageUrl,
   generatePdfViewUrl,
@@ -10,6 +15,26 @@ const {
 } = require("../../utils/cloudinaryUtils");
 
 const MAX_PAGE_LIMIT = 50;
+const UPLOAD_TIMEOUT_MS = 60000;
+
+const compressPdfBuffer = async (buffer) => {
+  try {
+    const pdfDoc = await PDFDocument.load(buffer, { ignoreEncryption: true });
+    const compressed = await pdfDoc.save({ useObjectStreams: true });
+    return Buffer.from(compressed);
+  } catch (error) {
+    return buffer;
+  }
+};
+
+const streamUpload = (fileBuffer, options) =>
+  new Promise((resolve, reject) => {
+    const uploadStream = cloudinary.uploader.upload_stream(options, (error, result) => {
+      if (error) return reject(error);
+      resolve(result);
+    });
+    streamifier.createReadStream(fileBuffer).pipe(uploadStream);
+  });
 
 function attachUrls(teacher) {
   const obj = typeof teacher.toObject === "function" ? teacher.toObject() : teacher;
@@ -150,6 +175,9 @@ exports.adminUpdateTeacher = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Teacher profile not found", 404));
   }
 
+  const oldAvatarPublicId = teacher.avatarPublicId;
+  const oldCvPublicId = teacher.cvPublicId;
+
   const {
     name,
     street,
@@ -216,6 +244,75 @@ exports.adminUpdateTeacher = asyncHandler(async (req, res, next) => {
   if (cvPublicId !== undefined) teacher.cvPublicId = cvPublicId;
   if (isVisible !== undefined) teacher.isVisible = Boolean(isVisible);
   if (isActive !== undefined) teacher.isActive = Boolean(isActive);
+
+  // Handle direct file uploads (Avatar image & CV PDF)
+  if (req.files) {
+    if (req.files.avatar) {
+      const avatarFile = req.files.avatar;
+      const avatarResult = await withRetry(
+        () =>
+          streamUpload(avatarFile.data, {
+            folder: "tutionmaster/avatars",
+            resource_type: "image",
+            timeout: UPLOAD_TIMEOUT_MS,
+            transformation: [
+              { width: 500, height: 500, crop: "fill" },
+              { quality: "auto" },
+              { format: "webp" },
+            ],
+          }),
+        { label: "Cloudinary admin avatar upload" }
+      );
+      teacher.avatarPublicId = avatarResult.public_id;
+    }
+
+    if (req.files.cv) {
+      const cvFile = req.files.cv;
+      const compressedData = await compressPdfBuffer(cvFile.data);
+      const cvResult = await withRetry(
+        () =>
+          streamUpload(compressedData, {
+            folder: "tutionmaster/documents",
+            resource_type: "raw",
+            public_id: `${Date.now()}-${cvFile.name.replace(/\.[^/.]+$/, "")}`,
+            format: "pdf",
+            timeout: UPLOAD_TIMEOUT_MS,
+          }),
+        { label: "Cloudinary admin CV upload" }
+      );
+      teacher.cvPublicId = cvResult.public_id;
+    }
+  }
+
+  // If avatar was replaced or cleared, destroy the old asset to save Cloudinary storage
+  if (oldAvatarPublicId && teacher.avatarPublicId !== oldAvatarPublicId) {
+    try {
+      await withRetry(
+        () =>
+          cloudinary.uploader.destroy(oldAvatarPublicId, {
+            resource_type: "image",
+          }),
+        { label: "Cloudinary old avatar deletion" }
+      );
+    } catch (err) {
+      logger.warn(`Failed to delete old avatar from Cloudinary: ${err.message}`);
+    }
+  }
+
+  // If CV was replaced or cleared, destroy the old raw asset to save Cloudinary storage
+  if (oldCvPublicId && teacher.cvPublicId !== oldCvPublicId) {
+    try {
+      await withRetry(
+        () =>
+          cloudinary.uploader.destroy(oldCvPublicId, {
+            resource_type: "raw",
+          }),
+        { label: "Cloudinary old CV deletion" }
+      );
+    } catch (err) {
+      logger.warn(`Failed to delete old CV from Cloudinary: ${err.message}`);
+    }
+  }
 
   await teacher.save();
 

@@ -121,12 +121,27 @@ const TeacherFilters = ({ filters, onFilterChange, onClearFilters }) => {
 
   //fetch subjects
   useEffect(() => {
+    let isMounted = true;
     const fetchSubjects = async () => {
-      const res = await teacherService.getAllSubjects();
-      setSubjects(res.data.data);
-      setFilteredSubjects(res.data.data);
+      try {
+        const res = await teacherService.getAllSubjects();
+        if (isMounted) {
+          const data = res.data?.data || res.data || [];
+          setSubjects(data);
+          setFilteredSubjects(data);
+        }
+      } catch (err) {
+        console.warn("Failed to fetch subjects list:", err.message);
+        if (isMounted) {
+          setSubjects([]);
+          setFilteredSubjects([]);
+        }
+      }
     };
     fetchSubjects();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
   return (
