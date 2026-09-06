@@ -1,9 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Calendar, User, Tag, Share2, Check } from 'lucide-react';
+import { marked } from 'marked';
 import { blogService } from '../services/blogService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+
+// Configure marked with GFM (tables, tasklists, autolinks) and breaks
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
 
 const BlogDetail = () => {
   const { slug } = useParams();
@@ -81,6 +88,15 @@ const BlogDetail = () => {
   const pageDescription = blog.metaDescription || blog.excerpt || '';
   const currentUrl = `https://www.tuitionmaster.guru/blog/${blog.slug}`;
   const imageUrl = blog.coverImage || 'https://www.tuitionmaster.guru/logo.png';
+
+  const renderedContent = useMemo(() => {
+    if (!blog?.content) return '';
+    try {
+      return marked.parse(blog.content);
+    } catch {
+      return blog.content;
+    }
+  }, [blog?.content]);
 
   return (
     <>
@@ -170,8 +186,8 @@ const BlogDetail = () => {
           {/* Main Article Body */}
           <div className="bg-white rounded-3xl border border-stone-200 shadow-sm p-6 sm:p-12 mb-12">
             <div
-              className="prose prose-lg max-w-none text-gray-800 leading-relaxed font-sans space-y-4 [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:text-gray-900 [&_h2]:mt-8 [&_h2]:mb-4 [&_h3]:text-xl [&_h3]:font-bold [&_h3]:text-gray-900 [&_h3]:mt-6 [&_h3]:mb-2 [&_.lead]:text-lg [&_.lead]:font-medium [&_.lead]:text-gray-700"
-              dangerouslySetInnerHTML={{ __html: blog.content }}
+              className="blog-content"
+              dangerouslySetInnerHTML={{ __html: renderedContent }}
             />
 
             {/* Tags */}

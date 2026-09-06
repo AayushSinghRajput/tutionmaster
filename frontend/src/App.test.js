@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
 
 // Render the real provider tree (AuthProvider, TeacherProvider, etc. — all
@@ -29,9 +30,11 @@ jest.mock('axios', () => ({
 
 test('renders the app shell (header + routed page) without crashing', async () => {
   render(
-    <MemoryRouter initialEntries={['/']}>
-      <App />
-    </MemoryRouter>
+    <HelmetProvider>
+      <MemoryRouter initialEntries={['/']}>
+        <App />
+      </MemoryRouter>
+    </HelmetProvider>
   );
 
   expect(await screen.findByRole('banner')).toBeInTheDocument();

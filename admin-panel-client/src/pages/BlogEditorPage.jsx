@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { marked } from 'marked';
 import { blogAdminService } from '../services/blogAdminService';
 import { BLOG_CATEGORIES as CATEGORIES } from '../constants';
 import {
@@ -23,6 +24,11 @@ import {
   Link2,
 } from 'lucide-react';
 
+marked.setOptions({
+  gfm: true,
+  breaks: true,
+});
+
 export default function BlogEditorPage() {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -32,6 +38,7 @@ export default function BlogEditorPage() {
   const [submitting, setSubmitting] = useState(false);
   const [autoSlug, setAutoSlug] = useState(!isEditing);
   const [showSeo, setShowSeo] = useState(false);
+  const [activeTab, setActiveTab] = useState('write'); // 'write' | 'preview'
 
   const [formData, setFormData] = useState({
     title: '',
@@ -283,75 +290,139 @@ export default function BlogEditorPage() {
 
           {/* Card: Article Content Editor */}
           <div className="card">
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-              <label className="form-label" style={{ margin: 0 }}>Article Content (Markdown Supported) *</label>
-              <div style={{ display: 'flex', gap: '4px' }}>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm"
-                  style={{ padding: '4px 8px' }}
-                  onClick={() => insertMarkdown('**', '**')}
-                  title="Bold"
-                >
-                  <Bold size={13} />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm"
-                  style={{ padding: '4px 8px' }}
-                  onClick={() => insertMarkdown('*', '*')}
-                  title="Italic"
-                >
-                  <Italic size={13} />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm"
-                  style={{ padding: '4px 8px' }}
-                  onClick={() => insertMarkdown('## ')}
-                  title="Heading 2"
-                >
-                  <Heading2 size={13} />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm"
-                  style={{ padding: '4px 8px' }}
-                  onClick={() => insertMarkdown('- ')}
-                  title="Bullet List"
-                >
-                  <List size={13} />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm"
-                  style={{ padding: '4px 8px' }}
-                  onClick={() => insertMarkdown('> ')}
-                  title="Quote"
-                >
-                  <Quote size={13} />
-                </button>
-                <button
-                  type="button"
-                  className="btn btn-ghost btn-sm"
-                  style={{ padding: '4px 8px' }}
-                  onClick={() => insertMarkdown('`', '`')}
-                  title="Code"
-                >
-                  <Code size={13} />
-                </button>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px', flexWrap: 'wrap', gap: '8px' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <label className="form-label" style={{ margin: 0 }}>Article Content *</label>
+                <div style={{ display: 'inline-flex', background: 'var(--bg-input)', borderRadius: 'var(--radius-sm)', padding: '2px', border: '1px solid var(--border)' }}>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('write')}
+                    style={{
+                      padding: '3px 10px',
+                      fontSize: '.75rem',
+                      fontWeight: 600,
+                      borderRadius: '4px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      background: activeTab === 'write' ? 'var(--brand-500)' : 'transparent',
+                      color: activeTab === 'write' ? '#fff' : 'var(--text-secondary)',
+                      transition: 'all 0.15s ease',
+                    }}
+                  >
+                    Write (Markdown)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setActiveTab('preview')}
+                    style={{
+                      padding: '3px 10px',
+                      fontSize: '.75rem',
+                      fontWeight: 600,
+                      borderRadius: '4px',
+                      border: 'none',
+                      cursor: 'pointer',
+                      background: activeTab === 'preview' ? 'var(--brand-500)' : 'transparent',
+                      color: activeTab === 'preview' ? '#fff' : 'var(--text-secondary)',
+                      transition: 'all 0.15s ease',
+                    }}
+                  >
+                    Live Preview
+                  </button>
+                </div>
               </div>
+
+              {activeTab === 'write' && (
+                <div style={{ display: 'flex', gap: '4px' }}>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    style={{ padding: '4px 8px' }}
+                    onClick={() => insertMarkdown('**', '**')}
+                    title="Bold"
+                  >
+                    <Bold size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    style={{ padding: '4px 8px' }}
+                    onClick={() => insertMarkdown('*', '*')}
+                    title="Italic"
+                  >
+                    <Italic size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    style={{ padding: '4px 8px' }}
+                    onClick={() => insertMarkdown('## ')}
+                    title="Heading 2"
+                  >
+                    <Heading2 size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    style={{ padding: '4px 8px' }}
+                    onClick={() => insertMarkdown('- ')}
+                    title="Bullet List"
+                  >
+                    <List size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    style={{ padding: '4px 8px' }}
+                    onClick={() => insertMarkdown('> ')}
+                    title="Quote"
+                  >
+                    <Quote size={13} />
+                  </button>
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    style={{ padding: '4px 8px' }}
+                    onClick={() => insertMarkdown('`', '`')}
+                    title="Code"
+                  >
+                    <Code size={13} />
+                  </button>
+                </div>
+              )}
             </div>
 
-            <textarea
-              id="blog-content-area"
-              className="form-textarea"
-              rows={14}
-              placeholder="Write comprehensive article content in markdown format..."
-              value={formData.content}
-              onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-              required
-            />
+            {activeTab === 'write' ? (
+              <textarea
+                id="blog-content-area"
+                className="form-textarea"
+                rows={14}
+                placeholder="Write comprehensive article content in markdown format..."
+                value={formData.content}
+                onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                required
+              />
+            ) : (
+              <div
+                style={{
+                  minHeight: '280px',
+                  maxHeight: '520px',
+                  overflowY: 'auto',
+                  padding: '16px',
+                  background: 'var(--bg-input)',
+                  borderRadius: 'var(--radius)',
+                  border: '1px solid var(--border)',
+                  color: 'var(--text-primary)',
+                  fontSize: '.92rem',
+                  lineHeight: '1.7',
+                }}
+                className="admin-blog-preview"
+                dangerouslySetInnerHTML={{
+                  __html: formData.content
+                    ? marked.parse(formData.content)
+                    : '<p style="color: var(--text-muted); font-style: italic;">No content to preview yet. Switch to "Write" to add article content.</p>',
+                }}
+              />
+            )}
           </div>
 
           {/* Card: Collapsible SEO & Social Meta */}

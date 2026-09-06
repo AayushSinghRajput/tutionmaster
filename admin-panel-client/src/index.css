@@ -2010,5 +2010,60 @@ tbody tr:hover {
   line-height: 1;
 }
 
+/* ── Admin Blog Live Preview Typography ─────────────────────── */
+.admin-blog-preview h1,
+.admin-blog-preview h2,
+.admin-blog-preview h3,
+.admin-blog-preview h4 {
+  color: var(--text-primary);
+  font-weight: 700;
+  margin-top: 1.5rem;
+  margin-bottom: 0.6rem;
+}
+.admin-blog-preview h1 { font-size: 1.5rem; }
+.admin-blog-preview h2 { font-size: 1.25rem; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+.admin-blog-preview h3 { font-size: 1.1rem; }
+.admin-blog-preview p { margin-bottom: 1rem; color: var(--text-secondary); }
+.admin-blog-preview strong { color: var(--text-primary); font-weight: 600; }
+.admin-blog-preview ul { list-style-type: disc; padding-left: 1.4rem; margin-bottom: 1rem; color: var(--text-secondary); }
+.admin-blog-preview ol { list-style-type: decimal; padding-left: 1.4rem; margin-bottom: 1rem; color: var(--text-secondary); }
+.admin-blog-preview li { margin-bottom: 0.35rem; }
+.admin-blog-preview blockquote {
+  border-left: 3px solid var(--brand-400);
+  background: rgba(138, 56, 97, 0.12);
+  padding: 8px 14px;
+  border-radius: 0 6px 6px 0;
+  margin: 1rem 0;
+  color: var(--text-gold);
+}
+.admin-blog-preview table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: .85rem;
+}
+.admin-blog-preview th {
+  background: var(--bg-card-elevated);
+  color: var(--text-primary);
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  text-align: left;
+}
+.admin-blog-preview td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+}
+.admin-blog-preview hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 1.5rem 0;
+}
+.admin-blog-preview a {
+  color: var(--brand-300);
+  text-decoration: underline;
+}
+
+
 
 
