@@ -38,11 +38,30 @@ exports.listRegisteredUsers = asyncHandler(async (req, res) => {
 // @route   GET /api/admin/administrators
 // @access  Super Admin
 exports.listAdministrators = asyncHandler(async (req, res) => {
-  const admins = await Admin.find().sort({ createdAt: 1 });
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const skip = (page - 1) * limit;
+
+  const total = await Admin.countDocuments();
+  const totalPages = Math.ceil(total / limit) || 1;
+
+  const admins = await Admin.find()
+    .sort({ createdAt: 1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
 
   res.json({
     success: true,
     count: admins.length,
+    total,
+    totalPages,
+    page,
+    pagination: {
+      currentPage: page,
+      totalPages,
+      totalCount: total,
+    },
     data: admins.map((a) => ({
       id: a._id,
       name: a.name,

@@ -72,8 +72,8 @@ export const curriculumService = {
 };
 
 export const administratorService = {
-  list: () =>
-    api.get('/administrators'),
+  list: (params) =>
+    api.get('/administrators', { params }),
 
   getUsers: () =>
     api.get('/administrators/users'),

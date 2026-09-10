@@ -6,15 +6,25 @@ const ReviewsPage = () => {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [page, setPage] = useState(1);
+  const [pagination, setPagination] = useState({ currentPage: 1, totalPages: 1, totalCount: 0 });
 
   useEffect(() => {
     fetchReviews();
-  }, []);
+  }, [page]);
 
   const fetchReviews = async () => {
+    setLoading(true);
     try {
-      const response = await adminReviewService.getAllReviews();
-      setReviews(response.data.data);
+      const response = await adminReviewService.getAllReviews({ page, limit: 10 });
+      setReviews(response.data.data || []);
+      setPagination(
+        response.data.pagination || {
+          currentPage: page,
+          totalPages: response.data.totalPages || 1,
+          totalCount: response.data.total || 0,
+        }
+      );
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to fetch reviews');
     } finally {
@@ -43,8 +53,8 @@ const ReviewsPage = () => {
     }
   };
 
-  if (loading) return <div className="p-8 text-center text-gray-500">Loading reviews...</div>;
-  if (error) return <div className="p-8 text-center text-red-500">{error}</div>;
+  if (loading && reviews.length === 0) return <div className="p-8 text-center text-gray-500">Loading reviews...</div>;
+  if (error && reviews.length === 0) return <div className="p-8 text-center text-red-500">{error}</div>;
 
   return (
     <div className="space-y-6">
@@ -116,6 +126,31 @@ const ReviewsPage = () => {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        {pagination.totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px', borderTop: '1px solid var(--border)' }}>
+            <span style={{ fontSize: '14px', color: 'var(--text-muted)' }}>
+              Showing Page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalCount} reviews)
+            </span>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                className="btn btn-ghost btn-sm"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Previous
+              </button>
+              <button
+                className="btn btn-ghost btn-sm"
+                disabled={page >= pagination.totalPages}
+                onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -50,7 +50,7 @@ function attachUrls(teacher) {
 exports.adminGetTeachers = asyncHandler(async (req, res) => {
   const {
     page = 1,
-    limit = 20,
+    limit = 10,
     search,
     isVisible,
     isActive,
@@ -79,8 +79,8 @@ exports.adminGetTeachers = asyncHandler(async (req, res) => {
   if (isActive === "true") filter.isActive = true;
   else if (isActive === "false") filter.isActive = false;
 
-  const pageNum = Math.max(1, parseInt(page) || 1);
-  const limitNum = Math.min(MAX_PAGE_LIMIT, Math.max(1, parseInt(limit) || 20));
+  const pageNum = Math.max(1, parseInt(page, 10) || 1);
+  const limitNum = Math.min(MAX_PAGE_LIMIT, Math.max(1, parseInt(limit, 10) || 10));
   const skip = (pageNum - 1) * limitNum;
 
   const sortDir = order === "asc" ? 1 : -1;

@@ -12,14 +12,32 @@ router.use(protectAdmin);
 // @route   GET /api/admin/reviews
 // @access  Private/Admin
 router.get('/', asyncHandler(async (req, res, next) => {
+  const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limit = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const skip = (page - 1) * limit;
+
+  const total = await Review.countDocuments();
+  const totalPages = Math.ceil(total / limit) || 1;
+
   const reviews = await Review.find()
     .populate('teacher', 'name email')
-    .sort({ createdAt: -1 });
+    .sort({ createdAt: -1 })
+    .skip(skip)
+    .limit(limit)
+    .lean();
 
   res.status(200).json({
     success: true,
     count: reviews.length,
-    data: reviews
+    total,
+    totalPages,
+    page,
+    pagination: {
+      currentPage: page,
+      totalPages,
+      totalCount: total,
+    },
+    data: reviews,
   });
 }));
 
