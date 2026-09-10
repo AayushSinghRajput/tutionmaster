@@ -14,6 +14,7 @@ import TeacherAvailabilityGrid from '../components/teachers/detail/TeacherAvaila
 import TeacherContactInfoCard from '../components/teachers/detail/TeacherContactInfoCard';
 import TeacherMetaSidebar from '../components/teachers/detail/TeacherMetaSidebar';
 import TeacherEditModal from '../components/teachers/detail/TeacherEditModal';
+import ShareTutorModal from '../components/teachers/detail/ShareTutorModal';
 
 export default function TeacherDetailPage() {
   const { id } = useParams();
@@ -23,6 +24,7 @@ export default function TeacherDetailPage() {
   const [confirm, setConfirm] = useState(false);
   const [toggling, setToggling] = useState(false);
   const [editing, setEditing] = useState(false);
+  const [sharing, setSharing] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -91,6 +93,7 @@ export default function TeacherDetailPage() {
         teacher={teacher}
         onToggleVisibility={() => setConfirm(true)}
         onOpenEdit={() => setEditing(true)}
+        onOpenShare={() => setSharing(true)}
         toggling={toggling}
       />
 
@@ -136,6 +139,14 @@ export default function TeacherDetailPage() {
           teacher={teacher}
           onClose={() => setEditing(false)}
           onSaveSuccess={handleSaveSuccess}
+        />
+      )}
+
+      {/* Share Tutor Profile Modal */}
+      {sharing && (
+        <ShareTutorModal
+          teacher={teacher}
+          onClose={() => setSharing(false)}
         />
       )}
     </div>
