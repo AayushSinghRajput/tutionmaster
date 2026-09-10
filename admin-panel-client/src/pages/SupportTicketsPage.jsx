@@ -25,7 +25,7 @@ export default function SupportTicketsPage() {
     try {
       const data = await supportAdminService.getTickets({
         page,
-        limit: 15,
+        limit: 10,
         status: activeTab,
         search,
       });

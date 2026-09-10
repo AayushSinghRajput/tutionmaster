@@ -27,7 +27,7 @@ export default function TeachersPage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const params = { page, limit: 20 };
+      const params = { page, limit: 10 };
       if (search) params.search = search;
       if (statusFilter === 'pending') {
         params.isVisible = 'false';

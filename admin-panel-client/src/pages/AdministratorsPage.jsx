@@ -6,25 +6,37 @@ import AddAdminModal from '../components/administrators/AddAdminModal';
 import toast from 'react-hot-toast';
 
 export default function AdministratorsPage() {
-  const [admins, setAdmins]       = useState([]);
-  const [loading, setLoading]     = useState(true);
-  const [showAdd, setShowAdd]     = useState(false);
+  const [admins, setAdmins]             = useState([]);
+  const [loading, setLoading]           = useState(true);
+  const [showAdd, setShowAdd]           = useState(false);
   const [removeTarget, setRemoveTarget] = useState(null);
-  const [removing, setRemoving]   = useState(false);
+  const [removing, setRemoving]         = useState(false);
+  const [page, setPage]                 = useState(1);
+  const [pagination, setPagination]     = useState({ currentPage: 1, totalPages: 1, totalCount: 0 });
 
   const load = () => {
     setLoading(true);
-    administratorService.list()
-      .then(res => setAdmins(res.data.data))
+    administratorService.list({ page, limit: 10 })
+      .then((res) => {
+        setAdmins(res.data.data || []);
+        setPagination(
+          res.data.pagination || {
+            currentPage: page,
+            totalPages: res.data.totalPages || 1,
+            totalCount: res.data.total || 0,
+          }
+        );
+      })
       .catch(() => toast.error('Failed to load administrators'))
       .finally(() => setLoading(false));
   };
 
-  useEffect(load, []);
+  useEffect(load, [page]);
 
   const handleCreated = (admin) => {
     setAdmins(prev => [...prev, admin]);
     setShowAdd(false);
+    load();
   };
 
   const handleRemove = async () => {
@@ -70,13 +82,13 @@ export default function AdministratorsPage() {
               </tr>
             </thead>
             <tbody>
-              {loading && (
+              {loading && admins.length === 0 && (
                 <tr><td colSpan={7}><div className="state-center" style={{ padding: '40px' }}><div className="spinner" /></div></td></tr>
               )}
               {!loading && admins.length === 0 && (
                 <tr><td colSpan={7}><div className="state-center"><div className="state-icon">🛡️</div><p>No administrators found</p></div></td></tr>
               )}
-              {!loading && admins.map(a => (
+              {admins.map(a => (
                 <tr key={a.id}>
                   <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -133,6 +145,31 @@ export default function AdministratorsPage() {
             </tbody>
           </table>
         </div>
+
+        {/* Pagination Controls */}
+        {pagination.totalPages > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '16px', fontSize: '.85rem', color: 'var(--text-secondary)' }}>
+            <div>
+              Showing Page <strong>{pagination.currentPage}</strong> of <strong>{pagination.totalPages}</strong> ({pagination.totalCount} administrators total)
+            </div>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <button
+                className="btn btn-ghost btn-sm"
+                disabled={page <= 1}
+                onClick={() => setPage((p) => Math.max(1, p - 1))}
+              >
+                Previous
+              </button>
+              <button
+                className="btn btn-ghost btn-sm"
+                disabled={page >= pagination.totalPages}
+                onClick={() => setPage((p) => Math.min(pagination.totalPages, p + 1))}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
 
         {showAdd && (
           <AddAdminModal onClose={() => setShowAdd(false)} onCreated={handleCreated} />

@@ -10,7 +10,7 @@ const escapeRegex = require("../../utils/escapeRegex");
 exports.adminGetRequirements = asyncHandler(async (req, res) => {
   const {
     page = 1,
-    limit = 20,
+    limit = 10,
     search,
     status,
     academicLevel,
@@ -46,7 +46,7 @@ exports.adminGetRequirements = asyncHandler(async (req, res) => {
   }
 
   const pageNum = Math.max(1, parseInt(page, 10) || 1);
-  const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 20));
+  const limitNum = Math.min(50, Math.max(1, parseInt(limit, 10) || 10));
   const skip = (pageNum - 1) * limitNum;
 
   const sortDir = order === "asc" ? 1 : -1;

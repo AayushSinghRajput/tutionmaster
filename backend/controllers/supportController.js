@@ -43,7 +43,9 @@ exports.createSupportTicket = asyncHandler(async (req, res, next) => {
 // @route   GET /api/admin/support-tickets
 // @access  Private (Admin)
 exports.getAdminSupportTickets = asyncHandler(async (req, res) => {
-  const { page = 1, limit = 20, status, category, search } = req.query;
+  const pageNum = Math.max(1, parseInt(req.query.page, 10) || 1);
+  const limitNum = Math.min(50, Math.max(1, parseInt(req.query.limit, 10) || 10));
+  const { status, category, search } = req.query;
 
   const query = {};
 
@@ -65,20 +67,25 @@ exports.getAdminSupportTickets = asyncHandler(async (req, res) => {
     ];
   }
 
-  const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+  const skip = (pageNum - 1) * limitNum;
   const total = await SupportTicket.countDocuments(query);
   const tickets = await SupportTicket.find(query)
     .sort({ createdAt: -1 })
     .skip(skip)
-    .limit(parseInt(limit, 10))
+    .limit(limitNum)
     .lean();
 
   res.status(200).json({
     success: true,
     count: tickets.length,
     total,
-    totalPages: Math.ceil(total / parseInt(limit, 10)),
-    page: parseInt(page, 10),
+    totalPages: Math.ceil(total / limitNum) || 1,
+    page: pageNum,
+    pagination: {
+      currentPage: pageNum,
+      totalPages: Math.ceil(total / limitNum) || 1,
+      totalCount: total,
+    },
     data: tickets,
   });
 });

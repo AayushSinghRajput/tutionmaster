@@ -39,7 +39,7 @@ export default function RequirementsPage() {
   const loadRequirements = useCallback(async () => {
     setLoading(true);
     try {
-      const params = { page, limit: 20 };
+      const params = { page, limit: 10 };
       if (search) params.search = search;
       if (statusFilter !== 'ALL') params.status = statusFilter;
 
