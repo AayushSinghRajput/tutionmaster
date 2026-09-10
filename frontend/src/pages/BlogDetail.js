@@ -63,6 +63,15 @@ const BlogDetail = () => {
     });
   };
 
+  const renderedContent = useMemo(() => {
+    if (!blog?.content) return '';
+    try {
+      return marked.parse(blog.content);
+    } catch {
+      return blog.content;
+    }
+  }, [blog?.content]);
+
   if (loading) {
     return <LoadingSpinner fullScreen text="Loading article..." />;
   }
@@ -88,15 +97,6 @@ const BlogDetail = () => {
   const pageDescription = blog.metaDescription || blog.excerpt || '';
   const currentUrl = `https://www.tuitionmaster.guru/blog/${blog.slug}`;
   const imageUrl = blog.coverImage || 'https://www.tuitionmaster.guru/logo.png';
-
-  const renderedContent = useMemo(() => {
-    if (!blog?.content) return '';
-    try {
-      return marked.parse(blog.content);
-    } catch {
-      return blog.content;
-    }
-  }, [blog?.content]);
 
   return (
     <>
