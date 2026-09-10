@@ -1,8 +1,8 @@
-import { MapPin, Briefcase, Laptop, Eye, EyeOff, Edit3, ArrowLeft, ExternalLink } from 'lucide-react';
+import { MapPin, Briefcase, Laptop, Eye, EyeOff, Edit3, ArrowLeft, ExternalLink, Share2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import NepaliRupeeIcon from '../../common/NepaliRupeeIcon';
 
-export default function TeacherHero({ teacher, onToggleVisibility, onOpenEdit, toggling }) {
+export default function TeacherHero({ teacher, onToggleVisibility, onOpenEdit, onOpenShare, toggling }) {
   const initials = teacher.name?.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase() || 'TM';
   const monthlyRate = teacher.monthlyRate ?? (teacher.hourlyRate ? teacher.hourlyRate * 20 : 0);
 
@@ -109,6 +109,16 @@ export default function TeacherHero({ teacher, onToggleVisibility, onOpenEdit, t
             >
               <Edit3 size={14} />
               <span>Edit Profile</span>
+            </button>
+
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={onOpenShare}
+              title="Share Public Tutor Profile"
+            >
+              <Share2 size={14} />
+              <span>Share Profile</span>
             </button>
 
             {teacher.cvUrl && (
