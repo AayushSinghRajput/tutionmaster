@@ -164,10 +164,9 @@ exports.getTeachers = asyncHandler(async (req, res) => {
 
   const teachers = await Teacher.find(filter)
     .populate("userId", "email")
-    .sort({ name: 1 })
+    .sort({ createdAt: -1 })
     .skip(skip)
     .limit(limitNum)
-    .collation({ locale: "en", strength: 2 })
     .lean();
 
   // Add Cloudinary URLs using helper functions
