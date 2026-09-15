@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/sitemap.xml",
-      "destination": "https://tutionmaster-backend.onrender.com/sitemap.xml"
+      "destination": "https://tutionmaster-backend-s5uc.onrender.com/sitemap.xml"
     }
   ]
 }
