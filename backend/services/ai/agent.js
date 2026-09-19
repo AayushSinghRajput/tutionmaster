@@ -193,7 +193,7 @@ async function fallbackLocalChat(message, user) {
 
   return {
     message:
-      "I'm receiving high traffic right now — please try again in a moment, or browse our verified tutors at [/teachers](/teachers) or tuition jobs at [/jobs](/jobs). You can also contact support directly on **WhatsApp (+977 980-5981168)**.",
+      "I'm receiving high traffic right now — please try again in a moment, or browse our verified tutors at [/teachers](/teachers) or tuition jobs at [/jobs](/jobs). You can also contact support directly on **WhatsApp (+977 980-5981168)** or call **+977 986-4275919**.",
     results: [],
   };
 }

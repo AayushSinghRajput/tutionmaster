@@ -12,7 +12,11 @@ export const contactMethods = [
     icon: <Phone className="w-6 h-6" />,
     title: "Call Us",
     description: "Mon to Fri from 8am to 5pm",
-    details: "+977 (980) 598-1168",
+    details: "+977 (980) 598-1168 / +977 986-427-5919",
+    links: [
+      { label: "+977 (980) 598-1168", action: "tel:+9779805981168" },
+      { label: "+977 986-427-5919", action: "tel:+9779864275919" }
+    ],
     action: "tel:+9779805981168"
   },
   {

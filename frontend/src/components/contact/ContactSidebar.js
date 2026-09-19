@@ -40,23 +40,35 @@ const ContactSidebar = () => {
           Having trouble creating a profile or have questions about tuition jobs? Reach out directly via WhatsApp or phone.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-3">
+        <div className="space-y-2.5">
           <a
             href="https://wa.me/9779805981168?text=Hi%20TuitionMaster%20Support%2C%20I%20need%20assistance"
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-transform hover:-translate-y-0.5 text-xs sm:text-sm"
+            className="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-transform hover:-translate-y-0.5 text-xs sm:text-sm"
           >
             <span>💬 Chat on WhatsApp</span>
           </a>
 
-          <a
-            href="tel:+9779805981168"
-            className="flex-1 bg-white hover:bg-stone-100 text-gray-900 font-bold py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 shadow-md transition-transform hover:-translate-y-0.5 text-xs sm:text-sm"
-          >
-            <Phone className="w-4 h-4 text-brand-600" />
-            <span>Call Support</span>
-          </a>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <a
+              href="tel:+9779805981168"
+              className="bg-white hover:bg-stone-100 text-gray-900 font-bold py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 shadow-md transition-transform hover:-translate-y-0.5 text-xs"
+              title="Call +977 (980) 598-1168"
+            >
+              <Phone className="w-3.5 h-3.5 text-brand-600 shrink-0" />
+              <span className="truncate">980-5981168</span>
+            </a>
+
+            <a
+              href="tel:+9779864275919"
+              className="bg-white hover:bg-stone-100 text-gray-900 font-bold py-2.5 px-2 rounded-xl flex items-center justify-center gap-1.5 shadow-md transition-transform hover:-translate-y-0.5 text-xs"
+              title="Call +977-9864275919"
+            >
+              <Phone className="w-3.5 h-3.5 text-brand-600 shrink-0" />
+              <span className="truncate">986-4275919</span>
+            </a>
+          </div>
         </div>
       </div>
 

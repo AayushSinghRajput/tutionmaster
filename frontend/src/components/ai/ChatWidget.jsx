@@ -50,7 +50,7 @@ const ChatWidget = () => {
         {
           role: "assistant",
           content:
-            "I'm experiencing a brief network pause, but I'm still here to help!\n\n- Browse our tutor directory at [/teachers](/teachers)\n- Check tuition job vacancies at [/jobs](/jobs)\n- Reach out directly to our support team on **WhatsApp (+977 980-5981168)** or [/contact](/contact).",
+            "I'm experiencing a brief network pause, but I'm still here to help!\n\n- Browse our tutor directory at [/teachers](/teachers)\n- Check tuition job vacancies at [/jobs](/jobs)\n- Reach out directly to our support team on **WhatsApp (+977 980-5981168)**, call **+977 986-4275919**, or [/contact](/contact).",
         },
       ]);
     } finally {

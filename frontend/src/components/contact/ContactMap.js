@@ -49,10 +49,13 @@ const ContactMap = () => {
                     <MapPin className="w-4 h-4 text-brand-600" />
                     Kathmandu, Nepal
                   </p>
-                  <p className="flex items-center gap-2">
-                    <Phone className="w-4 h-4 text-brand-600" />
-                    +977 (980) 598-1168
-                  </p>
+                  <div className="flex items-start gap-2">
+                    <Phone className="w-4 h-4 text-brand-600 mt-1 shrink-0" />
+                    <div className="flex flex-col">
+                      <a href="tel:+9779805981168" className="hover:text-brand-600 hover:underline">+977 (980) 598-1168</a>
+                      <a href="tel:+9779864275919" className="hover:text-brand-600 hover:underline">+977 986-427-5919</a>
+                    </div>
+                  </div>
                   <p className="flex items-center gap-2">
                     <Mail className="w-4 h-4 text-brand-600" />
                     hello.tuitionmaster@gmail.com

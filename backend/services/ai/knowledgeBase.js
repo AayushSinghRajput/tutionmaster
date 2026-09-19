@@ -63,7 +63,7 @@ const ENTRIES = [
     title: "Contact TuitionMaster",
     keywords: ["contact", "support", "email", "phone number", "reach you", "help"],
     content:
-      "You can reach TuitionMaster at hello.tuitionmaster@gmail.com or +977 (980) 598-1168, or through the contact form at /contact.",
+      "You can reach TuitionMaster at hello.tuitionmaster@gmail.com, +977 (980) 598-1168, or +977 986-427-5919, or through the contact form at /contact.",
   },
   {
     id: "policies",

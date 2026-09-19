@@ -194,15 +194,22 @@ const JobDetail = () => {
               </div>
               <h3 className="text-xl sm:text-2xl font-bold">How to Apply for this Tuition</h3>
               <p className="text-brand-100 text-sm leading-relaxed whitespace-pre-line">
-                {job.contactInstructions || 'Please contact TuitionMaster support at +977 980-598-1168 or email hello.tuitionmaster@gmail.com with your profile ID to express interest in this vacancy.'}
+                {job.contactInstructions || 'Please contact TuitionMaster support at +977 980-598-1168 / +977 986-427-5919 or email hello.tuitionmaster@gmail.com with your profile ID to express interest in this vacancy.'}
               </p>
-              <div className="pt-2">
+              <div className="pt-2 flex flex-wrap gap-3">
                 <a
                   href="tel:+9779805981168"
-                  className="inline-flex items-center gap-2 bg-white text-brand-800 font-bold px-6 py-3 rounded-xl text-sm shadow hover:bg-stone-100 transition-colors"
+                  className="inline-flex items-center gap-2 bg-white text-brand-800 font-bold px-5 py-2.5 rounded-xl text-sm shadow hover:bg-stone-100 transition-colors"
                 >
                   <PhoneCall size={16} />
-                  Call Support Coordinator
+                  Call 980-598-1168
+                </a>
+                <a
+                  href="tel:+9779864275919"
+                  className="inline-flex items-center gap-2 bg-brand-500 text-white font-bold px-5 py-2.5 rounded-xl text-sm shadow hover:bg-brand-400 border border-brand-400 transition-colors"
+                >
+                  <PhoneCall size={16} />
+                  Call 986-427-5919
                 </a>
               </div>
             </div>
