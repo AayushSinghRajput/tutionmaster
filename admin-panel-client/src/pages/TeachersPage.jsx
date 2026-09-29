@@ -11,6 +11,7 @@ import {
   MapPin,
   UserPlus,
   RefreshCw,
+  GraduationCap,
 } from 'lucide-react';
 
 export default function TeachersPage() {
