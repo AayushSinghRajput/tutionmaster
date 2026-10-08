@@ -8,8 +8,8 @@ export const prohibitedActivities = [
 ];
 
 export const legalContacts = [
-  { title: "Legal Inquiries", email: "legal@tutionmaster.com" },
-  { title: "Educator Support", email: "support@tutionmaster.com" },
-  { title: "Billing Questions", email: "billing@tutionmaster.com" },
-  { title: "General Inquiries", email: "hello@tutionmaster.com" }
+  { title: "Legal Inquiries", email: "hello.tuitionmaster@gmail.com" },
+  { title: "Educator Support", email: "hello.tuitionmaster@gmail.com" },
+  { title: "Billing Questions", email: "hello.tuitionmaster@gmail.com" },
+  { title: "General Inquiries", email: "hello.tuitionmaster@gmail.com" }
 ];

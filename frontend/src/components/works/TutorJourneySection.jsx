@@ -28,7 +28,7 @@ const TutorJourneySection = () => {
 
         <div className="max-w-3xl mx-auto">
           {TUTOR_JOURNEY.map((step, index) => (
-            <div key={step.id}>
+            <div key={step.id} className={index !== TUTOR_JOURNEY.length - 1 ? 'pb-10' : ''}>
               <JourneyStepCard
                 step={step}
                 index={index}
