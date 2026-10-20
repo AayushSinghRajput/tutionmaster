@@ -2,6 +2,31 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AuthProvider, useAuth } from './AuthContext';
 import { authService } from '../services/authSerive';
+import api, { setAccessToken } from '../services/api';
+
+jest.mock('axios', () => ({
+  create: () => ({
+    get: jest.fn().mockResolvedValue({ data: { token: 'test-token' } }),
+    post: jest.fn().mockResolvedValue({ data: { success: true } }),
+    interceptors: {
+      request: { use: jest.fn() },
+      response: { use: jest.fn() },
+    },
+  }),
+}));
+
+jest.mock('../services/api', () => ({
+  __esModule: true,
+  default: {
+    get: jest.fn(),
+    post: jest.fn().mockResolvedValue({ data: { success: true } }),
+    interceptors: {
+      request: { use: jest.fn() },
+      response: { use: jest.fn() },
+    },
+  },
+  setAccessToken: jest.fn(),
+}));
 
 jest.mock('../services/authSerive', () => ({
   authService: {
@@ -27,9 +52,11 @@ function TestHarness() {
 beforeEach(() => {
   localStorage.clear();
   jest.clearAllMocks();
+  api.get.mockResolvedValue({ data: { token: 'mock-token' } });
 });
 
 test('login stores a token and flips isAuthenticated', async () => {
+  api.get.mockRejectedValueOnce(new Error('No session'));
   authService.login.mockResolvedValue({
     data: { token: 'abc123', user: { id: '1', email: 'a@b.com', role: 'teacher' } },
   });
@@ -44,11 +71,10 @@ test('login stores a token and flips isAuthenticated', async () => {
   await userEvent.click(screen.getByText('login'));
 
   await waitFor(() => expect(screen.getByTestId('auth-state')).toHaveTextContent('in'));
-  expect(localStorage.getItem('token')).toBe('abc123');
+  expect(setAccessToken).toHaveBeenCalledWith('abc123');
 });
 
 test('logout clears local auth state immediately and calls the backend', async () => {
-  localStorage.setItem('token', 'existing-token');
   authService.getCurrentUser.mockResolvedValue({ id: '1', email: 'a@b.com', role: 'teacher' });
   authService.logout.mockResolvedValue({ data: { success: true } });
 
@@ -63,11 +89,10 @@ test('logout clears local auth state immediately and calls the backend', async (
 
   expect(screen.getByTestId('auth-state')).toHaveTextContent('out');
   expect(authService.logout).toHaveBeenCalledTimes(1);
-  await waitFor(() => expect(localStorage.getItem('token')).toBeNull());
+  expect(setAccessToken).toHaveBeenCalledWith(null);
 });
 
 test('a failed backend logout call still clears the token locally', async () => {
-  localStorage.setItem('token', 'existing-token');
   authService.getCurrentUser.mockResolvedValue({ id: '1', email: 'a@b.com', role: 'teacher' });
   authService.logout.mockRejectedValue(new Error('network error'));
 
@@ -81,5 +106,5 @@ test('a failed backend logout call still clears the token locally', async () => 
   await userEvent.click(screen.getByText('logout'));
 
   expect(screen.getByTestId('auth-state')).toHaveTextContent('out');
-  await waitFor(() => expect(localStorage.getItem('token')).toBeNull());
+  expect(setAccessToken).toHaveBeenCalledWith(null);
 });

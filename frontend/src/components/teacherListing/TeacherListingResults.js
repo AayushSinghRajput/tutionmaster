@@ -34,28 +34,7 @@ const TeacherListingResults = ({
         </div>
       )}
 
-      {/* Results Header */}
-      <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-4 sm:p-6 mb-6">
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-          <div>
-            <h1 className="text-base sm:text-lg font-semibold text-gray-900">
-              Available Teachers
-            </h1>
-            <p className="text-xs sm:text-sm text-gray-600 mt-1">
-              Showing {teachers.length} of {pagination.total} results
-              {pagination.totalPages > 1 &&
-                ` • Page ${pagination.page} of ${pagination.totalPages}`}
-            </p>
-          </div>
-          <div className="mt-3 sm:mt-0">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-brand-50 border border-brand-200">
-              <span className="text-sm font-medium text-brand-700">
-                {pagination.total} Total
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+      <h1 className="sr-only">Available Teachers</h1>
 
       {teachers.length === 0 && !loading ? (
         <div className="bg-white rounded-2xl shadow-sm border border-stone-200 p-6 sm:p-12 text-center">

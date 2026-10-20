@@ -1,4 +1,5 @@
-import  { useState } from 'react';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { useAuth } from '../../context/AuthContext';
 import { toast } from 'react-toastify';
@@ -7,9 +8,11 @@ import GoogleAuthButton from './GoogleAuthButton';
 import { Eye, EyeOff, Mail, Lock, UserPlus, User } from 'lucide-react';
 
 const RegisterForm = () => {
+  const [searchParams] = useSearchParams();
+  const defaultRole = searchParams.get('role') === 'student' ? 'student' : 'teacher';
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [role, setRole] = useState('student');
+  const [role, setRole] = useState(defaultRole);
   const { register: registerUser } = useAuth();
   
   const {

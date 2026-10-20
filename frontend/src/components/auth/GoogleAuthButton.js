@@ -2,7 +2,7 @@ import { GoogleLogin } from '@react-oauth/google';
 import { toast } from 'react-toastify';
 import { useAuth } from '../../context/AuthContext';
 
-const GoogleAuthButton = ({ role = 'student' }) => {
+const GoogleAuthButton = ({ role = 'teacher' }) => {
   const { loginWithGoogle } = useAuth();
 
   const handleSuccess = async (credentialResponse) => {

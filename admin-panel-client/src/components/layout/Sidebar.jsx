@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import toast from 'react-hot-toast';
+import logo from '../../../assets/logo.png';
 import {
   LayoutDashboard,
   UserCheck,
@@ -13,7 +14,6 @@ import {
   Shield,
   LogOut,
   UserPlus,
-  Sparkles,
 } from 'lucide-react';
 
 const NAV_GROUPS = [
@@ -80,7 +80,7 @@ export default function Sidebar({ isOpen, isCollapsed, onToggleCollapse, onClose
               onClick={isCollapsed ? onToggleCollapse : undefined}
               style={{ cursor: isCollapsed ? 'pointer' : 'default' }}
             >
-              <Sparkles size={20} />
+              <img src={logo} alt="TuitionMaster" />
             </div>
             {!isCollapsed && (
               <div className="logo-texts">
