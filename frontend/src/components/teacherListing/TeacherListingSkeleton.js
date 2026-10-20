@@ -73,15 +73,7 @@ const TeacherListingSkeleton = () => {
       <FilterSidebarSkeleton />
 
       <div className="flex-1">
-        {/* Results heading */}
-        <div className="flex items-center justify-between mb-5">
-          <div>
-            <Skeleton className="h-6 w-40 mb-2" />
-            <Skeleton className="h-4 w-24" />
-          </div>
 
-          <Skeleton className="h-9 w-24 rounded-lg" />
-        </div>
 
         {/* Teacher cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">

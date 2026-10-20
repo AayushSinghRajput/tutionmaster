@@ -3,12 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { Menu, X, LogOut, Search } from 'lucide-react';
 
-const Logo = ({ size = 30 }) => (
+const Logo = ({ className = "w-9 h-9 sm:w-10 sm:h-10" }) => (
   <img
     src="/logo.png"
     alt="TuitionMaster"
-    className="rounded-lg shrink-0 object-cover"
-    style={{ width: size, height: size }}
+    className={`shrink-0 object-contain drop-shadow-sm ${className}`}
   />
 );
 
@@ -34,9 +33,9 @@ const Header = () => {
         <div className="flex justify-between items-center h-16 sm:h-20">
 
           {/* Logo */}
-          <Link to="/" onClick={handleHomeClick} className="flex items-center gap-2 min-w-0">
-            <Logo size={30} />
-            <span className="text-lg sm:text-xl font-serif font-bold text-gray-900 tracking-tight truncate">TuitionMaster</span>
+          <Link to="/" onClick={handleHomeClick} className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+            <Logo />
+            <span className="text-xl sm:text-2xl font-serif font-bold text-gray-900 tracking-tight truncate">TuitionMaster</span>
           </Link>
 
           {/* Desktop Nav */}
