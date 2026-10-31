@@ -8,6 +8,8 @@ const {
   getUnonboardedUsers,
   createManualTeacher,
   resendTutorNotification,
+  getBulkNotifyStats,
+  bulkNotifyVerifiedTeachers,
 } = require("../controllers/adminTeacherController");
 const { protectAdmin, requireSuperAdmin } = require("../middleware/adminAuth");
 
@@ -21,8 +23,14 @@ router.get("/unonboarded-users", requireSuperAdmin, getUnonboardedUsers);
 // POST /api/admin/teachers/create-manual
 router.post("/create-manual", requireSuperAdmin, createManualTeacher);
 
+// GET  /api/admin/teachers/bulk-notify-stats
+router.get("/bulk-notify-stats", getBulkNotifyStats);
+
+// POST /api/admin/teachers/bulk-notify-verified
+router.post("/bulk-notify-verified", bulkNotifyVerifiedTeachers);
+
 // POST /api/admin/teachers/:id/resend-notification
-router.post("/:id/resend-notification", requireSuperAdmin, resendTutorNotification);
+router.post("/:id/resend-notification", resendTutorNotification);
 
 // GET  /api/admin/teachers
 router.get("/", adminGetTeachers);

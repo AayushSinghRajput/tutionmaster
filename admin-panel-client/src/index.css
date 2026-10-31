@@ -927,7 +927,7 @@ tbody tr:hover {
 
 .drawer-panel {
   width: 100%;
-  max-width: 760px;
+  max-width: 860px;
   height: 100%;
   background: var(--bg-card);
   border-left: 1px solid var(--border);
@@ -953,13 +953,59 @@ tbody tr:hover {
 }
 
 .drawer-footer {
-  padding: 18px 26px;
+  padding: 16px 24px;
   border-top: 1px solid var(--border);
   background: var(--bg-card-elevated);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ── Document Fullscreen Inspection Lightbox ──────────────── */
+.doc-fullscreen-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn .18s ease;
+}
+
+.doc-fullscreen-card {
+  width: 96vw;
+  max-width: 1260px;
+  height: 94vh;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+.doc-fullscreen-header {
+  padding: 12px 20px;
+  background: var(--bg-card-elevated);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.doc-fullscreen-body {
+  flex: 1;
+  background: #0f172a;
+  overflow: hidden;
+  position: relative;
 }
 
 @keyframes slideInRight {

@@ -1,6 +1,23 @@
-import { FileText, Download, CheckCircle2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileText, Download, CheckCircle2, Maximize2, Minimize2, ExternalLink, X } from 'lucide-react';
 
 export default function ReviewDocumentsTab({ teacher }) {
+  const [isFullScreen, setIsFullScreen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') setIsFullScreen(false);
+    };
+    if (isFullScreen) {
+      window.addEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'hidden';
+    }
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = '';
+    };
+  }, [isFullScreen]);
+
   return (
     <div>
       {/* CV Section */}
@@ -18,34 +35,69 @@ export default function ReviewDocumentsTab({ teacher }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            marginBottom: '10px',
+            marginBottom: '12px',
+            flexWrap: 'wrap',
+            gap: '8px',
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
             <FileText size={18} color="var(--brand-300)" />
             <span style={{ fontWeight: 700, fontSize: '.9rem' }}>Curriculum Vitae (CV)</span>
           </div>
-          {teacher.cvDownloadUrl && (
-            <a
-              href={teacher.cvDownloadUrl}
-              target="_blank"
-              rel="noreferrer"
-              className="btn btn-ghost btn-sm"
-            >
-              <Download size={14} />
-              <span>Download PDF</span>
-            </a>
-          )}
+          
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {teacher.cvUrl && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setIsFullScreen(true)}
+                  className="btn btn-secondary btn-sm"
+                  title="View CV in Full Screen Modal"
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <Maximize2 size={14} />
+                  <span>Full Screen View</span>
+                </button>
+
+                <a
+                  href={teacher.cvUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-ghost btn-sm"
+                  title="Open CV in a new browser tab"
+                  style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+                >
+                  <ExternalLink size={14} />
+                  <span>Open Tab</span>
+                </a>
+              </>
+            )}
+
+            {teacher.cvDownloadUrl && (
+              <a
+                href={teacher.cvDownloadUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="btn btn-ghost btn-sm"
+                title="Download original CV PDF"
+                style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+              >
+                <Download size={14} />
+                <span>Download</span>
+              </a>
+            )}
+          </div>
         </div>
 
         {teacher.cvUrl ? (
           <div
             style={{
+              position: 'relative',
               borderRadius: 'var(--radius)',
               overflow: 'hidden',
               border: '1px solid var(--border)',
-              background: '#fff',
-              height: '420px',
+              background: '#1e293b',
+              height: '460px',
             }}
           >
             <iframe
@@ -53,7 +105,7 @@ export default function ReviewDocumentsTab({ teacher }) {
               title="CV Preview"
               width="100%"
               height="100%"
-              style={{ border: 'none' }}
+              style={{ border: 'none', display: 'block' }}
             />
           </div>
         ) : (
@@ -68,6 +120,69 @@ export default function ReviewDocumentsTab({ teacher }) {
           </div>
         )}
       </div>
+
+      {/* Full Screen Lightbox Modal for CV */}
+      {isFullScreen && teacher.cvUrl && (
+        <div className="doc-fullscreen-backdrop" onClick={() => setIsFullScreen(false)}>
+          <div className="doc-fullscreen-card" onClick={(e) => e.stopPropagation()}>
+            <div className="doc-fullscreen-header">
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                <FileText size={20} color="var(--gold-400)" />
+                <div>
+                  <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 700 }}>
+                    CV Document Preview — {teacher.name}
+                  </h3>
+                  <span style={{ fontSize: '.76rem', color: 'var(--text-secondary)' }}>
+                    Press Esc or click close to exit full screen
+                  </span>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                {teacher.cvDownloadUrl && (
+                  <a
+                    href={teacher.cvDownloadUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="btn btn-ghost btn-sm"
+                  >
+                    <Download size={14} />
+                    <span>Download</span>
+                  </a>
+                )}
+                <a
+                  href={teacher.cvUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="btn btn-ghost btn-sm"
+                >
+                  <ExternalLink size={14} />
+                  <span>Open Tab</span>
+                </a>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-icon"
+                  onClick={() => setIsFullScreen(false)}
+                  title="Close Full Screen (Esc)"
+                  style={{ marginLeft: '4px' }}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+            </div>
+
+            <div className="doc-fullscreen-body">
+              <iframe
+                src={teacher.cvUrl}
+                title="CV Full Screen"
+                width="100%"
+                height="100%"
+                style={{ border: 'none', display: 'block' }}
+              />
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Verification Audit Checklist */}
       <div

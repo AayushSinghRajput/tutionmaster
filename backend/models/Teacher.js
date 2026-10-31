@@ -195,6 +195,14 @@ const teacherSchema = new mongoose.Schema(
       ref: "Admin",
       default: null,
     },
+    approvalEmailSentAt: {
+      type: Date,
+      default: null,
+    },
+    lastNotificationSentAt: {
+      type: Date,
+      default: null,
+    },
   },
   {
     timestamps: true,

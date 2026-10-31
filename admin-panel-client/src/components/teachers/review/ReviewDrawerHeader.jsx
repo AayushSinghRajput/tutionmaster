@@ -42,11 +42,26 @@ export default function ReviewDrawerHeader({ teacher, onClose }) {
           </div>
         )}
         <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <h3 style={{ fontSize: '1.15rem', fontWeight: 700, margin: 0 }}>{teacher.name}</h3>
             <span className={`badge ${teacher.isVisible ? 'badge-verified' : 'badge-pending'}`}>
               {teacher.isVisible ? 'Verified & Public' : 'Pending Review'}
             </span>
+            {teacher.approvalEmailSentAt && (
+              <span
+                style={{
+                  fontSize: '.72rem',
+                  padding: '2px 8px',
+                  borderRadius: '6px',
+                  background: 'rgba(16, 185, 129, 0.15)',
+                  color: 'var(--success-light, #10b981)',
+                  fontWeight: 600,
+                }}
+                title={`Live profile email sent on ${new Date(teacher.approvalEmailSentAt).toLocaleString()}`}
+              >
+                ✉️ Email Notified
+              </span>
+            )}
           </div>
           <div style={{ fontSize: '.78rem', color: 'var(--text-secondary)', marginTop: '2px' }}>
             {teacher.contact?.email} · {teacher.address?.city || 'Nepal'}
