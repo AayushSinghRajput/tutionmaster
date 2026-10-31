@@ -50,7 +50,7 @@ function validTeacherPayload(overrides = {}) {
     experience: 5,
     availability: ['Monday'],
     teachingMode: 'Online',
-    hourlyRate: 500,
+    monthlyRate: 10000,
     ...overrides,
   };
 }

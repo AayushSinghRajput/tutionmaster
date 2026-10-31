@@ -16,7 +16,27 @@ describe('auth', () => {
     expect(res.body.success).toBe(true);
     expect(res.body.token).toBeDefined();
     expect(res.body.user.email).toBe(email);
-    expect(res.body.user.role).toBe('teacher');
+    expect(res.body.user.role).toBe('student');
+  });
+
+  it('lets a user sign up as a teacher but never as an admin', async () => {
+    const asTeacher = await request(app).post('/api/auth/register').send({
+      username: 'Teacher User',
+      email: uniqueEmail(),
+      password: 'password123',
+      role: 'teacher',
+    });
+    expect(asTeacher.status).toBe(201);
+    expect(asTeacher.body.user.role).toBe('teacher');
+
+    const asAdmin = await request(app).post('/api/auth/register').send({
+      username: 'Sneaky User',
+      email: uniqueEmail(),
+      password: 'password123',
+      role: 'admin',
+    });
+    expect(asAdmin.status).toBe(201);
+    expect(asAdmin.body.user.role).toBe('student');
   });
 
   it('rejects registration when passwords do not match', async () => {

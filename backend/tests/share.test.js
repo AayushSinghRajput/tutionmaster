@@ -17,7 +17,7 @@ describe('POST /api/teachers/:id/share - Profile Share Endpoint', () => {
       qualifications: [{ degree: 'B.Sc Physics', institution: 'TU', year: 2020 }],
       contact: { email: 'jane@example.com', phone: '+9779800000000' },
       preferredSubjects: ['Physics', 'Mathematics'],
-      hourlyRate: 500,
+      monthlyRate: 10000,
       teachingMode: 'Both',
       experience: 4,
       availability: ['Monday', 'Wednesday'],

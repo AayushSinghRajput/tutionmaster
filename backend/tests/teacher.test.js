@@ -1,5 +1,6 @@
 const request = require('supertest');
 const app = require('../app');
+const Teacher = require('../models/Teacher');
 const { registerUser, validTeacherPayload } = require('./helpers');
 
 describe('teacher profile', () => {
@@ -61,6 +62,8 @@ describe('teacher profile', () => {
       .post('/api/teachers')
       .set('Authorization', `Bearer ${owner.token}`)
       .send(validTeacherPayload({ name: 'C++ Expert' }));
+    // New profiles stay hidden until an admin approves them.
+    await Teacher.updateMany({}, { isVisible: true });
 
     // An unescaped "(" would throw "Invalid regular expression" and 500.
     const brokenPattern = await request(app).get('/api/teachers/search').query({ q: '(' });
@@ -81,6 +84,7 @@ describe('teacher profile', () => {
         .set('Authorization', `Bearer ${owner.token}`)
         .send(validTeacherPayload());
     }
+    await Teacher.updateMany({}, { isVisible: true });
 
     const paged = await request(app).get('/api/teachers').query({ limit: 2 });
     expect(paged.status).toBe(200);
