@@ -13,6 +13,10 @@ const googleClient = process.env.GOOGLE_CLIENT_ID
 
 const jwt = require("jsonwebtoken");
 
+// Only these roles may be chosen at sign-up; "admin" is granted out-of-band.
+const SELF_ASSIGNABLE_ROLES = ['student', 'teacher'];
+const pickSignupRole = (role) => (SELF_ASSIGNABLE_ROLES.includes(role) ? role : 'student');
+
 const setTokenCookie = (res, token) => {
   res.cookie("refreshToken", token, {
     httpOnly: true,
@@ -28,7 +32,14 @@ const setTokenCookie = (res, token) => {
 // @route   POST /api/auth/register
 // @access  Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { username, email, password, role = 'student' } = req.body;
+  const { username, email, password, confirmPassword } = req.body;
+  const role = pickSignupRole(req.body.role);
+
+  // The web client validates this itself and doesn't send it, so only
+  // enforce the check when a caller supplies confirmPassword.
+  if (confirmPassword !== undefined && password !== confirmPassword) {
+    return next(new ErrorResponse('Passwords do not match', 400));
+  }
 
   // Check if user exists
   const existingUser = await User.findOne({ email });
@@ -146,7 +157,8 @@ exports.googleAuth = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse('Google sign-in is not configured', 501));
   }
 
-  const { credential, role = 'student' } = req.body;
+  const { credential } = req.body;
+  const role = pickSignupRole(req.body.role);
 
   let payload;
   try {
