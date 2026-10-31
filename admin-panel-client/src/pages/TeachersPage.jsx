@@ -12,6 +12,7 @@ import {
   UserPlus,
   RefreshCw,
   GraduationCap,
+  Mail,
 } from 'lucide-react';
 
 export default function TeachersPage() {
@@ -24,6 +25,22 @@ export default function TeachersPage() {
   const [modeFilter, setModeFilter] = useState('ALL');
   const [page, setPage] = useState(1);
   const [selectedTeacherForReview, setSelectedTeacherForReview] = useState(null);
+
+  // Bulk live profile email notification states
+  const [notifyStats, setNotifyStats] = useState({ pendingCount: 0, totalVerifiedCount: 0 });
+  const [showBulkNotifyModal, setShowBulkNotifyModal] = useState(false);
+  const [bulkNotifying, setBulkNotifying] = useState(false);
+
+  const fetchNotifyStats = useCallback(async () => {
+    try {
+      const res = await teacherService.getBulkNotifyStats();
+      if (res.data?.data) {
+        setNotifyStats(res.data.data);
+      }
+    } catch {
+      // quiet fail
+    }
+  }, []);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -54,7 +71,8 @@ export default function TeachersPage() {
 
   useEffect(() => {
     load();
-  }, [load]);
+    fetchNotifyStats();
+  }, [load, fetchNotifyStats]);
 
   // Debounced search
   const [searchInput, setSearchInput] = useState(search);
@@ -73,6 +91,7 @@ export default function TeachersPage() {
       setTeachers((prev) =>
         prev.map((t) => (t._id === id ? { ...t, isVisible } : t))
       );
+      fetchNotifyStats();
     } catch (err) {
       toast.error(err.response?.data?.error || 'Failed to update visibility');
     }
@@ -82,6 +101,22 @@ export default function TeachersPage() {
     setTeachers((prev) =>
       prev.map((t) => (t._id === updatedTeacher._id ? updatedTeacher : t))
     );
+    fetchNotifyStats();
+  };
+
+  const handleBulkNotify = async () => {
+    setBulkNotifying(true);
+    try {
+      const res = await teacherService.bulkNotifyVerified();
+      toast.success(res.data.message || 'Notification emails dispatched successfully');
+      setShowBulkNotifyModal(false);
+      fetchNotifyStats();
+      load();
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to dispatch bulk notifications');
+    } finally {
+      setBulkNotifying(false);
+    }
   };
 
   const { page: pg, totalPages, total } = pagination;
@@ -93,7 +128,33 @@ export default function TeachersPage() {
           <h1>Tutor Profiles & Verification</h1>
           <p>Review credentials, verify identity documents, and manage platform listings</p>
         </div>
-        <div style={{ display: 'flex', gap: '10px' }}>
+        <div style={{ display: 'flex', gap: '10px', alignItems: 'center', flexWrap: 'wrap' }}>
+          <button
+            type="button"
+            className="btn btn-secondary"
+            onClick={() => setShowBulkNotifyModal(true)}
+            title="Send live profile emails to verified tutors who haven't been notified yet"
+            style={{ display: 'flex', alignItems: 'center', gap: '6px' }}
+          >
+            <Mail size={16} />
+            <span>Notify Verified Tutors</span>
+            {notifyStats.pendingCount > 0 && (
+              <span
+                style={{
+                  background: 'var(--brand-500, #f59e0b)',
+                  color: '#000',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  padding: '2px 7px',
+                  borderRadius: '9999px',
+                  marginLeft: '4px',
+                }}
+              >
+                {notifyStats.pendingCount}
+              </span>
+            )}
+          </button>
+
           <Link to="/teachers/create-manual" className="btn btn-primary">
             <UserPlus size={16} />
             <span>Manual Tutor Onboarding</span>
@@ -325,6 +386,29 @@ export default function TeachersPage() {
           teacher={selectedTeacherForReview}
           onClose={() => setSelectedTeacherForReview(null)}
           onVerified={handleTeacherVerified}
+        />
+      )}
+
+      {/* Confirmation Modal for Bulk Live Profile Notifications */}
+      {showBulkNotifyModal && (
+        <ConfirmModal
+          title="Notify Verified Tutors"
+          message={
+            notifyStats.pendingCount > 0
+              ? `There are currently ${notifyStats.pendingCount} verified tutor(s) who haven't received their live profile email notification. Would you like to dispatch their notification emails now via Resend?`
+              : `All ${notifyStats.totalVerifiedCount || 0} verified tutors have already received their live profile notification. Would you like to re-send notifications to all of them?`
+          }
+          confirmLabel={
+            bulkNotifying
+              ? 'Sending Emails...'
+              : notifyStats.pendingCount > 0
+              ? `Send to ${notifyStats.pendingCount} Tutor(s)`
+              : 'Re-send to All Verified'
+          }
+          confirmClass="btn-success"
+          loading={bulkNotifying}
+          onConfirm={handleBulkNotify}
+          onCancel={() => setShowBulkNotifyModal(false)}
         />
       )}
     </>

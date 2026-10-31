@@ -42,6 +42,21 @@ export default function TutorReviewDrawer({ teacher, onClose, onVerified }) {
     }
   };
 
+  const handleResendNotification = async () => {
+    setSubmitting(true);
+    try {
+      const res = await teacherService.resendNotification(teacher._id);
+      toast.success(res.data.message || 'Notification email sent successfully');
+      if (res.data.approvalEmailSentAt) {
+        onVerified({ ...teacher, approvalEmailSentAt: res.data.approvalEmailSentAt });
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.error || 'Failed to send notification email');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   const tabs = [
     { key: 'documents', label: 'Submitted Documents (CV / ID)' },
     { key: 'profile', label: 'Profile & Bio' },
@@ -113,6 +128,7 @@ export default function TutorReviewDrawer({ teacher, onClose, onVerified }) {
         {/* Drawer Footer Actions */}
         <ReviewDrawerFooter
           teacherId={teacher._id}
+          isVerified={Boolean(teacher.isVisible)}
           showResubmitForm={showResubmitForm}
           showRejectForm={showRejectForm}
           onRequestResubmit={() => {
@@ -124,6 +140,7 @@ export default function TutorReviewDrawer({ teacher, onClose, onVerified }) {
             setShowResubmitForm(false);
           }}
           onApprove={() => handleAction('APPROVE')}
+          onResendNotification={handleResendNotification}
           submitting={submitting}
         />
       </div>

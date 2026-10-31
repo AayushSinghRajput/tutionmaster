@@ -1,4 +1,5 @@
 const Teacher = require("../../models/Teacher");
+const User = require("../../models/User");
 const Admin = require("../models/Admin");
 const ErrorResponse = require("../../utils/errorResponse");
 const asyncHandler = require("../../middleware/asyncHandler");
@@ -13,6 +14,12 @@ const {
   generatePdfViewUrl,
   generatePdfUrl,
 } = require("../../utils/cloudinaryUtils");
+const {
+  sendManualTutorOnboardingEmail,
+  sendTutorProfileApprovedEmail,
+  sendTutorResubmissionEmail,
+  sendTutorRejectionEmail,
+} = require("../../services/emailService");
 
 const MAX_PAGE_LIMIT = 50;
 const UPLOAD_TIMEOUT_MS = 60000;
@@ -134,25 +141,45 @@ exports.adminGetTeacher = asyncHandler(async (req, res, next) => {
 // @route   PATCH /api/admin/teachers/:id/visibility
 // @access  Admin
 exports.adminSetVisibility = asyncHandler(async (req, res, next) => {
-  const { isVisible } = req.body;
+  const { isVisible, notifyTutor = true } = req.body;
 
   if (typeof isVisible !== "boolean") {
     return next(new ErrorResponse("isVisible must be a boolean", 400));
   }
 
-  const teacher = await Teacher.findByIdAndUpdate(
-    req.params.id,
-    {
-      isVisible,
-      visibilityUpdatedAt: new Date(),
-      visibilityUpdatedBy: req.admin._id,
-    },
-    { new: true, runValidators: false }
-  );
+  const teacher = await Teacher.findById(req.params.id);
 
   if (!teacher) {
     return next(new ErrorResponse("Teacher not found", 404));
   }
+
+  const wasVisible = teacher.isVisible;
+  teacher.isVisible = isVisible;
+  teacher.visibilityUpdatedAt = new Date();
+  teacher.visibilityUpdatedBy = req.admin._id;
+
+  // If toggling on to public and hasn't received approval email yet, notify them
+  if (isVisible && !wasVisible && notifyTutor && !teacher.approvalEmailSentAt) {
+    teacher.approvalEmailSentAt = new Date();
+    teacher.lastNotificationSentAt = new Date();
+    if (teacher.profileStatus !== "Active") {
+      teacher.profileStatus = "Active";
+    }
+
+    User.findById(teacher.userId)
+      .then((user) => {
+        if (user) {
+          sendTutorProfileApprovedEmail({ user, teacher }).catch((err) =>
+            logger.error(`[EMAIL] Error sending approval notification on visibility toggle: ${err.message}`)
+          );
+        }
+      })
+      .catch((err) =>
+        logger.error(`[EMAIL] Error looking up user for visibility toggle notification: ${err.message}`)
+      );
+  }
+
+  await teacher.save();
 
   res.json({
     success: true,
@@ -160,7 +187,9 @@ exports.adminSetVisibility = asyncHandler(async (req, res, next) => {
       id: teacher._id,
       name: teacher.name,
       isVisible: teacher.isVisible,
+      profileStatus: teacher.profileStatus,
       visibilityUpdatedAt: teacher.visibilityUpdatedAt,
+      approvalEmailSentAt: teacher.approvalEmailSentAt,
     },
   });
 });
@@ -323,9 +352,6 @@ exports.adminUpdateTeacher = asyncHandler(async (req, res, next) => {
   });
 });
 
-const User = require("../../models/User");
-const { sendManualTutorOnboardingEmail } = require("../../services/emailService");
-
 // @desc    Get unonboarded users (registered users without a Tutor profile)
 // @route   GET /api/admin/teachers/unonboarded-users
 // @access  Super Admin
@@ -451,7 +477,7 @@ exports.createManualTeacher = asyncHandler(async (req, res, next) => {
   });
 });
 
-// @desc    Resend onboarding email notification to a tutor
+// @desc    Resend email notification to a tutor (approval or onboarding)
 // @route   POST /api/admin/teachers/:id/resend-notification
 // @access  Super Admin
 exports.resendTutorNotification = asyncHandler(async (req, res, next) => {
@@ -465,15 +491,30 @@ exports.resendTutorNotification = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Associated user account not found", 404));
   }
 
-  await sendManualTutorOnboardingEmail({
-    user,
-    teacher,
-    sendNotification: true,
-  });
+  const recipientEmail = teacher.contact?.email || user.email;
+
+  if (teacher.isManuallyCreatedByAdmin && !teacher.isVisible) {
+    await sendManualTutorOnboardingEmail({
+      user,
+      teacher,
+      sendNotification: true,
+    });
+  } else {
+    // Send live profile approved notification with public profile link
+    await sendTutorProfileApprovedEmail({
+      user,
+      teacher,
+    });
+    teacher.approvalEmailSentAt = new Date();
+  }
+
+  teacher.lastNotificationSentAt = new Date();
+  await teacher.save();
 
   res.json({
     success: true,
-    message: `Notification email successfully resent to ${user.email}`,
+    message: `Notification email successfully sent to ${recipientEmail}`,
+    approvalEmailSentAt: teacher.approvalEmailSentAt,
   });
 });
 
@@ -488,17 +529,62 @@ exports.adminVerifyTeacher = asyncHandler(async (req, res, next) => {
     return next(new ErrorResponse("Teacher not found", 404));
   }
 
+  const now = new Date();
+
   if (action === "APPROVE") {
     teacher.isVisible = true;
     teacher.profileStatus = "Active";
-    teacher.visibilityUpdatedAt = new Date();
+    teacher.visibilityUpdatedAt = now;
     teacher.visibilityUpdatedBy = req.admin._id;
+    teacher.approvalEmailSentAt = now;
+    teacher.lastNotificationSentAt = now;
+
+    // Send approved & live email notification
+    User.findById(teacher.userId)
+      .then((user) => {
+        if (user) {
+          sendTutorProfileApprovedEmail({ user, teacher }).catch((err) =>
+            logger.error(`[EMAIL] Failed to send approval email to tutor ${teacher._id}: ${err.message}`)
+          );
+        }
+      })
+      .catch((err) =>
+        logger.error(`[EMAIL] Failed to find user for tutor approval email: ${err.message}`)
+      );
   } else if (action === "REQUEST_RESUBMISSION") {
     teacher.isVisible = false;
     teacher.profileStatus = "Under Review";
+    teacher.lastNotificationSentAt = now;
+
+    // Send action required / resubmission email notification
+    User.findById(teacher.userId)
+      .then((user) => {
+        if (user) {
+          sendTutorResubmissionEmail({ user, teacher, reason, feedbackNotes }).catch((err) =>
+            logger.error(`[EMAIL] Failed to send resubmission email to tutor ${teacher._id}: ${err.message}`)
+          );
+        }
+      })
+      .catch((err) =>
+        logger.error(`[EMAIL] Failed to find user for tutor resubmission email: ${err.message}`)
+      );
   } else if (action === "REJECT") {
     teacher.isVisible = false;
     teacher.profileStatus = "Draft";
+    teacher.lastNotificationSentAt = now;
+
+    // Send application status / rejection email notification
+    User.findById(teacher.userId)
+      .then((user) => {
+        if (user) {
+          sendTutorRejectionEmail({ user, teacher, reason, feedbackNotes }).catch((err) =>
+            logger.error(`[EMAIL] Failed to send rejection email to tutor ${teacher._id}: ${err.message}`)
+          );
+        }
+      })
+      .catch((err) =>
+        logger.error(`[EMAIL] Failed to find user for tutor rejection email: ${err.message}`)
+      );
   } else {
     return next(new ErrorResponse("Invalid verification action. Must be APPROVE, REQUEST_RESUBMISSION, or REJECT", 400));
   }
@@ -509,18 +595,105 @@ exports.adminVerifyTeacher = asyncHandler(async (req, res, next) => {
     success: true,
     message:
       action === "APPROVE"
-        ? `Tutor profile approved and made publicly visible`
+        ? `Tutor profile approved, published, and notification email sent`
         : action === "REQUEST_RESUBMISSION"
-        ? `Resubmission requested with reason: ${reason || "Documents require update"}`
-        : `Tutor profile rejected (${reason || "Quality standard not met"})`,
+        ? `Resubmission requested and notification email sent (Reason: ${reason || "Documents require update"})`
+        : `Tutor profile rejected and notification email sent (${reason || "Quality standard not met"})`,
     data: attachUrls(teacher),
     verificationDetails: {
       action,
       reason: reason || null,
       feedbackNotes: feedbackNotes || null,
       verifiedBy: req.admin?.name,
-      verifiedAt: new Date(),
+      verifiedAt: now,
+      notificationSent: true,
     },
+  });
+});
+
+// @desc    Get count of verified/active tutors who haven't received approval email
+// @route   GET /api/admin/teachers/bulk-notify-stats
+// @access  Admin
+exports.getBulkNotifyStats = asyncHandler(async (req, res) => {
+  const pendingCount = await Teacher.countDocuments({
+    isVisible: true,
+    isActive: true,
+    approvalEmailSentAt: null,
+  });
+
+  const totalVerifiedCount = await Teacher.countDocuments({
+    isVisible: true,
+    isActive: true,
+  });
+
+  res.json({
+    success: true,
+    data: {
+      pendingCount,
+      totalVerifiedCount,
+      notifiedCount: totalVerifiedCount - pendingCount,
+    },
+  });
+});
+
+// @desc    Trigger bulk email notification for verified tutors who haven't been notified yet
+// @route   POST /api/admin/teachers/bulk-notify-verified
+// @access  Admin
+exports.bulkNotifyVerifiedTeachers = asyncHandler(async (req, res) => {
+  const { force = false } = req.body;
+
+  const query = {
+    isVisible: true,
+    isActive: true,
+  };
+
+  if (!force) {
+    query.approvalEmailSentAt = null;
+  }
+
+  const teachers = await Teacher.find(query).populate("userId", "email username");
+
+  if (teachers.length === 0) {
+    return res.json({
+      success: true,
+      message: "No pending verified tutors to notify",
+      sentCount: 0,
+      failedCount: 0,
+    });
+  }
+
+  let sentCount = 0;
+  let failedCount = 0;
+
+  for (const teacher of teachers) {
+    const user = teacher.userId;
+    const recipient = teacher.contact?.email || user?.email;
+
+    if (!recipient) {
+      failedCount++;
+      continue;
+    }
+
+    try {
+      await sendTutorProfileApprovedEmail({ user, teacher });
+      teacher.approvalEmailSentAt = new Date();
+      teacher.lastNotificationSentAt = new Date();
+      await teacher.save();
+      sentCount++;
+
+      // Small throttling delay to stay comfortably under Resend limits
+      await new Promise((r) => setTimeout(r, 300));
+    } catch (err) {
+      logger.error(`[BULK_NOTIFY] Failed to notify tutor ${teacher._id}: ${err.message}`);
+      failedCount++;
+    }
+  }
+
+  res.json({
+    success: true,
+    message: `Successfully sent live profile notifications to ${sentCount} tutor(s)${failedCount > 0 ? ` (${failedCount} failed/skipped)` : ""}`,
+    sentCount,
+    failedCount,
   });
 });
 

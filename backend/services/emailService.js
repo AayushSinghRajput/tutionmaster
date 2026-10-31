@@ -238,4 +238,280 @@ exports.sendPasswordResetEmail = async ({ user, resetUrl }) => {
   });
 };
 
+/**
+ * Send email when tutor profile is verified & approved by admin (made public)
+ */
+exports.sendTutorProfileApprovedEmail = async ({ user, teacher }) => {
+  const recipientEmail = teacher.contact?.email || user?.email;
+  if (!recipientEmail) {
+    logger.warn(`[EMAIL] No recipient email found for tutor profile ${teacher._id}`);
+    return null;
+  }
+
+  const tutorName = teacher.name || user?.username || "Tutor";
+  const frontendUrl = process.env.FRONTEND_URL || "https://www.tuitionmaster.guru";
+  const publicProfileUrl = `${frontendUrl}/teachers/${teacher._id}`;
+  const dashboardUrl = `${frontendUrl}/dashboard`;
+
+  const subject = `🎉 Congratulations! Your TuitionMaster profile is approved & live`;
+
+  const subjectsList = Array.isArray(teacher.preferredSubjects) && teacher.preferredSubjects.length > 0
+    ? teacher.preferredSubjects.join(", ")
+    : "General Tutoring";
+  const city = teacher.address?.city || "Nepal";
+  const monthlyRateFormatted = teacher.monthlyRate
+    ? `₨ ${Number(teacher.monthlyRate).toLocaleString()} / month`
+    : teacher.hourlyRate
+    ? `₨ ${Number(teacher.hourlyRate).toLocaleString()} / hour`
+    : "Negotiable";
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px 12px; color: #334155; }
+        .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); border: 1px solid #e2e8f0; }
+        .header { background: linear-gradient(135deg, #065f46 0%, #059669 100%); padding: 32px 24px; text-align: center; color: #ffffff; }
+        .content { padding: 32px 28px; }
+        .badge { display: inline-block; background-color: #d1fae5; color: #065f46; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .summary-box { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin: 24px 0; }
+        .btn-container { text-align: center; margin: 28px 0; }
+        .btn-primary { display: inline-block; background-color: #059669; color: #ffffff !important; font-weight: 600; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; margin: 6px; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25); }
+        .btn-secondary { display: inline-block; background-color: #f1f5f9; color: #1e293b !important; font-weight: 600; text-decoration: none; padding: 14px 28px; border-radius: 10px; font-size: 15px; margin: 6px; border: 1px solid #cbd5e1; }
+        .tips-box { background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 16px; border-radius: 8px; margin: 20px 0; font-size: 13.5px; color: #1e40af; line-height: 1.5; }
+        .footer { text-align: center; padding: 20px 24px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.5px;">TuitionMaster</h1>
+          <p style="margin: 6px 0 0 0; color: #a7f3d0; font-size: 14px;">Nepal's Premier Tutoring Network</p>
+        </div>
+        
+        <div class="content">
+          <span class="badge">Verified & Published</span>
+          <h2 style="margin-top: 4px; color: #0f172a; font-size: 20px;">Great news, ${tutorName}!</h2>
+          
+          <p style="font-size: 15px; line-height: 1.6; color: #475569;">
+            Our verification team has throughly reviewed your credentials. Your tutor profile has been <strong>approved</strong> and is now publicly live on TuitionMaster!
+          </p>
+
+          <div class="summary-box">
+            <h3 style="margin-top: 0; font-size: 15px; color: #1e293b; margin-bottom: 12px;">📋 Your Live Profile Overview</h3>
+            <table style="width: 100%; border-collapse: collapse; font-size: 14px; color: #334155;">
+              <tr>
+                <td style="padding: 6px 0; font-weight: 600; width: 130px; color: #64748b;">Full Name:</td>
+                <td style="padding: 6px 0; font-weight: 600; color: #0f172a;">${teacher.name}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-weight: 600; color: #64748b;">Location:</td>
+                <td style="padding: 6px 0;">${city}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-weight: 600; color: #64748b;">Subjects:</td>
+                <td style="padding: 6px 0;">${subjectsList}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-weight: 600; color: #64748b;">Mode:</td>
+                <td style="padding: 6px 0;">${teacher.teachingMode}</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 0; font-weight: 600; color: #64748b;">Tuition Fee:</td>
+                <td style="padding: 6px 0; font-weight: 600; color: #059669;">${monthlyRateFormatted}</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="btn-container">
+            <a href="${publicProfileUrl}" class="btn-primary">View My Public Profile</a>
+            <a href="${dashboardUrl}" class="btn-secondary">Go to Dashboard</a>
+          </div>
+
+          <div class="tips-box">
+            <strong>💡 Pro Tip:</strong> Share your public profile link on your WhatsApp status, LinkedIn, or Facebook to get direct tutoring leads from parents and students looking for quality mentors!
+          </div>
+
+          <p style="font-size: 13px; color: #64748b; margin-top: 20px;">
+            If you ever need to update your schedule, subjects, or pricing, you can do so anytime from your <a href="${dashboardUrl}" style="color: #059669; font-weight: 600;">Dashboard</a>.
+          </p>
+        </div>
+
+        <div class="footer">
+          <p style="margin: 0 0 4px 0;">© ${new Date().getFullYear()} TuitionMaster. All rights reserved.</p>
+          <p style="margin: 0;">Connecting passionate tutors with eager learners.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  return sendEmail({
+    to: recipientEmail,
+    subject,
+    html: htmlContent,
+  });
+};
+
+/**
+ * Send email when admin requests document/profile resubmission from tutor
+ */
+exports.sendTutorResubmissionEmail = async ({ user, teacher, reason, feedbackNotes }) => {
+  const recipientEmail = teacher.contact?.email || user?.email;
+  if (!recipientEmail) {
+    logger.warn(`[EMAIL] No recipient email found for tutor profile ${teacher._id}`);
+    return null;
+  }
+
+  const tutorName = teacher.name || user?.username || "Tutor";
+  const frontendUrl = process.env.FRONTEND_URL || "https://www.tuitionmaster.guru";
+  const editProfileUrl = `${frontendUrl}/dashboard`;
+
+  const subject = `⚠️ Action Required: Updates needed for your TuitionMaster profile`;
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px 12px; color: #334155; }
+        .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); border: 1px solid #e2e8f0; }
+        .header { background: linear-gradient(135deg, #b45309 0%, #d97706 100%); padding: 32px 24px; text-align: center; color: #ffffff; }
+        .content { padding: 32px 28px; }
+        .badge { display: inline-block; background-color: #fef3c7; color: #92400e; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 9999px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .feedback-box { background: #fffbeb; border: 1px solid #fef3c7; border-left: 4px solid #f59e0b; border-radius: 8px; padding: 18px; margin: 24px 0; }
+        .btn-container { text-align: center; margin: 28px 0; }
+        .btn-primary { display: inline-block; background-color: #d97706; color: #ffffff !important; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-size: 15px; box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25); }
+        .footer { text-align: center; padding: 20px 24px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700;">TuitionMaster</h1>
+          <p style="margin: 6px 0 0 0; color: #fde68a; font-size: 14px;">Profile Verification Update</p>
+        </div>
+        
+        <div class="content">
+          <span class="badge">Action Required</span>
+          <h2 style="margin-top: 4px; color: #0f172a; font-size: 20px;">Hello ${tutorName},</h2>
+          
+          <p style="font-size: 15px; line-height: 1.6; color: #475569;">
+            Thank you for registering on TuitionMaster! Our verification team has reviewed your application. Before we can publish your profile publicly, there are a few items that need your attention:
+          </p>
+
+          <div class="feedback-box">
+            <h4 style="margin: 0 0 8px 0; color: #92400e; font-size: 15px;">Review Details:</h4>
+            ${reason ? `<p style="margin: 0 0 8px 0; font-size: 14px; color: #78350f;"><strong>Reason:</strong> ${reason}</p>` : ""}
+            ${feedbackNotes ? `<p style="margin: 0; font-size: 14px; color: #78350f;"><strong>Admin Note:</strong> ${feedbackNotes}</p>` : ""}
+          </div>
+
+          <p style="font-size: 14.5px; line-height: 1.6; color: #475569;">
+            Please log in to your dashboard to update the requested information or re-upload your document. Once updated, our team will review it promptly so your profile can go live.
+          </p>
+
+          <div class="btn-container">
+            <a href="${editProfileUrl}" class="btn-primary">Update & Resubmit Profile</a>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p style="margin: 0 0 4px 0;">© ${new Date().getFullYear()} TuitionMaster. All rights reserved.</p>
+          <p style="margin: 0;">Need help? Reply directly to this email for assistance.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  return sendEmail({
+    to: recipientEmail,
+    subject,
+    html: htmlContent,
+  });
+};
+
+/**
+ * Send email when admin rejects a tutor profile
+ */
+exports.sendTutorRejectionEmail = async ({ user, teacher, reason, feedbackNotes }) => {
+  const recipientEmail = teacher.contact?.email || user?.email;
+  if (!recipientEmail) {
+    logger.warn(`[EMAIL] No recipient email found for tutor profile ${teacher._id}`);
+    return null;
+  }
+
+  const tutorName = teacher.name || user?.username || "Tutor";
+  const frontendUrl = process.env.FRONTEND_URL || "https://www.tuitionmaster.guru";
+  const supportUrl = `${frontendUrl}/contact`;
+
+  const subject = `Update regarding your TuitionMaster tutor application`;
+
+  const htmlContent = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f8fafc; margin: 0; padding: 24px 12px; color: #334155; }
+        .card { max-width: 600px; margin: 0 auto; background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01); border: 1px solid #e2e8f0; }
+        .header { background: linear-gradient(135deg, #334155 0%, #475569 100%); padding: 32px 24px; text-align: center; color: #ffffff; }
+        .content { padding: 32px 28px; }
+        .feedback-box { background: #f8fafc; border: 1px solid #e2e8f0; border-left: 4px solid #64748b; border-radius: 8px; padding: 18px; margin: 24px 0; }
+        .btn-container { text-align: center; margin: 28px 0; }
+        .btn-primary { display: inline-block; background-color: #475569; color: #ffffff !important; font-weight: 600; text-decoration: none; padding: 14px 32px; border-radius: 10px; font-size: 15px; }
+        .footer { text-align: center; padding: 20px 24px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; }
+      </style>
+    </head>
+    <body>
+      <div class="card">
+        <div class="header">
+          <h1 style="margin: 0; font-size: 24px; font-weight: 700;">TuitionMaster</h1>
+          <p style="margin: 6px 0 0 0; color: #cbd5e1; font-size: 14px;">Application Status</p>
+        </div>
+        
+        <div class="content">
+          <h2 style="margin-top: 4px; color: #0f172a; font-size: 20px;">Hello ${tutorName},</h2>
+          
+          <p style="font-size: 15px; line-height: 1.6; color: #475569;">
+            Thank you for your interest in joining TuitionMaster. After careful review of your tutor application and submitted materials, we regret to inform you that we are unable to approve your tutor profile at this time.
+          </p>
+
+          <div class="feedback-box">
+            <h4 style="margin: 0 0 8px 0; color: #1e293b; font-size: 15px;">Reason:</h4>
+            <p style="margin: 0 0 6px 0; font-size: 14px; color: #475569;">${reason || "Does not meet current platform requirements"}</p>
+            ${feedbackNotes ? `<p style="margin: 6px 0 0 0; font-size: 13.5px; color: #64748b;"><em>Note: ${feedbackNotes}</em></p>` : ""}
+          </div>
+
+          <p style="font-size: 14px; line-height: 1.6; color: #64748b;">
+            If you have questions or believe this decision was made in error, please feel free to reach out to our support team.
+          </p>
+
+          <div class="btn-container">
+            <a href="${supportUrl}" class="btn-primary">Contact Support</a>
+          </div>
+        </div>
+
+        <div class="footer">
+          <p style="margin: 0 0 4px 0;">© ${new Date().getFullYear()} TuitionMaster. All rights reserved.</p>
+          <p style="margin: 0;">TuitionMaster Support Team</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+
+  return sendEmail({
+    to: recipientEmail,
+    subject,
+    html: htmlContent,
+  });
+};
+
 exports.sendEmail = sendEmail;

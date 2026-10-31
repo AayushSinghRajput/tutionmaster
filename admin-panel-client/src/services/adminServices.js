@@ -32,6 +32,12 @@ export const teacherService = {
 
   resendNotification: (id) =>
     api.post(`/teachers/${id}/resend-notification`),
+
+  getBulkNotifyStats: () =>
+    api.get('/teachers/bulk-notify-stats'),
+
+  bulkNotifyVerified: (force = false) =>
+    api.post('/teachers/bulk-notify-verified', { force }),
 };
 
 export const requirementService = {
