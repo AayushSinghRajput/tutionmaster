@@ -14,24 +14,27 @@ const AboutCta = () => {
           <BookOpen className="w-8 h-8 sm:w-10 sm:h-10 text-white" />
         </div>
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold mb-6">
-          Join the Educational Revolution
+          Join the Educational Movement in Nepal
         </h2>
-        <p className="text-lg sm:text-xl text-brand-100 mb-8 max-w-2xl mx-auto leading-relaxed">
-          Be part of our mission to make quality education accessible to learners across Nepal
+        <p className="text-lg sm:text-xl text-brand-100 mb-4 max-w-2xl mx-auto leading-relaxed">
+          Whether you are a student aiming for top marks in your board exams, a parent seeking an inspiring role model for your child, or a passionate teacher looking to expand your tutoring career, TuitionMaster welcomes you.
+        </p>
+        <p className="text-base text-brand-200/90 mb-8 max-w-2xl mx-auto leading-relaxed">
+          Connect directly with thousands of learners and verified teachers across Nepal. No middleman agencies, no hidden commissions—just genuine academic partnership.
         </p>
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link
-            to="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-brand-600 bg-white rounded-xl hover:bg-brand-50 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-2xl group"
+            to="/teachers"
+            className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-brand-700 bg-white rounded-xl hover:bg-brand-50 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-2xl group"
           >
-            Start Learning Today
+            Find a Verified Tutor
             <ArrowRight className="w-5 h-5 ml-3 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             to="/register"
             className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-transparent border-2 border-white/30 rounded-xl hover:bg-white/10 transition-all duration-300 backdrop-blur-sm"
           >
-            Become a Tutor
+            Apply to Teach
           </Link>
         </div>
       </div>

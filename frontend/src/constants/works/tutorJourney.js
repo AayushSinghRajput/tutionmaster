@@ -4,37 +4,37 @@ export const TUTOR_JOURNEY = [
   {
     id: 'create-profile',
     icon: UserPlus,
-    title: 'Create Your Tutor Profile',
+    title: '1. Register & Build Your Academic Profile',
     description:
-      'Create a profile with your name, subjects, qualifications, experience, teaching information, location, availability, rate, and other relevant information.',
-    tags: ['Subjects', 'Qualifications', 'Experience', 'Availability', 'Rate'],
+      'Complete our guided 4-step onboarding wizard. Enter your university education, target boards (SEE, +2, Entrance, University), years of teaching experience, preferred travel radius, and hourly or monthly rate preferences.',
+    tags: ['Qualifications', 'Subjects', 'Availability', 'Rates', 'Curricula'],
   },
   {
     id: 'build-trustworthy-profile',
     icon: ShieldCheck,
-    title: 'Build a Complete & Trustworthy Profile',
+    title: '2. Upload Resume & Complete Verification',
     description:
-      'Accurate, detailed information helps students understand your background and teaching capabilities. Highlight your qualifications, experience, subjects, teaching approach, availability, and pricing. Where verification applies, a completed review can be reflected on your profile.',
+      'Submit your academic documentation and CV for administrative verification. Approved educators receive the verified badge, significantly increasing parent trust and profile inquiry rates.',
   },
   {
     id: 'get-discovered',
     icon: Radar,
-    title: 'Get Discovered by Students',
+    title: '3. Gain High-Intent Student Visibility',
     description:
-      "Students discover tutors on TuitionMaster based on their requirements. Your profile can appear in relevant searches and AI-assisted discovery, though TuitionMaster doesn't guarantee a specific number of students or leads.",
+      'Your profile is indexed across our public directory and recommended by our AI chat assistant whenever students in your area search for your specialized subjects.',
   },
   {
     id: 'connect-with-students',
     icon: MessageCircle,
-    title: 'Connect With Interested Students',
+    title: '4. Receive Direct Student Inquiries',
     description:
-      'Interested students can view your profile and use the available contact options to reach out and communicate with you.',
+      'Parents and students contact you directly without commission cuts. Review tuition requests, discuss student needs, and schedule trial sessions on your terms.',
   },
   {
     id: 'start-teaching',
     icon: GraduationCap,
-    title: 'Start Teaching',
+    title: '5. Build Your Independent Tutoring Career',
     description:
-      'Once you and the student agree on the learning arrangement, you can begin classes together.',
+      'Deliver impactful instruction, collect genuine five-star reviews from satisfied families, and establish an authoritative reputation as an expert educator in Nepal.',
   },
 ];

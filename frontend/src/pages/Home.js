@@ -10,6 +10,7 @@ import StudentValueProp from "../components/section/StudentValueProp";
 import TutorValueProp from "../components/section/TutorValueProp";
 import HowItWorks from "../components/section/HowItWorks";
 import Features from "../components/section/Feature";
+import HomeFAQ from "../components/section/HomeFAQ";
 import TrustSection from "../components/section/TrustSection";
 import CTA from "../components/section/CTA";
 import VideoOverlayBanner from "../components/video/VideoOverlayBanner";
@@ -101,6 +102,9 @@ const Home = () => {
 
       {/* Why TuitionMaster Section */}
       <Features />
+
+      {/* Frequently Asked Questions */}
+      <HomeFAQ />
 
       {/* Trust Section */}
       <TrustSection />
