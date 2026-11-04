@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { Calendar, User, ArrowRight, BookOpen, Tag } from 'lucide-react';
+import { Calendar, User, ArrowRight, BookOpen, Tag, Clock } from 'lucide-react';
 import { blogService } from '../services/blogService';
 import Pagination from '../components/common/Pagination';
 
@@ -82,7 +82,7 @@ const BlogIndex = () => {
         <title>Educational Insights & Study Tips | TuitionMaster Blog</title>
         <meta
           name="description"
-          content="Explore expert teaching insights, study strategies, and educational guidance from TuitionMaster tutors and education specialists."
+          content="Explore expert teaching insights, study strategies, and educational guidance from TuitionMaster tutors and education specialists in Nepal."
         />
         <link rel="canonical" href="https://www.tuitionmaster.guru/blog" />
       </Helmet>
@@ -99,7 +99,7 @@ const BlogIndex = () => {
               Insights & Resources for Better Learning
             </h1>
             <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-              Discover proven tips, exam strategies, and educational advice curated by top tutors and educators.
+              Proven exam strategies, study blueprints, and expert tutoring guidance curated for students, parents, and educators in Nepal.
             </p>
           </div>
 
@@ -125,7 +125,7 @@ const BlogIndex = () => {
               <BookOpen size={48} className="mx-auto text-stone-400 mb-4" />
               <h3 className="text-xl font-bold text-gray-900 mb-2">No Blog Posts Found</h3>
               <p className="text-gray-600 text-sm">
-                We haven't published any articles yet. Check back soon for exciting updates!
+                We are actively curating in-depth educational guides. Check back soon for exciting updates!
               </p>
             </div>
           ) : (
@@ -157,12 +157,18 @@ const BlogIndex = () => {
                     {/* Content Body */}
                     <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
                       <div className="space-y-3">
-                        <div className="flex items-center gap-4 text-xs text-gray-500 font-medium">
+                        <div className="flex flex-wrap items-center gap-3 text-xs text-gray-500 font-medium">
                           <span className="flex items-center gap-1">
                             <Calendar size={13} className="text-brand-500" />
                             {formatDate(blog.publishedAt || blog.createdAt)}
                           </span>
-                          <span className="flex items-center gap-1 truncate max-w-[120px]">
+                          {blog.readingTime > 0 && (
+                            <span className="flex items-center gap-1">
+                              <Clock size={13} className="text-brand-500" />
+                              {blog.readingTime} min read
+                            </span>
+                          )}
+                          <span className="flex items-center gap-1 truncate max-w-[110px]">
                             <User size={13} className="text-brand-500" />
                             {blog.author}
                           </span>

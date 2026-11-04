@@ -3,13 +3,14 @@ import { FEATURES } from '../../constants/works/features';
 
 const FeaturesSection = () => {
   return (
-    <div className="bg-brand-900 text-white py-12 sm:py-16">
+    <div className="bg-brand-900 text-white py-12 sm:py-16 md:py-20">
       <div className="container mx-auto px-4 sm:px-6">
-        <div className="text-center mb-10 sm:mb-12">
-          <h2 className="text-2xl sm:text-3xl font-serif font-bold mb-4">Why Choose TuitionMaster?</h2>
-          <p className="text-brand-200 text-sm sm:text-base max-w-2xl mx-auto">
-            Find the right tutor faster with personalized recommendations, transparent
-            profiles, and flexible learning options — all in one place.
+        <div className="text-center mb-10 sm:mb-14">
+          <h2 className="text-2xl sm:text-4xl font-serif font-bold mb-4">
+            Platform Architecture & Quality Controls
+          </h2>
+          <p className="text-brand-200 text-base sm:text-lg max-w-3xl mx-auto leading-relaxed">
+            TuitionMaster is built on transparent data, AI-driven discovery, and rigorous credential verification to ensure high-standard academic outcomes across Nepal.
           </p>
         </div>
 

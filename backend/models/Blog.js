@@ -40,6 +40,14 @@ const blogSchema = new mongoose.Schema({
     type: [String],
     default: [],
   },
+  readingTime: {
+    type: Number,
+    default: 0,
+  },
+  wordCount: {
+    type: Number,
+    default: 0,
+  },
   published: {
     type: Boolean,
     default: false,
@@ -61,8 +69,16 @@ const blogSchema = new mongoose.Schema({
   timestamps: true,
 });
 
-// Helper static or hook to handle publishedAt on first publish
+// Calculate word count, reading time, and publishedAt timestamp
 blogSchema.pre('save', function (next) {
+  if (this.isModified('content') && this.content) {
+    const cleanText = this.content
+      .replace(/<[^>]*>?/gm, ' ')
+      .replace(/[#*_~`>\-|]/g, ' ');
+    const words = cleanText.trim().split(/\s+/).filter(Boolean).length;
+    this.wordCount = words;
+    this.readingTime = Math.max(1, Math.ceil(words / 200));
+  }
   if (this.published && !this.publishedAt) {
     this.publishedAt = new Date();
   }

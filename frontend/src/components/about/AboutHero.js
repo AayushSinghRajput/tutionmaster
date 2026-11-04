@@ -20,9 +20,11 @@ const AboutHero = () => {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gold-300 to-gold-400"> One Student at a Time</span>
           </h1>
 
-          <p className="text-lg sm:text-xl text-brand-100 leading-relaxed mb-8 max-w-3xl mx-auto">
-            TuitionMaster is changing the way students find teachers and teachers find students.
-            We believe in making quality education accessible to everyone, everywhere in Nepal.
+          <p className="text-lg sm:text-xl text-brand-100 leading-relaxed mb-6 max-w-3xl mx-auto">
+            TuitionMaster is Nepal's dedicated educational marketplace, built to connect students and parents with qualified, verified private tutors. Founded by passionate educators and engineers, we eliminate the guesswork from hiring home and online teachers.
+          </p>
+          <p className="text-base sm:text-lg text-brand-200/90 leading-relaxed mb-8 max-w-3xl mx-auto">
+            Whether preparing for high-stakes SEE board examinations, +2 science and management curricula, or competitive university entrance tests, our platform provides transparent tutor credentials, verified reviews, and personalized learning pathways across Kathmandu, Lalitpur, Bhaktapur, and throughout Nepal.
           </p>
         </div>
       </div>

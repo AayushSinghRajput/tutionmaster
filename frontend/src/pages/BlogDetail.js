@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ArrowLeft, Calendar, User, Tag, Share2, Check } from 'lucide-react';
+import { ArrowLeft, Calendar, User, Tag, Share2, Check, Clock } from 'lucide-react';
 import { marked } from 'marked';
 import { blogService } from '../services/blogService';
 import LoadingSpinner from '../components/common/LoadingSpinner';
@@ -98,6 +98,29 @@ const BlogDetail = () => {
   const currentUrl = `https://www.tuitionmaster.guru/blog/${blog.slug}`;
   const imageUrl = blog.coverImage || 'https://www.tuitionmaster.guru/logo.png';
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": pageTitle,
+    "description": pageDescription,
+    "image": imageUrl,
+    "author": {
+      "@type": "Person",
+      "name": blog.author || "TuitionMaster Team"
+    },
+    "publisher": {
+      "@type": "Organization",
+      "name": "TuitionMaster",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://www.tuitionmaster.guru/logo.png"
+      }
+    },
+    "datePublished": blog.publishedAt || blog.createdAt,
+    "dateModified": blog.updatedAt || blog.publishedAt || blog.createdAt,
+    "mainEntityOfPage": currentUrl
+  };
+
   return (
     <>
       <Helmet>
@@ -111,6 +134,11 @@ const BlogDetail = () => {
         <meta property="og:image" content={imageUrl} />
         <meta property="og:url" content={currentUrl} />
         <meta property="og:type" content="article" />
+
+        {/* JSON-LD Article Structured Data */}
+        <script type="application/ld+json">
+          {JSON.stringify(articleSchema)}
+        </script>
       </Helmet>
 
       <div className="bg-stone-50 min-h-screen py-8 sm:py-12">
@@ -129,7 +157,7 @@ const BlogDetail = () => {
           {/* Article Header */}
           <div className="bg-white rounded-3xl border border-stone-200 shadow-sm p-6 sm:p-10 mb-8 space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-stone-100 pb-4">
-              <div className="flex items-center gap-3">
+              <div className="flex flex-wrap items-center gap-3">
                 {blog.category && (
                   <span className="bg-brand-100 text-brand-700 text-xs font-semibold px-3 py-1 rounded-full flex items-center gap-1">
                     <Tag size={12} />
@@ -140,6 +168,12 @@ const BlogDetail = () => {
                   <Calendar size={14} className="text-brand-500" />
                   {formatDate(blog.publishedAt || blog.createdAt)}
                 </span>
+                {blog.readingTime > 0 && (
+                  <span className="flex items-center gap-1 text-xs font-medium text-gray-500">
+                    <Clock size={14} className="text-brand-500" />
+                    {blog.readingTime} min read
+                  </span>
+                )}
               </div>
 
               <button

@@ -1,48 +1,47 @@
-
 import { Award, Sparkles, Target, Search, ClipboardCheck, ShieldCheck, Globe } from "lucide-react";
 
 const WHY_CHOOSE_FEATURES = [
   {
     icon: Sparkles,
     gradient: "from-brand-600 to-brand-700",
-    title: "AI-Powered Tutor Matching",
+    title: "Intelligent Tutor Discovery",
     description:
-      "Our AI helps you discover tutors that best match your learning needs, subjects, preferences, and requirements.",
+      "Tell our AI assistant what your child needs help with—from SEE compulsory math to university entrance physics. It instantly analyzes subject matter, syllabus level, and tutor expertise to surface the best mentors.",
   },
   {
     icon: Target,
     gradient: "from-gold-500 to-gold-600",
-    title: "Personalized Recommendations",
+    title: "100% Tailored Instruction",
     description:
-      "Get tutor recommendations tailored to your learning goals, subject requirements, location, and preferences.",
+      "One-on-one sessions adapted to each student's unique learning pace. Tutors build targeted practice problem sets, address conceptual blindspots, and guide exam revisions without rushing.",
   },
   {
     icon: Search,
     gradient: "from-success-500 to-success-600",
-    title: "Search Your Way",
+    title: "Multi-Filter Search Precision",
     description:
-      "Find tutors using subjects, location, teaching preferences, and other filters that matter to you.",
+      "Filter by specific academic subjects, your city or neighborhood in Nepal, budget per hour or month, and teaching format. Find exactly the educator who fits your family's schedule.",
   },
   {
     icon: ClipboardCheck,
     gradient: "from-brand-600 to-brand-700",
-    title: "Detailed Tutor Profiles",
+    title: "Comprehensive Tutor CVs",
     description:
-      "Explore tutor qualifications, experience, subjects, and teaching information before making your choice.",
+      "Inspect authentic academic qualifications, college degrees, teaching certificates, and verified subject specializations directly on each tutor's public profile before reaching out.",
   },
   {
     icon: ShieldCheck,
     gradient: "from-gold-500 to-gold-600",
-    title: "Transparent & Trustworthy",
+    title: "Verified Community Reviews",
     description:
-      "Make informed decisions with clear tutor information, verification indicators, reviews, and ratings.",
+      "Read genuine, moderated feedback from Nepali parents and students. We maintain a zero-tolerance policy for fabricated ratings, giving you total confidence in your choice.",
   },
   {
     icon: Globe,
     gradient: "from-success-500 to-success-600",
-    title: "Local & Online Learning",
+    title: "In-Person Home & Virtual Classes",
     description:
-      "Connect with tutors near you for local learning, or choose online tutoring for greater flexibility.",
+      "Choose in-person home tutoring across the Kathmandu Valley and major cities, or opt for interactive digital tutoring to learn from premier instructors anywhere across Nepal.",
   },
 ];
 
@@ -56,11 +55,10 @@ const Features = () => {
             WHY CHOOSE US
           </div>
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4 font-serif">
-            Why Choose <span className="text-brand-600">TuitionMaster</span>?
+            Why Students & Parents Trust <span className="text-brand-600">TuitionMaster</span>
           </h2>
-          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-            Find the right tutor faster with personalized recommendations, transparent
-            profiles, and flexible learning options — all in one place.
+          <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+            Eliminating broker fees, unvetted tutors, and mismatched teaching styles. We provide a transparent, merit-first platform where every Nepali student can thrive under expert academic mentorship.
           </p>
         </div>
 
