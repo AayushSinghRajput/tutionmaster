@@ -7,6 +7,7 @@ const logger = require("../utils/logger");
 const escapeRegex = require("../utils/escapeRegex");
 const cache = require("../utils/cache");
 const { notifyIndexNow, getTeacherUrl } = require("../utils/indexNow");
+const { notifyNewTutorRegistered } = require("../services/telegramService");
 
 const SUBJECTS_CACHE_KEY = "subjects";
 const SUBJECTS_CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
@@ -417,6 +418,11 @@ exports.createTeacher = asyncHandler(async (req, res, next) => {
   });
 
   cache.clear(SUBJECTS_CACHE_KEY);
+
+  // Notify admin via Telegram (fire-and-forget; failure must never fail profile creation)
+  notifyNewTutorRegistered({ teacher, user: req.user }).catch((error) => {
+    logger.warn(`Telegram notification failed: ${error.message}`);
+  });
 
   // Notify IndexNow about the newly created public profile.
   // Failure must never cause the profile creation request to fail.
