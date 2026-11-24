@@ -16,6 +16,7 @@ import JobListPage from './pages/JobListPage';
 import JobEditorPage from './pages/JobEditorPage';
 import ManualTutorCreationPage from './pages/ManualTutorCreationPage';
 import SupportTicketsPage from './pages/SupportTicketsPage';
+import LLMKeysPage from './pages/LLMKeysPage';
 
 export default function App() {
   return (
@@ -42,6 +43,7 @@ export default function App() {
             <Route path="/support-tickets" element={<SupportTicketsPage />} />
             <Route path="/reviews" element={<ReviewsPage />} />
             <Route path="/administrators" element={<AdministratorsPage />} />
+            <Route path="/llm-keys" element={<LLMKeysPage />} />
           </Route>
 
           {/* Fallback */}

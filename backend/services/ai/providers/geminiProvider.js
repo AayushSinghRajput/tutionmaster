@@ -38,9 +38,9 @@ class GeminiProvider extends AIProvider {
     if (!apiKey) {
       throw new Error("GeminiProvider requires an apiKey");
     }
-    this.model = model;
-    this.temperature = temperature;
-    this.maxOutputTokens = maxOutputTokens;
+    this.model = model || process.env.GEMINI_MODEL || "gemini-2.5-flash";
+    this.temperature = typeof temperature === "number" ? temperature : 0.3;
+    this.maxOutputTokens = maxOutputTokens || 1024;
     this.client = new GoogleGenAI({ apiKey });
   }
 
