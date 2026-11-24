@@ -43,6 +43,7 @@ const adminCurriculumRoutes = require("./admin-panel-server/routes/adminCurricul
 
 const supportRoute = require("./routes/supportRoutes");
 const adminSupportRoutes = require("./admin-panel-server/routes/adminSupportRoutes");
+const adminLlmKeyRoutes = require("./admin-panel-server/routes/adminLlmKeyRoutes");
 
 // Trust the single reverse proxy hop in front of the app (Render's edge
 // proxy locally, or the "backend" service behind a tunnel/proxy in dev),
@@ -167,6 +168,7 @@ app.use("/api/admin/jobs", adminJobRoutes);
 app.use("/api/admin/requirements", adminRequirementRoutes);
 app.use("/api/admin/curriculum", adminCurriculumRoutes);
 app.use("/api/admin/support-tickets", adminSupportRoutes);
+app.use("/api/admin/llm-keys", adminLlmKeyRoutes);
 
 // API documentation (read-only, public — safe to leave open)
 app.use("/api/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));

@@ -4,7 +4,6 @@ import { useAuth } from '../../context/AuthContext';
 import Sidebar from './Sidebar';
 import {
   Menu,
-  Search,
   PlusCircle,
   ExternalLink,
   CheckCircle2,
@@ -27,7 +26,6 @@ export default function AdminLayout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [showQuickMenu, setShowQuickMenu] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
 
   if (loading) return <Spinner />;
@@ -38,13 +36,6 @@ export default function AdminLayout() {
       setMobileSidebarOpen((prev) => !prev);
     } else {
       setIsCollapsed((prev) => !prev);
-    }
-  };
-
-  const handleGlobalSearch = (e) => {
-    if (e.key === 'Enter' && searchQuery.trim()) {
-      navigate(`/teachers?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
     }
   };
 
@@ -69,19 +60,6 @@ export default function AdminLayout() {
             >
               <Menu size={18} />
             </button>
-
-            {/* Global Search */}
-            <div className="header-search-bar">
-              <Search size={16} className="header-search-icon" />
-              <input
-                type="text"
-                placeholder="Search tutors, subjects, email…"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onKeyDown={handleGlobalSearch}
-              />
-              <span className="header-search-shortcut">↵</span>
-            </div>
           </div>
 
           <div className="header-right">
