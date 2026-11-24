@@ -14,6 +14,7 @@ import {
   Shield,
   LogOut,
   UserPlus,
+  Cpu,
 } from 'lucide-react';
 
 const NAV_GROUPS = [
@@ -50,6 +51,7 @@ const NAV_GROUPS = [
 
 const SUPER_ADMIN_ITEMS = [
   { to: '/administrators', icon: Shield, label: 'Administrator Access' },
+  { to: '/llm-keys', icon: Cpu, label: 'AI Models & LLM Keys' },
 ];
 
 export default function Sidebar({ isOpen, isCollapsed, onToggleCollapse, onClose }) {

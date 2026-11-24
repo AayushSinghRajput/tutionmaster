@@ -1,5 +1,6 @@
 const aiConfig = require("../../config/aiConfig");
 const GeminiProvider = require("./providers/geminiProvider");
+const keyRouter = require("./keyRouter");
 const { buildSystemPrompt } = require("./systemPrompt");
 const { searchKnowledgeBase } = require("./knowledgeBase");
 const toolRegistry = require("./tools");
@@ -8,20 +9,21 @@ const logger = require("../../utils/logger");
 
 const MAX_TOOL_ITERATIONS = 4;
 const MAX_HISTORY_MESSAGES = 20;
+const MAX_PROVIDER_CASCADES = 3;
 
-let cachedProvider = null;
+let cachedDefaultProvider = null;
 
 function getDefaultProvider() {
   if (!aiConfig.isEnabled) return null;
-  if (!cachedProvider) {
-    cachedProvider = new GeminiProvider({
+  if (!cachedDefaultProvider) {
+    cachedDefaultProvider = new GeminiProvider({
       apiKey: aiConfig.apiKey,
       model: aiConfig.model,
       temperature: aiConfig.temperature,
       maxOutputTokens: aiConfig.maxOutputTokens,
     });
   }
-  return cachedProvider;
+  return cachedDefaultProvider;
 }
 
 function toGeminiRole(role) {
@@ -68,7 +70,7 @@ function isOffTopicQuery(message) {
 
 /**
  * Intelligent Local Fallback Engine
- * Shielding users from Gemini Free API rate limits (HTTP 429) & network errors.
+ * Shielding users from LLM rate limits (HTTP 429), quota limits, & network errors.
  */
 async function fallbackLocalChat(message, user) {
   if (isOffTopicQuery(message)) {
@@ -96,20 +98,17 @@ async function fallbackLocalChat(message, user) {
     try {
       const searchArgs = {};
 
-      // 1. Dynamic budget parsing (look for rate context or 700/hr, Rs 700, under 700)
       const rateMatch = message.match(/(?:less than|under|below|max|<|=|rate is|rate of|budget|hourly rate|\/hr|\/hour|rs\.?|npr)\s*(\d{3,4})|(\d{3,4})\s*(?:\/|\s*per)?\s*(?:hr|hour)/i);
       const extractedRate = rateMatch ? (rateMatch[1] || rateMatch[2]) : null;
       if (extractedRate) {
         searchArgs.maxRate = Number(extractedRate);
       }
 
-      // 2. Dynamic experience parsing: "1 year experience", "2+ years", "at least 3 years"
       const expMatch = message.match(/(\d+)\s*(?:\+|\s*plus|\s*year|\s*yrs|\s*years)/i);
       if (expMatch && expMatch[1]) {
         searchArgs.minExperience = Number(expMatch[1]);
       }
 
-      // 3. Robust domain keyword extraction: filter out natural language stopwords & number patterns
       const stopwords = new Set([
         "find", "a", "an", "the", "tutor", "teacher", "who", "teaches", "teach", "is", "there", "any", "looking", "for", "with",
         "at", "least", "more", "than", "less", "under", "below", "above", "rate", "of", "budget", "hourly", "hr", "hour", "hours",
@@ -117,7 +116,6 @@ async function fallbackLocalChat(message, user) {
         "has", "have", "per", "npr", "rs", "kathmandu", "pokhara", "lalitpur", "bhaktapur"
       ]);
 
-      // If user specified location, set city
       if (msgLower.includes("kathmandu")) searchArgs.city = "Kathmandu";
       else if (msgLower.includes("lalitpur")) searchArgs.city = "Lalitpur";
       else if (msgLower.includes("bhaktapur")) searchArgs.city = "Bhaktapur";
@@ -141,7 +139,7 @@ async function fallbackLocalChat(message, user) {
     }
   }
 
-  // 2. Only query jobs if user EXPLICITLY asks for job vacancies
+  // 2. Query jobs if user asks for job vacancies
   const isExplicitJobSearch =
     msgLower.includes("job vacancy") ||
     msgLower.includes("job vacancies") ||
@@ -161,7 +159,7 @@ async function fallbackLocalChat(message, user) {
     }
   }
 
-  // 3. Search local static knowledge base entries ONLY if no direct DB results found AND query is not a tutor/job search
+  // 3. Search local static knowledge base entries ONLY if no direct DB results found
   let kbResponse = "";
   if (collectedResults.length === 0 && !isExplicitTeacherSearch && !isExplicitJobSearch) {
     const kbMatches = searchKnowledgeBase(message, 2);
@@ -198,42 +196,20 @@ async function fallbackLocalChat(message, user) {
   };
 }
 
-async function chat({ message, history, user, provider } = {}) {
-  if (isOffTopicQuery(message)) {
-    return {
-      message: OFF_TOPIC_DECLINE_MESSAGE,
-      results: [],
-    };
-  }
-
-  const activeProvider = provider || getDefaultProvider();
-
-  if (!activeProvider) {
-    return {
-      message: "The AI assistant isn't configured yet. Please try again later.",
-      results: [],
-    };
-  }
-
-  const contents = buildContents(history, message);
-  const systemInstruction = buildSystemPrompt({ user });
+/**
+ * Execute chat request with given provider and tool-calling loop.
+ */
+async function executeProviderLoop({ activeProvider, contents, systemInstruction, user }) {
   const collectedResults = [];
 
   for (let iteration = 0; iteration < MAX_TOOL_ITERATIONS; iteration += 1) {
-    let response;
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      response = await activeProvider.generate({
-        systemInstruction,
-        contents,
-        tools: toolRegistry.definitions,
-      });
-    } catch (error) {
-      logger.warn(`AI Provider rate-limited or failed (${error.message}). Invoking fallback local chat.`);
-      return fallbackLocalChat(message, user);
-    }
+    const response = await activeProvider.generate({
+      systemInstruction,
+      contents,
+      tools: toolRegistry.definitions,
+    });
 
-    if (!response.functionCalls.length) {
+    if (!response.functionCalls || !response.functionCalls.length) {
       return {
         message: response.text || "I'm not sure how to help with that — could you rephrase?",
         results: collectedResults,
@@ -243,7 +219,7 @@ async function chat({ message, history, user, provider } = {}) {
     contents.push({
       role: "model",
       parts: response.parts || response.functionCalls.map((call) => ({
-        functionCall: { name: call.name, args: call.args },
+        functionCall: { id: call.id, name: call.name, args: call.args },
       })),
     });
 
@@ -264,6 +240,81 @@ async function chat({ message, history, user, provider } = {}) {
     message: "That request needed more steps than I can safely take at once — could you narrow it down?",
     results: collectedResults,
   };
+}
+
+async function chat({ message, history, user, provider } = {}) {
+  if (isOffTopicQuery(message)) {
+    return {
+      message: OFF_TOPIC_DECLINE_MESSAGE,
+      results: [],
+    };
+  }
+
+  const systemInstruction = buildSystemPrompt({ user });
+
+  // 1. If an explicit provider was passed (e.g. from unit tests), use it directly
+  if (provider) {
+    const contents = buildContents(history, message);
+    try {
+      return await executeProviderLoop({ activeProvider: provider, contents, systemInstruction, user });
+    } catch (error) {
+      logger.warn(`Explicit AI Provider call failed (${error.message}). Invoking fallback local chat.`);
+      return fallbackLocalChat(message, user);
+    }
+  }
+
+  // 2. Dynamic multi-provider selection with cascading circuit breaker
+  const excludedCandidateIds = [];
+  let attempts = 0;
+
+  while (attempts < MAX_PROVIDER_CASCADES) {
+    // eslint-disable-next-line no-await-in-loop
+    const candidate = await keyRouter.getAvailableCandidate(excludedCandidateIds);
+
+    if (!candidate) {
+      break;
+    }
+
+    attempts += 1;
+    const contents = buildContents(history, message);
+
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      const result = await executeProviderLoop({
+        activeProvider: candidate.provider,
+        contents,
+        systemInstruction,
+        user,
+      });
+
+      // Record successful execution
+      keyRouter.recordSuccess(candidate.id);
+      return result;
+    } catch (error) {
+      logger.warn(
+        `AI Provider candidate "${candidate.label}" (${candidate.providerName} / ${candidate.model}) failed: ${error.message}. Cascading to next candidate...`
+      );
+
+      // Record failure & cooldown
+      keyRouter.recordFailure(candidate.id, error);
+      excludedCandidateIds.push(candidate.id);
+    }
+  }
+
+  // If no candidates were available at all on fresh install
+  if (attempts === 0) {
+    const fallbackDefault = getDefaultProvider();
+    if (!fallbackDefault) {
+      return {
+        message: "The AI assistant isn't configured yet. Please try again later.",
+        results: [],
+      };
+    }
+  }
+
+  // If all remote providers failed or were exhausted, invoke intelligent local engine
+  logger.warn("All available AI LLM keys were rate-limited or unavailable. Invoking local rule engine.");
+  return fallbackLocalChat(message, user);
 }
 
 module.exports = { chat };
