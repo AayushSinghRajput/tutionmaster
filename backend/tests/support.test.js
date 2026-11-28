@@ -42,6 +42,35 @@ describe('Support Ticket API Endpoints', () => {
     expect(res.body.data.status).toBe('Open');
   });
 
+  it('persists contact form submissions via POST /api/v1/support/tickets as SupportTicket records', async () => {
+    const payload = {
+      name: 'Sita Gurung',
+      contactEmail: 'sita.gurung@example.com',
+      contactPhone: '+9779812345678',
+      category: 'General',
+      subject: 'Tutoring Services (Tuition Enquiry)',
+      message: 'Need a physics tutor for +2 Science in Kathmandu.',
+    };
+
+    const res = await request(app)
+      .post('/api/v1/support/tickets')
+      .send(payload);
+
+    expect(res.status).toBe(201);
+    expect(res.body.success).toBe(true);
+    expect(res.body.data.ticketId).toMatch(/^TM-\d{4}$/);
+
+    const savedTicket = await SupportTicket.findOne({ ticketId: res.body.data.ticketId }).lean();
+    expect(savedTicket).not.toBeNull();
+    expect(savedTicket.name).toBe(payload.name);
+    expect(savedTicket.contactEmail).toBe(payload.contactEmail);
+    expect(savedTicket.contactPhone).toBe(payload.contactPhone);
+    expect(savedTicket.category).toBe(payload.category);
+    expect(savedTicket.subject).toBe(payload.subject);
+    expect(savedTicket.message).toBe(payload.message);
+    expect(savedTicket.status).toBe('Open');
+  });
+
   it('allows admin to list, update status, and reply to tickets', async () => {
     // Create sample ticket
     const ticket = await SupportTicket.create({

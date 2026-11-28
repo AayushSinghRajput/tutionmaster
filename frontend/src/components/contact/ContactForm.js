@@ -1,11 +1,49 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { CheckCircle, AlertCircle, Send } from 'lucide-react';
 import LoadingSpinner from '../common/LoadingSpinner';
+import { supportService } from '../../services/supportService';
+import { trackMetaEvent } from '../../analytics/metaPixel';
+
+export const CONTACT_SUBJECT_CONFIG = {
+  tutoring: {
+    label: 'Tutoring Services (Tuition Enquiry)',
+    category: 'General',
+    metaEvent: 'Lead',
+  },
+  general: {
+    label: 'General Inquiry',
+    category: 'General',
+    metaEvent: 'Contact',
+  },
+  technical: {
+    label: 'Technical Support',
+    category: 'Technical Support',
+    metaEvent: 'Contact',
+  },
+  billing: {
+    label: 'Billing & Payments',
+    category: 'General',
+    metaEvent: 'Contact',
+  },
+  partnership: {
+    label: 'Partnership',
+    category: 'General',
+    metaEvent: 'Contact',
+  },
+  other: {
+    label: 'Other',
+    category: 'General',
+    metaEvent: 'Contact',
+  },
+};
 
 const ContactForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedTicketId, setSubmittedTicketId] = useState(null);
+  const [submitError, setSubmitError] = useState('');
+  const successTimerRef = useRef(null);
 
   const {
     register,
@@ -14,16 +52,65 @@ const ContactForm = () => {
     reset
   } = useForm();
 
+  useEffect(() => {
+    return () => {
+      if (successTimerRef.current) {
+        clearTimeout(successTimerRef.current);
+      }
+    };
+  }, []);
+
   const onSubmit = async (data) => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    setIsLoading(false);
-    setIsSubmitted(true);
-    reset();
+    setSubmitError('');
+    setIsSubmitted(false);
+    setSubmittedTicketId(null);
 
-    // Hide success message after 5 seconds
-    setTimeout(() => setIsSubmitted(false), 5000);
+    if (successTimerRef.current) {
+      clearTimeout(successTimerRef.current);
+    }
+
+    const subjectConfig = CONTACT_SUBJECT_CONFIG[data.subject] || CONTACT_SUBJECT_CONFIG.other;
+    const payload = {
+      name: `${data.firstName.trim()} ${data.lastName.trim()}`,
+      contactEmail: data.email.trim(),
+      contactPhone: data.phone ? data.phone.trim() : '',
+      category: subjectConfig.category,
+      subject: subjectConfig.label,
+      message: data.message.trim(),
+    };
+
+    try {
+      const response = await supportService.createTicket(payload);
+      if (!response?.data?.success) {
+        throw new Error(response?.data?.message || 'Failed to send your message. Please try again.');
+      }
+
+      const ticketId = response.data?.data?.ticketId || null;
+
+      trackMetaEvent(subjectConfig.metaEvent, {
+        content_name: subjectConfig.label,
+        content_category: subjectConfig.metaEvent === 'Lead' ? 'tuition_enquiry' : data.subject,
+      });
+
+      setSubmittedTicketId(ticketId);
+      setIsSubmitted(true);
+      reset();
+
+      successTimerRef.current = setTimeout(() => {
+        setIsSubmitted(false);
+        setSubmittedTicketId(null);
+      }, 8000);
+    } catch (error) {
+      const errorMessage =
+        error?.response?.data?.message ||
+        error?.response?.data?.error ||
+        error?.message ||
+        'Failed to send your message. Please try again.';
+      setSubmitError(errorMessage);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -39,11 +126,31 @@ const ContactForm = () => {
 
       <div className="p-5 sm:p-8">
         {isSubmitted && (
-          <div className="mb-6 bg-success-50 border border-success-200 rounded-xl p-4 flex items-center gap-3 animate-pulse">
+          <div
+            role="status"
+            className="mb-6 bg-success-50 border border-success-200 rounded-xl p-4 flex items-center gap-3"
+          >
             <CheckCircle className="w-5 h-5 text-success-600 flex-shrink-0" />
             <div>
               <div className="font-semibold text-success-700">Message Sent Successfully!</div>
-              <div className="text-success-600 text-sm">We'll get back to you within 2 hours.</div>
+              <div className="text-success-600 text-sm">
+                {submittedTicketId
+                  ? `Ticket ${submittedTicketId} created. We'll get back to you within 2 hours.`
+                  : "We'll get back to you within 2 hours."}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {submitError && (
+          <div
+            role="alert"
+            className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4 flex items-center gap-3"
+          >
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+            <div>
+              <div className="font-semibold text-red-700">Unable to Send Message</div>
+              <div className="text-red-600 text-sm">{submitError}</div>
             </div>
           </div>
         )}
@@ -127,6 +234,19 @@ const ContactForm = () => {
           </div>
 
           <div className="space-y-2">
+            <label htmlFor="phone" className="block text-sm font-semibold text-gray-800">
+              Phone / WhatsApp (Optional)
+            </label>
+            <input
+              type="tel"
+              id="phone"
+              className="w-full px-4 py-3 border-2 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-brand-500 transition-all duration-300 border-gray-200 hover:border-brand-300"
+              placeholder="+977 98XXXXXXXX"
+              {...register('phone')}
+            />
+          </div>
+
+          <div className="space-y-2">
             <label htmlFor="subject" className="block text-sm font-semibold text-gray-800">
               Subject *
             </label>
@@ -140,12 +260,11 @@ const ContactForm = () => {
               {...register('subject', { required: 'Please select a subject' })}
             >
               <option value="">Select a topic</option>
-              <option value="general">General Inquiry</option>
-              <option value="technical">Technical Support</option>
-              <option value="billing">Billing & Payments</option>
-              <option value="tutoring">Tutoring Services</option>
-              <option value="partnership">Partnership</option>
-              <option value="other">Other</option>
+              {Object.entries(CONTACT_SUBJECT_CONFIG).map(([value, config]) => (
+                <option key={value} value={value}>
+                  {config.label}
+                </option>
+              ))}
             </select>
             {errors.subject && (
               <p className="text-red-600 text-sm font-medium flex items-center gap-2">
